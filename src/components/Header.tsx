@@ -68,12 +68,12 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         </div>
         
         <nav className="flex-1 p-6">
-          <ul className="space-y-2">
+          <ul className="space-y-0.5">
             {navItems.map((item) => (
               <li key={item.id}>
                 <button
                   onClick={() => onNavigate(item.id)}
-                  className={`w-full flex items-center px-4 py-3 rounded-lg transition-colors group ${
+                  className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors group ${
                     activeSection === item.id
                       ? 'bg-green-600 text-white'
                       : activeSection === 'contact'

@@ -10,10 +10,38 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const [activeTab, setActiveTab] = useState('comprehensive');
 
   const tabs = [
-    { id: 'comprehensive', label: 'Comprehensive', icon: Shield },
-    { id: 'daytoday', label: 'Day-to-Day', icon: Heart },
-    { id: 'hospital', label: 'Hospital', icon: CreditCard },
-    { id: 'senior', label: 'Build your own', icon: Users }
+    { 
+      id: 'comprehensive', 
+      label: 'Comprehensive', 
+      icon: Shield,
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+      hoverBg: 'hover:bg-blue-200'
+    },
+    { 
+      id: 'daytoday', 
+      label: 'Day-to-Day', 
+      icon: Heart,
+      bgColor: 'bg-pink-100',
+      iconColor: 'text-pink-600',
+      hoverBg: 'hover:bg-pink-200'
+    },
+    { 
+      id: 'hospital', 
+      label: 'Hospital', 
+      icon: CreditCard,
+      bgColor: 'bg-purple-100',
+      iconColor: 'text-purple-600',
+      hoverBg: 'hover:bg-purple-200'
+    },
+    { 
+      id: 'senior', 
+      label: 'Make your own', 
+      icon: Users,
+      bgColor: 'bg-green-100',
+      iconColor: 'text-green-600',
+      hoverBg: 'hover:bg-green-200'
+    }
   ];
 
   const handleTabClick = (tabId: string) => {
@@ -362,17 +390,16 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}
-                  className={`flex items-center space-x-2 px-6 py-4 rounded-xl font-medium text-base transition-all duration-300 whitespace-nowrap ${
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                     activeTab === tab.id
-                      ? 'bg-green-600 text-white shadow-md transform scale-105'
-                      : 'text-green-600 border border-transparent hover:border-green-200 hover:bg-green-50'
+                      ? 'bg-green-50 text-green-700 shadow-sm border border-green-100'
+                      : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <tab.icon className={`w-4 h-4 ${
-                    activeTab === tab.id ? 'text-white' : 'text-green-600'
-                  }`} />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                  <span className="sm:hidden">{tab.label.replace('Your ', '')}</span>
+                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 ${activeTab === tab.id ? tab.bgColor + ' ' + tab.hoverBg : tab.bgColor + ' ' + tab.hoverBg} transition-colors`}>
+                    <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? tab.iconColor : 'text-gray-600'}`} />
+                  </span>
+                  <span className="whitespace-nowrap">{tab.label}</span>
                 </button>
               ))}
             </div>

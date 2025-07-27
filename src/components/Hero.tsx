@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, HeartPulse, Briefcase, UsersRound, Users2 } from 'lucide-react';
 
 interface HeroProps {
   isSidebarCollapsed: boolean;
@@ -12,40 +12,56 @@ interface HeroSlide {
   typewriterWords: string[];
   subheading: string;
   bgColor: string;
+  icon?: React.ComponentType<{ className?: string }>;
   textColor?: string;
   buttonBg?: string;
+  iconColor?: string;
 }
 
 const heroSlides: HeroSlide[] = [
   {
     id: 0,
-    staticText: 'Health 🩺',
+    staticText: 'Health',
+    icon: HeartPulse,
     typewriterWords: ['Well', 'Protected', 'Secured'],
     subheading: 'Simple, affordable healthcare from day one.',
-    bgColor: 'from-green-600 to-green-700',
+    bgColor: 'from-[#B2E5B2] to-[#B2E5B2]',
+    textColor: 'text-gray-900',
+    buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
+    iconColor: 'text-red-500',
   },
   {
     id: 1,
-    staticText: 'Community 🙏',
+    staticText: 'Community',
+    icon: Users2,
     typewriterWords: ['United', 'Supported', 'Covered'],
     subheading: 'Designed with community in mind.',
-    bgColor: 'from-blue-900 to-blue-800',
+    bgColor: 'from-[#A8DADC] to-[#A8DADC]',
+    textColor: 'text-gray-900',
+    buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
+    iconColor: 'text-blue-800',
   },
   {
     id: 2,
-    staticText: 'Freelance? 💼',
+    staticText: 'Freelance?',
+    icon: Briefcase,
     typewriterWords: ['Covered', 'Protected', 'Empowered'],
     subheading: 'Flexible medical plans for freelancers.',
-    bgColor: 'from-amber-800 to-amber-700',
+    bgColor: 'from-[#EAD8C0] to-[#EAD8C0]',
+    textColor: 'text-gray-900',
+    buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
+    iconColor: 'text-blue-600',
   },
   {
     id: 3,
-    staticText: 'Family 👨‍👩‍👧‍👦',
+    staticText: 'Family',
+    icon: UsersRound,
     typewriterWords: ['Protected', 'Secure', 'Together'],
     subheading: 'Because everyone deserves Day1 protection.',
-    bgColor: 'from-pink-100 to-blue-100',
+    bgColor: 'from-[#F7F9F8] to-[#F7F9F8]',
     textColor: 'text-gray-900',
-    buttonBg: 'bg-green-600 hover:bg-green-700',
+    buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
+    iconColor: 'text-purple-500',
   },
 ];
 
@@ -146,7 +162,14 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                   >
                     <h1 className="text-8xl md:text-9xl lg:text-[10rem] font-bold leading-none mb-4">
                       <div className="flex flex-col">
-                        <span className="whitespace-nowrap">{slide.staticText}</span>
+                        <div className="flex items-center space-x-4">
+                          <span className="whitespace-nowrap">{slide.staticText}</span>
+                          {slide.icon && (
+                            <div className={`p-2 rounded-full ${slide.id === 3 ? 'bg-gray-200/50' : 'bg-white/20'}`}>
+                              <slide.icon className={`w-16 h-16 md:w-20 md:h-20 ${slide.iconColor || 'text-current'} drop-shadow-lg`} />
+                            </div>
+                          )}
+                        </div>
                         <span className="relative h-[1.2em] mt-2">
                           <span className={`relative ${currentText ? 'opacity-100' : 'opacity-0'}`}>
                             {currentText}
