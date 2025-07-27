@@ -40,13 +40,13 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false })
   ];
 
   // Calculate the horizontal offset based on sidebar state
-  const horizontalOffset = isSidebarCollapsed ? '-translate-x-36' : '-translate-x-8';
+  const horizontalOffset = isSidebarCollapsed ? '-translate-x-32' : 'translate-x-[-65px]';
 
   return (
     <div 
       className={`fixed bottom-6 left-[calc(50%+15px)] transform -translate-x-1/2 z-50 transition-all duration-300 ${horizontalOffset}`}
     >
-      <div className="flex items-center justify-center bg-gray-100/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-500 group">
+      <div className="flex items-center justify-center bg-gray-100/95 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-500 group">
         {socialLinks.map((social, index) => {
           const colorMap: { [key: string]: string } = {
             'bg-blue-600': '#1d4ed8',

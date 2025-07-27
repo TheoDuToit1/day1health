@@ -14,7 +14,7 @@ const FacebookButton: React.FC = () => {
             width="36"
             height="36"
             fill="currentColor"
-            className="bi bi-facebook"
+            className="bi bi-facebook text-blue-600"
             viewBox="0 0 16 16"
           >
             <path

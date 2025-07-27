@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 
@@ -12,40 +12,51 @@ interface HeroSlide {
   typewriterWords: string[];
   subheading: string;
   bgColor: string;
+  textColor?: string;
+  buttonBg?: string;
 }
 
 const heroSlides: HeroSlide[] = [
   {
     id: 0,
-    staticText: 'Your Health,',
+    staticText: 'Health 🩺',
     typewriterWords: ['Well', 'Protected', 'Secured'],
     subheading: 'Simple, affordable healthcare from day one.',
     bgColor: 'from-green-600 to-green-700',
   },
   {
     id: 1,
-    staticText: 'Church Members,',
+    staticText: 'Community 🙏',
     typewriterWords: ['United', 'Supported', 'Covered'],
     subheading: 'Designed with community in mind.',
     bgColor: 'from-blue-900 to-blue-800',
   },
   {
     id: 2,
-    staticText: 'Self-Employed?',
+    staticText: 'Freelance? 💼',
     typewriterWords: ['Covered', 'Protected', 'Empowered'],
     subheading: 'Flexible medical plans for freelancers.',
     bgColor: 'from-amber-800 to-amber-700',
   },
   {
     id: 3,
-    staticText: 'Family First,',
+    staticText: 'Family 👨‍👩‍👧‍👦',
     typewriterWords: ['Protected', 'Secure', 'Together'],
     subheading: 'Because everyone deserves Day1 protection.',
-    bgColor: 'from-slate-700 to-slate-600',
+    bgColor: 'from-pink-100 to-blue-100',
+    textColor: 'text-gray-900',
+    buttonBg: 'bg-green-600 hover:bg-green-700',
   },
 ];
 
 const Hero = ({ isSidebarCollapsed }: HeroProps) => {
+  // Calculate padding based on sidebar state with more noticeable difference
+  const getContentPadding = () => {
+    if (isSidebarCollapsed) {
+      return 'pl-12 md:pl-16 lg:pl-24';
+    }
+    return 'pl-24 md:pl-32 lg:pl-48 xl:pl-64';
+  };
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
@@ -99,15 +110,12 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
     setIsDeleting(false);
   }, [currentSlide]);
 
-  const navTabs = ['Comprehensive', 'Day-to-Day', 'Hospital', 'Senior Cover'];
-  const taglines = ['No call centers', 'No paperwork', 'No commission'];
+  const getHeroPadding = () => {
+    return isSidebarCollapsed ? 'pl-24 lg:pl-32' : 'pl-8 lg:pl-12';
+  };
 
   return (
-    <section 
-      className={`relative min-h-[calc(100vh-80px)] overflow-hidden transition-all duration-300 pb-20 ${
-        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'
-      }`}
-    >
+    <section id="hero" className="relative min-h-[calc(100vh-80px)] overflow-hidden transition-all duration-500 pb-20 w-full">
       <AnimatePresence mode="wait">
         {heroSlides.map((slide, index) => {
           if (currentSlide !== index) return null;
@@ -119,28 +127,35 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className={`min-h-screen flex items-center justify-center bg-gradient-to-br ${slide.bgColor} text-white`}
+              className={`min-h-screen flex items-center justify-start bg-gradient-to-br ${slide.bgColor} ${slide.textColor || 'text-white'}`}
             >
-              <div className="container mx-auto px-4 pt-32 pb-16">
-                <div className="max-w-4xl mx-auto text-center">
+              <div 
+                className={`container mx-auto pr-12 lg:pr-24 pt-32 pb-16 transition-all duration-500 ease-in-out ${getContentPadding()} ${getHeroPadding()}`}
+                style={{
+                  transitionProperty: 'padding',
+                  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                  transitionDuration: '500ms'
+                }}
+              >
+                <div className="max-w-4xl">
                   <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="mb-8"
+                    className="mb-12"
                   >
-                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-                      <div className="inline-flex flex-col sm:flex-row sm:items-baseline gap-2">
+                    <h1 className="text-8xl md:text-9xl lg:text-[10rem] font-bold leading-none mb-4">
+                      <div className="flex flex-col">
                         <span className="whitespace-nowrap">{slide.staticText}</span>
-                        <span className="relative h-[1.2em] inline-flex items-center min-w-[180px] sm:min-w-[220px] text-left justify-center sm:justify-start">
+                        <span className="relative h-[1.2em] mt-2">
                           <span className={`relative ${currentText ? 'opacity-100' : 'opacity-0'}`}>
                             {currentText}
-                            <span className={`inline-block w-[2px] h-8 ml-1 bg-white align-middle ${currentText ? 'opacity-100' : 'opacity-0'}`}></span>
+                            <span className={`inline-block w-[4px] h-16 ml-2 ${slide.id === 3 ? 'bg-gray-900' : 'bg-white'} align-middle ${currentText ? 'opacity-100' : 'opacity-0'}`}></span>
                           </span>
                         </span>
                       </div>
                     </h1>
-                    <p className="text-xl md:text-2xl text-white/90 mt-4">
+                    <p className="text-2xl md:text-3xl mt-8 max-w-2xl leading-relaxed">
                       {slide.subheading}
                     </p>
                   </motion.div>
@@ -149,23 +164,14 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="mt-10"
+                    className="mt-12"
                   >
-                    <button className="bg-white text-green-700 hover:bg-gray-100 font-semibold py-3 px-8 rounded-full text-lg transition-colors duration-300 flex items-center mx-auto">
+                    <button className={`${slide.buttonBg || 'bg-white text-green-700 hover:bg-gray-100'} font-semibold py-4 px-10 rounded-lg text-lg transition-colors duration-300 flex items-center`}>
                       Get my price
                       <ChevronRight className="ml-2 h-5 w-5" />
                     </button>
 
-                    <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-white/80">
-                      {taglines.map((tagline, i) => (
-                        <div key={i} className="flex items-center">
-                          {tagline}
-                          {i < taglines.length - 1 && (
-                            <span className="mx-2">•</span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+
                   </motion.div>
                 </div>
               </div>
@@ -175,13 +181,15 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
       </AnimatePresence>
 
       {/* Navigation Dots */}
-      <div className="absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-3 z-10">
-        {heroSlides.map((_, index) => (
+      <div className={`absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-3 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'right-4' : 'right-8'}`}>
+        {heroSlides.map((slide, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`w-3 h-3 rounded-full transition-all ${
-              currentSlide === index ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
+              currentSlide === index 
+                ? (slide.id === 3 ? 'bg-gray-900 scale-125' : 'bg-white scale-125')
+                : (slide.id === 3 ? 'bg-gray-900/30 hover:bg-gray-900/50' : 'bg-white/50 hover:bg-white/75')
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
@@ -190,22 +198,18 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
 
       {/* Bottom Tabs - Moved to be part of the hero content */}
       <div className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm border-t border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center space-x-1 py-3">
-            {navTabs.map((tab, index) => (
-              <button
-                key={index}
-                className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                  currentSlide === index
-                    ? 'bg-white text-gray-900'
-                    : 'text-white hover:bg-white/10'
-                }`}
-                onClick={() => setCurrentSlide(index)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        {/* Mobile Navigation Dots */}
+        <div className="lg:hidden fixed bottom-8 left-0 right-0 flex justify-center space-x-2 z-40">
+          {[0, 1, 2, 3].map((index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                currentSlide === index ? 'bg-white' : 'bg-white/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
 

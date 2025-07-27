@@ -1,6 +1,10 @@
 import React from 'react';
 import { Carousel, TestimonialCard } from './ui/retro-testimonial';
 
+interface FeedbackProps {
+  isSidebarCollapsed: boolean;
+}
+
 const testimonials = [
   {
     name: 'Sarah Johnson',
@@ -28,10 +32,14 @@ const testimonials = [
   }
 ];
 
-const Feedback: React.FC = () => {
+const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
   return (
-    <section id="feedback" className="py-20 lg:pl-56 bg-gray-50 transition-all duration-300">
-      <div className="container mx-auto px-4">
+    <section id="feedback" className={`py-20 bg-gray-50 transition-all duration-500 ${
+      isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-56'
+    }`}>
+      <div className={`mx-auto px-4 transition-all duration-500 ${
+        isSidebarCollapsed ? 'lg:pl-8' : 'lg:pl-4'
+      }`} style={{ maxWidth: '90rem' }}>
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
             Testimonials

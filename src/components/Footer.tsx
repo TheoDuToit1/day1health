@@ -13,11 +13,11 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
   return (
     <footer 
       id={id} 
-      className={`transition-all duration-300 bg-gray-900 text-white ${
-        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
+      className={`bg-gray-900 text-white mt-auto ${
+        isSidebarCollapsed ? 'w-[calc(100%-4rem)] ml-16' : 'w-[calc(100%-12.5rem)] ml-52'
       }`}
     >
-      <div className="container mx-auto px-4 py-16">
+      <div className="mx-auto px-4 py-16 w-full">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">

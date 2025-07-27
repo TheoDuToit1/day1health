@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   const navItems = [
     { id: 'hero', label: 'Home', icon: Home },
     { id: 'how-it-works', label: 'How It Works', icon: Settings },
-    { id: 'feedback', label: 'Feedback', icon: MessageSquare },
+    { id: 'feedback', label: 'Our Reviews', icon: MessageSquare },
     { id: 'why-choose', label: 'Why Choose Us', icon: Users },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'contact', label: 'Contact', icon: Phone }
@@ -34,9 +34,9 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     <>
       {/* Desktop Sidebar */}
       <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-lg lg:z-40 lg:flex lg:flex-col transition-all duration-300 ${
-        isSidebarCollapsed ? 'lg:w-16' : 'lg:w-56'
+        isSidebarCollapsed ? 'w-16' : 'w-42'
       } ${
-        isFooterInView ? 'lg:bg-gray-900' : 'lg:bg-white'
+        isFooterInView ? 'bg-gray-900' : 'bg-white'
       }`}>
         {/* Sidebar Toggle Button */}
         <button
@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                   {isSidebarCollapsed ? (
                     <item.icon className="w-5 h-5 mx-auto" />
                   ) : (
-                    <span>{item.label}</span>
+                    <span className="w-full text-left">{item.label}</span>
                   )}
                 </button>
               </li>

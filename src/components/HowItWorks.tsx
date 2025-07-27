@@ -1,7 +1,11 @@
 import React from 'react';
 import { Search, FileText, Shield, Stethoscope } from 'lucide-react';
 
-const HowItWorks: React.FC = () => {
+interface HowItWorksProps {
+  isSidebarCollapsed: boolean;
+}
+
+const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
   const steps = [
     {
       icon: Search,
@@ -30,11 +34,18 @@ const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 lg:pl-56 bg-white relative overflow-hidden transition-all duration-300">
+    <section 
+      id="how-it-works" 
+      className={`py-20 bg-white relative overflow-hidden transition-all duration-500 ${
+        isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-56'
+      }`}
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-blue-50/50"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className={`container mx-auto px-4 relative z-10 transition-all duration-500 ${
+          isSidebarCollapsed ? 'lg:pl-8' : 'lg:pl-4'
+        }`}>
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
             How It Works

@@ -108,8 +108,8 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 				/>
 				<div
 					className={cn(
-						"flex flex-row justify-start gap-4 pl-3",
-						"max-w-5xl mx-auto",
+						"flex flex-row justify-start gap-4 px-4",
+						"w-full max-w-[90%] mx-auto",
 					)}
 				>
 					{items.map((item, index) => {
@@ -127,7 +127,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 								}}
 								viewport={{ once: true }}
 								key={`card-${index}`}
-								className="last:pr-[5%] md:last:pr-[33%] rounded-3xl"
+								className="last:pr-4 rounded-3xl"
 							>
 								{React.cloneElement(item, {
 									onCardClose: () => {
@@ -139,7 +139,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 					})}
 				</div>
 			</div>
-			<div className="flex justify-end gap-2 mt-4">
+			<div className="flex justify-center gap-2 mt-6">
 				<button
 					className="relative z-40 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center disabled:opacity-50 hover:bg-green-700 transition-colors duration-200"
 					onClick={handleScrollLeft}

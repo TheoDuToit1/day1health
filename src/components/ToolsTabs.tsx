@@ -13,7 +13,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     { id: 'comprehensive', label: 'Comprehensive', icon: Shield },
     { id: 'daytoday', label: 'Day-to-Day', icon: Heart },
     { id: 'hospital', label: 'Hospital', icon: CreditCard },
-    { id: 'senior', label: 'Senior Cover', icon: Users }
+    { id: 'senior', label: 'Build your own', icon: Users }
   ];
 
   const handleTabClick = (tabId: string) => {
@@ -56,7 +56,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span>Chronic medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors">
+                <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                   Choose Plan
                 </button>
               </div>
@@ -91,7 +91,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span>Chronic medication (PDP)</span>
                   </li>
                 </ul>
-                <button className="w-full bg-yellow-500 text-white py-3 rounded-xl font-semibold hover:bg-yellow-600 transition-colors">
+                <button className="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
                   Choose Plan
                 </button>
               </div>
@@ -126,7 +126,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span>Acute medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-gray-600 text-white py-3 rounded-xl font-semibold hover:bg-gray-700 transition-colors">
+                <button className="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
                   Choose Plan
                 </button>
               </div>
@@ -161,7 +161,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span>Basic medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-amber-500 text-white py-3 rounded-xl font-semibold hover:bg-amber-600 transition-colors">
+                <button className="w-full bg-amber-500 text-white py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors">
                   Choose Plan
                 </button>
               </div>
@@ -350,19 +350,19 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   };
 
   return (
-    <div className={`relative z-30 -mt-10 transition-all duration-300 ${
+    <div className={`relative z-30 -mt-32 transition-all duration-300 ${
       isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-56'
     }`}>
       <div className="container mx-auto px-4">
         {/* Floating Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-full shadow-md border border-gray-100 p-2 backdrop-blur-sm bg-white/95">
-            <div className="flex flex-wrap justify-center gap-1">
+        <div className="flex justify-center mb-12">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 backdrop-blur-sm bg-white/95">
+            <div className="flex flex-wrap justify-center gap-4">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}
-                  className={`flex items-center space-x-2 px-4 py-3 rounded-full font-medium text-sm transition-all duration-300 whitespace-nowrap ${
+                  className={`flex items-center space-x-2 px-6 py-4 rounded-xl font-medium text-base transition-all duration-300 whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'bg-green-600 text-white shadow-md transform scale-105'
                       : 'text-green-600 border border-transparent hover:border-green-200 hover:bg-green-50'

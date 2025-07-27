@@ -1,7 +1,11 @@
 import React from 'react';
 import { Shield, Clock, Users, Heart, Globe, Award } from 'lucide-react';
 
-const WhyChoose: React.FC = () => {
+interface WhyChooseProps {
+  isSidebarCollapsed: boolean;
+}
+
+const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
   const features = [
     {
       icon: Shield,
@@ -42,8 +46,15 @@ const WhyChoose: React.FC = () => {
   ];
 
   return (
-    <section id="why-choose" className="py-20 lg:pl-56 bg-gray-50 transition-all duration-300">
-      <div className="container mx-auto px-4">
+    <section 
+      id="why-choose" 
+      className={`py-20 bg-gray-50 transition-all duration-500 ${
+        isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-56'
+      }`}
+    >
+      <div className={`container mx-auto px-4 transition-all duration-500 ${
+        isSidebarCollapsed ? 'lg:pl-8' : 'lg:pl-4'
+      }`}>
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
             Why Choose Day1Health

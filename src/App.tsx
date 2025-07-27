@@ -17,9 +17,18 @@ function App() {
 
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
+    // Special case for home/hero section
+    if (sectionId === 'hero') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      return;
+    }
+    
     const element = document.getElementById(sectionId);
     if (element) {
-      const offsetTop = sectionId === 'hero' ? 0 : element.offsetTop - 100;
+      const offsetTop = element.offsetTop - 100;
       window.scrollTo({
         top: offsetTop,
         behavior: 'smooth'
@@ -76,27 +85,31 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header 
-        activeSection={activeSection} 
-        onNavigate={scrollToSection}
-        isSidebarCollapsed={isSidebarCollapsed}
-        setIsSidebarCollapsed={setIsSidebarCollapsed}
-        isFooterInView={isFooterInView}
-      />
-      
-      <main>
-        <Hero isSidebarCollapsed={isSidebarCollapsed} />
-        <ToolsTabs isSidebarCollapsed={isSidebarCollapsed} />
-        <HowItWorks />
-        <Feedback />
-        <WhyChoose />
-        <FAQs />
-        <Contact />
-      </main>
-      
-      <Footer id="footer" isSidebarCollapsed={isSidebarCollapsed} />
-      <SocialLinks isSidebarCollapsed={isSidebarCollapsed} />
+    <div className="min-h-screen bg-white overflow-x-hidden">
+      <div className="flex min-h-screen w-full">
+        <Header 
+          activeSection={activeSection} 
+          onNavigate={scrollToSection}
+          isSidebarCollapsed={isSidebarCollapsed}
+          setIsSidebarCollapsed={setIsSidebarCollapsed}
+          isFooterInView={isFooterInView}
+        />
+        
+        <div className="flex-1 w-0">
+          <main className="w-full">
+            <Hero isSidebarCollapsed={isSidebarCollapsed} />
+            <ToolsTabs isSidebarCollapsed={isSidebarCollapsed} />
+            <HowItWorks isSidebarCollapsed={isSidebarCollapsed} />
+            <Feedback isSidebarCollapsed={isSidebarCollapsed} />
+            <WhyChoose isSidebarCollapsed={isSidebarCollapsed} />
+            <FAQs isSidebarCollapsed={isSidebarCollapsed} />
+            <Contact isSidebarCollapsed={isSidebarCollapsed} />
+          </main>
+          
+          <Footer id="footer" isSidebarCollapsed={isSidebarCollapsed} />
+          <SocialLinks isSidebarCollapsed={isSidebarCollapsed} />
+        </div>
+      </div>
     </div>
   );
 }
