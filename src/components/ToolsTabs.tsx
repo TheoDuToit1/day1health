@@ -379,7 +379,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
   return (
     <div className={`relative z-30 -mt-32 transition-all duration-300 ${
-      isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-56'
+      isSidebarCollapsed ? 'lg:ml-12' : 'lg:ml-40'
     }`}>
       <div className="container mx-auto px-4">
         {/* Floating Tabs */}

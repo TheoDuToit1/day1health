@@ -47,12 +47,10 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     <section 
       id="faqs" 
       className={`py-20 bg-white transition-all duration-500 ${
-        isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-56'
+        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-40'
       }`}
     >
-      <div className={`container mx-auto px-4 transition-all duration-500 ${
-        isSidebarCollapsed ? 'lg:pl-8' : 'lg:pl-4'
-      }`}>
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
             Frequently Asked Questions

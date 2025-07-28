@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-vertical {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+/* Marquee animation utilities */
+.animate-marquee {
+  animation: marquee var(--duration, 40s) infinite linear;
+  will-change: transform;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 40s) infinite linear;
+  will-change: transform;
+}
+
+/* Ensure smooth infinite looping */
+.animate-marquee-vertical {
+  animation-iteration-count: infinite;
+  animation-fill-mode: none;
+  animation-timing-function: linear;
+}
+
 /* Custom Styles */
 html {
   scroll-behavior: smooth;

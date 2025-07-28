@@ -14,7 +14,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
     <footer 
       id={id} 
       className={`bg-gray-900 text-white mt-auto ${
-        isSidebarCollapsed ? 'w-[calc(100%-4rem)] ml-16' : 'w-[calc(100%-12.5rem)] ml-52'
+        isSidebarCollapsed ? 'w-[calc(100%-3rem)] ml-12' : 'w-[calc(100%-9.375rem)] ml-40'
       }`}
     >
       <div className="mx-auto px-4 py-16 w-full">

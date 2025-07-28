@@ -3,9 +3,10 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
 
 interface SocialLinksProps {
   isSidebarCollapsed?: boolean;
+  activeSection?: string;
 }
 
-const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false }) => {
+const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, activeSection = '' }) => {
   const socialLinks = [
     {
       name: 'Facebook',
@@ -41,6 +42,11 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false })
 
   // Calculate the horizontal offset based on sidebar state
   const horizontalOffset = isSidebarCollapsed ? '-translate-x-32' : 'translate-x-[-65px]';
+
+  // Hide social links when on hero section
+  if (activeSection === 'hero') {
+    return null;
+  }
 
   return (
     <div 

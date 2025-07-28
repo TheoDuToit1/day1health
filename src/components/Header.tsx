@@ -15,11 +15,11 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
 
   const navItems = [
     { id: 'hero', label: 'Home', icon: Home },
-    { id: 'how-it-works', label: 'How It Works', icon: Settings },
-    { id: 'feedback', label: 'Our Reviews', icon: MessageSquare },
-    { id: 'why-choose', label: 'Why Choose Us', icon: Users },
-    { id: 'faqs', label: 'FAQs', icon: HelpCircle },
-    { id: 'contact', label: 'Contact', icon: Phone }
+    { id: 'how-it-works', label: 'Cover plan', icon: Settings },
+    { id: 'feedback', label: 'Reviews', icon: MessageSquare },
+    { id: 'why-choose', label: 'Why Us', icon: Users },
+    { id: 'contact', label: 'Contact us', icon: Phone },
+    { id: 'faqs', label: 'Faqs', icon: HelpCircle }
   ];
 
   useEffect(() => {
@@ -33,8 +33,8 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-lg lg:z-40 lg:flex lg:flex-col transition-all duration-300 ${
-        isSidebarCollapsed ? 'w-16' : 'w-42'
+      <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-auto lg:bottom-0 lg:shadow-lg lg:z-40 lg:flex lg:flex-col transition-all duration-300 ${
+        isSidebarCollapsed ? 'w-16' : 'w-32'
       } ${
         isFooterInView ? 'bg-gray-900' : 'bg-white'
       }`}>
@@ -50,24 +50,19 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           )}
         </button>
         
-        <div className={`p-6 transition-all duration-300 ${
+        <div className={`p-4 transition-all duration-300 ${
           isFooterInView ? 'border-b border-gray-700' : 'border-b border-gray-200'
         }`}>
-          <div className={`flex items-center transition-all duration-300 ${
-            isSidebarCollapsed ? 'justify-center' : 'space-x-2'
+          <div className={`flex items-center justify-center transition-all duration-300 ${
+            isSidebarCollapsed ? 'p-2' : 'p-0'
           }`}>
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">D1</span>
+            <div className={`${isSidebarCollapsed ? 'w-10 h-10' : 'w-8 h-8'} bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300`}>
+              <span className={`text-white font-bold ${isSidebarCollapsed ? 'text-base' : 'text-sm'}`}>D1</span>
             </div>
-            {!isSidebarCollapsed && (
-              <span className={`text-xl font-bold transition-colors duration-300 ${
-                isFooterInView ? 'text-white' : 'text-gray-900'
-              }`}>Day1Health</span>
-            )}
           </div>
         </div>
         
-        <nav className="flex-1 p-6">
+        <nav className="flex-1 p-4">
           <ul className="space-y-0.5">
             {navItems.map((item) => (
               <li key={item.id}>
@@ -83,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                   title={isSidebarCollapsed ? item.label : undefined}
                 >
                   {isSidebarCollapsed ? (
-                    <item.icon className="w-5 h-5 mx-auto" />
+                    <item.icon className="w-7 h-7 mx-auto" />
                   ) : (
                     <span className="w-full text-left">{item.label}</span>
                   )}
@@ -104,34 +99,34 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             }`}>
               Quick Actions
             </h3>
-            <div className="space-y-2">
-              <button className={`w-full text-left px-4 py-2 text-sm rounded-lg transition-colors flex items-center ${
+            <div className="space-y-1">
+              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
                 isFooterInView 
                   ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               }`}>
-                <span className="mr-2">📋</span> Get a Quote
+                Get a Quote
               </button>
-              <button className={`w-full text-left px-4 py-2 text-sm rounded-lg transition-colors flex items-center ${
+              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
                 isFooterInView 
                   ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               }`}>
-                <span className="mr-2">📞</span> Schedule Call
+                Schedule Call
               </button>
-              <button className={`w-full text-left px-4 py-2 text-sm rounded-lg transition-colors flex items-center ${
+              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
                 isFooterInView 
                   ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               }`}>
-                <span className="mr-2">💬</span> Live Chat
+                Live Chat
               </button>
-              <button className={`w-full text-left px-4 py-2 text-sm rounded-lg transition-colors flex items-center ${
+              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
                 isFooterInView 
                   ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               }`}>
-                <span className="mr-2">📍</span> Find Office
+                Find Office
               </button>
             </div>
           </div>

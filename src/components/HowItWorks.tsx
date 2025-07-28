@@ -37,15 +37,13 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     <section 
       id="how-it-works" 
       className={`py-20 bg-white relative overflow-hidden transition-all duration-500 ${
-        isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-56'
+        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-40'
       }`}
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-blue-50/50"></div>
       
-      <div className={`container mx-auto px-4 relative z-10 transition-all duration-500 ${
-          isSidebarCollapsed ? 'lg:pl-8' : 'lg:pl-4'
-        }`}>
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
             How It Works
