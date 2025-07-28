@@ -28,25 +28,11 @@ const initialCategories: Category[] = [
     isIncluded: true,
     subCategories: [
       {
-        id: 'medical-basic',
-        name: 'Basic Cover',
-        description: 'GP visits, basic tests, and essential procedures',
-        price: 349,
-        selected: true
-      },
-      {
-        id: 'medical-comprehensive',
-        name: 'Comprehensive',
-        description: 'Includes specialist consultations and advanced diagnostics',
-        price: 549,
-        selected: false
-      },
-      {
-        id: 'medical-premium',
-        name: 'Premium',
+        id: 'medical-hospital',
+        name: 'Hospital',
         description: 'Full medical cover with private hospital access',
         price: 899,
-        selected: false
+        selected: true
       }
     ]
   },
@@ -58,22 +44,8 @@ const initialCategories: Category[] = [
     isIncluded: false,
     subCategories: [
       {
-        id: 'medication-basic',
-        name: 'Basic Formulary',
-        description: 'Essential chronic medications',
-        price: 199,
-        selected: false
-      },
-      {
-        id: 'medication-extended',
-        name: 'Extended Formulary',
-        description: 'Wider range of chronic medications',
-        price: 349,
-        selected: false
-      },
-      {
-        id: 'medication-comprehensive',
-        name: 'Comprehensive',
+        id: 'medication-hospital',
+        name: 'Hospital',
         description: 'Full chronic medication coverage',
         price: 499,
         selected: false
@@ -88,24 +60,10 @@ const initialCategories: Category[] = [
     isIncluded: false,
     subCategories: [
       {
-        id: 'dental-basic',
-        name: 'Preventive',
-        description: 'Check-ups, cleanings, and x-rays',
-        price: 149,
-        selected: false
-      },
-      {
-        id: 'dental-comprehensive',
-        name: 'Comprehensive',
-        description: 'Includes fillings and extractions',
-        price: 249,
-        selected: false
-      },
-      {
-        id: 'dental-premium',
-        name: 'Premium',
-        description: 'Includes crowns, bridges, and dentures',
-        price: 399,
+        id: 'dental-hospital',
+        name: 'Hospital',
+        description: 'Comprehensive dental coverage',
+        price: 499,
         selected: false
       }
     ]
@@ -113,22 +71,15 @@ const initialCategories: Category[] = [
   {
     id: 'optical',
     name: 'Optical Care',
-    description: 'Eye care and vision correction',
+    description: 'Vision care and eyewear',
     isExpanded: false,
     isIncluded: false,
     subCategories: [
       {
-        id: 'optical-basic',
-        name: 'Basic',
-        description: 'Eye tests and basic frames',
-        price: 129,
-        selected: false
-      },
-      {
-        id: 'optical-premium',
-        name: 'Premium',
-        description: 'Includes designer frames and lenses',
-        price: 299,
+        id: 'optical-hospital',
+        name: 'Hospital',
+        description: 'Comprehensive vision coverage',
+        price: 399,
         selected: false
       }
     ]
@@ -141,16 +92,9 @@ const initialCategories: Category[] = [
     isIncluded: false,
     subCategories: [
       {
-        id: 'home-nursing',
-        name: 'Nursing Care',
-        description: 'Basic nursing services at home',
-        price: 299,
-        selected: false
-      },
-      {
-        id: 'home-support',
-        name: 'Support Services',
-        description: 'Includes personal care assistance',
+        id: 'home-hospital',
+        name: 'Hospital',
+        description: 'Comprehensive home care coverage',
         price: 499,
         selected: false
       }
