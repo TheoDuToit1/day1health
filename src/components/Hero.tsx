@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, HeartPulse, Briefcase, UsersRound, Users2, ShieldCheck, Activity, Heart, Star } from 'lucide-react';
+import { ChevronRight, HeartPulse, Briefcase, UsersRound, Users2, ShieldCheck, Activity, Heart, Star, Magnet } from 'lucide-react';
+import { MagnetizeButton } from '@/components/ui/magnetize-button';
 import type { LucideProps } from 'lucide-react';
 import { ShuffleCards } from '@/components/ui/shuffle-cards';
 import { AudioPlayer } from '@/components/ui/audio-player';
@@ -778,22 +779,42 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.6 }}
-                        className="text-2xl sm:text-3xl md:text-4xl text-gray-700 font-manrope font-medium max-w-4xl mx-auto leading-relaxed"
+                        className="text-2xl sm:text-3xl md:text-4xl text-gray-700 font-manrope font-medium max-w-4xl mx-auto leading-relaxed mt-[50px] mb-12"
                       >
                         {slide.subheading}
                       </motion.p>
                       
-                      {/* CTA Button */}
-                      <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.8, duration: 0.6 }}
-                        className="mt-12"
-                      >
-                        <button className="bg-green-600 hover:bg-green-700 text-white font-manrope font-bold text-xl px-12 py-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl">
-                          Get Started Today
-                        </button>
-                      </motion.div>
+                      {/* Magnetize Button for Slide 1 */}
+                      {slide.id === 0 && (
+                        <motion.div
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.8, duration: 0.6 }}
+                          className="mt-4"
+                        >
+                          <MagnetizeButton 
+                            className="text-xl px-10 py-5 rounded-sm shadow-md hover:shadow-xl transition-all duration-500 ease-out transform hover:scale-[1.03] font-semibold tracking-wide"
+                            particleCount={16}
+                            attractRadius={60}
+                          >
+                            Join Now
+                          </MagnetizeButton>
+                        </motion.div>
+                      )}
+                      
+                      {/* CTA Button - Only show for slides other than the first one */}
+                      {slide.id !== 0 && (
+                        <motion.div
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.8, duration: 0.6 }}
+                          className="mt-12"
+                        >
+                          <button className="bg-green-600 hover:bg-green-700 text-white font-manrope font-bold text-xl px-12 py-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl">
+                            Get Started Today
+                          </button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   </div>
                 )}
