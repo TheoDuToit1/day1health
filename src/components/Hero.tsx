@@ -51,14 +51,15 @@ const heroSlides: HeroSlide[] = [
   },
   {
     id: 1,
-    staticText: 'Community',
+    staticText: 'My FamCare',
     icon: Users2,
     typewriterWords: [
-      { text: 'United', icon: Users2 },
-      { text: 'Supported', icon: HeartPulse },
-      { text: 'Covered', icon: ShieldCheck }
+      { text: 'Our family feels safe.', icon: ShieldCheck },
+      { text: 'No gaps. Just care.', icon: Heart },
+      { text: 'Protected in every way.', icon: Users2 },
+      { text: 'Health cover that lasts.', icon: Star }
     ],
-    subheading: 'Designed with community in mind.',
+    subheading: 'Complete care for growing families',
     bgColor: 'from-[#A8DADC] to-[#A8DADC]',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
@@ -329,9 +330,6 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
   };
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [currentText, setCurrentText] = useState<string>('');
-  const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [isTypewriterComplete, setIsTypewriterComplete] = useState(false);
   const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTestimonial, setModalTestimonial] = useState<any>(null);
@@ -345,60 +343,64 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
   // Get words for current slide
   const currentWords = heroSlides[currentSlide]?.typewriterWords || [];
 
-  // Typewriter effect with smoother animation
+  // Smooth typewriter effect that types sentences sequentially with pauses
   useEffect(() => {
     if (currentWords.length === 0) return;
 
     let timeoutId: ReturnType<typeof setTimeout>;
-    const currentWordText = currentWords[currentWordIndex]?.text || '';
-    let newTypingSpeed = 100;
-
-    const type = () => {
-      if (isDeleting) {
-        // Delete character
-        setCurrentText((prev) => {
-          const newText = prev.substring(0, prev.length - 1);
-          if (newText === '') {
-            // Move to next word
-            setIsDeleting(false);
-            setCurrentWordIndex((prevIndex) => (prevIndex + 1) % currentWords.length);
-            newTypingSpeed = 500; // Pause before typing next word
-          } else {
-            newTypingSpeed = 30; // Faster when deleting
-          }
-          return newText;
-        });
-      } else {
-        // Type character
-        setCurrentText((prev) => {
-          const newText = currentWordText.substring(0, prev.length + 1);
-          if (newText === currentWordText) {
-            // Pause at end of word
-            setIsDeleting(true);
-            newTypingSpeed = 1500;
-          } else {
-            // Smoother typing with easing
-            newTypingSpeed = Math.max(30, Math.min(100, 150 - (prev.length * 2)));
-          }
-          return newText;
-        });
+    let charIndex = 0;
+    let sentenceIndex = 0;
+    
+    const typeNextChar = () => {
+      if (sentenceIndex >= currentWords.length) {
+        // All sentences completed, restart after a longer pause
+        timeoutId = setTimeout(() => {
+          setCurrentText('');
+          sentenceIndex = 0;
+          charIndex = 0;
+          typeNextChar();
+        }, 3000); // 3 second pause before restarting
+        return;
       }
 
-      timeoutId = setTimeout(type, newTypingSpeed);
+      const currentSentence = currentWords[sentenceIndex]?.text || '';
+      
+      if (charIndex <= currentSentence.length) {
+        // Type the next character
+        setCurrentText(currentSentence.substring(0, charIndex));
+        charIndex++;
+        
+        if (charIndex <= currentSentence.length) {
+          // Continue typing current sentence
+          timeoutId = setTimeout(typeNextChar, 80); // Smooth typing speed
+        } else {
+          // Sentence completed, pause before next sentence
+          timeoutId = setTimeout(() => {
+            sentenceIndex++;
+            charIndex = 0;
+            typeNextChar();
+          }, 1000); // 1 second pause between sentences
+        }
+      }
     };
 
-    timeoutId = setTimeout(type, 800); // Initial delay
+    // Start typing after initial delay
+    setCurrentText('');
+    timeoutId = setTimeout(typeNextChar, 500);
     
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [currentWordIndex, isDeleting, currentWords]);
+  }, [currentWords]);
 
   // Reset typewriter when slide changes
   useEffect(() => {
-    setCurrentText('');
-    setCurrentWordIndex(0);
-    setIsDeleting(false);
+    // Don't reset text immediately to prevent flash
+    const timer = setTimeout(() => {
+      setCurrentText('');
+    }, 50);
+    
+    return () => clearTimeout(timer);
   }, [currentSlide]);
 
   const getHeroPadding = () => {
@@ -727,29 +729,51 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                       className="text-center max-w-7xl mx-auto px-6"
                     >
                       {/* Main Heading - Bold and Centered */}
-                      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-manrope font-bold leading-tight tracking-tight text-gray-900 mb-6">
+                      <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 mb-12 ${
+                        slide.id === 1 
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-left -ml-[200px] -mt-[87px]' 
+                          : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center'
+                      }`}>
                         {slide.id === 0 ? (
-                          <>
+                          <div className="mb-8">
                             You're one{' '}
                             <span className="text-gray-900">smart choice</span>{' '}
                             away
-                          </>
+                          </div>
+                        ) : slide.id === 1 ? (
+                          <div className="mb-8">
+                            <span className="text-white">My </span>
+                            <span className="text-green-600">FamCare</span>
+                          </div>
                         ) : (
-                          slide.staticText
+                          <div className="mb-8">
+                            {slide.staticText}
+                          </div>
                         )}
                       </h1>
                       
                       {/* Typewriter Section - Large and Prominent */}
-                      <div className="mb-8 flex items-baseline justify-center gap-4">
-                        <span className="text-3xl sm:text-4xl md:text-5xl font-manrope font-bold text-gray-900">
-                          from
-                        </span>
-                        <div className="relative">
-                          <span className={`text-3xl sm:text-4xl md:text-5xl font-manrope font-bold transition-all duration-300 ${currentText ? 'text-green-600' : 'text-transparent'}`}>
-                            {currentText || 'placeholder'}
+                      <div className={`mb-20 flex items-baseline gap-4 ${
+                        slide.id === 1 ? 'justify-start -ml-[200px]' : 'justify-center'
+                      }`}>
+                        {slide.id !== 1 && (
+                          <span className="text-3xl sm:text-4xl md:text-5xl font-manrope font-bold text-gray-900">
+                            from
                           </span>
-                          {/* Enhanced Heartbeat Line */}
-                          <div className={`absolute -bottom-4 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>
+                        )}
+                        <div className={`relative min-w-[200px] ${
+                          slide.id === 1 ? 'h-24 sm:h-28 md:h-32 lg:h-36' : 'h-16 sm:h-20 md:h-24'
+                        }`}>
+                          <span className={`font-manrope font-bold opacity-100 block ${
+                            slide.id === 1 
+                              ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight' 
+                              : 'text-3xl sm:text-4xl md:text-5xl text-green-600'
+                          }`}>
+                            {currentText || ''}
+                          </span>
+                          {/* Enhanced Heartbeat Line - Hidden for slide 2 */}
+                          {slide.id !== 1 && (
+                            <div className={`absolute -bottom-4 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>
                             <svg 
                               className="w-full h-full" 
                               viewBox="0 0 400 32" 
@@ -762,7 +786,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                                 fill="none"
                                 initial={{ pathLength: 0 }}
                                 animate={{ 
-                                  pathLength: currentText ? (currentText.length / (currentWords[currentWordIndex]?.text.length || 1)) : 0 
+                                  pathLength: currentText ? 1 : 0 
                                 }}
                                 transition={{
                                   duration: 0.1,
@@ -771,6 +795,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                               />
                             </svg>
                           </div>
+                          )}
                         </div>
                       </div>
                       
@@ -779,7 +804,12 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.6 }}
-                        className="text-2xl sm:text-3xl md:text-4xl text-gray-700 font-manrope font-medium max-w-4xl mx-auto leading-relaxed mt-[50px] mb-12"
+                        className={`text-base sm:text-xl md:text-2xl text-gray-700 font-manrope font-bold max-w-4xl mx-auto leading-relaxed mt-24 mb-20 ${
+                          slide.id === 1 ? 'text-center' : ''
+                        }`}
+                        style={{ 
+                          marginTop: slide.id === 1 ? '50px' : '235px'
+                        }}
                       >
                         {slide.subheading}
                       </motion.p>
@@ -791,19 +821,38 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.8, duration: 0.6 }}
                           className="mt-4"
+                          style={{ marginTop: '-40px' }}
                         >
                           <MagnetizeButton 
-                            className="text-xl px-10 py-5 rounded-sm shadow-md hover:shadow-xl transition-all duration-500 ease-out transform hover:scale-[1.03] font-semibold tracking-wide"
+                            className="text-2xl px-12 py-6 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-500 ease-out transform hover:scale-[1.03] font-bold tracking-wide"
                             particleCount={16}
                             attractRadius={60}
+                            style={{ transform: 'scale(1.3)' }}
                           >
                             Join Now
                           </MagnetizeButton>
                         </motion.div>
                       )}
                       
-                      {/* CTA Button - Only show for slides other than the first one */}
-                      {slide.id !== 0 && (
+                      {/* MagnetizeButton for Slide 2 */}
+                      {slide.id === 1 && (
+                        <div
+                          className="mt-4"
+                          style={{ marginTop: '10px' }}
+                        >
+                          <MagnetizeButton 
+                            className="text-2xl px-12 py-6 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-300 ease-out font-bold tracking-wide"
+                            particleCount={16}
+                            attractRadius={60}
+                            style={{ transform: 'scale(1.3)', position: 'relative', zIndex: 10 }}
+                          >
+                            Join Now
+                          </MagnetizeButton>
+                        </div>
+                      )}
+                      
+                      {/* CTA Button - Only show for slides other than the first two */}
+                      {slide.id !== 0 && slide.id !== 1 && (
                         <motion.div
                           initial={{ y: 20, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
@@ -825,15 +874,15 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
       </AnimatePresence>
 
       {/* Navigation Dots */}
-      <div className={`absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-3 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'right-4' : 'right-8'}`}>
+      <div className={`absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-4 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'right-4' : 'right-8'}`}>
         {heroSlides.map((slide, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
+            className={`w-4 h-4 rounded-full transition-all ${
               currentSlide === index 
-                ? (slide.id === 3 ? 'bg-gray-900 scale-125' : 'bg-white scale-125')
-                : (slide.id === 3 ? 'bg-gray-900/30 hover:bg-gray-900/50' : 'bg-white/50 hover:bg-white/75')
+                ? (slide.id === 3 ? 'bg-gray-900 scale-150' : 'bg-green-600 scale-150')
+                : (slide.id === 3 ? 'bg-gray-400 hover:bg-gray-600' : 'bg-gray-300 hover:bg-green-500')
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

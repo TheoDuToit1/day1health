@@ -322,8 +322,8 @@ const SeniorPackageBuilder: React.FC = () => {
   return (
     <div className="space-y-8 select-none">
       <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h3 className="text-3xl font-bold text-gray-900 mb-2">Build Your Senior Care Plan</h3>
-        <p className="text-gray-600 mb-6">Drag categories to include them in your package and select options</p>
+        <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to your ChoicePlan</h3>
+        <p className="text-gray-600 mb-6">Choose the benefits you need. Skip what you don't. Build the cover that fits you.</p>
         
         <DragDropContext 
           onDragStart={handleDragStart}

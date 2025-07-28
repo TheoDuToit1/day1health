@@ -36,7 +36,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'senior', 
-      label: 'Make your own', 
+      label: 'Your ChoicePlan', 
       icon: Users,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -378,7 +378,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   };
 
   return (
-    <div className={`relative z-30 -mt-32 transition-all duration-300 ${
+    <div className={`relative z-30 -mt-20 transition-all duration-300 ${
       isSidebarCollapsed ? 'lg:ml-12' : 'lg:ml-40'
     }`}>
       <div className="container mx-auto px-4">
