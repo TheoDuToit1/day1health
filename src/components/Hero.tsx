@@ -753,7 +753,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                       </h1>
                       
                       {/* Typewriter Section - Large and Prominent */}
-                      <div className={`mb-20 flex items-baseline gap-4 ${
+                      <div className={`${slide.id === 1 ? 'mb-2' : 'mb-8'} flex items-baseline gap-4 ${
                         slide.id === 1 ? 'justify-start -ml-[200px]' : 'justify-center'
                       }`}>
                         {slide.id !== 1 && (
@@ -773,7 +773,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                           </span>
                           {/* Enhanced Heartbeat Line - Hidden for slide 2 */}
                           {slide.id !== 1 && (
-                            <div className={`absolute -bottom-4 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>
+                            <div className={`absolute -bottom-1 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>
                             <svg 
                               className="w-full h-full" 
                               viewBox="0 0 400 32" 
@@ -808,7 +808,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                           slide.id === 1 ? 'text-center' : ''
                         }`}
                         style={{ 
-                          marginTop: slide.id === 1 ? '50px' : '235px'
+                          marginTop: '165px'
                         }}
                       >
                         {slide.subheading}
@@ -821,7 +821,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.8, duration: 0.6 }}
                           className="mt-4"
-                          style={{ marginTop: '-40px' }}
+                          style={{ marginTop: '-30px' }}
                         >
                           <MagnetizeButton 
                             className="text-2xl px-12 py-6 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-500 ease-out transform hover:scale-[1.03] font-bold tracking-wide"
@@ -836,9 +836,12 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                       
                       {/* MagnetizeButton for Slide 2 */}
                       {slide.id === 1 && (
-                        <div
+                        <motion.div
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.8, duration: 0.6 }}
                           className="mt-4"
-                          style={{ marginTop: '10px' }}
+                          style={{ marginTop: '-30px' }}
                         >
                           <MagnetizeButton 
                             className="text-2xl px-12 py-6 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-300 ease-out font-bold tracking-wide"
@@ -848,7 +851,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                           >
                             Join Now
                           </MagnetizeButton>
-                        </div>
+                        </motion.div>
                       )}
                       
                       {/* CTA Button - Only show for slides other than the first two */}
