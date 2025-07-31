@@ -1,5 +1,6 @@
 import React from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface SocialLinksProps {
   isSidebarCollapsed?: boolean;
@@ -7,6 +8,7 @@ interface SocialLinksProps {
 }
 
 const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, activeSection = '' }) => {
+  const { isDark } = useTheme();
   const socialLinks = [
     {
       name: 'Facebook',
@@ -18,13 +20,13 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, a
       name: 'Twitter',
       icon: Twitter,
       url: 'https://twitter.com/day1health',
-      color: 'bg-sky-500'
+      color: 'bg-blue-500'
     },
     {
       name: 'Instagram',
       icon: Instagram,
       url: 'https://instagram.com/day1health',
-      color: 'bg-pink-600'
+      color: 'bg-green-600'
     },
     {
       name: 'LinkedIn',
@@ -36,7 +38,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, a
       name: 'YouTube',
       icon: Youtube,
       url: 'https://youtube.com/day1health',
-      color: 'bg-red-600'
+      color: 'bg-blue-600'
     }
   ];
 
@@ -52,14 +54,18 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, a
     <div 
       className={`fixed bottom-6 left-[calc(50%+15px)] transform -translate-x-1/2 z-50 transition-all duration-300 ${horizontalOffset}`}
     >
-      <div className="flex items-center justify-center bg-gray-100/95 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-500 group">
+      <div className={`flex items-center justify-center backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-500 group ${
+        isDark 
+          ? 'bg-gray-800/95 border border-gray-700' 
+          : 'bg-gray-100/95 border border-gray-200'
+      }`}>
         {socialLinks.map((social, index) => {
           const colorMap: { [key: string]: string } = {
-            'bg-blue-600': '#1d4ed8',
-            'bg-sky-500': '#0ea5e9', 
-            'bg-pink-600': '#db2777',
+            'bg-blue-600': '#2563eb',
+            'bg-blue-500': '#3b82f6', 
+            'bg-green-600': '#16a34a',
             'bg-blue-700': '#1d4ed8',
-            'bg-red-600': '#dc2626'
+            'bg-green-500': '#22c55e'
           };
           
           return (

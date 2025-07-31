@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
 }
 
 const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
+  const { isDark } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -30,19 +32,34 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
   return (
     <section 
       id="contact" 
-      className={`py-20 bg-gray-50 transition-all duration-500 ${
-        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-40'
+      className={`py-20 transition-all duration-700 ease-in-out ${
+        isDark ? 'bg-gray-800' : 'bg-gray-50'
+      } ${
+        isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
+      } ${
+        isSidebarCollapsed ? 'lg:w-[calc(100%-6rem)]' : 'lg:w-[calc(100%-16rem)]'
       }`}
+      style={{
+        transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      }}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+            isDark 
+              ? 'bg-green-900/50 text-green-400' 
+              : 'bg-green-100 text-green-800'
+          }`}>
             Contact Us
           </span>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className={`text-4xl lg:text-5xl font-bold mb-6 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             Get in Touch
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className={`text-xl max-w-3xl mx-auto ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Ready to get covered or have questions? Our team is here to help you find the perfect healthcare solution.
           </p>
         </div>
@@ -50,68 +67,122 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Information */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">Let's Connect</h3>
+            <h3 className={`text-2xl font-bold mb-8 ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}>Let's Connect</h3>
             
             <div className="space-y-6">
               <div className="flex items-start">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 ${
+                  isDark ? 'bg-green-900/50' : 'bg-green-100'
+                }`}>
                   <Phone className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Call Us</h4>
-                  <p className="text-gray-600 mb-1">087 610 0600</p>
-                  <p className="text-sm text-gray-500">Mon - Fri: 8AM - 6PM | Sat: 8AM - 1PM</p>
+                  <h4 className={`font-semibold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Call Us</h4>
+                  <p className={`mb-1 ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>087 610 0600</p>
+                  <p className={`text-sm ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Mon - Fri: 8AM - 6PM | Sat: 8AM - 1PM</p>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 ${
+                  isDark ? 'bg-green-900/50' : 'bg-green-100'
+                }`}>
                   <Mail className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Email Us</h4>
-                  <p className="text-gray-600 mb-1">info@day1health.co.za</p>
-                  <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                  <h4 className={`font-semibold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Email Us</h4>
+                  <p className={`mb-1 ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>info@day1health.co.za</p>
+                  <p className={`text-sm ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>We'll respond within 24 hours</p>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 ${
+                  isDark ? 'bg-green-900/50' : 'bg-green-100'
+                }`}>
                   <MapPin className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Visit Us</h4>
-                  <p className="text-gray-600 mb-1">Cape Town, Johannesburg, Durban</p>
-                  <p className="text-sm text-gray-500">Multiple locations across South Africa</p>
+                  <h4 className={`font-semibold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Visit Us</h4>
+                  <p className={`mb-1 ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Cape Town, Johannesburg, Durban</p>
+                  <p className={`text-sm ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Multiple locations across South Africa</p>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 ${
+                  isDark ? 'bg-green-900/50' : 'bg-green-100'
+                }`}>
                   <Clock className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Emergency Support</h4>
-                  <p className="text-gray-600 mb-1">24/7 Emergency Helpline</p>
-                  <p className="text-sm text-gray-500">Always available when you need us</p>
+                  <h4 className={`font-semibold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Emergency Support</h4>
+                  <p className={`mb-1 ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>24/7 Emergency Helpline</p>
+                  <p className={`text-sm ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Always available when you need us</p>
                 </div>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="mt-8 p-6 bg-white rounded-2xl shadow-sm">
-              <h4 className="font-semibold text-gray-900 mb-4">Quick Actions</h4>
+            <div className={`mt-8 p-6 rounded-2xl shadow-sm ${
+              isDark ? 'bg-gray-800' : 'bg-white'
+            }`}>
+              <h4 className={`font-semibold mb-4 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>Quick Actions</h4>
               <div className="space-y-3">
-                <button className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  isDark 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-900 hover:bg-gray-50'
+                }`}>
                   📋 Get a Quote Online
                 </button>
-                <button className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  isDark 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-900 hover:bg-gray-50'
+                }`}>
                   📞 Schedule a Call Back
                 </button>
-                <button className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  isDark 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-900 hover:bg-gray-50'
+                }`}>
                   💬 Start Live Chat
                 </button>
-                <button className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
+                  isDark 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-900 hover:bg-gray-50'
+                }`}>
                   📍 Find Nearest Office
                 </button>
               </div>
@@ -120,12 +191,18 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 
           {/* Contact Form */}
           <div>
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h3>
+            <form onSubmit={handleSubmit} className={`rounded-2xl shadow-lg p-8 ${
+              isDark ? 'bg-gray-800' : 'bg-white'
+            }`}>
+              <h3 className={`text-2xl font-bold mb-6 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>Send us a Message</h3>
               
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="name" className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Full Name *
                   </label>
                   <input
@@ -135,13 +212,19 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
+                      isDark 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Enter your full name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="phone" className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Phone Number *
                   </label>
                   <input
@@ -151,13 +234,19 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
+                      isDark 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Enter your phone number"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Email Address *
                   </label>
                   <input
@@ -167,13 +256,19 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
+                      isDark 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Enter your email address"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="message" className={`block text-sm font-medium mb-2 ${
+                    isDark ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Message
                   </label>
                   <textarea
@@ -182,7 +277,11 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     value={formData.message}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none ${
+                      isDark 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Tell us how we can help you..."
                   />
                 </div>
@@ -196,7 +295,9 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 </button>
               </div>
 
-              <p className="text-sm text-gray-500 mt-4 text-center">
+              <p className={`text-sm mt-4 text-center ${
+                isDark ? 'text-gray-400' : 'text-gray-500'
+              }`}>
                 By submitting this form, you agree to our privacy policy and terms of service.
               </p>
             </form>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Shield, CreditCard, Heart, Users, Check, Phone, Mail, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import SeniorPackageBuilder from './senior/SeniorPackageBuilder';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface ToolsTabsProps {
   isSidebarCollapsed: boolean;
@@ -8,6 +10,7 @@ interface ToolsTabsProps {
 
 const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const [activeTab, setActiveTab] = useState('comprehensive');
+  const { isDark } = useTheme();
 
   const tabs = [
     { 
@@ -22,17 +25,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       id: 'daytoday', 
       label: 'Day-to-Day', 
       icon: Heart,
-      bgColor: 'bg-pink-100',
-      iconColor: 'text-pink-600',
-      hoverBg: 'hover:bg-pink-200'
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+      hoverBg: 'hover:bg-blue-200'
     },
     { 
       id: 'hospital', 
       label: 'Hospital', 
       icon: CreditCard,
-      bgColor: 'bg-purple-100',
-      iconColor: 'text-purple-600',
-      hoverBg: 'hover:bg-purple-200'
+      bgColor: 'bg-green-100',
+      iconColor: 'text-green-600',
+      hoverBg: 'hover:bg-green-200'
     },
     { 
       id: 'senior', 
@@ -55,33 +58,43 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Platinum Elite Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-green-200 hover:border-green-400 transition-all">
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                  : 'bg-white border-green-200 hover:border-green-400'
+              }`}>
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Platinum Elite</h3>
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Platinum Elite</h3>
                   <div className="flex items-baseline justify-center mb-4">
                     <span className="text-3xl font-bold text-green-600">R1,199</span>
-                    <span className="text-gray-500 ml-1">/month</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
                   </div>
                   <div className="h-16 mb-4">
-                    <p className="text-sm text-gray-600">Comprehensive coverage with premium benefits</p>
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Comprehensive coverage with premium benefits</p>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Private hospital cover</span>
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Private hospital cover</span>
                   </li>
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Unlimited GP visits</span>
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Unlimited GP visits</span>
                   </li>
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Specialist consultations</span>
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Specialist consultations</span>
                   </li>
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Chronic medication</span>
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span>
                   </li>
                 </ul>
                 <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
@@ -90,106 +103,136 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
               </div>
 
               {/* Gold Plus Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-yellow-200 hover:border-yellow-400 transition-all">
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                  : 'bg-white border-blue-200 hover:border-blue-400'
+              }`}>
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Gold Plus</h3>
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Gold Plus</h3>
                   <div className="flex items-baseline justify-center mb-4">
-                    <span className="text-3xl font-bold text-yellow-600">R899</span>
-                    <span className="text-gray-500 ml-1">/month</span>
+                    <span className="text-3xl font-bold text-blue-600">R899</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
                   </div>
                   <div className="h-16 mb-4">
-                    <p className="text-sm text-gray-600">Great value with extensive coverage</p>
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Great value with extensive coverage</p>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Private hospital cover</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Private hospital cover</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>15 GP visits per year</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>15 GP visits per year</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Limited specialist cover</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited specialist cover</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Chronic medication (PDP)</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication (PDP)</span>
                   </li>
                 </ul>
-                <button className="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                   Choose Plan
                 </button>
               </div>
 
               {/* Silver Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-200 hover:border-gray-400 transition-all">
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
+                  : 'bg-white border-gray-200 hover:border-gray-400'
+              }`}>
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Silver</h3>
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Silver</h3>
                   <div className="flex items-baseline justify-center mb-4">
-                    <span className="text-3xl font-bold text-gray-600">R649</span>
-                    <span className="text-gray-500 ml-1">/month</span>
+                    <span className="text-3xl font-bold text-blue-600">R649</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
                   </div>
                   <div className="h-16 mb-4">
-                    <p className="text-sm text-gray-600">Essential coverage for individuals</p>
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Essential coverage for individuals</p>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
                     <span>Private hospital cover</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>6 GP visits per year</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>6 GP visits per year</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Basic dentistry</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic dentistry</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Acute medication</span>
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
+                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                   Choose Plan
                 </button>
               </div>
 
               {/* Bronze Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-amber-200 hover:border-amber-400 transition-all">
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                  : 'bg-white border-green-200 hover:border-green-400'
+              }`}>
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Bronze</h3>
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Bronze</h3>
                   <div className="flex items-baseline justify-center mb-4">
-                    <span className="text-3xl font-bold text-amber-600">R459</span>
-                    <span className="text-gray-500 ml-1">/month</span>
+                    <span className="text-3xl font-bold text-green-600">R459</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
                   </div>
                   <div className="h-16 mb-4">
-                    <p className="text-sm text-gray-600">Basic coverage for essential needs</p>
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Basic coverage for essential needs</p>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Hospital network cover</span>
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital network cover</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>3 GP visits per year</span>
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>3 GP visits per year</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Emergency cover</span>
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency cover</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Basic medication</span>
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-amber-500 text-white py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors">
+                <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                   Choose Plan
                 </button>
               </div>
@@ -202,55 +245,87 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Premium Care */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-200 hover:border-blue-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Premium Care</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-4">R499<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                  : 'bg-white border-blue-200 hover:border-blue-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Premium Care</h3>
+                <div className="text-3xl font-bold text-blue-600 mb-4">R499<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Unlimited GP visits</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Chronic medication</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Dental & optical</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> 24/7 Virtual doctor</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Unlimited GP visits</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Dental & optical</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Virtual doctor</span></li>
                 </ul>
                 <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
               </div>
 
               {/* Family Care */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-green-200 hover:border-green-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Family Care</h3>
-                <div className="text-3xl font-bold text-green-600 mb-4">R399<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                  : 'bg-white border-green-200 hover:border-green-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Family Care</h3>
+                <div className="text-3xl font-bold text-green-600 mb-4">R399<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> 20 GP visits/year</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Essential medicines</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Child immunizations</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Maternity benefits</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>20 GP visits/year</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Essential medicines</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Child immunizations</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
                 </ul>
                 <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Choose Plan</button>
               </div>
 
               {/* Basic Care */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-yellow-200 hover:border-yellow-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Basic Care</h3>
-                <div className="text-3xl font-bold text-yellow-600 mb-4">R249<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                  : 'bg-white border-blue-200 hover:border-blue-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Basic Care</h3>
+                <div className="text-3xl font-bold text-blue-600 mb-4">R249<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-yellow-500 mr-2" /> 12 GP visits/year</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-yellow-500 mr-2" /> Acute medication</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-yellow-500 mr-2" /> Basic pathology</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-yellow-500 mr-2" /> Telehealth services</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>12 GP visits/year</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic pathology</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Telehealth services</span></li>
                 </ul>
-                <button className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition">Choose Plan</button>
+                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
               </div>
 
               {/* Student Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-purple-200 hover:border-purple-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Student Care</h3>
-                <div className="text-3xl font-bold text-purple-600 mb-4">R199<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                  : 'bg-white border-green-200 hover:border-green-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Student Care</h3>
+                <div className="text-3xl font-bold text-green-600 mb-4">R199<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-purple-500 mr-2" /> 8 GP visits/year</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-purple-500 mr-2" /> Acute medication</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-purple-500 mr-2" /> 24/7 Nurse line</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-purple-500 mr-2" /> Campus clinic discounts</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>8 GP visits/year</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Nurse line</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Campus clinic discounts</span></li>
                 </ul>
-                <button className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">Choose Plan</button>
+                <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Choose Plan</button>
               </div>
             </div>
           </div>
@@ -261,53 +336,87 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Executive Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-red-200 hover:border-red-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Executive</h3>
-                <div className="text-3xl font-bold text-red-600 mb-4">R1,899<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                  : 'bg-white border-blue-200 hover:border-blue-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Executive</h3>
+                <div className="text-3xl font-bold text-blue-600 mb-4">R1,899<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-red-500 mr-2" /> Private hospital cover</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-red-500 mr-2" /> Full surgical procedures</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-red-500 mr-2" /> Specialist consultations</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-red-500 mr-2" /> Advanced diagnostics</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Private hospital cover</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Full surgical procedures</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Specialist consultations</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Advanced diagnostics</span></li>
                 </ul>
-                <button className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">Choose Plan</button>
+                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
               </div>
 
               {/* Family Hospital Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-200 hover:border-blue-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Family Cover</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-4">R1,299<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                  : 'bg-white border-blue-200 hover:border-blue-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Family Cover</h3>
+                <div className="text-3xl font-bold text-blue-600 mb-4">R1,299<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Family hospital cover</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Surgical procedures</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Maternity benefits</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> Pediatric care</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Family hospital cover</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Surgical procedures</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Pediatric care</span></li>
                 </ul>
                 <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
               </div>
 
               {/* Standard Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-green-200 hover:border-green-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Standard</h3>
-                <div className="text-3xl font-bold text-green-600 mb-4">R899<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                  : 'bg-white border-green-200 hover:border-green-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Standard</h3>
+                <div className="text-3xl font-bold text-green-600 mb-4">R899<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Hospital network cover</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Basic surgical procedures</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Emergency cover</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> Limited diagnostics</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital network cover</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic surgical procedures</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency cover</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited diagnostics</span></li>
                 </ul>
                 <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Choose Plan</button>
               </div>
 
               {/* Basic Hospital Plan */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-200 hover:border-gray-400 transition-all">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Basic Cover</h3>
-                <div className="text-3xl font-bold text-gray-600 mb-4">R599<span className="text-sm font-normal text-gray-500">/month</span></div>
+              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                isDark 
+                  ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
+                  : 'bg-white border-gray-200 hover:border-gray-400'
+              }`}>
+                <h3 className={`text-xl font-bold mb-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Basic Cover</h3>
+                <div className={`text-3xl font-bold mb-4 ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>R599<span className={`text-sm font-normal ${
+                  isDark ? 'text-gray-500' : 'text-gray-500'
+                }`}>/month</span></div>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> Essential hospital cover</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> Emergency procedures</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> Limited hospital stay</li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> Basic diagnostics</li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Essential hospital cover</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency procedures</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited hospital stay</span></li>
+                  <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic diagnostics</span></li>
                 </ul>
                 <button className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition">Choose Plan</button>
               </div>
@@ -378,13 +487,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   };
 
   return (
-    <div className={`relative z-30 -mt-20 transition-all duration-300 ${
-      isSidebarCollapsed ? 'lg:ml-12' : 'lg:ml-40'
-    }`}>
+    <div className={`relative z-30 -mt-20 transition-all duration-700 ease-in-out ${
+      isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
+    } ${
+      isSidebarCollapsed ? 'lg:w-[calc(100%-6rem)]' : 'lg:w-[calc(100%-16rem)]'
+    } ${
+      isDark ? 'bg-gray-900' : 'bg-white'
+    }`}
+    style={{
+      transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    }}>
       <div className="container mx-auto px-4">
         {/* Floating Tabs */}
         <div className="flex justify-center mb-12">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 backdrop-blur-sm bg-white/95">
+          <div className={`rounded-2xl shadow-lg p-3 backdrop-blur-sm transition-colors duration-300 ${
+            isDark 
+              ? 'bg-gray-800/95 border border-gray-700' 
+              : 'bg-white/95 border border-gray-100'
+          }`}>
             <div className="flex flex-wrap justify-center gap-4">
               {tabs.map((tab) => (
                 <button
@@ -392,12 +512,32 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   onClick={() => handleTabClick(tab.id)}
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                     activeTab === tab.id
-                      ? 'bg-green-50 text-green-700 shadow-sm border border-green-100'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      ? isDark 
+                        ? 'bg-green-900/50 text-green-400 shadow-sm border border-green-800'
+                        : 'bg-green-50 text-green-700 shadow-sm border border-green-100'
+                      : isDark
+                        ? 'text-gray-300 hover:bg-gray-700'
+                        : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 ${activeTab === tab.id ? tab.bgColor + ' ' + tab.hoverBg : tab.bgColor + ' ' + tab.hoverBg} transition-colors`}>
-                    <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? tab.iconColor : 'text-gray-600'}`} />
+                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
+                    activeTab === tab.id
+                      ? isDark
+                        ? 'bg-green-900/50 hover:bg-green-900/70'
+                        : tab.bgColor + ' ' + tab.hoverBg
+                      : isDark
+                        ? 'bg-gray-700 hover:bg-gray-600'
+                        : tab.bgColor + ' ' + tab.hoverBg
+                  }`}>
+                    <tab.icon className={`w-4 h-4 ${
+                      activeTab === tab.id 
+                        ? isDark 
+                          ? 'text-green-400' 
+                          : tab.iconColor
+                        : isDark
+                          ? 'text-gray-400'
+                          : 'text-gray-600'
+                    }`} />
                   </span>
                   <span className="whitespace-nowrap">{tab.label}</span>
                 </button>
@@ -407,7 +547,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         </div>
         
         {/* Content Panel */}
-        <div className="transition-all duration-500 ease-in-out">
+        <div className={`transition-all duration-500 ease-in-out rounded-2xl p-6 ${
+          isDark ? 'bg-gray-900' : 'bg-white'
+        }`}>
           <div className={`transform transition-all duration-500 ${
             activeTab ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface FAQsProps {
   isSidebarCollapsed: boolean;
 }
 
 const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
-  const [openFAQ, setOpenFAQ] = useState<number | null>(0);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const { isDark } = useTheme();
 
   const faqs = [
     {
@@ -46,19 +48,34 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
   return (
     <section 
       id="faqs" 
-      className={`py-20 bg-white transition-all duration-500 ${
-        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-40'
+      className={`py-20 transition-all duration-700 ease-in-out ${
+        isDark ? 'bg-gray-900' : 'bg-white'
+      } ${
+        isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
+      } ${
+        isSidebarCollapsed ? 'lg:w-[calc(100%-6rem)]' : 'lg:w-[calc(100%-16rem)]'
       }`}
+      style={{
+        transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      }}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full mb-4">
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+            isDark 
+              ? 'bg-green-900/50 text-green-400' 
+              : 'bg-green-100 text-green-800'
+          }`}>
             Frequently Asked Questions
           </span>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className={`text-4xl lg:text-5xl font-bold mb-6 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             Got Questions? We Have Answers
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className={`text-xl max-w-3xl mx-auto ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Find answers to the most common questions about Day1Health medical insurance.
           </p>
         </div>
@@ -67,28 +84,32 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="mb-4 bg-gray-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+              className={`mb-4 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${
+                isDark ? 'bg-gray-800' : 'bg-gray-50'
+              }`}
             >
               <button
+                className={`w-full px-8 py-6 text-left flex items-center justify-between transition-colors duration-200 ${
+                  isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                }`}
                 onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-gray-100 transition-colors duration-200"
               >
-                <h3 className="text-lg font-semibold text-gray-900 pr-4">
-                  {faq.question}
-                </h3>
-                {openFAQ === index ? (
-                  <ChevronUp className="w-6 h-6 text-green-600 flex-shrink-0" />
-                ) : (
-                  <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                )}
+                <h3 className={`text-lg font-semibold pr-4 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>{faq.question}</h3>
+                <ChevronDown className={`w-6 h-6 flex-shrink-0 transition-transform duration-200 ${
+                  openFAQ === index ? 'rotate-180' : ''
+                } ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
               </button>
               
               {openFAQ === index && (
                 <div className="px-8 pb-6">
-                  <div className="w-full h-px bg-gray-200 mb-6"></div>
-                  <p className="text-gray-600 leading-relaxed">
-                    {faq.answer}
-                  </p>
+                  <div className={`w-full h-px mb-6 ${
+                    isDark ? 'bg-gray-600' : 'bg-gray-200'
+                  }`}></div>
+                  <p className={`leading-relaxed ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>{faq.answer}</p>
                 </div>
               )}
             </div>
@@ -97,11 +118,17 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
 
         {/* Contact CTA */}
         <div className="mt-16 text-center">
-          <div className="bg-green-50 rounded-2xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className={`rounded-2xl p-8 max-w-2xl mx-auto ${
+            isDark ? 'bg-green-900/20' : 'bg-green-50'
+          }`}>
+            <h3 className={`text-2xl font-bold mb-4 ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}>
               Still Have Questions?
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className={`mb-6 ${
+              isDark ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               Our friendly consultants are available to help you understand your options and find the right plan for your needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

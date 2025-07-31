@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import ToolsTabs from './components/ToolsTabs';
-import HowItWorks from './components/HowItWorks';
-import Feedback from './components/Feedback';
-import WhyChoose from './components/WhyChoose';
-import FAQs from './components/FAQs';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import SocialLinks from './components/SocialLinks';
+import AppContent from './components/AppContent';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -85,37 +77,16 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
-      <div className="flex min-h-screen w-full">
-        {/* Simple Sticky Text */}
-        <div className="fixed top-7 left-24 lg:left-48 xl:left-64 z-50">
-          <span className="text-2xl font-bold text-[#16a34a] bg-white/80 px-2 py-1 rounded">Day1Health</span>
-        </div>
-        
-        <Header 
-          activeSection={activeSection} 
-          onNavigate={scrollToSection}
-          isSidebarCollapsed={isSidebarCollapsed}
-          setIsSidebarCollapsed={setIsSidebarCollapsed}
-          isFooterInView={isFooterInView}
-        />
-        
-        <div className="flex-1 w-0">
-          <main className="w-full">
-            <Hero isSidebarCollapsed={isSidebarCollapsed} />
-            <ToolsTabs isSidebarCollapsed={isSidebarCollapsed} />
-            <HowItWorks isSidebarCollapsed={isSidebarCollapsed} />
-            <Feedback isSidebarCollapsed={isSidebarCollapsed} />
-            <WhyChoose isSidebarCollapsed={isSidebarCollapsed} />
-            <Contact isSidebarCollapsed={isSidebarCollapsed} />
-            <FAQs isSidebarCollapsed={isSidebarCollapsed} />
-          </main>
-          
-          <Footer id="footer" isSidebarCollapsed={isSidebarCollapsed} />
-          <SocialLinks isSidebarCollapsed={isSidebarCollapsed} activeSection={activeSection} />
-        </div>
-      </div>
-    </div>
+    <ThemeProvider>
+      <AppContent
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        isSidebarCollapsed={isSidebarCollapsed}
+        setIsSidebarCollapsed={setIsSidebarCollapsed}
+        isFooterInView={isFooterInView}
+        scrollToSection={scrollToSection}
+      />
+    </ThemeProvider>
   );
 }
 

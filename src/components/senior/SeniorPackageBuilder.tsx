@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { ChevronDown, ChevronUp, Check, X } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface SubCategory {
   id: string;
@@ -126,6 +127,7 @@ const initialCategories: Category[] = [
 ];
 
 const SeniorPackageBuilder: React.FC = () => {
+  const { isDark } = useTheme();
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [droppedCategories, setDroppedCategories] = useState<Category[]>([]);
 
@@ -265,9 +267,15 @@ const SeniorPackageBuilder: React.FC = () => {
 
   return (
     <div className="space-y-8 select-none">
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to your ChoicePlan</h3>
-        <p className="text-gray-600 mb-6">Choose the benefits you need. Skip what you don't. Build the cover that fits you.</p>
+      <div className={`rounded-2xl shadow-lg p-8 ${
+        isDark ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <h3 className={`text-3xl font-bold mb-2 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>Welcome to your ChoicePlan</h3>
+        <p className={`mb-6 ${
+          isDark ? 'text-gray-300' : 'text-gray-600'
+        }`}>Choose the benefits you need. Skip what you don't. Build the cover that fits you.</p>
         
         <DragDropContext 
           onDragStart={handleDragStart}
@@ -276,13 +284,17 @@ const SeniorPackageBuilder: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Available Categories */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">Available Categories</h4>
+              <h4 className={`text-lg font-semibold mb-4 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>Available Categories</h4>
               <Droppable droppableId="available-categories">
                 {(provided) => (
                   <div 
                     {...provided.droppableProps} 
                     ref={provided.innerRef} 
-                    className="space-y-3 min-h-[200px] bg-gray-50 p-4 rounded-lg"
+                    className={`space-y-3 min-h-[400px] p-4 rounded-lg relative ${
+                      isDark ? 'bg-gray-700' : 'bg-gray-50'
+                    }`}
                   >
                     {categories.length === 0 ? (
                       <div className="text-center text-gray-500 py-8">
@@ -299,10 +311,16 @@ const SeniorPackageBuilder: React.FC = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+                              className={`border rounded-lg overflow-hidden ${
+                                isDark 
+                                  ? 'bg-gray-800 border-gray-600' 
+                                  : 'bg-white border-gray-200'
+                              }`}
                             >
                               <div 
-                                className={`p-4 flex justify-between items-center cursor-grab active:cursor-grabbing hover:bg-gray-50 ${
+                                className={`p-4 flex justify-between items-center cursor-grab active:cursor-grabbing ${
+                                  isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                                } ${
                                   isDragging ? 'cursor-grabbing' : ''
                                 }`}
                                 onClick={() => {
@@ -313,27 +331,43 @@ const SeniorPackageBuilder: React.FC = () => {
                                 }}
                               >
                                 <div>
-                                  <h4 className="font-medium">{category.name}</h4>
-                                  <p className="text-sm text-gray-500">{category.description}</p>
+                                  <h4 className={`font-medium ${
+                                    isDark ? 'text-white' : 'text-gray-900'
+                                  }`}>{category.name}</h4>
+                                  <p className={`text-sm ${
+                                    isDark ? 'text-gray-400' : 'text-gray-500'
+                                  }`}>{category.description}</p>
                                 </div>
                                 {category.isExpanded ? (
-                                  <ChevronUp className="w-5 h-5 text-gray-400" />
+                                  <ChevronUp className={`w-5 h-5 ${
+                                    isDark ? 'text-gray-500' : 'text-gray-400'
+                                  }`} />
                                 ) : (
-                                  <ChevronDown className="w-5 h-5 text-gray-400" />
+                                  <ChevronDown className={`w-5 h-5 ${
+                                  isDark ? 'text-gray-500' : 'text-gray-400'
+                                }`} />
                                 )}
                               </div>
                               
                               {category.isExpanded && (
-                                <div className="px-4 pb-4 pt-2 bg-gray-50 border-t">
-                                  <p className="text-sm text-gray-600 mb-3">Select one option:</p>
+                                <div className={`px-4 pb-4 pt-2 border-t ${
+                                  isDark ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'
+                                }`}>
+                                  <p className={`text-sm mb-3 ${
+                                    isDark ? 'text-gray-300' : 'text-gray-600'
+                                  }`}>Select one option:</p>
                                   <div className="space-y-2">
                                     {category.subCategories.map((sub) => (
                                       <div 
                                         key={sub.id}
                                         className={`p-3 rounded-md border cursor-pointer transition-colors ${
                                           sub.selected 
-                                            ? 'border-green-500 bg-green-50' 
-                                            : 'border-gray-200 hover:bg-gray-50'
+                                            ? isDark
+                                              ? 'border-green-500 bg-green-900/50'
+                                              : 'border-green-500 bg-green-50'
+                                            : isDark
+                                              ? 'border-gray-600 hover:bg-gray-600'
+                                              : 'border-gray-200 hover:bg-gray-50'
                                         }`}
                                         onClick={(e) => {
                                           e.stopPropagation();
@@ -341,10 +375,16 @@ const SeniorPackageBuilder: React.FC = () => {
                                       >
                                         <div className="flex justify-between items-start">
                                           <div>
-                                            <div className="font-medium">{sub.name}</div>
-                                            <div className="text-sm text-gray-600">{sub.description}</div>
+                                            <div className={`font-medium ${
+                                              isDark ? 'text-white' : 'text-gray-900'
+                                            }`}>{sub.name}</div>
+                                            <div className={`text-sm ${
+                                              isDark ? 'text-gray-400' : 'text-gray-600'
+                                            }`}>{sub.description}</div>
                                           </div>
-                                          <div className="font-semibold text-gray-700 whitespace-nowrap ml-4">
+                                          <div className={`font-semibold whitespace-nowrap ml-4 ${
+                                            isDark ? 'text-gray-300' : 'text-gray-700'
+                                          }`}>
                                             R{sub.price}/mo
                                           </div>
                                         </div>
@@ -399,7 +439,9 @@ const SeniorPackageBuilder: React.FC = () => {
             
             {/* Selected Categories */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">Your Package</h4>
+              <h4 className={`text-lg font-semibold mb-4 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>Your Package</h4>
               <Droppable droppableId="selected-categories">
                 {(provided) => (
                   <div 
@@ -408,14 +450,22 @@ const SeniorPackageBuilder: React.FC = () => {
                     className="space-y-4 min-h-[200px]"
                   >
                     {droppedCategories.length === 0 ? (
-                      <div className="bg-gray-50 rounded-xl p-8 text-center">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className={`rounded-xl p-8 text-center ${
+                        isDark ? 'bg-gray-700' : 'bg-gray-50'
+                      }`}>
+                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                          isDark ? 'bg-blue-900/50' : 'bg-blue-100'
+                        }`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" className={`h-8 w-8 ${
+                            isDark ? 'text-blue-400' : 'text-blue-600'
+                          }`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                           </svg>
                         </div>
-                        <h4 className="text-lg font-medium text-gray-900 mb-1">Build Your Package</h4>
-                        <p className="text-gray-600">Drag categories here to get started</p>
+                        <h4 className={`text-lg font-medium mb-1 ${
+                          isDark ? 'text-white' : 'text-gray-900'
+                        }`}>Build Your Package</h4>
+                        <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Drag categories here to get started</p>
                       </div>
                     ) : (
                       <>
@@ -431,7 +481,11 @@ const SeniorPackageBuilder: React.FC = () => {
                                 <div
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
-                                  className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
+                                  className={`border rounded-lg overflow-hidden shadow-sm ${
+                                    isDark 
+                                      ? 'bg-gray-800 border-gray-600' 
+                                      : 'bg-white border-gray-200'
+                                  }`}
                                 >
                                   <div 
                                     className="p-4 flex justify-between items-center"
@@ -512,11 +566,17 @@ const SeniorPackageBuilder: React.FC = () => {
                         })}
                         
                         {droppedCategories.length > 0 && (
-                          <div className="bg-gray-50 p-6 rounded-xl mt-6">
+                          <div className={`p-6 rounded-xl mt-6 ${
+                            isDark ? 'bg-gray-700' : 'bg-gray-50'
+                          }`}>
                             <div className="flex justify-between items-center mb-6">
-                              <h4 className="text-lg font-semibold">Package Summary</h4>
+                              <h4 className={`text-lg font-semibold ${
+                                isDark ? 'text-white' : 'text-gray-900'
+                              }`}>Package Summary</h4>
                               <div className="text-2xl font-bold text-green-600">
-                                R{calculateTotal()}<span className="text-base font-normal text-gray-500">/month</span>
+                                R{calculateTotal()}<span className={`text-base font-normal ${
+                                  isDark ? 'text-gray-400' : 'text-gray-500'
+                                }`}>/month</span>
                               </div>
                             </div>
                             
@@ -526,10 +586,16 @@ const SeniorPackageBuilder: React.FC = () => {
                                 return selectedSub ? (
                                   <div key={category.id} className="flex justify-between items-center">
                                     <div>
-                                      <div className="font-medium">{category.name}</div>
-                                      <div className="text-sm text-gray-600">{selectedSub.name}</div>
+                                      <div className={`font-medium ${
+                                        isDark ? 'text-white' : 'text-gray-900'
+                                      }`}>{category.name}</div>
+                                      <div className={`text-sm ${
+                                        isDark ? 'text-gray-400' : 'text-gray-600'
+                                      }`}>{selectedSub.name}</div>
                                     </div>
-                                    <div className="font-semibold">R{selectedSub.price}</div>
+                                    <div className={`font-semibold ${
+                                      isDark ? 'text-gray-300' : 'text-gray-900'
+                                    }`}>R{selectedSub.price}</div>
                                   </div>
                                 ) : null;
                               })}
@@ -539,7 +605,9 @@ const SeniorPackageBuilder: React.FC = () => {
                               Get This Package
                             </button>
                             
-                            <p className="text-xs text-gray-500 mt-3 text-center">
+                            <p className={`text-xs mt-3 text-center ${
+                              isDark ? 'text-gray-400' : 'text-gray-500'
+                            }`}>
                               Your selected benefits will be confirmed with a healthcare advisor
                             </p>
                           </div>
@@ -555,11 +623,15 @@ const SeniorPackageBuilder: React.FC = () => {
         </DragDropContext>
       </div>
       
-      <div className="bg-blue-50 p-6 rounded-xl">
+      <div className={`p-6 rounded-xl ${
+        isDark ? 'bg-blue-900/20' : 'bg-blue-50'
+      }`}>
         <div className="flex flex-col md:flex-row md:items-center justify-between">
           <div className="mb-4 md:mb-0">
-            <h4 className="text-lg font-semibold mb-1">Need help choosing?</h4>
-            <p className="text-gray-600">Our senior care specialists can help you build the perfect package.</p>
+            <h4 className={`text-lg font-semibold mb-1 ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}>Need help choosing?</h4>
+            <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Our senior care specialists can help you build the perfect package.</p>
           </div>
           <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg whitespace-nowrap transition-colors">
             Speak to an Advisor

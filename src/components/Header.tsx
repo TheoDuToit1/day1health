@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar, MessageCircle, MapPin } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface HeaderProps {
   activeSection: string;
@@ -11,6 +12,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navItems = [
@@ -33,129 +35,241 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-auto lg:bottom-0 lg:shadow-lg lg:z-40 lg:flex lg:flex-col transition-all duration-300 ${
-        isSidebarCollapsed ? 'w-16' : 'w-32'
-      } ${
-        isFooterInView ? 'bg-gray-900' : 'bg-white'
-      }`}>
+      <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-xl lg:z-40 lg:flex lg:flex-col transition-all duration-700 ease-in-out ${
+        isSidebarCollapsed ? 'w-24' : 'w-64'
+      } ${isDark ? 'bg-gray-900' : 'bg-white'}`}
+      style={{
+        transition: 'width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease'
+      }}>
         {/* Sidebar Toggle Button */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          className="absolute -right-3 top-6 w-6 h-6 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
+          className={`absolute -right-4 top-8 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shadow-lg hover:shadow-xl transform hover:scale-110 ${
+            isDark 
+              ? 'bg-gray-800 border border-gray-600 hover:bg-gray-700' 
+              : 'bg-white border border-gray-200 hover:bg-gray-50'
+          }`}
+          style={{
+            transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          }}
         >
           {isSidebarCollapsed ? (
-            <ChevronRight className="w-3 h-3 text-gray-600" />
+            <ChevronRight className={`w-4 h-4 ${
+              isDark ? 'text-white' : 'text-gray-600'
+            }`} />
           ) : (
-            <ChevronLeft className="w-3 h-3 text-gray-600" />
+            <ChevronLeft className={`w-4 h-4 ${
+              isDark ? 'text-white' : 'text-gray-600'
+            }`} />
           )}
         </button>
         
-        <div className={`p-4 transition-all duration-300 ${
-          isFooterInView ? 'border-b border-gray-700' : 'border-b border-gray-200'
-        }`}>
-          <div className={`flex items-center justify-center transition-all duration-300 ${
-            isSidebarCollapsed ? 'p-2' : 'p-0'
-          }`}>
-            <div className={`${isSidebarCollapsed ? 'w-10 h-10' : 'w-8 h-8'} bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300`}>
-              <span className={`text-white font-bold ${isSidebarCollapsed ? 'text-base' : 'text-sm'}`}>D1</span>
+        <div className={`p-6 transition-all duration-700 ease-in-out ${
+          isDark ? 'border-b border-gray-700' : 'border-b border-gray-200'
+        }`}
+        style={{
+          transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        }}>
+          <div className={`flex items-center transition-all duration-700 ease-in-out ${
+            isSidebarCollapsed ? 'justify-center' : 'justify-start space-x-3'
+          }`}
+          style={{
+            transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          }}>
+            <div className={`${isSidebarCollapsed ? 'w-12 h-12' : 'w-10 h-10'} bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center transition-all duration-700 ease-in-out shadow-lg transform`}
+            style={{
+              transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            }}>
+              <span className={`text-white font-bold ${isSidebarCollapsed ? 'text-lg' : 'text-base'}`}>D1</span>
             </div>
+            {!isSidebarCollapsed && (
+              <div className="flex flex-col transition-all duration-700 ease-in-out transform"
+              style={{
+                transition: 'opacity 0.5s ease 0.2s, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+              }}>
+                <span className={`font-bold text-lg transition-all duration-500 ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>Day1Health</span>
+                <span className={`text-sm transition-all duration-500 ${
+                  isDark ? 'text-gray-300' : 'text-gray-500'
+                }`}>Health Solutions</span>
+              </div>
+            )}
           </div>
         </div>
         
-        <nav className="flex-1 p-4">
-          <ul className="space-y-0.5">
+        <nav className="p-6 pb-2">
+          <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.id}>
                 <button
                   onClick={() => onNavigate(item.id)}
-                  className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors group ${
+                  className={`w-full flex items-center rounded-xl transition-all duration-500 ease-in-out group relative transform ${
+                    isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
+                  } ${
                     activeSection === item.id
-                      ? 'bg-green-600 text-white'
-                      : activeSection === 'contact'
-                        ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
+                      : isDark
+                        ? 'text-gray-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-700 hover:text-white hover:shadow-lg hover:scale-102'
+                        : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:text-gray-900 hover:shadow-lg hover:scale-102'
                   }`}
                   title={isSidebarCollapsed ? item.label : undefined}
+                  style={{
+                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  }}
                 >
-                  {isSidebarCollapsed ? (
-                    <item.icon className="w-7 h-7 mx-auto" />
-                  ) : (
-                    <span className="w-full text-left">{item.label}</span>
+                  <item.icon className={`transition-all duration-500 ease-in-out transform ${
+                    isSidebarCollapsed ? 'w-5 h-5' : 'w-4 h-4'
+                  } ${
+                    activeSection === item.id ? 'text-white scale-110' : 'group-hover:scale-105'
+                  }`} />
+                  {!isSidebarCollapsed && (
+                    <span className={`font-medium text-sm transition-all duration-500 ease-in-out ${
+                      activeSection === item.id ? 'transform translate-x-1' : ''
+                    }`}>{item.label}</span>
                   )}
+
                 </button>
               </li>
             ))}
           </ul>
         </nav>
 
-        {!isSidebarCollapsed && (
-          <div className={`px-6 py-4 transition-all duration-300 ${
-            isFooterInView 
-              ? 'border-t border-gray-700' 
-              : 'border-t border-gray-200'
+        {/* Quick Actions - Always visible with icons */}
+        <div className={`px-6 py-2 transition-all duration-300 ${
+          isDark 
+            ? 'border-t border-gray-700' 
+            : 'border-t border-gray-200'
+        }`}>
+          {!isSidebarCollapsed && (
+            <h4 className={`font-medium mb-4 text-sm uppercase tracking-wide ${
+              isDark ? 'text-gray-400' : 'text-gray-500'
+            }`}>Quick Actions</h4>
+          )}
+          <div className={`grid gap-2 ${
+            isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-2'
           }`}>
-            <h3 className={`text-sm font-medium mb-3 transition-colors duration-300 ${
-              isFooterInView ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              Quick Actions
-            </h3>
-            <div className="space-y-1">
-              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
-                isFooterInView 
-                  ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-              }`}>
-                Get a Quote
-              </button>
-              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
-                isFooterInView 
-                  ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-              }`}>
-                Schedule Call
-              </button>
-              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
-                isFooterInView 
-                  ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-              }`}>
-                Live Chat
-              </button>
-              <button className={`w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
-                isFooterInView 
-                  ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-              }`}>
-                Find Office
-              </button>
-            </div>
+            <button 
+              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
+                isSidebarCollapsed ? 'p-3' : 'p-3'
+              } ${
+                isDark 
+                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
+              }`}
+              title="Get a Quote"
+            >
+              <Quote className={`${
+                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
+              }`} />
+              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Quote</span>}
+            </button>
+            <button 
+              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
+                isSidebarCollapsed ? 'p-3' : 'p-3'
+              } ${
+                isDark 
+                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
+              }`}
+              title="Schedule Call"
+            >
+              <Calendar className={`${
+                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
+              }`} />
+              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Call</span>}
+            </button>
+            <button 
+              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
+                isSidebarCollapsed ? 'p-3' : 'p-3'
+              } ${
+                isDark 
+                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
+              }`}
+              title="Live Chat"
+            >
+              <MessageCircle className={`${
+                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
+              }`} />
+              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Chat</span>}
+            </button>
+            <button 
+              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
+                isSidebarCollapsed ? 'p-3' : 'p-3'
+              } ${
+                isDark 
+                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
+                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
+              }`}
+              title="Find Office"
+            >
+              <MapPin className={`${
+                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
+              }`} />
+              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Office</span>}
+            </button>
           </div>
-        )}
+        </div>
 
-        {!isSidebarCollapsed && (
-          <div className={`p-6 transition-all duration-300 ${
-            isFooterInView 
-              ? 'border-t border-gray-700 bg-gray-800' 
-              : 'border-t border-gray-200 bg-gray-50'
+        {/* Contact Information - Always visible */}
+        <div className={`p-6 mt-auto transition-all duration-300 ${
+          isDark 
+            ? 'border-t border-gray-700 bg-gradient-to-b from-gray-800 to-gray-900' 
+            : 'border-t border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100'
+        }`}>
+          {!isSidebarCollapsed && (
+            <h4 className={`font-medium mb-4 text-sm uppercase tracking-wide ${
+              isDark ? 'text-gray-400' : 'text-gray-500'
+            }`}>Contact Info</h4>
+          )}
+          <div className={`space-y-3 ${
+            isSidebarCollapsed ? 'flex flex-col items-center' : ''
           }`}>
-            <div className={`space-y-2 text-sm transition-colors duration-300 ${
-              isFooterInView ? 'text-gray-300' : 'text-gray-600'
+            <div className={`flex items-center transition-all duration-300 ${
+              isSidebarCollapsed ? 'justify-center' : 'space-x-3'
             }`}>
-              <div className="flex items-center space-x-2">
+              <div className={`p-2 rounded-lg ${
+                isDark ? 'bg-green-600' : 'bg-green-100'
+              }`}>
                 <Phone className={`w-4 h-4 ${
-                  isFooterInView ? 'text-green-400' : 'text-gray-600'
+                  isDark ? 'text-white' : 'text-green-600'
                 }`} />
-                <span>087 610 0600</span>
               </div>
-              <div className="flex items-center space-x-2">
+              {!isSidebarCollapsed && (
+                <div className="flex flex-col">
+                  <span className={`text-sm font-medium ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>087 610 0600</span>
+                  <span className={`text-xs ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Call us now</span>
+                </div>
+              )}
+            </div>
+            <div className={`flex items-center transition-all duration-300 ${
+              isSidebarCollapsed ? 'justify-center' : 'space-x-3'
+            }`}>
+              <div className={`p-2 rounded-lg ${
+                isDark ? 'bg-green-600' : 'bg-green-100'
+              }`}>
                 <Mail className={`w-4 h-4 ${
-                  isFooterInView ? 'text-green-400' : 'text-gray-600'
+                  isDark ? 'text-white' : 'text-green-600'
                 }`} />
-                <span>info@day1health.co.za</span>
               </div>
+              {!isSidebarCollapsed && (
+                <div className="flex flex-col">
+                  <span className={`text-sm font-medium ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>info@day1health.co.za</span>
+                  <span className={`text-xs ${
+                    isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Send us an email</span>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
       </aside>
 
       {/* Mobile Header */}

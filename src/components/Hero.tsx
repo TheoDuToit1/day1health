@@ -47,7 +47,7 @@ const heroSlides: HeroSlide[] = [
     bgColor: 'from-[#B2E5B2] to-[#B2E5B2]',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
-    iconColor: 'text-red-500',
+    iconColor: 'text-blue-500',
   },
   {
     id: 1,
@@ -90,7 +90,7 @@ const heroSlides: HeroSlide[] = [
     bgColor: 'from-[#F7F9F8] to-[#F7F9F8]',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
-    iconColor: 'text-purple-500',
+    iconColor: 'text-green-500',
   },
 ];
 
@@ -408,7 +408,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
   };
 
   return (
-    <section id="hero" className="relative min-h-[calc(100vh-80px)] overflow-hidden transition-all duration-500 pb-8 w-full">
+    <section id="hero" className="relative overflow-hidden transition-all duration-500 w-full">
       <AnimatePresence mode="wait">
         {heroSlides.map((slide, index) => {
           if (currentSlide !== index) return null;
@@ -420,10 +420,10 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className={`min-h-screen flex items-center justify-start bg-gradient-to-br ${slide.bgColor} ${slide.textColor || 'text-white'}`}
+              className={`min-h-screen flex items-center justify-center bg-gradient-to-br ${slide.bgColor} ${slide.textColor || 'text-white'}`}
             >
               <div 
-                className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 transition-all duration-500 ease-in-out ${getContentPadding()} ${getHeroPadding()}`}
+                className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 transition-all duration-500 ease-in-out ${getContentPadding()} ${getHeroPadding()}`}
                 style={{
                   transitionProperty: 'padding',
                   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
@@ -607,7 +607,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                         </motion.div>
                         
                         <motion.div
-                          className="absolute top-40 right-16 text-red-500/30"
+                          className="absolute top-40 right-16 text-blue-500/30"
                           animate={{
                             y: [0, 15, 0],
                             rotate: [0, -8, 0],
@@ -641,7 +641,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                         </motion.div>
                         
                         <motion.div
-                          className="absolute bottom-20 right-24 text-purple-500/30"
+                          className="absolute bottom-20 right-24 text-green-500/30"
                           animate={{
                             y: [0, 20, 0],
                             rotate: [0, -12, 0],
@@ -721,17 +721,17 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                   </div>
                 ) : (
                   /* Default single-column layout for other slides */
-                  <div className="w-full h-screen flex items-start justify-center pt-32">
+                  <div className="w-full h-screen flex flex-col items-center justify-center">
                     <motion.div
                       initial={{ y: 30, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="text-center max-w-7xl mx-auto px-6"
+                      className="text-center w-full max-w-7xl mx-auto px-6"
                     >
                       {/* Main Heading - Bold and Centered */}
-                      <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 mb-12 ${
+                      <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 mb-8 ${
                         slide.id === 1 
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-left -ml-[200px] -mt-[87px]' 
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-left' 
                           : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center'
                       }`}>
                         {slide.id === 0 ? (
@@ -971,8 +971,8 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                     <div className="text-2xl font-bold text-blue-600">{modalTestimonial.age}</div>
                     <div className="text-sm text-gray-600">Age</div>
                   </div>
-                  <div className="bg-purple-50 rounded-lg p-4 text-center col-span-2 md:col-span-1">
-                    <div className="text-lg font-bold text-purple-600">{modalTestimonial.plan}</div>
+                  <div className="bg-green-50 rounded-lg p-4 text-center col-span-2 md:col-span-1">
+                    <div className="text-lg font-bold text-green-600">{modalTestimonial.plan}</div>
                     <div className="text-sm text-gray-600">Plan</div>
                   </div>
                 </div>
