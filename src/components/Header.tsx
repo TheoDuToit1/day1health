@@ -240,7 +240,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                 <div className="flex flex-col">
                   <span className={`text-sm font-medium ${
                     isDark ? 'text-white' : 'text-gray-900'
-                  }`}>087 610 0600</span>
+                  }`}>0876 100 600</span>
                   <span className={`text-xs ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>Call us now</span>

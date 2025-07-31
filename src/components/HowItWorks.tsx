@@ -39,7 +39,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
   return (
     <section 
       id="how-it-works" 
-      className={`py-20 transition-all duration-700 ease-in-out ${
+      className={`relative py-20 transition-all duration-700 ease-in-out ${
         isDark ? 'bg-gray-900' : 'bg-white'
       } ${
         isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
@@ -236,30 +236,23 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                 Start Application
               </motion.button>
               <motion.button 
-                className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-green-600 transition-colors"
+                className={`border-2 border-white px-8 py-4 rounded-xl font-semibold transition-colors ${
+                  isDark 
+                    ? 'text-white hover:bg-white hover:text-green-600' 
+                    : 'text-green-600 hover:bg-green-600 hover:text-white border-green-600'
+                }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                Call 087 610 0600
+                Call 0876 100 600
               </motion.button>
             </motion.div>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Section Separator */}
-      <motion.svg 
-        className="absolute bottom-0 left-0 w-full h-20" 
-        viewBox="0 0 1200 120" 
-        preserveAspectRatio="none"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        viewport={{ once: true }}
-      >
-        <path d="M0,60 Q300,120 600,60 T1200,60 L1200,120 L0,120 Z" fill="currentColor" className={isDark ? 'text-gray-800' : 'text-gray-50'} />
-      </motion.svg>
+
     </section>
   );
 };

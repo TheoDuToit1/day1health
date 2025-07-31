@@ -133,7 +133,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors">
-                Call 087 610 0600
+                Call 0876 100 600
               </button>
               <button className="border-2 border-green-600 text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-600 hover:text-white transition-colors">
                 Email Us

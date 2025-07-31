@@ -242,14 +242,33 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       
       case 'daytoday':
         return (
-          <div className="max-w-7xl mx-auto px-4">
+          <motion.div 
+            className="max-w-7xl mx-auto px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Premium Care */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
-                  : 'bg-white border-blue-200 hover:border-blue-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                    : 'bg-white border-blue-200 hover:border-blue-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Premium Care</h3>
@@ -262,15 +281,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Dental & optical</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Virtual doctor</span></li>
                 </ul>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
 
               {/* Family Care */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                  : 'bg-white border-green-200 hover:border-green-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Family Care</h3>
@@ -283,15 +323,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Child immunizations</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
                 </ul>
-                <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
 
               {/* Basic Care */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
-                  : 'bg-white border-blue-200 hover:border-blue-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                    : 'bg-white border-blue-200 hover:border-blue-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.3,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Basic Care</h3>
@@ -304,15 +365,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic pathology</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Telehealth services</span></li>
                 </ul>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
 
               {/* Student Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                  : 'bg-white border-green-200 hover:border-green-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Student Care</h3>
@@ -325,10 +407,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Nurse line</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Campus clinic discounts</span></li>
                 </ul>
-                <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         );
       
       case 'hospital':
@@ -473,7 +562,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
               <div className="flex items-center justify-center space-x-4 mt-8 pt-8 border-t border-gray-200">
                 <button className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors">
                   <Phone className="w-5 h-5" />
-                  <span>Call Us: 087 610 0600</span>
+                  <span>Call Us: 0876 100 600</span>
                 </button>
                 <button className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors">
                   <Mail className="w-5 h-5" />

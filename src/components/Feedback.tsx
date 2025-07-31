@@ -36,7 +36,7 @@ const testimonials = [
 const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
   const { isDark } = useTheme();
   return (
-    <section className={`py-20 transition-all duration-700 ease-in-out ${
+    <section id="feedback" className={`py-20 transition-all duration-700 ease-in-out ${
       isDark ? 'bg-gray-800' : 'bg-gray-50'
     } ${
       isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'

@@ -109,7 +109,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-green-400" />
-                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>087 610 0600</span>
+                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>0876 100 600</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
