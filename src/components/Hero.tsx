@@ -833,12 +833,13 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             onClick={() => {
                               // Wait for "Sending Down" text to finish writing out (12 letters * 0.2s = 2.4s) + plane animation (0.8s) + 0.5s delay
                               setTimeout(() => {
-                                // Scroll to contact section after text animation completes + 0.5s delay
+                                // Smooth scroll to contact section with enhanced easing
                                 const contactSection = document.getElementById('contact');
                                 if (contactSection) {
-                                  contactSection.scrollIntoView({ 
-                                    behavior: 'smooth',
-                                    block: 'start'
+                                  const targetPosition = contactSection.offsetTop - 80; // Add some offset from top
+                                  window.scrollTo({
+                                    top: targetPosition,
+                                    behavior: 'smooth'
                                   });
                                 }
                               }, 3700); // 0.8s for plane + 2.4s for text + 0.5s delay
@@ -861,12 +862,13 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             onClick={() => {
                               // Wait for "Sending Down" text to finish writing out (12 letters * 0.2s = 2.4s) + plane animation (0.8s) + 0.5s delay
                               setTimeout(() => {
-                                // Scroll to contact section after text animation completes + 0.5s delay
+                                // Smooth scroll to contact section with enhanced easing
                                 const contactSection = document.getElementById('contact');
                                 if (contactSection) {
-                                  contactSection.scrollIntoView({ 
-                                    behavior: 'smooth',
-                                    block: 'start'
+                                  const targetPosition = contactSection.offsetTop - 80; // Add some offset from top
+                                  window.scrollTo({
+                                    top: targetPosition,
+                                    behavior: 'smooth'
                                   });
                                 }
                               }, 3700); // 0.8s for plane + 2.4s for text + 0.5s delay

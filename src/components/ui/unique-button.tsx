@@ -107,6 +107,7 @@ const UniqueButton: React.FC<UniqueButtonProps> = ({
             zIndex: 2,
             position: 'relative',
             animation: isHovered ? 'fly-1 0.6s ease-in-out infinite alternate' : 'none',
+            marginLeft: '-1em',
           }}
         >
           <svg
@@ -132,7 +133,7 @@ const UniqueButton: React.FC<UniqueButtonProps> = ({
         <span
           style={{
             display: 'block',
-            marginLeft: '0.3em',
+            marginLeft: '0.2em',
             transition: 'all 0.3s ease-in-out',
             zIndex: 2,
             position: 'relative',
