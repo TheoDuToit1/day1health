@@ -2,6 +2,7 @@ import React from 'react';
 import { Shield, Stethoscope, Search, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
+import UniqueButton from './ui/unique-button';
 
 interface HowItWorksProps {
   isSidebarCollapsed: boolean;
@@ -223,18 +224,19 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
               transition={{ delay: 0.8, duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <motion.button 
-                className={`px-8 py-4 rounded-xl font-semibold transition-colors ${
-                  isDark 
-                    ? 'bg-gray-800 text-green-400 hover:bg-gray-700' 
-                    : 'bg-white text-green-600 hover:bg-gray-100'
-                }`}
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                Start Application
-              </motion.button>
+                <UniqueButton
+                  width="200px"
+                  height="60px"
+                  className="font-semibold"
+                >
+                  Start Application
+                </UniqueButton>
+              </motion.div>
               <motion.button 
                 className={`border-2 border-white px-8 py-4 rounded-xl font-semibold transition-colors ${
                   isDark 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface FAQsProps {
@@ -82,37 +83,79 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
 
         <div className="max-w-4xl mx-auto">
           {faqs.map((faq, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`mb-4 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`mb-4 rounded-2xl overflow-hidden shadow-sm transition-all duration-300 ${
                 isDark ? 'bg-gray-800' : 'bg-gray-50'
               }`}
+              whileHover={{ 
+                scale: 1.02,
+                boxShadow: isDark 
+                  ? '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)'
+                  : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <button
+              <motion.button
                 className={`w-full px-8 py-6 text-left flex items-center justify-between transition-colors duration-200 ${
                   isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
                 }`}
                 onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                whileTap={{ scale: 0.98 }}
               >
                 <h3 className={`text-lg font-semibold pr-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>{faq.question}</h3>
-                <ChevronDown className={`w-6 h-6 flex-shrink-0 transition-transform duration-200 ${
-                  openFAQ === index ? 'rotate-180' : ''
-                } ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
-              </button>
+                <motion.div
+                  animate={{ rotate: openFAQ === index ? 180 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <ChevronDown className={`w-6 h-6 flex-shrink-0 ${
+                    isDark ? 'text-gray-400' : 'text-gray-400'
+                  }`} />
+                </motion.div>
+              </motion.button>
               
-              {openFAQ === index && (
-                <div className="px-8 pb-6">
-                  <div className={`w-full h-px mb-6 ${
-                    isDark ? 'bg-gray-600' : 'bg-gray-200'
-                  }`}></div>
-                  <p className={`leading-relaxed ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
-                  }`}>{faq.answer}</p>
-                </div>
-              )}
-            </div>
+              <AnimatePresence>
+                {openFAQ === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ 
+                      duration: 0.4,
+                      ease: [0.04, 0.62, 0.23, 0.98]
+                    }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-8 pb-6">
+                      <motion.div 
+                        className={`w-full h-px mb-6 ${
+                          isDark ? 'bg-gray-600' : 'bg-gray-200'
+                        }`}
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      ></motion.div>
+                      <motion.p 
+                        className={`leading-relaxed ${
+                          isDark ? 'text-gray-300' : 'text-gray-600'
+                        }`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
+                      >
+                        {faq.answer}
+                      </motion.p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
 

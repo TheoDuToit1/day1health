@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, HeartPulse, Briefcase, UsersRound, Users2, ShieldCheck, Activity, Heart, Star, Magnet } from 'lucide-react';
 import { MagnetizeButton } from '@/components/ui/magnetize-button';
+import UniqueButton from '@/components/ui/unique-button';
+import { SendMessageButton } from '@/components/ui/send-message-button';
 import type { LucideProps } from 'lucide-react';
 import { ShuffleCards } from '@/components/ui/shuffle-cards';
 import { AudioPlayer } from '@/components/ui/audio-player';
@@ -13,6 +15,7 @@ type IconType = React.ComponentType<LucideProps>;
 
 interface HeroProps {
   isSidebarCollapsed: boolean;
+  specificSlide?: number | null;
 }
 
 interface TypewriterWord {
@@ -320,7 +323,7 @@ function TestimonialCard({
   );
 }
 
-const Hero = ({ isSidebarCollapsed }: HeroProps) => {
+const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroProps) => {
   // Calculate padding based on sidebar state with more noticeable difference
   const getContentPadding = () => {
     if (isSidebarCollapsed) {
@@ -328,7 +331,7 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
     }
     return 'pl-16 md:pl-24 lg:pl-32 xl:pl-48';
   };
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [currentSlide, setCurrentSlide] = useState<number>(specificSlide ?? 0);
   const [currentText, setCurrentText] = useState<string>('');
   const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -411,7 +414,10 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
     <section id="hero" className="relative overflow-hidden transition-all duration-500 w-full">
       <AnimatePresence mode="wait">
         {heroSlides.map((slide, index) => {
-          if (currentSlide !== index) return null;
+          // For specific slide routes, only render that slide
+          if (specificSlide !== null && index !== specificSlide) return null;
+          // For main route, show current slide
+          if (specificSlide === null && currentSlide !== index) return null;
 
           return (
             <motion.div
@@ -814,43 +820,59 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                         {slide.subheading}
                       </motion.p>
                       
-                      {/* Magnetize Button for Slide 1 */}
+                      {/* SendMessage Button for Slide 1 */}
                       {slide.id === 0 && (
                         <motion.div
                           initial={{ y: 20, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.8, duration: 0.6 }}
-                          className="mt-4"
+                          className="mt-4 flex justify-center"
                           style={{ marginTop: '-30px' }}
                         >
-                          <MagnetizeButton 
-                            className="text-2xl px-12 py-6 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-500 ease-out transform hover:scale-[1.03] font-bold tracking-wide"
-                            particleCount={16}
-                            attractRadius={60}
-                            style={{ transform: 'scale(1.3)' }}
-                          >
-                            Join Now
-                          </MagnetizeButton>
+                          <SendMessageButton
+                            onClick={() => {
+                              // Wait for "Sending Down" text to finish writing out (16 letters * 0.2s = 3.2s) + 0.5s delay
+                              setTimeout(() => {
+                                // Scroll to contact section after text animation completes + 0.5s delay
+                                const contactSection = document.getElementById('contact');
+                                if (contactSection) {
+                                  contactSection.scrollIntoView({ 
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                  });
+                                }
+                              }, 3700); // 3.2s for text animation + 0.5s delay
+                            }}
+                            className="font-manrope font-bold text-xl"
+                          />
                         </motion.div>
                       )}
                       
-                      {/* MagnetizeButton for Slide 2 */}
+                      {/* SendMessage Button for Slide 2 */}
                       {slide.id === 1 && (
                         <motion.div
                           initial={{ y: 20, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.8, duration: 0.6 }}
-                          className="mt-4"
+                          className="mt-4 flex justify-center"
                           style={{ marginTop: '-30px' }}
                         >
-                          <MagnetizeButton 
-                            className="text-2xl px-12 py-6 rounded-sm shadow-lg hover:shadow-2xl transition-all duration-300 ease-out font-bold tracking-wide"
-                            particleCount={16}
-                            attractRadius={60}
-                            style={{ transform: 'scale(1.3)', position: 'relative', zIndex: 10 }}
-                          >
-                            Join Now
-                          </MagnetizeButton>
+                          <SendMessageButton
+                            onClick={() => {
+                              // Wait for "Sending Down" text to finish writing out (16 letters * 0.2s = 3.2s) + 0.5s delay
+                              setTimeout(() => {
+                                // Scroll to contact section after text animation completes + 0.5s delay
+                                const contactSection = document.getElementById('contact');
+                                if (contactSection) {
+                                  contactSection.scrollIntoView({ 
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                  });
+                                }
+                              }, 3700); // 3.2s for text animation + 0.5s delay
+                            }}
+                            className="font-manrope font-bold text-xl"
+                          />
                         </motion.div>
                       )}
                       
@@ -862,9 +884,13 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
                           transition={{ delay: 0.8, duration: 0.6 }}
                           className="mt-12"
                         >
-                          <button className="bg-green-600 hover:bg-green-700 text-white font-manrope font-bold text-xl px-12 py-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl">
+                          <UniqueButton
+                            width="220px"
+                            height="70px"
+                            className="font-manrope font-bold text-xl"
+                          >
                             Get Started Today
-                          </button>
+                          </UniqueButton>
                         </motion.div>
                       )}
                     </motion.div>
@@ -876,37 +902,41 @@ const Hero = ({ isSidebarCollapsed }: HeroProps) => {
         })}
       </AnimatePresence>
 
-      {/* Navigation Dots */}
-      <div className={`absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-4 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'right-4' : 'right-8'}`}>
-        {heroSlides.map((slide, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-4 h-4 rounded-full transition-all ${
-              currentSlide === index 
-                ? (slide.id === 3 ? 'bg-gray-900 scale-150' : 'bg-green-600 scale-150')
-                : (slide.id === 3 ? 'bg-gray-400 hover:bg-gray-600' : 'bg-gray-300 hover:bg-green-500')
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
-
-      {/* Bottom Tabs - Moved to be part of the hero content */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm border-t border-white/10">
-        {/* Mobile Navigation Dots */}
-        <div className="lg:hidden fixed bottom-8 left-0 right-0 flex justify-center space-x-2 z-40">
+      {/* Navigation Dots - Only show on main route */}
+      {specificSlide === null && (
+        <div className={`absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-4 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'right-4' : 'right-8'}`}>
           {heroSlides.map((slide, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                currentSlide === index ? 'bg-white' : 'bg-white/50'
+              className={`w-4 h-4 rounded-full transition-all ${
+                currentSlide === index 
+                  ? (slide.id === 3 ? 'bg-gray-900 scale-150' : 'bg-green-600 scale-150')
+                  : (slide.id === 3 ? 'bg-gray-400 hover:bg-gray-600' : 'bg-gray-300 hover:bg-green-500')
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
+      )}
+
+      {/* Bottom Tabs - Moved to be part of the hero content */}
+      <div className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm border-t border-white/10">
+        {/* Mobile Navigation Dots - Only show on main route */}
+        {specificSlide === null && (
+          <div className="lg:hidden fixed bottom-8 left-0 right-0 flex justify-center space-x-2 z-40">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                  currentSlide === index ? 'bg-white' : 'bg-white/50'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Section Separator */}

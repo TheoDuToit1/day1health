@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from './components/AppContent';
 import { ThemeProvider } from './contexts/ThemeContext';
 
-function App() {
+function AppWrapper() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFooterInView, setIsFooterInView] = useState(false);
+  const location = useLocation();
+
+  // Get slide number from route
+  const getSlideFromRoute = () => {
+    const path = location.pathname;
+    if (path === '/slide-1') return 0;
+    if (path === '/slide-2') return 1;
+    if (path === '/slide-3') return 2;
+    if (path === '/slide-4') return 3;
+    return null; // Main route
+  };
+
+  const specificSlide = getSlideFromRoute();
 
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
@@ -77,15 +91,28 @@ function App() {
   }, []);
 
   return (
+    <AppContent
+      activeSection={activeSection}
+      setActiveSection={setActiveSection}
+      isSidebarCollapsed={isSidebarCollapsed}
+      setIsSidebarCollapsed={setIsSidebarCollapsed}
+      isFooterInView={isFooterInView}
+      scrollToSection={scrollToSection}
+      specificSlide={specificSlide}
+    />
+  );
+}
+
+function App() {
+  return (
     <ThemeProvider>
-      <AppContent
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-        isSidebarCollapsed={isSidebarCollapsed}
-        setIsSidebarCollapsed={setIsSidebarCollapsed}
-        isFooterInView={isFooterInView}
-        scrollToSection={scrollToSection}
-      />
+      <Routes>
+        <Route path="/" element={<AppWrapper />} />
+        <Route path="/slide-1" element={<AppWrapper />} />
+        <Route path="/slide-2" element={<AppWrapper />} />
+        <Route path="/slide-3" element={<AppWrapper />} />
+        <Route path="/slide-4" element={<AppWrapper />} />
+      </Routes>
     </ThemeProvider>
   );
 }

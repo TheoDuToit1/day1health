@@ -58,11 +58,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Platinum Elite Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                  : 'bg-white border-green-200 hover:border-green-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <div className="text-center mb-6">
                   <h3 className={`text-xl font-bold mb-2 ${
                     isDark ? 'text-white' : 'text-gray-900'
@@ -100,14 +114,28 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                   Choose Plan
                 </button>
-              </div>
+              </motion.div>
 
               {/* Gold Plus Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
-                  : 'bg-white border-blue-200 hover:border-blue-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                    : 'bg-white border-blue-200 hover:border-blue-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <div className="text-center mb-6">
                   <h3 className={`text-xl font-bold mb-2 ${
                     isDark ? 'text-white' : 'text-gray-900'
@@ -142,17 +170,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication (PDP)</span>
                   </li>
                 </ul>
-                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                <motion.button 
+                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
                   Choose Plan
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
 
               {/* Silver Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
-                  : 'bg-white border-gray-200 hover:border-gray-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
+                    : 'bg-white border-gray-200 hover:border-gray-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.3,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <div className="text-center mb-6">
                   <h3 className={`text-xl font-bold mb-2 ${
                     isDark ? 'text-white' : 'text-gray-900'
@@ -187,17 +234,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                <motion.button 
+                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
                   Choose Plan
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
 
               {/* Bronze Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                  : 'bg-white border-green-200 hover:border-green-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <div className="text-center mb-6">
                   <h3 className={`text-xl font-bold mb-2 ${
                     isDark ? 'text-white' : 'text-gray-900'
@@ -232,10 +298,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                <motion.button 
+                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
                   Choose Plan
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </div>
           </div>
         );
@@ -425,11 +496,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Executive Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
-                  : 'bg-white border-blue-200 hover:border-blue-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                    : 'bg-white border-blue-200 hover:border-blue-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Executive</h3>
@@ -442,15 +527,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Specialist consultations</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Advanced diagnostics</span></li>
                 </ul>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
 
               {/* Family Hospital Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
-                  : 'bg-white border-blue-200 hover:border-blue-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                    : 'bg-white border-blue-200 hover:border-blue-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Family Cover</h3>
@@ -463,15 +569,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Pediatric care</span></li>
                 </ul>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
 
               {/* Standard Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                  : 'bg-white border-green-200 hover:border-green-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.3,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Standard</h3>
@@ -484,15 +611,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency cover</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited diagnostics</span></li>
                 </ul>
-                <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
 
               {/* Basic Hospital Plan */}
-              <div className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                isDark 
-                  ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
-                  : 'bg-white border-gray-200 hover:border-gray-400'
-              }`}>
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
+                    : 'bg-white border-gray-200 hover:border-gray-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Basic Cover</h3>
@@ -507,8 +655,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited hospital stay</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic diagnostics</span></li>
                 </ul>
-                <button className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition">Choose Plan</button>
-              </div>
+                <motion.button 
+                  className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Choose Plan
+                </motion.button>
+              </motion.div>
             </div>
           </div>
         );

@@ -1,8 +1,5 @@
 import React from 'react';
 import { Mail, Phone, Shield } from 'lucide-react';
-import FacebookButton from './FacebookButton';
-import LinkedInButton from './LinkedInButton';
-import WhatsAppButton from './WhatsAppButton';
 import BB8Toggle from './BB8Toggle';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -50,11 +47,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
               Underwritten by African Unity Life, we provide trusted healthcare coverage across South Africa.
             </p>
             
-            <div className="mt-6 flex space-x-4 flex-wrap gap-4">
-              <FacebookButton />
-              <LinkedInButton />
-              <WhatsAppButton />
-            </div>
+
           </div>
 
           {/* Quick Links */}
