@@ -1,23 +1,23 @@
 import React from 'react';
-import './send-message-button.css';
+import './hero-cta-button.css';
 
-interface SendMessageButtonProps {
+interface HeroCTAButtonProps {
   onClick?: () => void;
   className?: string;
 }
 
-export const SendMessageButton: React.FC<SendMessageButtonProps> = ({ 
+export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({ 
   onClick, 
   className = "" 
 }) => {
   return (
     <button 
-      className={`button ${className}`}
+      className={`hero-cta-button ${className}`}
       onClick={onClick}
     >
-      <div className="outline"></div>
-      <div className="state state--default">
-        <div className="icon">
+      <div className="hero-outline"></div>
+      <div className="hero-state hero-state--default">
+        <div className="hero-icon">
           <svg
             width="1em"
             height="1em"
@@ -48,21 +48,23 @@ export const SendMessageButton: React.FC<SendMessageButtonProps> = ({
           </svg>
         </div>
         <p>
-          <span style={{'--i': 0} as React.CSSProperties}>S</span>
-          <span style={{'--i': 1} as React.CSSProperties}>e</span>
-          <span style={{'--i': 2} as React.CSSProperties}>n</span>
-          <span style={{'--i': 3} as React.CSSProperties}>d</span>
-          <span style={{'--i': 4} as React.CSSProperties}>M</span>
-          <span style={{'--i': 5} as React.CSSProperties}>e</span>
+          <span style={{'--i': 0} as React.CSSProperties}>J</span>
+          <span style={{'--i': 1} as React.CSSProperties}>o</span>
+          <span style={{'--i': 2} as React.CSSProperties}>i</span>
+          <span style={{'--i': 3} as React.CSSProperties}>n</span>
+          <span style={{'--i': 4} as React.CSSProperties}>&nbsp;</span>
+          <span style={{'--i': 5} as React.CSSProperties}>U</span>
           <span style={{'--i': 6} as React.CSSProperties}>s</span>
-          <span style={{'--i': 7} as React.CSSProperties}>s</span>
-          <span style={{'--i': 8} as React.CSSProperties}>a</span>
-          <span style={{'--i': 9} as React.CSSProperties}>g</span>
-          <span style={{'--i': 10} as React.CSSProperties}>e</span>
+          <span style={{'--i': 7} as React.CSSProperties}>&nbsp;</span>
+          <span style={{'--i': 8} as React.CSSProperties}>T</span>
+          <span style={{'--i': 9} as React.CSSProperties}>o</span>
+          <span style={{'--i': 10} as React.CSSProperties}>d</span>
+          <span style={{'--i': 11} as React.CSSProperties}>a</span>
+          <span style={{'--i': 12} as React.CSSProperties}>y</span>
         </p>
       </div>
-      <div className="state state--sent">
-        <div className="icon">
+      <div className="hero-state hero-state--sent">
+        <div className="hero-icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -88,7 +90,15 @@ export const SendMessageButton: React.FC<SendMessageButtonProps> = ({
           <span style={{'--i': 5} as React.CSSProperties}>S</span>
           <span style={{'--i': 6} as React.CSSProperties}>e</span>
           <span style={{'--i': 7} as React.CSSProperties}>n</span>
-          <span style={{'--i': 8} as React.CSSProperties}>t</span>
+          <span style={{'--i': 8} as React.CSSProperties}>d</span>
+          <span style={{'--i': 9} as React.CSSProperties}>i</span>
+          <span style={{'--i': 10} as React.CSSProperties}>n</span>
+          <span style={{'--i': 11} as React.CSSProperties}>g</span>
+          <span style={{'--i': 12} as React.CSSProperties}>&nbsp;</span>
+          <span style={{'--i': 13} as React.CSSProperties}>D</span>
+          <span style={{'--i': 14} as React.CSSProperties}>o</span>
+          <span style={{'--i': 15} as React.CSSProperties}>w</span>
+          <span style={{'--i': 16} as React.CSSProperties}>n</span>
         </p>
       </div>
     </button>

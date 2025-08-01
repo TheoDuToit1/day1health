@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, HeartPulse, Briefcase, UsersRound, Users2, ShieldCheck, Activity, Heart, Star, Magnet } from 'lucide-react';
 import { MagnetizeButton } from '@/components/ui/magnetize-button';
 import UniqueButton from '@/components/ui/unique-button';
-import { SendMessageButton } from '@/components/ui/send-message-button';
+import { HeroCTAButton } from './ui/hero-cta-button';
 import type { LucideProps } from 'lucide-react';
 import { ShuffleCards } from '@/components/ui/shuffle-cards';
 import { AudioPlayer } from '@/components/ui/audio-player';
@@ -829,9 +829,9 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           className="mt-4 flex justify-center"
                           style={{ marginTop: '-30px' }}
                         >
-                          <SendMessageButton
+                          <HeroCTAButton
                             onClick={() => {
-                              // Wait for "Sending Down" text to finish writing out (16 letters * 0.2s = 3.2s) + 0.5s delay
+                              // Wait for "Sending Down" text to finish writing out (12 letters * 0.2s = 2.4s) + plane animation (0.8s) + 0.5s delay
                               setTimeout(() => {
                                 // Scroll to contact section after text animation completes + 0.5s delay
                                 const contactSection = document.getElementById('contact');
@@ -841,7 +841,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                                     block: 'start'
                                   });
                                 }
-                              }, 3700); // 3.2s for text animation + 0.5s delay
+                              }, 3700); // 0.8s for plane + 2.4s for text + 0.5s delay
                             }}
                             className="font-manrope font-bold text-xl"
                           />
@@ -857,9 +857,9 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           className="mt-4 flex justify-center"
                           style={{ marginTop: '-30px' }}
                         >
-                          <SendMessageButton
+                          <HeroCTAButton
                             onClick={() => {
-                              // Wait for "Sending Down" text to finish writing out (16 letters * 0.2s = 3.2s) + 0.5s delay
+                              // Wait for "Sending Down" text to finish writing out (12 letters * 0.2s = 2.4s) + plane animation (0.8s) + 0.5s delay
                               setTimeout(() => {
                                 // Scroll to contact section after text animation completes + 0.5s delay
                                 const contactSection = document.getElementById('contact');
@@ -869,7 +869,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                                     block: 'start'
                                   });
                                 }
-                              }, 3700); // 3.2s for text animation + 0.5s delay
+                              }, 3700); // 0.8s for plane + 2.4s for text + 0.5s delay
                             }}
                             className="font-manrope font-bold text-xl"
                           />

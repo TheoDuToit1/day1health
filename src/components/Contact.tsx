@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { AnimatedContactButton } from './ui/animated-contact-button';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
@@ -286,13 +287,16 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center justify-center"
-                >
-                  Send Message
-                  <Send className="ml-2 w-5 h-5" />
-                </button>
+                <div className="flex justify-center">
+                  <AnimatedContactButton
+                    type="button"
+                    className="w-full max-w-md opacity-100"
+                    onClick={() => {
+                      // Demo purposes - just trigger the animation
+                      console.log('Contact button clicked for demo');
+                    }}
+                  />
+                </div>
               </div>
 
               <p className={`text-sm mt-4 text-center ${

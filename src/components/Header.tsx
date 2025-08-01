@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               <li key={item.id}>
                 <button
                   onClick={() => onNavigate(item.id)}
-                  className={`w-full flex items-center rounded-xl transition-all duration-500 ease-in-out group relative transform ${
+                  className={`w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
                     isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
                   } ${
                     activeSection === item.id
