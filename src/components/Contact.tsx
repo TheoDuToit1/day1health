@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { AddToCartButton } from './ui/add-to-cart-button';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
@@ -15,7 +14,6 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
     email: '',
     message: ''
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -288,18 +286,13 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   />
                 </div>
 
-                <div className="flex justify-center">
-                  <AddToCartButton
-                    onClick={() => {
-                      // Create a synthetic form event and call handleSubmit
-                      const syntheticEvent = {
-                        preventDefault: () => {},
-                      } as React.FormEvent;
-                      handleSubmit(syntheticEvent);
-                    }}
-                    className="font-semibold"
-                  />
-                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center justify-center"
+                >
+                  Send Message
+                  <Send className="ml-2 w-5 h-5" />
+                </button>
               </div>
 
               <p className={`text-sm mt-4 text-center ${
