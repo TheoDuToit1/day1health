@@ -32,9 +32,8 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 
   return (
     <section 
-      id="contact" 
-      className={`py-20 transition-all duration-700 ease-in-out ${
-        isDark ? 'bg-gray-800' : 'bg-gray-50'
+      className={`py-20 transition-all duration-700 ease-in-out border-b ${
+        isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
       } ${
         isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
       } ${
@@ -44,6 +43,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
         transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }}
     >
+
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
@@ -53,7 +53,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
           }`}>
             Contact Us
           </span>
-          <h2 className={`text-4xl lg:text-5xl font-bold mb-6 ${
+          <h2 id="contact" className={`text-4xl lg:text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
             Get in Touch

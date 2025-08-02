@@ -25,7 +25,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
         transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }}
     >
-      <div className="mx-auto px-4 py-16 w-full">
+      <div className="mx-auto px-4 pt-16 pb-8 w-full">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
@@ -177,7 +177,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
             </div>
           </div>
 
-          <div className={`mt-6 p-4 rounded-lg text-center ${
+          <div className={`mt-4 p-3 rounded-lg text-center ${
             isDark ? 'bg-gray-800' : 'bg-gray-100'
           }`}>
             <p className={`text-sm ${

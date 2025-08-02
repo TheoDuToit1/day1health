@@ -558,7 +558,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       >
                         {/* Vertical Marquee Column 1 (downwards) */}
                         <div className="h-full w-72 flex-shrink-0">
-                          <Marquee vertical pauseOnHover repeat={2} className="[--duration:45s] h-full w-full">
+                          <Marquee vertical pauseOnHover repeat={2} className="[--duration:80s] h-full w-full">
                             {testimonials.map((review) => (
                               <TestimonialCard key={`col1-${review.username}`} {...review} onOpenModal={handleOpenModal} />
                             ))}
@@ -567,7 +567,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         
                         {/* Vertical Marquee Column 2 (upwards) */}
                         <div className="h-full w-72 flex-shrink-0">
-                          <Marquee vertical pauseOnHover reverse repeat={2} className="[--duration:40s] h-full w-full">
+                          <Marquee vertical pauseOnHover reverse repeat={2} className="[--duration:75s] h-full w-full">
                             {testimonials.map((review) => (
                               <TestimonialCard key={`col2-${review.username}`} {...review} onOpenModal={handleOpenModal} />
                             ))}
@@ -576,7 +576,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         
                         {/* Vertical Marquee Column 3 (downwards) */}
                         <div className="h-full w-72 flex-shrink-0">
-                          <Marquee vertical pauseOnHover repeat={2} className="[--duration:50s] h-full w-full">
+                          <Marquee vertical pauseOnHover repeat={2} className="[--duration:85s] h-full w-full">
                             {testimonials.map((review) => (
                               <TestimonialCard key={`col3-${review.username}`} {...review} onOpenModal={handleOpenModal} />
                             ))}
@@ -585,7 +585,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         
                         {/* Vertical Marquee Column 4 (upwards) */}
                         <div className="h-full w-72 flex-shrink-0">
-                          <Marquee vertical pauseOnHover reverse repeat={2} className="[--duration:35s] h-full w-full">
+                          <Marquee vertical pauseOnHover reverse repeat={2} className="[--duration:70s] h-full w-full">
                             {testimonials.map((review) => (
                               <TestimonialCard key={`col4-${review.username}`} {...review} onOpenModal={handleOpenModal} />
                             ))}

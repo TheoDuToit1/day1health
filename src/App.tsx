@@ -34,9 +34,11 @@ function AppWrapper() {
     
     const element = document.getElementById(sectionId);
     if (element) {
-      const offsetTop = element.offsetTop - 100;
+      // For heading elements, scroll with some offset to position them better
+      const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+      const offset = 60; // Adjust this value to move screen up/down
       window.scrollTo({
-        top: offsetTop,
+        top: elementTop - offset,
         behavior: 'smooth'
       });
     }
@@ -66,20 +68,24 @@ function AppWrapper() {
         }
       }
 
-      // Update active section for other sections
+      // Update active section for other sections (now using heading elements)
       for (let i = sections.length - 1; i >= 0; i--) {
         if (sections[i] === 'hero') continue; // Skip hero as we handle it above
         
-        const section = document.getElementById(sections[i]);
-        if (section) {
-          const sectionTop = section.offsetTop;
-          const sectionHeight = section.offsetHeight;
-          const sectionBottom = sectionTop + sectionHeight;
-          
-          // If scroll position is within this section's boundaries
-          if (scrollPosition >= sectionTop - 200 && scrollPosition < sectionBottom - 200) {
-            setActiveSection(sections[i]);
-            break;
+        const heading = document.getElementById(sections[i]);
+        if (heading) {
+          // Get the parent section element to calculate section boundaries
+          const section = heading.closest('section');
+          if (section) {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionBottom = sectionTop + sectionHeight;
+            
+            // If scroll position is within this section's boundaries
+            if (scrollPosition >= sectionTop - 200 && scrollPosition < sectionBottom - 200) {
+              setActiveSection(sections[i]);
+              break;
+            }
           }
         }
       }

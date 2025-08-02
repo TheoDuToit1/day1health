@@ -48,9 +48,8 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
 
   return (
     <section 
-      id="faqs" 
-      className={`py-20 transition-all duration-700 ease-in-out ${
-        isDark ? 'bg-gray-900' : 'bg-white'
+      className={`py-20 transition-all duration-700 ease-in-out border-b scroll-mt-32 ${
+        isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
       } ${
         isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
       } ${
@@ -69,7 +68,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
           }`}>
             Frequently Asked Questions
           </span>
-          <h2 className={`text-4xl lg:text-5xl font-bold mb-6 ${
+          <h2 id="faqs" className={`text-4xl lg:text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
             Got Questions? We Have Answers

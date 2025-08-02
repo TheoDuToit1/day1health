@@ -15,6 +15,10 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [showText, setShowText] = useState(!isSidebarCollapsed);
+  const [companyText, setCompanyText] = useState('');
+  const [taglineText, setTaglineText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
   // Close mobile menu when switching to desktop view
   useEffect(() => {
@@ -37,9 +41,60 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     }
   }, [isSidebarCollapsed, isMobile]);
 
+  // Typewriter effect for sidebar text
+  useEffect(() => {
+    if (isSidebarCollapsed) {
+      // Reset text immediately when collapsing
+      setShowText(false);
+      setCompanyText('');
+      setTaglineText('');
+      setIsTyping(false);
+    } else {
+      // Start typewriter effect after sidebar expansion completes (700ms)
+      const timer = setTimeout(() => {
+        setShowText(true);
+        setIsTyping(true);
+        
+        // Type "Day1Health" first
+        const companyName = 'Day1Health';
+        let companyIndex = 0;
+        
+        const typeCompany = () => {
+          if (companyIndex < companyName.length) {
+            setCompanyText(companyName.slice(0, companyIndex + 1));
+            companyIndex++;
+            setTimeout(typeCompany, 80); // 80ms per character
+          } else {
+            // After company name is done, type tagline
+            setTimeout(() => {
+              const tagline = 'Health Solutions';
+              let taglineIndex = 0;
+              
+              const typeTagline = () => {
+                if (taglineIndex < tagline.length) {
+                  setTaglineText(tagline.slice(0, taglineIndex + 1));
+                  taglineIndex++;
+                  setTimeout(typeTagline, 60); // 60ms per character for tagline
+                } else {
+                  setIsTyping(false);
+                }
+              };
+              
+              typeTagline();
+            }, 200); // 200ms pause between company name and tagline
+          }
+        };
+        
+        typeCompany();
+      }, 700);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isSidebarCollapsed]);
+
   const navItems = [
     { id: 'hero', label: 'Home', icon: Home },
-    { id: 'how-it-works', label: 'Cover plan', icon: Settings },
+    { id: 'how-it-works', label: 'How it works', icon: Settings },
     { id: 'feedback', label: 'Reviews', icon: MessageSquare },
     { id: 'why-choose', label: 'Why Us', icon: Users },
     { id: 'contact', label: 'Contact us', icon: Phone },
@@ -104,17 +159,27 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             }}>
               <span className={`text-white font-bold ${isSidebarCollapsed ? 'text-lg' : 'text-base'}`}>D1</span>
             </div>
-            {!isSidebarCollapsed && (
-              <div className="flex flex-col transition-all duration-700 ease-in-out transform"
+            {showText && (
+              <div className="flex flex-col transition-all duration-300 ease-in-out transform"
               style={{
-                transition: 'opacity 0.5s ease 0.2s, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                transition: 'opacity 0.3s ease, transform 0.3s ease'
               }}>
-                <span className={`font-bold text-lg transition-all duration-500 ${
+                <span className={`font-bold text-lg transition-all duration-300 ${
                   isDark ? 'text-white' : 'text-gray-900'
-                }`}>Day1Health</span>
-                <span className={`text-sm transition-all duration-500 ${
+                }`}>
+                  {companyText}
+                  {isTyping && companyText.length < 'Day1Health'.length && (
+                    <span className="animate-pulse text-green-500">|</span>
+                  )}
+                </span>
+                <span className={`text-sm transition-all duration-300 ${
                   isDark ? 'text-gray-300' : 'text-gray-500'
-                }`}>Health Solutions</span>
+                }`}>
+                  {taglineText}
+                  {isTyping && companyText.length === 'Day1Health'.length && taglineText.length < 'Health Solutions'.length && (
+                    <span className="animate-pulse text-green-500">|</span>
+                  )}
+                </span>
               </div>
             )}
           </div>

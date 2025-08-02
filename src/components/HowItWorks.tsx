@@ -39,9 +39,8 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
 
   return (
     <section 
-      id="how-it-works" 
-      className={`relative pt-20 pb-40 transition-all duration-700 ease-in-out ${
-        isDark ? 'bg-gray-900' : 'bg-white'
+      className={`relative py-20 transition-all duration-700 ease-in-out border-b scroll-mt-32 ${
+        isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
       } ${
         isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
       } ${
@@ -62,7 +61,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
           }`}>
             How It Works
           </span>
-          <h2 className={`text-4xl lg:text-5xl font-bold ${
+          <h2 id="how-it-works" className={`text-4xl lg:text-5xl font-bold ${
             isDark ? 'text-white' : 'text-gray-900'
           } mb-6`}>
             Getting Covered is Simple
@@ -213,13 +212,13 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                     
                     {/* Content */}
                     <h3 className={`text-lg font-semibold mb-2 ${
-                      isDark ? 'text-white' : 'text-gray-900'
+                      isDark ? '!text-white' : '!text-gray-900'
                     }`}>
                       {step.title}
                     </h3>
                     
                     <p className={`text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
+                      isDark ? '!text-gray-300' : '!text-gray-600'
                     }`}>
                       {step.description}
                     </p>

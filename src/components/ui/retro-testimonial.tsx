@@ -3,6 +3,7 @@ import {AnimatePresence, motion} from "framer-motion";
 import {ArrowLeft, ArrowRight, Quote, X, Play, Pause, RotateCcw} from "lucide-react";
 import {cn} from "@/lib/utils";
 import { speakText } from "@/lib/tts";
+import { useTheme } from "@/contexts/ThemeContext";
 
 // ===== Types and Interfaces =====
 export interface iTestimonial {
@@ -174,6 +175,7 @@ const TestimonialCard = ({
 	onCardClose?: () => void;
 	backgroundImage?: string;
 }) => {
+	const { isDark } = useTheme();
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [currentTime, setCurrentTime] = useState(0);
@@ -315,7 +317,7 @@ const TestimonialCard = ({
 							transition={{ type: 'spring', damping: 20, stiffness: 300 }}
 							ref={containerRef}
 							layoutId={layout ? `card-${testimonial.name}` : undefined}
-							className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden z-[60] relative my-10 max-h-[85vh] flex flex-col"
+							className={`max-w-3xl mx-auto ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-2xl rounded-2xl overflow-hidden z-[60] relative my-10 max-h-[85vh] flex flex-col`}
 						>
 							<div className="sticky top-0 z-10 bg-gradient-to-r from-green-600 to-green-700 p-4">
 								<div className="flex items-center justify-between">
@@ -337,7 +339,7 @@ const TestimonialCard = ({
 								</div>
 							</div>
 							<div className="p-6 overflow-y-auto flex-grow">
-								<div className="relative bg-white p-6 rounded-lg border border-green-100">
+								<div className={`relative ${isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-green-100'} p-6 rounded-lg border`}>
 									{/* Audio Controls */}
 									<div className="flex items-center justify-between mb-4">
 										<div className="flex-1 pr-4">
@@ -381,7 +383,7 @@ const TestimonialCard = ({
 									{/* Testimonial Text */}
 									<div className="relative">
 										<Quote className="absolute -left-2 -top-4 h-5 w-5 text-green-200 opacity-70" />
-										<p className="text-gray-700 text-base leading-relaxed pl-4">{testimonial.description}</p>
+										<p className={`${isDark ? 'text-gray-200' : 'text-gray-700'} text-base leading-relaxed pl-4`}>{testimonial.description}</p>
 									</div>
 								</div>
 							</div>
@@ -402,7 +404,7 @@ const TestimonialCard = ({
 				}}
 			>
 				<div
-					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl bg-gradient-to-b from-white to-green-50 h-[500px] md:h-[550px] w-80 md:w-96 overflow-hidden flex flex-col items-center justify-center relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-green-100`}
+					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700 border-gray-600' : 'bg-gradient-to-b from-white to-green-50 border-green-100'} h-[500px] md:h-[550px] w-80 md:w-96 overflow-hidden flex flex-col items-center justify-center relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border`}
 				>
 					<div className="absolute opacity-10" style={{inset: "-1px 0 0"}}>
 						<div className="absolute inset-0">
@@ -415,10 +417,10 @@ const TestimonialCard = ({
 					</div>
 					<ProfileImage src={testimonial.profileImage} alt={testimonial.name} />
 					<div className="px-6 mt-6 text-center">
-						<motion.p
-							layoutId={layout ? `title-${testimonial.name}` : undefined}
-							className="text-gray-700 text-lg md:text-xl font-medium leading-relaxed"
-						>
+							<motion.p
+								layoutId={layout ? `title-${testimonial.name}` : undefined}
+								className={`${isDark ? 'text-gray-200' : 'text-gray-700'} text-lg md:text-xl font-medium leading-relaxed`}
+							>
 							"{truncatedText}"
 						</motion.p>
 						{shouldTruncate && (
@@ -440,7 +442,7 @@ const TestimonialCard = ({
 					</div>
 					<motion.p
 						layoutId={layout ? `category-${testimonial.name}` : undefined}
-						className="text-gray-900 text-xl md:text-2xl font-bold text-center mt-6"
+						className={`${isDark ? 'text-white' : 'text-gray-900'} text-xl md:text-2xl font-bold text-center mt-6`}
 					>
 						{testimonial.name}
 					</motion.p>

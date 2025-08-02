@@ -36,8 +36,8 @@ const testimonials = [
 const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
   const { isDark } = useTheme();
   return (
-    <section id="feedback" className={`py-20 transition-all duration-700 ease-in-out ${
-      isDark ? 'bg-gray-800' : 'bg-gray-50'
+    <section className={`py-20 transition-all duration-700 ease-in-out border-b scroll-mt-32 ${
+      isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
     } ${
       isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
     } ${
@@ -55,7 +55,7 @@ const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
           }`}>
             Testimonials
           </span>
-          <h2 className={`text-4xl font-bold text-center mb-4 ${
+          <h2 id="feedback" className={`text-4xl font-bold text-center mb-4 ${
           isDark ? 'text-white' : 'text-gray-900'
         }`}>
             What Our Members Say
