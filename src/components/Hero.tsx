@@ -903,41 +903,11 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
         })}
       </AnimatePresence>
 
-      {/* Navigation Dots - Only show on main route */}
-      {specificSlide === null && (
-        <div className={`absolute top-1/2 right-8 transform -translate-y-1/2 flex flex-col space-y-4 z-10 transition-all duration-300 ${isSidebarCollapsed ? 'right-4' : 'right-8'}`}>
-          {heroSlides.map((slide, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-4 h-4 rounded-full transition-all ${
-                currentSlide === index 
-                  ? (slide.id === 3 ? 'bg-gray-900 scale-150' : 'bg-green-600 scale-150')
-                  : (slide.id === 3 ? 'bg-gray-400 hover:bg-gray-600' : 'bg-gray-300 hover:bg-green-500')
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-      )}
+
 
       {/* Bottom Tabs - Moved to be part of the hero content */}
       <div className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-sm border-t border-white/10">
-        {/* Mobile Navigation Dots - Only show on main route */}
-        {specificSlide === null && (
-          <div className="lg:hidden fixed bottom-8 left-0 right-0 flex justify-center space-x-2 z-40">
-            {heroSlides.map((slide, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                  currentSlide === index ? 'bg-white' : 'bg-white/50'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
+
       </div>
 
       {/* Section Separator */}
