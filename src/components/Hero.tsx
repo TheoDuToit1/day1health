@@ -41,10 +41,10 @@ const heroSlides: HeroSlide[] = [
     staticText: 'you\'re one smart choice away',
     icon: HeartPulse,
     typewriterWords: [
-      { text: 'I feel protected daily', icon: ShieldCheck },
-      { text: 'Health sorted, work easier.', icon: Activity },
-      { text: 'Every checkup feels covered.', icon: Heart },
-      { text: 'Confidence with every visit', icon: Star }
+      { text: 'Protected daily', icon: ShieldCheck },
+      { text: 'Health sorted', icon: Activity },
+      { text: 'Checkups covered', icon: Heart },
+      { text: 'Confidence always', icon: Star }
     ],
     subheading: 'Smart cover for today\'s working adults',
     bgColor: 'from-white to-white',
@@ -57,10 +57,10 @@ const heroSlides: HeroSlide[] = [
     staticText: 'My FamCare',
     icon: Users2,
     typewriterWords: [
-      { text: 'Our family feels safe.', icon: ShieldCheck },
-      { text: 'No gaps. Just care.', icon: Heart },
-      { text: 'Protected in every way.', icon: Users2 },
-      { text: 'Health cover that lasts.', icon: Star }
+      { text: 'Family safe', icon: ShieldCheck },
+      { text: 'All gaps covered', icon: Heart },
+      { text: 'Fully protected', icon: Users2 },
+      { text: 'Cover that lasts', icon: Star }
     ],
     subheading: 'Complete care for growing families',
     bgColor: 'from-[#A8DADC] to-[#A8DADC]',
@@ -84,10 +84,10 @@ const heroSlides: HeroSlide[] = [
     staticText: 'Finally, cover that fits your life',
     icon: UsersRound,
     typewriterWords: [
-      { text: 'Health cover, zero drama.', icon: ShieldCheck },
-      { text: 'Affordable. Flexible. No stress.', icon: Heart },
-      { text: 'Fits my crazy life.', icon: Activity },
-      { text: 'Glad I chose Pulse.', icon: Star }
+      { text: 'No drama cover', icon: ShieldCheck },
+      { text: 'Affordable & flexible', icon: Heart },
+      { text: 'Fits your life', icon: Activity },
+      { text: 'Glad you chose us', icon: Star }
     ],
     subheading: 'Because everyone deserves Day1 protection.',
     bgColor: 'from-[#F5E8D9] to-[#F0E0C9]',
@@ -737,7 +737,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       {/* Main Heading - Bold and Centered */}
                       <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 ${
                         slide.id === 1 
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-left mb-2' 
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center mb-8' 
                           : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center mb-8'
                       }`}>
                         {slide.id === 0 ? (
@@ -759,21 +759,21 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       </h1>
                       
                       {/* Typewriter Section - Large and Prominent */}
-                      <div className={`${slide.id === 1 ? 'mb-8' : 'mb-8'} flex items-baseline gap-4 ${
-                        slide.id === 1 ? 'justify-start' : 'justify-center'
+                      <div className={`${slide.id === 1 ? 'mb-4 sm:mb-8' : 'mb-4 sm:mb-8'} flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 ${
+                        'items-center justify-center'
                       }`}>
                         {slide.id !== 1 && (
-                          <span className="text-3xl sm:text-4xl md:text-5xl font-manrope font-bold text-gray-900">
+                          <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-manrope font-bold text-gray-900">
                             from
                           </span>
                         )}
                         <div className={`relative ${
-                          slide.id === 1 ? 'min-w-[400px] h-auto' : 'min-w-[200px] h-16 sm:h-20 md:h-24'
+                          slide.id === 1 ? 'w-full sm:min-w-[300px] md:min-w-[400px] h-auto' : 'min-w-[180px] sm:min-w-[200px] h-14 sm:h-20 md:h-24'
                         }`}>
                           <span className={`font-manrope font-bold opacity-100 block ${
                             slide.id === 1 
-                              ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight leading-none' 
-                              : 'text-3xl sm:text-4xl md:text-5xl text-green-600'
+                              ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-white tracking-tight leading-tight' 
+                              : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-green-600 leading-tight'
                           }`}>
                             {currentText || ''}
                           </span>
@@ -810,12 +810,11 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.6 }}
-                        className={`text-base sm:text-xl md:text-2xl text-gray-700 font-manrope font-bold max-w-4xl mx-auto leading-relaxed mt-24 mb-20 ${
-                          slide.id === 1 ? 'text-center' : ''
+                        className={`text-base sm:text-xl md:text-2xl text-gray-700 font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
+                          slide.id === 1 
+                            ? 'text-center mt-8 mb-8' // Reduced margins for slide 1
+                            : 'mt-12 mb-12' // Slightly reduced for other slides
                         }`}
-                        style={{ 
-                          marginTop: '165px'
-                        }}
                       >
                         {slide.subheading}
                       </motion.p>
@@ -827,7 +826,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.8, duration: 0.6 }}
                           className="mt-4 flex justify-center"
-                          style={{ marginTop: '-30px' }}
+                          style={{ marginTop: '0' }}
                         >
                           <HeroCTAButton
                             onClick={() => {
@@ -856,7 +855,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.8, duration: 0.6 }}
                           className="mt-4 flex justify-center"
-                          style={{ marginTop: '-30px' }}
+                          style={{ marginTop: '0' }}
                         >
                           <HeroCTAButton
                             onClick={() => {

@@ -87,18 +87,16 @@ export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({
           </svg>
         </div>
         <p>
-          <span style={{'--i': 5} as React.CSSProperties}>S</span>
-          <span style={{'--i': 6} as React.CSSProperties}>e</span>
-          <span style={{'--i': 7} as React.CSSProperties}>n</span>
-          <span style={{'--i': 8} as React.CSSProperties}>d</span>
-          <span style={{'--i': 9} as React.CSSProperties}>i</span>
-          <span style={{'--i': 10} as React.CSSProperties}>n</span>
-          <span style={{'--i': 11} as React.CSSProperties}>g</span>
-          <span style={{'--i': 12} as React.CSSProperties}>&nbsp;</span>
-          <span style={{'--i': 13} as React.CSSProperties}>D</span>
-          <span style={{'--i': 14} as React.CSSProperties}>o</span>
-          <span style={{'--i': 15} as React.CSSProperties}>w</span>
-          <span style={{'--i': 16} as React.CSSProperties}>n</span>
+          <span style={{'--i': 5} as React.CSSProperties}>G</span>
+          <span style={{'--i': 6} as React.CSSProperties}>o</span>
+          <span style={{'--i': 7} as React.CSSProperties}>i</span>
+          <span style={{'--i': 8} as React.CSSProperties}>n</span>
+          <span style={{'--i': 9} as React.CSSProperties}>g</span>
+          <span style={{'--i': 10} as React.CSSProperties}>&nbsp;</span>
+          <span style={{'--i': 11} as React.CSSProperties}>D</span>
+          <span style={{'--i': 12} as React.CSSProperties}>o</span>
+          <span style={{'--i': 13} as React.CSSProperties}>w</span>
+          <span style={{'--i': 14} as React.CSSProperties}>n</span>
         </p>
       </div>
     </button>

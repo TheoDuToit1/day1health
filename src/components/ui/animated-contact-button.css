@@ -28,7 +28,8 @@
   position: relative;
   transition: all 0.3s ease;
   min-width: 120px;
-  height: 70px;
+  height: 54px; /* Slightly increased for better proportions */
+  padding: 0 20px; /* Maintained padding for good spacing */
   font-style: normal;
   font-size: 19px;
   font-weight: 500;
