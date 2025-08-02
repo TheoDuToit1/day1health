@@ -14,6 +14,28 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  // Close mobile menu when switching to desktop view
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close mobile menu when sidebar is toggled on desktop
+  useEffect(() => {
+    if (!isMobile) {
+      setIsMenuOpen(false);
+    }
+  }, [isSidebarCollapsed, isMobile]);
 
   const navItems = [
     { id: 'hero', label: 'Home', icon: Home },

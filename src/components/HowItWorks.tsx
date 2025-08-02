@@ -53,7 +53,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     >
 
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 pt-16">
         <div className="text-center mb-16">
           <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
             isDark 
@@ -74,16 +74,18 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
           </p>
         </div>
 
-        <div className="relative py-20 overflow-hidden">
-          {/* Animated Wavy background line */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-visible">
+        <div className="relative py-16 md:py-20">
+          {/* Background Container */}
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            {/* Horizontal Wavy Line - Desktop */}
+            <div className="hidden md:flex w-full h-full items-center justify-center pointer-events-none">
             <svg 
               className="w-full h-12" 
               viewBox="0 0 1200 120" 
               preserveAspectRatio="none"
             >
               <defs>
-                <linearGradient id="wavyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <linearGradient id="wavyGradientHorizontal" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#3b82f6" stopOpacity="1" />
                   <stop offset="33%" stopColor="#2563eb" stopOpacity="1" />
                   <stop offset="50%" stopColor="#22c55e" stopOpacity="1" />
@@ -98,7 +100,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
               <motion.path
                 d="M0,60 C150,10 300,110 450,60 S750,10 900,60 S1200,-40 1200,60"
                 fill="none"
-                stroke="url(#wavyGradient)"
+                stroke="url(#wavyGradientHorizontal)"
                 strokeWidth="3"
                 strokeLinecap="round"
                 filter="url(#glow)"
@@ -121,12 +123,62 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                 }}
                 viewport={{ once: false }}
               />
-            </svg>
+              </svg>
+            </div>
+
+            {/* Vertical Wavy Line - Mobile */}
+            <div className="md:hidden w-12 h-full mx-auto flex items-center justify-center pointer-events-none">
+            <svg 
+              className="h-full w-12" 
+              viewBox="0 0 120 800" 
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="wavyGradientVertical" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="1" />
+                  <stop offset="33%" stopColor="#2563eb" stopOpacity="1" />
+                  <stop offset="50%" stopColor="#22c55e" stopOpacity="1" />
+                  <stop offset="66%" stopColor="#16a34a" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="1" />
+                </linearGradient>
+                <filter id="glowVertical" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+              <motion.path
+                d="M60,0 C10,150 110,300 60,450 S10,650 60,800"
+                fill="none"
+                stroke="url(#wavyGradientVertical)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                filter="url(#glowVertical)"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ 
+                  pathLength: 1, 
+                  opacity: [0, 1, 0.8],
+                  d: [
+                    "M60,0 C10,150 110,300 60,450 S10,650 60,800",
+                    "M60,0 C110,150 10,300 60,450 S110,650 60,800",
+                    "M60,0 C10,150 110,300 60,450 S10,650 60,800"
+                  ]
+                }}
+                transition={{ 
+                  duration: 8,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                  times: [0, 0.5, 1]
+                }}
+                viewport={{ once: false }}
+              />
+              </svg>
+            </div>
           </div>
 
           {/* Steps in a single row */}
           <div className="relative z-10 container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-20">
               {steps.map((step, index) => (
                 <motion.div
                   key={index}
@@ -180,11 +232,11 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
 
         {/* CTA Section */}
         <motion.div 
-          className="mt-32 text-center"
+          className="text-center pt-16 pb-8 px-4 -mt-5"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
           <motion.div 
             className={`rounded-2xl p-8 shadow-lg border group ${

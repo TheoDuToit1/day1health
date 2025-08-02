@@ -47,7 +47,7 @@ const heroSlides: HeroSlide[] = [
       { text: 'Confidence with every visit', icon: Star }
     ],
     subheading: 'Smart cover for today\'s working adults',
-    bgColor: 'from-[#B2E5B2] to-[#B2E5B2]',
+    bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
     iconColor: 'text-blue-500',
@@ -90,7 +90,7 @@ const heroSlides: HeroSlide[] = [
       { text: 'Glad I chose Pulse.', icon: Star }
     ],
     subheading: 'Because everyone deserves Day1 protection.',
-    bgColor: 'from-[#F7F9F8] to-[#F7F9F8]',
+    bgColor: 'from-[#F5E8D9] to-[#F0E0C9]',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
     iconColor: 'text-green-500',
@@ -735,10 +735,10 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       className="text-center w-full max-w-7xl mx-auto px-6"
                     >
                       {/* Main Heading - Bold and Centered */}
-                      <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 mb-8 ${
+                      <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 ${
                         slide.id === 1 
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-left' 
-                          : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center'
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-left mb-2' 
+                          : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center mb-8'
                       }`}>
                         {slide.id === 0 ? (
                           <div className="mb-8">
@@ -759,20 +759,20 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       </h1>
                       
                       {/* Typewriter Section - Large and Prominent */}
-                      <div className={`${slide.id === 1 ? 'mb-2' : 'mb-8'} flex items-baseline gap-4 ${
-                        slide.id === 1 ? 'justify-start -ml-[200px]' : 'justify-center'
+                      <div className={`${slide.id === 1 ? 'mb-8' : 'mb-8'} flex items-baseline gap-4 ${
+                        slide.id === 1 ? 'justify-start' : 'justify-center'
                       }`}>
                         {slide.id !== 1 && (
                           <span className="text-3xl sm:text-4xl md:text-5xl font-manrope font-bold text-gray-900">
                             from
                           </span>
                         )}
-                        <div className={`relative min-w-[200px] ${
-                          slide.id === 1 ? 'h-24 sm:h-28 md:h-32 lg:h-36' : 'h-16 sm:h-20 md:h-24'
+                        <div className={`relative ${
+                          slide.id === 1 ? 'min-w-[400px] h-auto' : 'min-w-[200px] h-16 sm:h-20 md:h-24'
                         }`}>
                           <span className={`font-manrope font-bold opacity-100 block ${
                             slide.id === 1 
-                              ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight' 
+                              ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight leading-none' 
                               : 'text-3xl sm:text-4xl md:text-5xl text-green-600'
                           }`}>
                             {currentText || ''}

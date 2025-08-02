@@ -42,9 +42,6 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, a
     }
   ];
 
-  // Calculate the horizontal offset based on sidebar state
-  const horizontalOffset = isSidebarCollapsed ? '-translate-x-32' : 'translate-x-[-65px]';
-
   // Hide social links when on hero section
   if (activeSection === 'hero') {
     return null;
@@ -52,12 +49,17 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, a
 
   return (
     <div 
-      className={`fixed bottom-6 left-[calc(50%+15px)] transform -translate-x-1/2 z-50 transition-all duration-300 ${horizontalOffset}`}
+      className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 w-auto ${
+        isSidebarCollapsed ? 'lg:left-[calc(50%+64px)]' : 'lg:left-[calc(50%+128px)]'
+      }`}
+      style={{
+        transition: 'left 0.3s ease-in-out'
+      }}
     >
-      <div className={`flex items-center justify-center backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-500 group ${
+      <div className={`flex items-center justify-center backdrop-blur-sm rounded-xl px-4 py-2.5 sm:px-6 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-500 group ${
         isDark 
           ? 'bg-gray-800/95 border border-gray-700' 
-          : 'bg-gray-100/95 border border-gray-200'
+          : 'bg-white/95 border border-gray-200'
       }`}>
         {socialLinks.map((social, index) => {
           const colorMap: { [key: string]: string } = {
