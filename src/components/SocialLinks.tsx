@@ -13,33 +13,16 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ isSidebarCollapsed = false, a
     {
       name: 'Facebook',
       icon: Facebook,
-      url: 'https://facebook.com/day1health',
+      url: 'https://www.facebook.com/day1healthsa/',
       color: 'bg-blue-600'
-    },
-    {
-      name: 'Twitter',
-      icon: Twitter,
-      url: 'https://twitter.com/day1health',
-      color: 'bg-blue-500'
     },
     {
       name: 'Instagram',
       icon: Instagram,
-      url: 'https://instagram.com/day1health',
-      color: 'bg-green-600'
-    },
-    {
-      name: 'LinkedIn',
-      icon: Linkedin,
-      url: 'https://linkedin.com/company/day1health',
-      color: 'bg-blue-700'
-    },
-    {
-      name: 'YouTube',
-      icon: Youtube,
-      url: 'https://youtube.com/day1health',
-      color: 'bg-blue-600'
+      url: 'https://www.instagram.com/day1legacy?igshid=MzRlODBiNWFlZA%3D%3D',
+      color: 'bg-pink-600'
     }
+    // Removed unused social links as per user's current active platforms
   ];
 
   // Hide social links when on hero section

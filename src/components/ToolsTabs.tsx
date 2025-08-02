@@ -732,23 +732,23 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
   return (
     <div className={`relative z-30 -mt-20 transition-all duration-700 ease-in-out ${
-      isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-64'
-    } ${
-      isSidebarCollapsed ? 'lg:w-[calc(100%-6rem)]' : 'lg:w-[calc(100%-16rem)]'
-    } ${
       isDark ? 'bg-gray-900' : 'bg-white'
-    }`}
-    style={{
-      transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-    }}>
-      <div className="container mx-auto px-4">
+    }`}>
+      <div className={`w-full mx-auto px-4 ${
+        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
+      }`} style={{
+        transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      }}>
         {/* Floating Tabs */}
         <div className="flex justify-center mb-12">
           <div className={`rounded-2xl shadow-lg p-3 backdrop-blur-sm transition-colors duration-300 ${
             isDark 
               ? 'bg-gray-800/95 border border-gray-700' 
               : 'bg-white/95 border border-gray-100'
-          }`}>
+          }`} style={{
+            width: 'fit-content',
+            margin: '0 auto'
+          }}>
             <div className="flex flex-wrap justify-center gap-4">
               {tabs.map((tab) => (
                 <button
