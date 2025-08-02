@@ -290,7 +290,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 <div className="flex justify-center">
                   <AnimatedContactButton
                     type="button"
-                    className="w-full max-w-md opacity-100"
+                    className="w-64 px-8 opacity-100"
                     onClick={() => {
                       // Demo purposes - just trigger the animation
                       console.log('Contact button clicked for demo');
