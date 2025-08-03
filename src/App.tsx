@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from './components/AppContent';
+import BlogPage from './components/BlogPage';
+import BlogDetailPage from './components/BlogDetailPage';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function AppWrapper() {
@@ -43,6 +45,47 @@ function AppWrapper() {
       });
     }
   };
+
+  // Handle hash navigation when coming from blog
+  useEffect(() => {
+    const handleNavigation = () => {
+      // First check URL hash
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        const element = document.getElementById(hash);
+        if (element) {
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+          return;
+        }
+      }
+
+      // Then check session storage for navigation from blog
+      const storedSection = sessionStorage.getItem('navigatingToSection');
+      if (storedSection) {
+        // Clear the stored section
+        sessionStorage.removeItem('navigatingToSection');
+        // Scroll to the section after a short delay to ensure the page is loaded
+        setTimeout(() => {
+          const element = document.getElementById(storedSection);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 300);
+      }
+    };
+
+    // Initial check
+    handleNavigation();
+
+    // Also handle hash changes
+    window.addEventListener('hashchange', handleNavigation);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleNavigation);
+    };
+  }, []);
 
   // Track active section and footer visibility based on scroll position
   useEffect(() => {
@@ -118,6 +161,8 @@ function App() {
         <Route path="/slide-2" element={<AppWrapper />} />
         <Route path="/slide-3" element={<AppWrapper />} />
         <Route path="/slide-4" element={<AppWrapper />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:id" element={<BlogDetailPage />} />
       </Routes>
     </ThemeProvider>
   );

@@ -3,6 +3,7 @@ import { Shield, CreditCard, Heart, Users, Check, Phone, Mail, ArrowRight } from
 import { motion } from 'framer-motion';
 import SeniorPackageBuilder from './senior/SeniorPackageBuilder';
 import { useTheme } from '../contexts/ThemeContext';
+import { AnimatedPaymentButton } from './ui/animated-payment-button';
 
 interface ToolsTabsProps {
   isSidebarCollapsed: boolean;
@@ -111,9 +112,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span>
                   </li>
                 </ul>
-                <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                  Choose Plan
-                </button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="platinum"
+                />
               </motion.div>
 
               {/* Gold Plus Plan */}
@@ -170,14 +172,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication (PDP)</span>
                   </li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="gold"
+                />
               </motion.div>
 
               {/* Silver Plan */}
@@ -234,14 +232,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span>
                   </li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="silver"
+                />
               </motion.div>
 
               {/* Bronze Plan */}
@@ -298,14 +292,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic medication</span>
                   </li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="bronze"
+                />
               </motion.div>
             </div>
           </div>
@@ -352,14 +342,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Dental & optical</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Virtual doctor</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="gold"
+                />
               </motion.div>
 
               {/* Family Care */}
@@ -394,14 +380,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Child immunizations</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="bronze"
+                />
               </motion.div>
 
               {/* Basic Care */}
@@ -436,14 +418,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic pathology</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Telehealth services</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="silver"
+                />
               </motion.div>
 
               {/* Student Plan */}
@@ -478,14 +456,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Nurse line</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Campus clinic discounts</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="bronze"
+                />
               </motion.div>
             </div>
           </motion.div>
@@ -527,14 +501,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Specialist consultations</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Advanced diagnostics</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="platinum"
+                />
               </motion.div>
 
               {/* Family Hospital Plan */}
@@ -569,14 +539,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Pediatric care</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="gold"
+                />
               </motion.div>
 
               {/* Standard Plan */}
@@ -611,14 +577,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency cover</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited diagnostics</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="silver"
+                />
               </motion.div>
 
               {/* Basic Hospital Plan */}
@@ -655,14 +617,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Limited hospital stay</span></li>
                   <li className="flex items-center"><Check className="w-5 h-5 text-gray-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic diagnostics</span></li>
                 </ul>
-                <motion.button 
-                  className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  Choose Plan
-                </motion.button>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="bronze"
+                />
               </motion.div>
             </div>
           </div>

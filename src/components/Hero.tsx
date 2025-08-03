@@ -10,6 +10,7 @@ import { AudioPlayer } from '@/components/ui/audio-player';
 import { Marquee } from '@/components/ui/3d-testimonials';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
+import { SlideUpTypewriter } from '@/components/ui/slide-up-typewriter';
 
 type IconType = React.ComponentType<LucideProps>;
 
@@ -349,6 +350,8 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
   // Smooth typewriter effect that types sentences sequentially with pauses
   useEffect(() => {
     if (currentWords.length === 0) return;
+    // Skip typewriter for slide 1 (id: 0) as it uses custom SlideUpTypewriter
+    if (currentSlide === 0) return;
 
     let timeoutId: ReturnType<typeof setTimeout>;
     let charIndex = 0;
@@ -734,35 +737,31 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       transition={{ duration: 0.8, ease: "easeOut" }}
                       className="text-center w-full max-w-7xl mx-auto px-6"
                     >
-                      {/* Main Heading - Bold and Centered */}
-                      <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 ${
-                        slide.id === 1 
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center mb-8' 
-                          : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center mb-8'
-                      }`}>
-                        {slide.id === 0 ? (
-                          <div className="mb-8">
-                            You're one{' '}
-                            <span className="text-gray-900">smart choice</span>{' '}
-                            away
-                          </div>
-                        ) : slide.id === 1 ? (
-                          <div className="mb-8">
-                            <span className="text-white">My </span>
-                            <span className="text-green-600">FamCare</span>
-                          </div>
-                        ) : (
-                          <div className="mb-8">
-                            {slide.staticText}
-                          </div>
-                        )}
-                      </h1>
+                      {/* Main Heading - Bold and Centered - Hidden for slide 0 */}
+                      {slide.id !== 0 && (
+                        <h1 className={`font-manrope font-bold leading-tight tracking-tight text-gray-900 ${
+                          slide.id === 1 
+                            ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center mb-8' 
+                            : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center mb-8'
+                        }`}>
+                          {slide.id === 1 ? (
+                            <div className="mb-8">
+                              <span className="text-white">My </span>
+                              <span className="text-green-600">FamCare</span>
+                            </div>
+                          ) : (
+                            <div className="mb-8">
+                              {slide.staticText}
+                            </div>
+                          )}
+                        </h1>
+                      )}
                       
                       {/* Typewriter Section - Large and Prominent */}
                       <div className={`${slide.id === 1 ? 'mb-4 sm:mb-8' : 'mb-4 sm:mb-8'} flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 ${
                         'items-center justify-center'
                       }`}>
-                        {slide.id !== 1 && (
+                        {slide.id !== 1 && slide.id !== 0 && (
                           <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-manrope font-bold text-gray-900">
                             from
                           </span>
@@ -770,13 +769,23 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         <div className={`relative ${
                           slide.id === 1 ? 'w-full sm:min-w-[300px] md:min-w-[400px] h-auto' : 'min-w-[180px] sm:min-w-[200px] h-14 sm:h-20 md:h-24'
                         }`}>
-                          <span className={`font-manrope font-bold opacity-100 block ${
-                            slide.id === 1 
-                              ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-white tracking-tight leading-tight' 
-                              : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-green-600 leading-tight'
-                          }`}>
-                            {currentText || ''}
-                          </span>
+                          {slide.id === 0 ? (
+                            <SlideUpTypewriter 
+                              words={slide.typewriterWords.map(word => word.text)}
+                              className={`font-manrope font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl text-green-600 leading-tight`}
+                              letterDelay={120}
+                              wordDisplayTime={2500}
+                              wordExitTime={600}
+                            />
+                          ) : (
+                            <span className={`font-manrope font-bold opacity-100 block ${
+                              slide.id === 1 
+                                ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-white tracking-tight leading-tight' 
+                                : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-green-600 leading-tight'
+                            }`}>
+                              {currentText || ''}
+                            </span>
+                          )}
                           {/* Enhanced Heartbeat Line - Hidden for slide 2 */}
                           {slide.id !== 1 && (
                             <div className={`absolute -bottom-1 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>

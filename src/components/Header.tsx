@@ -7,10 +7,9 @@ interface HeaderProps {
   onNavigate: (section: string) => void;
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (collapsed: boolean) => void;
-  isFooterInView: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView }) => {
+const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -98,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'feedback', label: 'Reviews', icon: MessageSquare },
     { id: 'why-choose', label: 'Why Us', icon: Users },
     { id: 'contact', label: 'Contact us', icon: Phone },
-    { id: 'faqs', label: 'Faqs', icon: HelpCircle }
+    { id: 'faqs', label: 'FAQs', icon: HelpCircle }
   ];
 
   useEffect(() => {
@@ -187,38 +186,41 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         
         <nav className="p-6 pb-2">
           <ul className="space-y-1">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => onNavigate(item.id)}
-                  className={`w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
-                    isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
-                  } ${
-                    activeSection === item.id
-                      ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
-                      : isDark
-                        ? 'text-gray-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-700 hover:text-white hover:shadow-lg hover:scale-102'
-                        : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:text-gray-900 hover:shadow-lg hover:scale-102'
-                  }`}
-                  title={isSidebarCollapsed ? item.label : undefined}
-                  style={{
-                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                  }}
-                >
-                  <item.icon className={`transition-all duration-500 ease-in-out transform ${
-                    isSidebarCollapsed ? 'w-5 h-5' : 'w-4 h-4'
-                  } ${
-                    activeSection === item.id ? 'text-white scale-110' : 'group-hover:scale-105'
-                  }`} />
-                  {!isSidebarCollapsed && (
-                    <span className={`font-medium text-sm transition-all duration-500 ease-in-out ${
-                      activeSection === item.id ? 'transform translate-x-1' : ''
-                    }`}>{item.label}</span>
-                  )}
-
-                </button>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate(item.id);
+                    }}
+                    className={`w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
+                      isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
+                    } ${
+                      isActive
+                        ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
+                        : isDark
+                          ? 'text-gray-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-700 hover:text-white hover:shadow-lg hover:scale-102'
+                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:text-gray-900 hover:shadow-lg hover:scale-102'
+                    }`}
+                    style={{
+                      transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                    }}
+                  >
+                    <item.icon className={`transition-all duration-500 ease-in-out transform w-5 h-5 ${
+                      isActive ? 'text-white' : 'group-hover:scale-110'
+                    }`} />
+                    {!isSidebarCollapsed && (
+                      <span className="font-medium text-sm transition-all duration-500 ease-in-out">
+                        {item.label}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -360,48 +362,132 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
       </aside>
 
       {/* Mobile Header */}
-      <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-md' : 'bg-white/95 backdrop-blur-md'
+      <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+        isScrolled 
+          ? isDark 
+            ? 'bg-gray-900/95 backdrop-blur-xl shadow-2xl border-b border-gray-800' 
+            : 'bg-white/95 backdrop-blur-xl shadow-2xl border-b border-gray-100'
+          : isDark 
+            ? 'bg-gray-900/90 backdrop-blur-md' 
+            : 'bg-white/90 backdrop-blur-md'
       }`}>
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">D1</span>
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center space-x-3">
+            <div className={`w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-105 ${
+              isScrolled ? 'shadow-green-500/20' : ''
+            }`}>
+              <span className="text-white font-bold text-base">D1</span>
             </div>
-            <span className="text-lg font-bold text-gray-900">Day1Health</span>
+            <div className="flex flex-col">
+              <span className={`text-xl font-bold transition-colors duration-300 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>Day1Health</span>
+              <span className={`text-xs font-medium transition-colors duration-300 ${
+                isDark ? 'text-green-400' : 'text-green-600'
+              }`}>Smart Health Cover</span>
+            </div>
           </div>
           
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 rounded-lg hover:bg-gray-100"
+            className={`relative p-3 rounded-xl transition-all duration-300 transform hover:scale-105 ${
+              isMenuOpen 
+                ? isDark 
+                  ? 'bg-red-600 text-white shadow-lg shadow-red-500/25' 
+                  : 'bg-red-50 text-red-600 shadow-lg shadow-red-500/10'
+                : isDark 
+                  ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white shadow-lg' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 shadow-lg'
+            }`}
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <div className="relative w-6 h-6">
+              <Menu className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
+                isMenuOpen ? 'opacity-0 rotate-90 scale-75' : 'opacity-100 rotate-0 scale-100'
+              }`} />
+              <X className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
+                isMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-75'
+              }`} />
+            </div>
           </button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-lg border-t">
-            <nav className="py-4">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    onNavigate(item.id);
-                    setIsMenuOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-3 transition-colors ${
-                    activeSection === item.id
-                      ? 'bg-green-50 text-green-600 border-r-4 border-green-600'
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
+        <div className={`absolute top-full left-0 right-0 overflow-hidden transition-all duration-500 ease-out ${
+          isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <div className={`transition-all duration-300 ${
+            isDark 
+              ? 'bg-gray-900/95 backdrop-blur-xl border-t border-gray-800 shadow-2xl' 
+              : 'bg-white/95 backdrop-blur-xl border-t border-gray-100 shadow-2xl'
+          }`}>
+            <nav className="py-6 px-4">
+              <div className="space-y-2">
+                {navItems.map((item, index) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      onNavigate(item.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center space-x-4 group ${
+                      activeSection === item.id
+                        ? isDark 
+                          ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/25'
+                          : 'bg-gradient-to-r from-green-50 to-green-100 text-green-700 border-2 border-green-200 shadow-lg shadow-green-500/10'
+                        : isDark 
+                          ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                    style={{
+                      animationDelay: `${index * 50}ms`,
+                      animation: isMenuOpen ? 'slideInFromRight 0.4s ease-out forwards' : 'none'
+                    }}
+                  >
+                    <item.icon className={`w-5 h-5 transition-all duration-300 ${
+                      activeSection === item.id 
+                        ? 'text-current scale-110' 
+                        : 'group-hover:scale-105'
+                    }`} />
+                    <span className="font-medium text-base">{item.label}</span>
+                    {activeSection === item.id && (
+                      <div className="ml-auto w-2 h-2 bg-current rounded-full animate-pulse" />
+                    )}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Quick Contact in Mobile Menu */}
+              <div className={`mt-6 pt-6 border-t ${
+                isDark ? 'border-gray-700' : 'border-gray-200'
+              }`}>
+                <div className="grid grid-cols-2 gap-3">
+                  <a 
+                    href="tel:0876100600"
+                    className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 ${
+                      isDark 
+                        ? 'bg-green-600 text-white shadow-lg shadow-green-500/25'
+                        : 'bg-green-600 text-white shadow-lg shadow-green-500/20'
+                    }`}
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span className="font-medium text-sm">Call</span>
+                  </a>
+                  <a 
+                    href="mailto:info@day1health.co.za"
+                    className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 ${
+                      isDark 
+                        ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 shadow-lg'
+                    }`}
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span className="font-medium text-sm">Email</span>
+                  </a>
+                </div>
+              </div>
             </nav>
           </div>
-        )}
+        </div>
       </header>
     </>
   );

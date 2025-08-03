@@ -4,12 +4,36 @@ import './hero-cta-button.css';
 interface HeroCTAButtonProps {
   onClick?: () => void;
   className?: string;
+  defaultText?: string;
+  sentText?: string;
 }
 
 export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({ 
   onClick, 
-  className = "" 
+  className = "",
+  defaultText = "Join Us Today",
+  sentText = "Going Down"
 }) => {
+  // Fixed text spacing issue with hardcoded spans - v2
+  // Helper function to convert text to animated spans
+  const textToSpans = (text: string, startIndex: number = 0) => {
+    return text.split('').map((char, index) => (
+      <span 
+        key={`${text}-${index}`} 
+        style={{
+          '--i': startIndex + index,
+          display: 'inline-block',
+          letterSpacing: 'normal',
+          wordSpacing: 'normal',
+          margin: 0,
+          padding: 0
+        } as React.CSSProperties}
+      >
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  };
+
   return (
     <button 
       className={`hero-cta-button ${className}`}
@@ -48,19 +72,41 @@ export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({
           </svg>
         </div>
         <p>
-          <span style={{'--i': 0} as React.CSSProperties}>J</span>
-          <span style={{'--i': 1} as React.CSSProperties}>o</span>
-          <span style={{'--i': 2} as React.CSSProperties}>i</span>
-          <span style={{'--i': 3} as React.CSSProperties}>n</span>
-          <span style={{'--i': 4} as React.CSSProperties}>&nbsp;</span>
-          <span style={{'--i': 5} as React.CSSProperties}>U</span>
-          <span style={{'--i': 6} as React.CSSProperties}>s</span>
-          <span style={{'--i': 7} as React.CSSProperties}>&nbsp;</span>
-          <span style={{'--i': 8} as React.CSSProperties}>T</span>
-          <span style={{'--i': 9} as React.CSSProperties}>o</span>
-          <span style={{'--i': 10} as React.CSSProperties}>d</span>
-          <span style={{'--i': 11} as React.CSSProperties}>a</span>
-          <span style={{'--i': 12} as React.CSSProperties}>y</span>
+          {defaultText === 'Apply Now' ? (
+            <>
+              <span style={{'--i': 0} as React.CSSProperties}>A</span>
+              <span style={{'--i': 1} as React.CSSProperties}>p</span>
+              <span style={{'--i': 2} as React.CSSProperties}>p</span>
+              <span style={{'--i': 3} as React.CSSProperties}>l</span>
+              <span style={{'--i': 4} as React.CSSProperties}>y</span>
+              <span style={{'--i': 5} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 6} as React.CSSProperties}>N</span>
+              <span style={{'--i': 7} as React.CSSProperties}>o</span>
+              <span style={{'--i': 8} as React.CSSProperties}>w</span>
+            </>
+          ) : defaultText === 'Call 0876 100 600' ? (
+            <>
+              <span style={{'--i': 0} as React.CSSProperties}>C</span>
+              <span style={{'--i': 1} as React.CSSProperties}>a</span>
+              <span style={{'--i': 2} as React.CSSProperties}>l</span>
+              <span style={{'--i': 3} as React.CSSProperties}>l</span>
+              <span style={{'--i': 4} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 5} as React.CSSProperties}>0</span>
+              <span style={{'--i': 6} as React.CSSProperties}>8</span>
+              <span style={{'--i': 7} as React.CSSProperties}>7</span>
+              <span style={{'--i': 8} as React.CSSProperties}>6</span>
+              <span style={{'--i': 9} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 10} as React.CSSProperties}>1</span>
+              <span style={{'--i': 11} as React.CSSProperties}>0</span>
+              <span style={{'--i': 12} as React.CSSProperties}>0</span>
+              <span style={{'--i': 13} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 14} as React.CSSProperties}>6</span>
+              <span style={{'--i': 15} as React.CSSProperties}>0</span>
+              <span style={{'--i': 16} as React.CSSProperties}>0</span>
+            </>
+          ) : (
+            textToSpans(defaultText, 0)
+          )}
         </p>
       </div>
       <div className="hero-state hero-state--sent">
@@ -87,16 +133,42 @@ export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({
           </svg>
         </div>
         <p>
-          <span style={{'--i': 5} as React.CSSProperties}>G</span>
-          <span style={{'--i': 6} as React.CSSProperties}>o</span>
-          <span style={{'--i': 7} as React.CSSProperties}>i</span>
-          <span style={{'--i': 8} as React.CSSProperties}>n</span>
-          <span style={{'--i': 9} as React.CSSProperties}>g</span>
-          <span style={{'--i': 10} as React.CSSProperties}>&nbsp;</span>
-          <span style={{'--i': 11} as React.CSSProperties}>D</span>
-          <span style={{'--i': 12} as React.CSSProperties}>o</span>
-          <span style={{'--i': 13} as React.CSSProperties}>w</span>
-          <span style={{'--i': 14} as React.CSSProperties}>n</span>
+          {sentText === 'Application Sent' ? (
+            <>
+              <span style={{'--i': 5} as React.CSSProperties}>A</span>
+              <span style={{'--i': 6} as React.CSSProperties}>p</span>
+              <span style={{'--i': 7} as React.CSSProperties}>p</span>
+              <span style={{'--i': 8} as React.CSSProperties}>l</span>
+              <span style={{'--i': 9} as React.CSSProperties}>i</span>
+              <span style={{'--i': 10} as React.CSSProperties}>c</span>
+              <span style={{'--i': 11} as React.CSSProperties}>a</span>
+              <span style={{'--i': 12} as React.CSSProperties}>t</span>
+              <span style={{'--i': 13} as React.CSSProperties}>i</span>
+              <span style={{'--i': 14} as React.CSSProperties}>o</span>
+              <span style={{'--i': 15} as React.CSSProperties}>n</span>
+              <span style={{'--i': 16} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 17} as React.CSSProperties}>S</span>
+              <span style={{'--i': 18} as React.CSSProperties}>e</span>
+              <span style={{'--i': 19} as React.CSSProperties}>n</span>
+              <span style={{'--i': 20} as React.CSSProperties}>t</span>
+            </>
+          ) : sentText === 'Calling Now' ? (
+            <>
+              <span style={{'--i': 5} as React.CSSProperties}>C</span>
+              <span style={{'--i': 6} as React.CSSProperties}>a</span>
+              <span style={{'--i': 7} as React.CSSProperties}>l</span>
+              <span style={{'--i': 8} as React.CSSProperties}>l</span>
+              <span style={{'--i': 9} as React.CSSProperties}>i</span>
+              <span style={{'--i': 10} as React.CSSProperties}>n</span>
+              <span style={{'--i': 11} as React.CSSProperties}>g</span>
+              <span style={{'--i': 12} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 13} as React.CSSProperties}>N</span>
+              <span style={{'--i': 14} as React.CSSProperties}>o</span>
+              <span style={{'--i': 15} as React.CSSProperties}>w</span>
+            </>
+          ) : (
+            textToSpans(sentText, 5)
+          )}
         </p>
       </div>
     </button>
