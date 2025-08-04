@@ -40,7 +40,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'senior', 
-      label: 'Your ChoicePlan', 
+      label: 'Senior plans', 
       icon: Users,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -627,7 +627,191 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         );
       
       case 'senior':
-        return <SeniorPackageBuilder />;
+        return (
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Gold Senior Plan */}
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-yellow-600 hover:border-yellow-500' 
+                    : 'bg-white border-yellow-200 hover:border-yellow-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
+                <div className="text-center mb-6">
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Gold Senior</h3>
+                  <div className="flex items-baseline justify-center mb-4">
+                    <span className="text-3xl font-bold text-yellow-600">R1,299</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
+                  </div>
+                  <div className="h-16 mb-4">
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Comprehensive senior health coverage</p>
+                  </div>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital cover (100% of rate)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Dental and optical benefits</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-yellow-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 emergency assistance</span>
+                  </li>
+                </ul>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="yellow"
+                />
+              </motion.div>
+
+              {/* Silver Senior Plan */}
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-600 hover:border-gray-400' 
+                    : 'bg-white border-gray-200 hover:border-gray-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
+                <div className="text-center mb-6">
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Silver Senior</h3>
+                  <div className="flex items-baseline justify-center mb-4">
+                    <span className="text-3xl font-bold text-gray-600">R999</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
+                  </div>
+                  <div className="h-16 mb-4">
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Essential senior health coverage</p>
+                  </div>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital cover (100% of rate)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic optical benefits</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-gray-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 emergency assistance</span>
+                  </li>
+                </ul>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="gray"
+                />
+              </motion.div>
+
+              {/* Bronze Senior Plan */}
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-amber-800 hover:border-amber-600' 
+                    : 'bg-white border-amber-200 hover:border-amber-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.3,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
+                <div className="text-center mb-6">
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Bronze Senior</h3>
+                  <div className="flex items-baseline justify-center mb-4">
+                    <span className="text-3xl font-bold text-amber-600">R799</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
+                  </div>
+                  <div className="h-16 mb-4">
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Basic senior health coverage</p>
+                  </div>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital cover (100% of rate)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic emergency cover</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 emergency assistance</span>
+                  </li>
+                </ul>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="amber"
+                />
+              </motion.div>
+            </div>
+          </div>
+        );
       
       default:
         return (

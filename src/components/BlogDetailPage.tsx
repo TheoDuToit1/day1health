@@ -602,7 +602,7 @@ const BlogDetailPage: React.FC = () => {
   const post = blogPosts.find(p => p.id === id);
   
   if (!post) {
-    return <Navigate to="/blog" replace />;
+    return <Navigate to="/whoisyomama" replace />;
   }
 
   // Function to render markdown-like content
@@ -705,7 +705,7 @@ const BlogDetailPage: React.FC = () => {
             {/* Navigation */}
             <div className="mb-8">
               <Link
-                to="/blog"
+                to="/whoisyomama"
                 className="inline-flex items-center text-center w-32 rounded-xl h-10 relative text-sm font-semibold group bg-gray-800 text-white"
               >
                 <div className="bg-green-400 rounded-lg h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[120px] z-10 duration-500">
@@ -1000,7 +1000,7 @@ const BlogDetailPage: React.FC = () => {
                       
                       {/* Read More Button */}
                       <Link
-                        to={`/blog/${relatedPost.id}`}
+                        to={`/whoisyomama/${relatedPost.id}`}
                         className="inline-flex items-center gap-2 text-green-500 hover:text-green-600 font-medium transition-colors"
                       >
                         Read More

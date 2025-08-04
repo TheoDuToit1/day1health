@@ -161,8 +161,8 @@ function App() {
         <Route path="/slide-2" element={<AppWrapper />} />
         <Route path="/slide-3" element={<AppWrapper />} />
         <Route path="/slide-4" element={<AppWrapper />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:id" element={<BlogDetailPage />} />
+        <Route path="/whoisyomama" element={<BlogPage />} />
+        <Route path="/whoisyomama/:id" element={<BlogDetailPage />} />
       </Routes>
     </ThemeProvider>
   );

@@ -213,7 +213,7 @@ const BlogPage: React.FC = () => {
   // Handle navigation to a section
   const handleNavigate = (section: string) => {
     // If we're on the blog page, navigate back to the main site with the hash
-    if (window.location.pathname.includes('/blog')) {
+    if (window.location.pathname.includes('/whoisyomama')) {
       // Store the section we're navigating to in session storage
       const targetSection = section === 'home' ? 'hero' : section;
       sessionStorage.setItem('navigatingToSection', targetSection);
@@ -466,7 +466,7 @@ const BlogPage: React.FC = () => {
                     
                     {/* Read More Button */}
                     <Link
-                      to={`/blog/${post.id}`}
+                      to={`/whoisyomama/${post.id}`}
                       className="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transform hover:scale-105 transition-all duration-300 group"
                     >
                       <BookOpen size={16} />

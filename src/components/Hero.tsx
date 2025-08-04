@@ -773,9 +773,9 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             <SlideUpTypewriter 
                               words={slide.typewriterWords.map(word => word.text)}
                               className={`font-manrope font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl text-green-600 leading-tight`}
-                              letterDelay={120}
-                              wordDisplayTime={2500}
-                              wordExitTime={600}
+                              letterDelay={80}
+                              wordDisplayTime={1500}
+                              wordExitTime={400}
                             />
                           ) : (
                             <span className={`font-manrope font-bold opacity-100 block ${

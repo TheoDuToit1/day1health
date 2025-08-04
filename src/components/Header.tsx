@@ -152,11 +152,15 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           style={{
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
-            <div className={`${isSidebarCollapsed ? 'w-12 h-12' : 'w-10 h-10'} bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center transition-all duration-700 ease-in-out shadow-lg transform`}
+            <div className={`${isSidebarCollapsed ? 'w-12 h-12' : 'w-10 h-10'} bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center transition-all duration-700 ease-in-out shadow-lg transform overflow-hidden`}
             style={{
               transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             }}>
-              <span className={`text-white font-bold ${isSidebarCollapsed ? 'text-lg' : 'text-base'}`}>D1</span>
+              <img 
+                src="/assets/images/Day_1_logo-removebg-preview.png" 
+                alt="Day 1 Health Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             {showText && (
               <div className="flex flex-col transition-all duration-300 ease-in-out transform"
@@ -373,10 +377,14 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
       }`}>
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-105 ${
+            <div className={`w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-105 overflow-hidden ${
               isScrolled ? 'shadow-green-500/20' : ''
             }`}>
-              <span className="text-white font-bold text-base">D1</span>
+              <img 
+                src="/assets/images/Day_1_logo-removebg-preview.png" 
+                alt="Day 1 Health Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex flex-col">
               <span className={`text-xl font-bold transition-colors duration-300 ${

@@ -135,7 +135,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
         isDark ? 'bg-gray-900' : 'bg-white'
       } ${
         // Only apply sidebar padding if not on the blog page
-        window.location.pathname.includes('/blog') 
+        window.location.pathname.includes('/whoisyomama') 
           ? '' 
           : isSidebarCollapsed 
             ? 'lg:pl-24' 
@@ -187,7 +187,7 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
                     badge={blog.badge}
                     imageColor={blog.imageColor}
                     price={blog.price}
-                    onClick={() => navigate(`/blog/${blog.blogId}`)}
+                    onClick={() => navigate(`/whoisyomama/${blog.blogId}`)}
                   />
                 </div>
               ))}
