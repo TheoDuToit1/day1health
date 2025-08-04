@@ -140,51 +140,27 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           )}
         </button>
         
-        <div className={`p-6 transition-all duration-700 ease-in-out ${
+        <div className={`px-6 pt-4 pb-2 transition-all duration-700 ease-in-out ${
           isDark ? 'border-b border-gray-700' : 'border-b border-gray-200'
         }`}
         style={{
           transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }}>
-          <div className={`flex items-center transition-all duration-700 ease-in-out ${
-            isSidebarCollapsed ? 'justify-center' : 'justify-start space-x-3'
-          }`}
+          <div 
+          className="flex items-center justify-center h-16 w-full"
           style={{
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
-            <div className={`${isSidebarCollapsed ? 'w-12 h-12' : 'w-10 h-10'} bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center transition-all duration-700 ease-in-out shadow-lg transform overflow-hidden`}
+            <div className="w-56 h-12 flex items-center justify-center transition-all duration-700 ease-in-out transform overflow-hidden"
             style={{
               transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             }}>
               <img 
                 src="/assets/images/Day_1_logo-removebg-preview.png" 
                 alt="Day 1 Health Logo" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
-            {showText && (
-              <div className="flex flex-col transition-all duration-300 ease-in-out transform"
-              style={{
-                transition: 'opacity 0.3s ease, transform 0.3s ease'
-              }}>
-                <span className={`font-bold text-lg transition-all duration-300 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {companyText}
-                  {isTyping && companyText.length < 'Day1Health'.length && (
-                    <span className="animate-pulse text-green-500">|</span>
-                  )}
-                </span>
-                <span className={`text-sm transition-all duration-300 ${
-                  isDark ? 'text-gray-300' : 'text-gray-500'
-                }`}>
-                  {taglineText}
-                  {isTyping && companyText.length === 'Day1Health'.length && taglineText.length < 'Health Solutions'.length && (
-                    <span className="animate-pulse text-green-500">|</span>
-                  )}
-                </span>
-              </div>
-            )}
           </div>
         </div>
         

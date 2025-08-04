@@ -629,7 +629,21 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'senior':
         return (
           <div className="max-w-7xl mx-auto px-4">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div 
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.15,
+                    delayChildren: 0.3
+                  }
+                }
+              }}
+            >
               {/* Gold Senior Plan */}
               <motion.div 
                 className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
@@ -637,17 +651,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     ? 'bg-gray-800 border-yellow-600 hover:border-yellow-500' 
                     : 'bg-white border-yellow-200 hover:border-yellow-400'
                 }`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.1,
-                  ease: [0.25, 0.46, 0.45, 0.94]
+                variants={{
+                  hidden: { opacity: 0, y: 40, scale: 0.95 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5
+                    }
+                  }
                 }}
-                viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
+                  transition: { duration: 0.2 }
                 }}
               >
                 <div className="text-center mb-6">
@@ -697,17 +718,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     ? 'bg-gray-800 border-gray-600 hover:border-gray-400' 
                     : 'bg-white border-gray-200 hover:border-gray-400'
                 }`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.2,
-                  ease: [0.25, 0.46, 0.45, 0.94]
+                variants={{
+                  hidden: { opacity: 0, y: 40, scale: 0.95 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                      delay: 0.15
+                    }
+                  }
                 }}
-                viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
+                  transition: { duration: 0.2 }
                 }}
               >
                 <div className="text-center mb-6">
@@ -757,17 +786,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     ? 'bg-gray-800 border-amber-800 hover:border-amber-600' 
                     : 'bg-white border-amber-200 hover:border-amber-400'
                 }`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.3,
-                  ease: [0.25, 0.46, 0.45, 0.94]
+                variants={{
+                  hidden: { opacity: 0, y: 40, scale: 0.95 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                      delay: 0.3
+                    }
+                  }
                 }}
-                viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
+                  transition: { duration: 0.2 }
                 }}
               >
                 <div className="text-center mb-6">
@@ -809,7 +846,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   className="amber"
                 />
               </motion.div>
-            </div>
+              {/* End of Senior plans grid */}
+            </motion.div>
           </div>
         );
       
