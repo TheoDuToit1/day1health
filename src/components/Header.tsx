@@ -151,15 +151,16 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           style={{
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
-            <div className="w-56 h-12 flex items-center justify-center transition-all duration-700 ease-in-out transform overflow-hidden"
-            style={{
-              transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-            }}>
-              <img 
-                src="/assets/images/Day_1_logo-removebg-preview.png" 
-                alt="Day 1 Health Logo" 
-                className="w-full h-full object-contain"
-              />
+            <div className="relative w-48 h-16 flex items-center justify-center">
+              <div className="absolute inset-0 bg-white rounded-lg border-2 border-green-500 shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div className="absolute inset-0 flex items-center justify-center p-1">
+                  <img 
+                    src="/assets/images/Day_1_logo-removebg-preview.png" 
+                    alt="Day 1 Health Logo" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
