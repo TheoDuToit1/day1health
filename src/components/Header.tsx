@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar, MessageCircle, MapPin } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar, MessageCircle, MapPin, Download } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface HeaderProps {
@@ -7,9 +7,10 @@ interface HeaderProps {
   onNavigate: (section: string) => void;
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (collapsed: boolean) => void;
+  isFooterInView: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed }) => {
+const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -219,6 +220,21 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           <div className={`grid gap-2 ${
             isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-2'
           }`}>
+            <div 
+              className={`flex items-center justify-center rounded-lg transition-all duration-300 ${
+                isSidebarCollapsed ? 'p-3' : 'p-3'
+              } ${
+                isDark 
+                  ? 'bg-green-900 text-green-100' 
+                  : 'bg-green-100 text-green-600'
+              }`}
+              title="Install as App - Look for Install button when browsing"
+            >
+              <Download className={`${
+                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
+              }`} />
+              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Install App</span>}
+            </div>
             <button 
               className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
                 isSidebarCollapsed ? 'p-3' : 'p-3'

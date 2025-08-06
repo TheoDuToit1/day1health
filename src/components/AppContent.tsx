@@ -9,6 +9,7 @@ import FAQs from './FAQs';
 import Contact from './Contact';
 import Footer from './Footer';
 import SocialLinks from './SocialLinks';
+import InstallButton from './InstallButton';
 
 interface AppContentProps {
   activeSection: string;
@@ -31,6 +32,9 @@ const AppContent: React.FC<AppContentProps> = ({
 
   return (
     <div className="min-h-screen overflow-x-hidden">
+      {/* PWA Install Button */}
+      <InstallButton />
+      
       <div className="flex min-h-screen w-full">
         <Header 
           activeSection={activeSection} 
