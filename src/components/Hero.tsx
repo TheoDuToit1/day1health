@@ -804,7 +804,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                                 }}
                                 className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-manrope font-bold text-lg rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                               >
-                                Why Choose Us
+                                Why Us
                               </button>
                             </motion.div>
                           )}
