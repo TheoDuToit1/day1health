@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from './components/AppContent';
 import BlogPage from './components/BlogPage';
 import BlogDetailPage from './components/BlogDetailPage';
+import VoiceAssistantsPage from './components/VoiceAssistantsPage';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function AppWrapper() {
@@ -161,6 +162,7 @@ function App() {
         <Route path="/slide-2" element={<AppWrapper />} />
         <Route path="/slide-3" element={<AppWrapper />} />
         <Route path="/slide-4" element={<AppWrapper />} />
+        <Route path="/voice-assistants" element={<VoiceAssistantsPage />} />
         <Route path="/whoisyomama" element={<BlogPage />} />
         <Route path="/whoisyomama/:id" element={<BlogDetailPage />} />
       </Routes>

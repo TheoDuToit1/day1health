@@ -47,7 +47,7 @@ const heroSlides: HeroSlide[] = [
       { text: 'Checkups covered', icon: Heart },
       { text: 'Confidence always', icon: Star }
     ],
-    subheading: 'Smart cover for today\'s working adults',
+    subheading: 'Day1Health for today\'s working adults',
     bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
@@ -786,6 +786,29 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               {currentText || ''}
                             </span>
                           )}
+                          {/* Simple CTA Button for Slide 0 */}
+                          {slide.id === 0 && (
+                            <motion.div 
+                              className="mt-[78px]" /* 48px (original mt-12) + 30px */
+                              initial={{ y: 20, opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              transition={{ delay: 2, duration: 0.6 }}
+                              style={{ marginTop: '78px' }}
+                            >
+                              <button 
+                                onClick={() => {
+                                  const whyChoose = document.getElementById('why-choose');
+                                  if (whyChoose) {
+                                    whyChoose.scrollIntoView({ behavior: 'smooth' });
+                                  }
+                                }}
+                                className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-manrope font-bold text-lg rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                              >
+                                Why Choose Us
+                              </button>
+                            </motion.div>
+                          )}
+                          
                           {/* Enhanced Heartbeat Line - Hidden for slide 2 */}
                           {slide.id !== 1 && (
                             <div className={`absolute -bottom-1 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>
@@ -828,34 +851,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         {slide.subheading}
                       </motion.p>
                       
-                      {/* SendMessage Button for Slide 1 */}
-                      {slide.id === 0 && (
-                        <motion.div
-                          initial={{ y: 20, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          transition={{ delay: 0.8, duration: 0.6 }}
-                          className="mt-4 flex justify-center"
-                          style={{ marginTop: '0' }}
-                        >
-                          <HeroCTAButton
-                            onClick={() => {
-                              // Wait for "Sending Down" text to finish writing out (12 letters * 0.2s = 2.4s) + plane animation (0.8s) + 0.5s delay
-                              setTimeout(() => {
-                                // Smooth scroll to contact section with enhanced easing
-                                const contactSection = document.getElementById('contact');
-                                if (contactSection) {
-                                  const targetPosition = contactSection.offsetTop - 80; // Add some offset from top
-                                  window.scrollTo({
-                                    top: targetPosition,
-                                    behavior: 'smooth'
-                                  });
-                                }
-                              }, 3700); // 0.8s for plane + 2.4s for text + 0.5s delay
-                            }}
-                            className="font-manrope font-bold text-xl"
-                          />
-                        </motion.div>
-                      )}
+                      {/* CTA Button for Slide 0 is now the simple green button above */}
                       
                       {/* SendMessage Button for Slide 2 */}
                       {slide.id === 1 && (

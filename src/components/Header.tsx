@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar, MessageCircle, MapPin, Download } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar, MessageCircle, MapPin, Download, Mic } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface HeaderProps {
@@ -97,6 +97,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'how-it-works', label: 'How it works', icon: Settings },
     { id: 'feedback', label: 'Reviews', icon: MessageSquare },
     { id: 'why-choose', label: 'Why Us', icon: Users },
+    { id: 'voice-assistants', label: 'Voice AI', icon: Mic, isRoute: true },
     { id: 'contact', label: 'Contact us', icon: Phone },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle }
   ];
@@ -173,10 +174,14 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               return (
                 <li key={item.id}>
                   <a
-                    href={`#${item.id}`}
+                    href={item.isRoute ? `/${item.id}` : `#${item.id}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      onNavigate(item.id);
+                      if (item.isRoute) {
+                        window.location.href = `/${item.id}`;
+                      } else {
+                        onNavigate(item.id);
+                      }
                     }}
                     className={`w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
                       isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
@@ -220,24 +225,9 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           <div className={`grid gap-2 ${
             isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-2'
           }`}>
-            <div 
-              className={`flex items-center justify-center rounded-lg transition-all duration-300 ${
-                isSidebarCollapsed ? 'p-3' : 'p-3'
-              } ${
-                isDark 
-                  ? 'bg-green-900 text-green-100' 
-                  : 'bg-green-100 text-green-600'
-              }`}
-              title="Install as App - Look for Install button when browsing"
-            >
-              <Download className={`${
-                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
-              }`} />
-              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Install App</span>}
-            </div>
             <button 
               className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-3' : 'p-3'
+                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
               } ${
                 isDark 
                   ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
@@ -252,7 +242,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             </button>
             <button 
               className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-3' : 'p-3'
+                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
               } ${
                 isDark 
                   ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
@@ -267,7 +257,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             </button>
             <button 
               className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-3' : 'p-3'
+                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
               } ${
                 isDark 
                   ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
@@ -282,7 +272,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             </button>
             <button 
               className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-3' : 'p-3'
+                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
               } ${
                 isDark 
                   ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 

@@ -11,9 +11,21 @@ interface HeroCTAButtonProps {
 export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({ 
   onClick, 
   className = "",
-  defaultText = "Join Us Today",
+  defaultText = "Why Us",
   sentText = "Going Down"
 }) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      onClick();
+    }
+    
+    // Scroll to the #why-choose section
+    const whyChooseSection = document.getElementById('why-choose');
+    if (whyChooseSection) {
+      e.preventDefault();
+      whyChooseSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   // Fixed text spacing issue with hardcoded spans - v2
   // Helper function to convert text to animated spans
   const textToSpans = (text: string, startIndex: number = 0) => {
@@ -37,7 +49,7 @@ export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({
   return (
     <button 
       className={`hero-cta-button ${className}`}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="hero-outline"></div>
       <div className="hero-state hero-state--default">
@@ -72,7 +84,16 @@ export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({
           </svg>
         </div>
         <p>
-          {defaultText === 'Apply Now' ? (
+          {defaultText === 'Why Us' ? (
+            <>
+              <span style={{'--i': 0} as React.CSSProperties}>W</span>
+              <span style={{'--i': 1} as React.CSSProperties}>h</span>
+              <span style={{'--i': 2} as React.CSSProperties}>y</span>
+              <span style={{'--i': 3} as React.CSSProperties}>&nbsp;</span>
+              <span style={{'--i': 4} as React.CSSProperties}>U</span>
+              <span style={{'--i': 5} as React.CSSProperties}>s</span>
+            </>
+          ) : defaultText === 'Apply Now' ? (
             <>
               <span style={{'--i': 0} as React.CSSProperties}>A</span>
               <span style={{'--i': 1} as React.CSSProperties}>p</span>
