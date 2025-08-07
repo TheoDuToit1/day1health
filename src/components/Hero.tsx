@@ -332,7 +332,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
     }
     return 'pl-16 md:pl-24 lg:pl-32 xl:pl-48';
   };
-  const [currentSlide, setCurrentSlide] = useState<number>(specificSlide ?? 0);
+  const [currentSlide] = useState<number>(specificSlide ?? 0);
   const [currentText, setCurrentText] = useState<string>('');
   const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
