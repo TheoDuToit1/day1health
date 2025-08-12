@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Shield, CreditCard, Heart, Users, Check, Phone, Mail, ArrowRight } from 'lucide-react';
+import { Shield, CreditCard, Heart, Users, Check, ArrowRight, Phone, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
-import SeniorPackageBuilder from './senior/SeniorPackageBuilder';
 import { useTheme } from '../contexts/ThemeContext';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 
@@ -14,14 +13,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const { isDark } = useTheme();
 
   const tabs = [
-    { 
-      id: 'comprehensive', 
-      label: 'Comprehensive', 
-      icon: Shield,
-      bgColor: 'bg-blue-100',
-      iconColor: 'text-blue-600',
-      hoverBg: 'hover:bg-blue-200'
-    },
     { 
       id: 'daytoday', 
       label: 'Day-to-Day', 
@@ -39,8 +30,16 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       hoverBg: 'hover:bg-green-200'
     },
     { 
+      id: 'comprehensive', 
+      label: 'Comprehensive', 
+      icon: Shield,
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+      hoverBg: 'hover:bg-blue-200'
+    },
+    { 
       id: 'senior', 
-      label: 'Senior plans', 
+      label: 'Senior-Plan', 
       icon: Users,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -52,19 +51,118 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     setActiveTab(tabId);
   };
 
-  const renderTabContent = () => {
+  const renderTabContent = (): JSX.Element => {
     switch (activeTab) {
       case 'comprehensive':
         return (
           <div className="max-w-7xl mx-auto px-4">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Platinum Elite Plan */}
+            {/* Styles for the custom Uiverse card */}
+            <style>{`
+              .card {
+                width: min(300px, 100%);
+                margin: auto;
+                background-color: #f4f5f2;
+                background-image: url('https://media.istockphoto.com/id/1372065700/photo/portrait-of-a-confident-young-businessman-working-in-a-modern-office.jpg?s=612x612&w=0&k=20&c=oPRp9aiGEb_00Y0Q_eR40MiOisM2eFfeP7lDf0IqJDw=');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                text-align: center;
+                border-top-left-radius: 4rem;
+                border: 2px solid #fff;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 18px 35px rgba(0,0,0,0.14);
+                transform: translateY(0);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+              }
+              .card:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(0,0,0,0.20); }
+              /* Glassmorphism overlay over full image */
+              .card::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(6px) saturate(110%);
+                -webkit-backdrop-filter: blur(6px) saturate(110%);
+                z-index: 0;
+              }
+              .card::before { display: none; }
+              .card__banner {
+                position: absolute;
+                top: 32px;
+                right: -2.5px;
+                height: 30px;
+                background-color: #16a34a; /* green-600 */
+                color: #fff;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 0 14px 0 18px;
+                clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+                z-index: 2;
+                white-space: nowrap;
+              }
+              .card__banner span { font-weight: 800; font-size: 0.9rem; letter-spacing: 0.2px; }
+              .card__banner svg { width: 20px; height: 20px; stroke: currentColor; }
+              .card__body { padding: 3rem 1.5rem 2rem; max-width: 25ch; margin: auto; position: relative; z-index: 2; }
+              .card__icon { display: flex; justify-content: center; margin-bottom: 0.75rem; }
+              .card__title { font-weight: 800; color: #121513; font-size: 1.25rem; margin-block: 1.5rem 0.75rem; }
+              .card__paragraph { color: #303830; font-size: 0.875rem; margin-top: 1.25rem; }
+              .card__list { list-style: none; margin: 1rem auto 0; padding: 0; max-width: 25ch; text-align: left; }
+              .card__list li { display: flex; align-items: flex-start; gap: 0.5rem; color: #121513; font-size: 0.875rem; margin-bottom: 0.5rem; }
+              .card__list svg { width: 16px; height: 16px; color: #2f855a; margin-top: 2px; flex-shrink: 0; }
+              .card__ribbon { margin-top: 1.5rem; display: grid; place-items: center; height: 50px; background-color: #16a34a; position: relative; width: 110%; left: -5%; top: 10px; border-radius: 0 0 2rem 2rem; z-index: 2; }
+              .card__ribbon::after, .card__ribbon::before { content: ""; position: absolute; width: 20px; aspect-ratio: 1/1; bottom: 100%; z-index: -2; background-color: #14532d; /* green-900 */ }
+              .card__ribbon::before { left: 0; transform-origin: left bottom; transform: rotate(45deg); }
+              .card__ribbon::after { right: 0; transform-origin: right bottom; transform: rotate(-45deg); }
+              .card__ribbon-label { display: block; width: 84px; aspect-ratio: 1/1; background-color: #fff; position: relative; transform: translateY(-50%); border-radius: 50%; border: 8px solid #16a34a; display: grid; place-items: center; font-weight: 900; line-height: 1; font-size: 1.5rem; }
+              .card__ribbon-label::before, .card__ribbon-label::after { content: ""; position: absolute; width: 25px; height: 25px; bottom: 50%; }
+              .card__ribbon-label::before { right: calc(100% + 4px); border-bottom-right-radius: 20px; box-shadow: 5px 5px 0 #16a34a; }
+              .card__ribbon-label::after { left: calc(100% + 4px); border-bottom-left-radius: 20px; box-shadow: -5px 5px 0 #16a34a; }
+            `}</style>
+            <div className="grid md:grid-cols-4 gap-8">
+              {/* Intro Text - Left Side */}
               <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                  isDark 
-                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                    : 'bg-white border-green-200 hover:border-green-400'
-                }`}
+                className="md:col-span-1"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Comprehensive Healthcare Plans
+                </h2>
+                <div className={`space-y-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p>
+                    Choose the coverage that fits your lifestyle. Our comprehensive plans are designed to provide peace of mind at every stage of life.
+                  </p>
+                  <div className={`h-px ${isDark ? 'bg-gray-700' : 'bg-gray-200'} my-4`} />
+                  <ul className="space-y-2">
+                    <li className="flex items-start">
+                      <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>24/7 Customer Support</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Nationwide Network</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>No Waiting Periods</span>
+                    </li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              {/* Plans Grid - 3 Columns */}
+              <div className="md:col-span-3">
+                <div className="grid md:grid-cols-3 gap-6">
+                  {/* Gold Plus Plan */}
+                  <motion.div 
+                    className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                      isDark 
+                        ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
+                        : 'bg-white border-blue-200 hover:border-blue-400'
+                    }`}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -74,7 +172,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 }}
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ 
-                  scale: 1.05,
+                  scale: 1.03,
                   boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
                 }}
               >
@@ -178,126 +276,44 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 />
               </motion.div>
 
-              {/* Silver Plan */}
-              <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                  isDark 
-                    ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
-                    : 'bg-white border-gray-200 hover:border-gray-400'
-                }`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.3,
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
-                }}
-              >
-                <div className="text-center mb-6">
-                  <h3 className={`text-xl font-bold mb-2 ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>Silver</h3>
-                  <div className="flex items-baseline justify-center mb-4">
-                    <span className="text-3xl font-bold text-blue-600">R649</span>
-                    <span className={`ml-1 ${
-                      isDark ? 'text-gray-400' : 'text-gray-500'
-                    }`}>/month</span>
-                  </div>
-                  <div className="h-16 mb-4">
-                    <p className={`text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>Essential coverage for individuals</p>
-                  </div>
+              {/* Silver Plan replaced with Uiverse card */}
+              <div className="card">
+                <div className="card__banner">
+                  <span>Silver</span>
+                  <svg height="20" width="20" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" strokeLinejoin="round" strokeLinecap="round"></path>
+                  </svg>
                 </div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>Private hospital cover</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>6 GP visits per year</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic dentistry</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span>
-                  </li>
-                </ul>
-                <AnimatedPaymentButton 
-                  text="Choose Plan"
-                  className="silver"
-                />
-              </motion.div>
-
-              {/* Bronze Plan */}
-              <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                  isDark 
-                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                    : 'bg-white border-green-200 hover:border-green-400'
-                }`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.4,
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
-                }}
-              >
-                <div className="text-center mb-6">
-                  <h3 className={`text-xl font-bold mb-2 ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>Bronze</h3>
-                  <div className="flex items-baseline justify-center mb-4">
-                    <span className="text-3xl font-bold text-green-600">R459</span>
-                    <span className={`ml-1 ${
-                      isDark ? 'text-gray-400' : 'text-gray-500'
-                    }`}>/month</span>
-                  </div>
-                  <div className="h-16 mb-4">
-                    <p className={`text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>Basic coverage for essential needs</p>
-                  </div>
+                <div className="card__body">
+                  <p className="card__paragraph">
+                    Essential coverage for individuals. Private hospital cover, 6 GP visits per year, basic dentistry, and acute medication.
+                  </p>
+                  <ul className="card__list">
+                    <li>
+                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
+                      <span>Private hospital cover</span>
+                    </li>
+                    <li>
+                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
+                      <span>6 GP visits per year</span>
+                    </li>
+                    <li>
+                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
+                      <span>Basic dentistry</span>
+                    </li>
+                    <li>
+                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
+                      <span>Acute medication</span>
+                    </li>
+                  </ul>
                 </div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital network cover</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>3 GP visits per year</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency cover</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic medication</span>
-                  </li>
-                </ul>
-                <AnimatedPaymentButton 
-                  text="Choose Plan"
-                  className="bronze"
-                />
-              </motion.div>
+                <div className="card__ribbon">
+                  <label className="card__ribbon-label">03</label>
+                </div>
+              </div>
             </div>
+          </div>
+          </div>
           </div>
         );
       
@@ -914,62 +930,30 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     <div className={`relative z-30 -mt-20 transition-all duration-700 ease-in-out ${
       isDark ? 'bg-gray-900' : 'bg-white'
     }`}>
-      <div className={`w-full mx-auto px-4 ${
-        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
-      }`} style={{
-        transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      }}>
-        {/* Floating Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className={`rounded-2xl shadow-lg p-3 backdrop-blur-sm transition-colors duration-300 ${
-            isDark 
-              ? 'bg-gray-800/95 border border-gray-700' 
-              : 'bg-white/95 border border-gray-100'
-          }`} style={{
-            width: 'fit-content',
-            margin: '0 auto'
-          }}>
-            <div className="flex flex-wrap justify-center gap-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTabClick(tab.id)}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                    activeTab === tab.id
-                      ? isDark 
-                        ? 'bg-green-900/50 text-green-400 shadow-sm border border-green-800'
-                        : 'bg-green-50 text-green-700 shadow-sm border border-green-100'
-                      : isDark
-                        ? 'text-gray-300 hover:bg-gray-700'
-                        : 'text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
-                    activeTab === tab.id
-                      ? isDark
-                        ? 'bg-green-900/50 hover:bg-green-900/70'
-                        : tab.bgColor + ' ' + tab.hoverBg
-                      : isDark
-                        ? 'bg-gray-700 hover:bg-gray-600'
-                        : tab.bgColor + ' ' + tab.hoverBg
-                  }`}>
-                    <tab.icon className={`w-4 h-4 ${
-                      activeTab === tab.id 
-                        ? isDark 
-                          ? 'text-green-400' 
-                          : tab.iconColor
-                        : isDark
-                          ? 'text-gray-400'
-                          : 'text-gray-600'
-                    }`} />
-                  </span>
-                  <span className="whitespace-nowrap">{tab.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+      <div 
+        className={`w-full mx-auto px-4 ${isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'}`}
+        style={{
+          transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        }}
+      >
+        {/* Tabs Navigation */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabClick(tab.id)}
+              className={`flex items-center px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                activeTab === tab.id
+                  ? `${tab.bgColor} ${tab.iconColor} shadow-md`
+                  : `bg-gray-100 text-gray-600 hover:bg-gray-200 ${isDark ? '!bg-gray-800 !text-gray-300 hover:!bg-gray-700' : ''}`
+              }`}
+            >
+              <tab.icon className="w-5 h-5 mr-2" />
+              {tab.label}
+            </button>
+          ))}
         </div>
-        
+
         {/* Content Panel */}
         <div className={`transition-all duration-500 ease-in-out rounded-2xl p-6 ${
           isDark ? 'bg-gray-900' : 'bg-white'
