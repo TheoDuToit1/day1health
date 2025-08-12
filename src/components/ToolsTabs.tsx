@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, CreditCard, Heart, Users, Check, ArrowRight, Phone, Mail } from 'lucide-react';
+import { Shield, CreditCard, Heart, Users, Check, Phone, Mail, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
@@ -11,6 +11,17 @@ interface ToolsTabsProps {
 const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const [activeTab, setActiveTab] = useState('comprehensive');
   const { isDark } = useTheme();
+  // Track expanded state for Day-to-Day pricing cards
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({
+    intro: false,
+    family: false,
+    basic: false,
+    student: false,
+  });
+  const toggleExpanded = (key: 'family' | 'basic' | 'student') =>
+    setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+  const toggleIntro = () => setExpanded((prev) => ({ ...prev, intro: !prev.intro }));
+
 
   const tabs = [
     { 
@@ -51,118 +62,19 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     setActiveTab(tabId);
   };
 
-  const renderTabContent = (): JSX.Element => {
+  const renderTabContent = () => {
     switch (activeTab) {
       case 'comprehensive':
         return (
           <div className="max-w-7xl mx-auto px-4">
-            {/* Styles for the custom Uiverse card */}
-            <style>{`
-              .card {
-                width: min(300px, 100%);
-                margin: auto;
-                background-color: #f4f5f2;
-                background-image: url('https://media.istockphoto.com/id/1372065700/photo/portrait-of-a-confident-young-businessman-working-in-a-modern-office.jpg?s=612x612&w=0&k=20&c=oPRp9aiGEb_00Y0Q_eR40MiOisM2eFfeP7lDf0IqJDw=');
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                text-align: center;
-                border-top-left-radius: 4rem;
-                border: 2px solid #fff;
-                position: relative;
-                overflow: hidden;
-                box-shadow: 0 18px 35px rgba(0,0,0,0.14);
-                transform: translateY(0);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-              }
-              .card:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(0,0,0,0.20); }
-              /* Glassmorphism overlay over full image */
-              .card::after {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: rgba(255, 255, 255, 0.08);
-                backdrop-filter: blur(6px) saturate(110%);
-                -webkit-backdrop-filter: blur(6px) saturate(110%);
-                z-index: 0;
-              }
-              .card::before { display: none; }
-              .card__banner {
-                position: absolute;
-                top: 32px;
-                right: -2.5px;
-                height: 30px;
-                background-color: #16a34a; /* green-600 */
-                color: #fff;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 0 14px 0 18px;
-                clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
-                z-index: 2;
-                white-space: nowrap;
-              }
-              .card__banner span { font-weight: 800; font-size: 0.9rem; letter-spacing: 0.2px; }
-              .card__banner svg { width: 20px; height: 20px; stroke: currentColor; }
-              .card__body { padding: 3rem 1.5rem 2rem; max-width: 25ch; margin: auto; position: relative; z-index: 2; }
-              .card__icon { display: flex; justify-content: center; margin-bottom: 0.75rem; }
-              .card__title { font-weight: 800; color: #121513; font-size: 1.25rem; margin-block: 1.5rem 0.75rem; }
-              .card__paragraph { color: #303830; font-size: 0.875rem; margin-top: 1.25rem; }
-              .card__list { list-style: none; margin: 1rem auto 0; padding: 0; max-width: 25ch; text-align: left; }
-              .card__list li { display: flex; align-items: flex-start; gap: 0.5rem; color: #121513; font-size: 0.875rem; margin-bottom: 0.5rem; }
-              .card__list svg { width: 16px; height: 16px; color: #2f855a; margin-top: 2px; flex-shrink: 0; }
-              .card__ribbon { margin-top: 1.5rem; display: grid; place-items: center; height: 50px; background-color: #16a34a; position: relative; width: 110%; left: -5%; top: 10px; border-radius: 0 0 2rem 2rem; z-index: 2; }
-              .card__ribbon::after, .card__ribbon::before { content: ""; position: absolute; width: 20px; aspect-ratio: 1/1; bottom: 100%; z-index: -2; background-color: #14532d; /* green-900 */ }
-              .card__ribbon::before { left: 0; transform-origin: left bottom; transform: rotate(45deg); }
-              .card__ribbon::after { right: 0; transform-origin: right bottom; transform: rotate(-45deg); }
-              .card__ribbon-label { display: block; width: 84px; aspect-ratio: 1/1; background-color: #fff; position: relative; transform: translateY(-50%); border-radius: 50%; border: 8px solid #16a34a; display: grid; place-items: center; font-weight: 900; line-height: 1; font-size: 1.5rem; }
-              .card__ribbon-label::before, .card__ribbon-label::after { content: ""; position: absolute; width: 25px; height: 25px; bottom: 50%; }
-              .card__ribbon-label::before { right: calc(100% + 4px); border-bottom-right-radius: 20px; box-shadow: 5px 5px 0 #16a34a; }
-              .card__ribbon-label::after { left: calc(100% + 4px); border-bottom-left-radius: 20px; box-shadow: -5px 5px 0 #16a34a; }
-            `}</style>
-            <div className="grid md:grid-cols-4 gap-8">
-              {/* Intro Text - Left Side */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Platinum Elite Plan */}
               <motion.div 
-                className="md:col-span-1"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <h2 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Comprehensive Healthcare Plans
-                </h2>
-                <div className={`space-y-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <p>
-                    Choose the coverage that fits your lifestyle. Our comprehensive plans are designed to provide peace of mind at every stage of life.
-                  </p>
-                  <div className={`h-px ${isDark ? 'bg-gray-700' : 'bg-gray-200'} my-4`} />
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>24/7 Customer Support</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>Nationwide Network</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>No Waiting Periods</span>
-                    </li>
-                  </ul>
-                </div>
-              </motion.div>
-
-              {/* Plans Grid - 3 Columns */}
-              <div className="md:col-span-3">
-                <div className="grid md:grid-cols-3 gap-6">
-                  {/* Gold Plus Plan */}
-                  <motion.div 
-                    className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
-                      isDark 
-                        ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
-                        : 'bg-white border-blue-200 hover:border-blue-400'
-                    }`}
+                className={`relative group rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                } ${expanded.family ? 'min-h-[420px]' : 'min-h-[180px]'} `}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -172,7 +84,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 }}
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{ 
-                  scale: 1.03,
+                  scale: 1.05,
                   boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
                 }}
               >
@@ -214,15 +126,40 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   text="Choose Plan"
                   className="platinum"
                 />
+                {/* Hover Overlay (collapsed only) */}
+                {!expanded.family && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20, rotate: -1, skewY: -2 }}
+                    whileHover={{ opacity: 1, y: 0, rotate: 0, skewY: 0 }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                    className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center px-4 ${
+                      isDark ? 'bg-gray-900/40' : 'bg-white/40'
+                    } backdrop-blur-[2px] opacity-0 group-hover:opacity-100`}
+                  >
+                    <div className={`text-xs uppercase tracking-wider mb-1 ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.label}
+                    </div>
+                    <motion.div
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      whileHover={{ scale: 1.02, opacity: 1 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 16, delay: 0.03 }}
+                      className={`font-extrabold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                    >
+                      <span className="text-2xl align-top mr-1">R</span>
+                      <span className="text-4xl">1,299</span>
+                      <span className={`ml-1 text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                    </motion.div>
+                  </motion.div>
+                )}
               </motion.div>
 
               {/* Gold Plus Plan */}
               <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                className={`relative group rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
                   isDark 
                     ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
                     : 'bg-white border-blue-200 hover:border-blue-400'
-                }`}
+                } ${expanded.basic ? 'min-h-[420px]' : 'min-h-[180px]'} `}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -276,63 +213,145 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 />
               </motion.div>
 
-              {/* Silver Plan replaced with Uiverse card */}
-              <div className="card">
-                <div className="card__banner">
-                  <span>Silver</span>
-                  <svg height="20" width="20" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" strokeLinejoin="round" strokeLinecap="round"></path>
-                  </svg>
+              {/* Silver Plan */}
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-600 hover:border-gray-500' 
+                    : 'bg-white border-gray-200 hover:border-gray-400'
+                }`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.3,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
+                <div className="text-center mb-6">
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Silver</h3>
+                  <div className="flex items-baseline justify-center mb-4">
+                    <span className="text-3xl font-bold text-blue-600">R649</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
+                  </div>
+                  <div className="h-16 mb-4">
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Essential coverage for individuals</p>
+                  </div>
                 </div>
-                <div className="card__body">
-                  <p className="card__paragraph">
-                    Essential coverage for individuals. Private hospital cover, 6 GP visits per year, basic dentistry, and acute medication.
-                  </p>
-                  <ul className="card__list">
-                    <li>
-                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
-                      <span>Private hospital cover</span>
-                    </li>
-                    <li>
-                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
-                      <span>6 GP visits per year</span>
-                    </li>
-                    <li>
-                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
-                      <span>Basic dentistry</span>
-                    </li>
-                    <li>
-                      <Check className="w-4 h-4 text-green-600 mt-0.5" />
-                      <span>Acute medication</span>
-                    </li>
-                  </ul>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>Private hospital cover</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>6 GP visits per year</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic dentistry</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span>
+                  </li>
+                </ul>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="silver"
+                />
+              </motion.div>
+
+              {/* Bronze Plan */}
+              <motion.div 
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                } ${expanded.family ? 'min-h-[420px]' : 'min-h-[180px]'} `}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
+                }}
+              >
+                <div className="text-center mb-6">
+                  <h3 className={`text-xl font-bold mb-2 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Bronze</h3>
+                  <div className="flex items-baseline justify-center mb-4">
+                    <span className="text-3xl font-bold text-green-600">R459</span>
+                    <span className={`ml-1 ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>/month</span>
+                  </div>
+                  <div className="h-16 mb-4">
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Basic coverage for essential needs</p>
+                  </div>
                 </div>
-                <div className="card__ribbon">
-                  <label className="card__ribbon-label">03</label>
-                </div>
-              </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Hospital network cover</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>3 GP visits per year</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Emergency cover</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic medication</span>
+                  </li>
+                </ul>
+                <AnimatedPaymentButton 
+                  text="Choose Plan"
+                  className="bronze"
+                />
+              </motion.div>
             </div>
-          </div>
-          </div>
           </div>
         );
       
       case 'daytoday':
         return (
           <motion.div 
-            className="max-w-7xl mx-auto px-4"
+            className="max-w-[76rem] mx-auto px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Premium Care */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+              {/* Introduction Column */}
               <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                className={`rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
                   isDark 
                     ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
                     : 'bg-white border-blue-200 hover:border-blue-400'
-                }`}
+                } ${expanded.intro ? 'min-h-[420px]' : 'min-h-[160px]'} `}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -346,31 +365,57 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   boxShadow: "0 20px 40px rgba(0,0,0,0.12)"
                 }}
               >
-                <h3 className={`text-xl font-bold mb-4 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>Premium Care</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-4">R499<span className={`text-sm font-normal ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>/month</span></div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Unlimited GP visits</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Chronic medication</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Dental & optical</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Virtual doctor</span></li>
-                </ul>
-                <AnimatedPaymentButton 
-                  text="Choose Plan"
-                  className="gold"
-                />
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className={`text-xl font-bold ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Day-to-Day Cover</h3>
+                  <button
+                    type="button"
+                    aria-label={expanded.intro ? 'Collapse introduction' : 'Expand introduction'}
+                    className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border text-sm transition-transform ${
+                      expanded.intro ? 'rotate-180' : ''
+                    } ${isDark ? 'border-gray-700 text-gray-200' : 'border-gray-200 text-gray-800'}`}
+                    onClick={toggleIntro}
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
+                </div>
+                {expanded.intro && (
+                  <>
+                    <p className={`mt-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Practical, affordable healthcare for everyday needs. Choose from our flexible options
+                      to cover GP visits, basic medication, and essential health services for you and your family.
+                    </p>
+                    <ul className="space-y-3 mt-4">
+                      <li className="flex items-start">
+                        <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5" />
+                        <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>GP consultations and virtual care</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5" />
+                        <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute and chronic medication options</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="w-5 h-5 text-blue-500 mr-2 mt-0.5" />
+                        <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Dental, optical and basic diagnostics</span>
+                      </li>
+                    </ul>
+                    <div className={`mt-6 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Compare plans on the right and pick what fits your lifestyle and budget.
+                    </div>
+                  </>
+                )}
               </motion.div>
 
               {/* Family Care */}
               <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                className={`relative group rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
-                }`}
+                } ${expanded.family ? 'min-h-[420px]' : 'min-h-[180px]'} `}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -387,28 +432,62 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Family Care</h3>
-                <div className="text-3xl font-bold text-green-600 mb-4">R399<span className={`text-sm font-normal ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>/month</span></div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>20 GP visits/year</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Essential medicines</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Child immunizations</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
-                </ul>
+                {expanded.family && (
+                  <motion.div layoutId="price-family" className="text-3xl font-bold text-green-600 mb-4">
+                    R399
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm font-normal`}>/month</span>
+                  </motion.div>
+                )}
+                {expanded.family && (
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>20 GP visits/year</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Essential medicines</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Child immunizations</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Maternity benefits</span></li>
+                  </ul>
+                )}
                 <AnimatedPaymentButton 
                   text="Choose Plan"
                   className="bronze"
+                  hoverMessages={[
+                    '20 GP visits/year',
+                    'Essential medicines',
+                    'Child immunizations',
+                    'Maternity benefits',
+                  ]}
+                  hoverIcons={['wallet','card','payment','check']}
+                  showArrow
+                  expanded={expanded.family}
+                  onToggleExpand={() => toggleExpanded('family')}
                 />
+                {/* Hover Badge (collapsed only) */}
+                {!expanded.family && (
+                  <div
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right ${
+                      isDark
+                        ? 'bg-gray-900/80 border-gray-700'
+                        : 'bg-white/90 border-gray-200'
+                    } opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.label}
+                    </div>
+                    <motion.div layoutId="price-family" className={`leading-none ${isDark ? 'text-white' : 'text-gray-900'}`} transition={{ type: 'spring', stiffness: 350, damping: 24 }}>
+                      <span className="text-sm align-top mr-1">R</span>
+                      <span className="text-xl font-extrabold">399</span>
+                      <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                    </motion.div>
+                  </div>
+                )}
               </motion.div>
 
               {/* Basic Care */}
               <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                className={`relative group rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
                   isDark 
                     ? 'bg-gray-800 border-blue-700 hover:border-blue-500' 
                     : 'bg-white border-blue-200 hover:border-blue-400'
-                }`}
+                } ${expanded.basic ? 'min-h-[420px]' : 'min-h-[180px]'} `}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -425,28 +504,62 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Basic Care</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-4">R249<span className={`text-sm font-normal ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>/month</span></div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>12 GP visits/year</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic pathology</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Telehealth services</span></li>
-                </ul>
+                {expanded.basic && (
+                  <motion.div layoutId="price-basic" className="text-3xl font-bold text-blue-600 mb-4">
+                    R249
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm font-normal`}>/month</span>
+                  </motion.div>
+                )}
+                {expanded.basic && (
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>12 GP visits/year</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Basic pathology</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-blue-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Telehealth services</span></li>
+                  </ul>
+                )}
                 <AnimatedPaymentButton 
                   text="Choose Plan"
                   className="silver"
+                  hoverMessages={[
+                    '12 GP visits/year',
+                    'Acute medication',
+                    'Basic pathology',
+                    'Telehealth services',
+                  ]}
+                  hoverIcons={['wallet','card','payment','check']}
+                  showArrow
+                  expanded={expanded.basic}
+                  onToggleExpand={() => toggleExpanded('basic')}
                 />
+                {/* Hover Badge (collapsed only) */}
+                {!expanded.basic && (
+                  <div
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right ${
+                      isDark
+                        ? 'bg-gray-900/80 border-gray-700'
+                        : 'bg-white/90 border-gray-200'
+                    } opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.label}
+                    </div>
+                    <motion.div layoutId="price-basic" className={`leading-none ${isDark ? 'text-white' : 'text-gray-900'}`} transition={{ type: 'spring', stiffness: 350, damping: 24 }}>
+                      <span className="text-sm align-top mr-1">R</span>
+                      <span className="text-xl font-extrabold">249</span>
+                      <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                    </motion.div>
+                  </div>
+                )}
               </motion.div>
 
               {/* Student Plan */}
               <motion.div 
-                className={`rounded-2xl shadow-lg p-6 border-2 transition-all ${
+                className={`relative group rounded-2xl shadow-lg p-6 border-2 transition-all overflow-hidden ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
-                }`}
+                } ${expanded.student ? 'min-h-[420px]' : 'min-h-[180px]'} `}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ 
@@ -463,19 +576,53 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <h3 className={`text-xl font-bold mb-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>Student Care</h3>
-                <div className="text-3xl font-bold text-green-600 mb-4">R199<span className={`text-sm font-normal ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>/month</span></div>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>8 GP visits/year</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Nurse line</span></li>
-                  <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Campus clinic discounts</span></li>
-                </ul>
+                {expanded.student && (
+                  <motion.div layoutId="price-student" className="text-3xl font-bold text-green-600 mb-4">
+                    R199
+                    <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm font-normal`}>/month</span>
+                  </motion.div>
+                )}
+                {expanded.student && (
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>8 GP visits/year</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Acute medication</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>24/7 Nurse line</span></li>
+                    <li className="flex items-center"><Check className="w-5 h-5 text-green-500 mr-2" /> <span className={isDark ? 'text-gray-300' : 'text-gray-900'}>Campus clinic discounts</span></li>
+                  </ul>
+                )}
                 <AnimatedPaymentButton 
                   text="Choose Plan"
                   className="bronze"
+                  hoverMessages={[
+                    '8 GP visits/year',
+                    'Acute medication',
+                    '24/7 Nurse line',
+                    'Campus clinic discounts',
+                  ]}
+                  hoverIcons={['wallet','card','payment','check']}
+                  showArrow
+                  expanded={expanded.student}
+                  onToggleExpand={() => toggleExpanded('student')}
                 />
+                {/* Hover Badge (collapsed only) */}
+                {!expanded.student && (
+                  <div
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right ${
+                      isDark
+                        ? 'bg-gray-900/80 border-gray-700'
+                        : 'bg-white/90 border-gray-200'
+                    } opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.label}
+                    </div>
+                    <motion.div layoutId="price-student" className={`leading-none ${isDark ? 'text-white' : 'text-gray-900'}`} transition={{ type: 'spring', stiffness: 350, damping: 24 }}>
+                      <span className="text-sm align-top mr-1">R</span>
+                      <span className="text-xl font-extrabold">199</span>
+                      <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                    </motion.div>
+                  </div>
+                )}
               </motion.div>
             </div>
           </motion.div>
@@ -930,34 +1077,61 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     <div className={`relative z-30 -mt-20 transition-all duration-700 ease-in-out ${
       isDark ? 'bg-gray-900' : 'bg-white'
     }`}>
-      <div 
-        className={`w-full mx-auto px-4 ${isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'}`}
-        style={{
-          transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-        }}
-      >
-        {/* Tabs Navigation */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleTabClick(tab.id)}
-              className={`flex items-center px-6 py-3 rounded-full text-sm font-medium transition-all ${
-                activeTab === tab.id
-                  ? `${tab.bgColor} ${tab.iconColor} shadow-md`
-                  : `bg-gray-100 text-gray-600 hover:bg-gray-200 ${isDark ? '!bg-gray-800 !text-gray-300 hover:!bg-gray-700' : ''}`
-              }`}
-            >
-              <tab.icon className="w-5 h-5 mr-2" />
-              {tab.label}
-            </button>
-          ))}
+      <div className={`w-full mx-auto px-4 ${
+        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
+      }`} style={{
+        transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      }}>
+        {/* Floating Tabs */}
+        <div className="flex justify-center mb-12">
+          <div className={`w-full max-w-6xl mx-auto rounded-2xl shadow-lg px-6 py-3 backdrop-blur-sm transition-colors duration-300 ${
+            isDark 
+              ? 'bg-gray-800/95 border border-gray-700' 
+              : 'bg-white/95 border border-gray-100'
+          }`}>
+            <div className="flex flex-wrap justify-between gap-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabClick(tab.id)}
+                  className={`flex items-center px-6 py-3 text-xs md:text-sm font-medium rounded-lg transition-all min-w-[200px] sm:min-w-[240px] justify-center ${
+                    activeTab === tab.id
+                      ? isDark 
+                        ? 'bg-green-900/50 text-green-400 shadow-sm border border-green-800'
+                        : 'bg-green-50 text-green-700 shadow-sm border border-green-100'
+                      : isDark
+                        ? 'text-gray-300 hover:bg-gray-700'
+                        : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
+                    activeTab === tab.id
+                      ? isDark
+                        ? 'bg-green-900/50 hover:bg-green-900/70'
+                        : tab.bgColor + ' ' + tab.hoverBg
+                      : isDark
+                        ? 'bg-gray-700 hover:bg-gray-600'
+                        : tab.bgColor + ' ' + tab.hoverBg
+                  }`}>
+                    <tab.icon className={`w-4 h-4 ${
+                      activeTab === tab.id 
+                        ? isDark 
+                          ? 'text-green-400' 
+                          : tab.iconColor
+                        : isDark
+                          ? 'text-gray-400'
+                          : 'text-gray-600'
+                    }`} />
+                  </span>
+                  <span className="whitespace-nowrap">{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-
+        
         {/* Content Panel */}
-        <div className={`transition-all duration-500 ease-in-out rounded-2xl p-6 ${
-          isDark ? 'bg-gray-900' : 'bg-white'
-        }`}>
+        <div className={`transition-all duration-500 ease-in-out`}>
           <div className={`transform transition-all duration-500 ${
             activeTab ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
