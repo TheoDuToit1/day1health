@@ -4,6 +4,7 @@ import AppContent from './components/AppContent';
 import BlogPage from './components/BlogPage';
 import BlogDetailPage from './components/BlogDetailPage';
 import VoiceAssistantsPage from './components/VoiceAssistantsPage';
+import PlanDetailPage from './components/PlanDetailPage';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function AppWrapper() {
@@ -165,6 +166,7 @@ function App() {
         <Route path="/voice-assistants" element={<VoiceAssistantsPage />} />
         <Route path="/whoisyomama" element={<BlogPage />} />
         <Route path="/whoisyomama/:id" element={<BlogDetailPage />} />
+        <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
       </Routes>
     </ThemeProvider>
   );

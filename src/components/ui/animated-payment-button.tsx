@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import './animated-payment-button.css';
 
 interface AnimatedPaymentButtonProps {
@@ -11,6 +13,7 @@ interface AnimatedPaymentButtonProps {
   expanded?: boolean; // current expand state
   onToggleExpand?: () => void; // toggle handler
   hoverIcons?: ("card" | "payment" | "dollar" | "wallet" | "check")[]; // optional icon sequence matching hover messages
+  to?: string; // optional react-router link target
 }
 
 export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
@@ -18,11 +21,12 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
   onClick,
   className = "",
   hoverMessages = [],
-  hoverCycleMs = 1200,
+  hoverCycleMs = 1600,
   showArrow = false,
   expanded = false,
   onToggleExpand,
-  hoverIcons
+  hoverIcons,
+  to
 }) => {
   const [hoverIndex, setHoverIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -50,6 +54,7 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
   ];
   const iconSeq = hoverIcons && hoverIcons.length > 0 ? hoverIcons : defaultIcons;
   const activeIcon = iconSeq[activeIndex % iconSeq.length];
+  const contentKey = isHovering && hoverMessages.length > 0 ? `hover-${hoverIndex}-${activeIcon}` : `base-${activeIcon}`;
 
   const renderIcon = (key: "card" | "payment" | "dollar" | "wallet" | "check") => {
     switch (key) {
@@ -87,26 +92,61 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
   };
 
   return (
-    <div className={`flex items-center gap-2`}>
-      <button
-        className={`pay-btn ${className}`}
-        onClick={onClick}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <span className="btn-text">{displayText}</span>
-      <div className="icon-container">{renderIcon(activeIcon)}</div>
-      </button>
+    <div className={`w-full flex items-center justify-end gap-3 pr-2`}>
+      {to ? (
+        <Link
+          to={to}
+          className={`pay-btn w-full max-w-[240px] md:max-w-[280px] px-5 md:px-6 shrink-0 ${className}`}
+          onClick={onClick}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={contentKey}
+              className="inline-flex items-center gap-2"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            >
+              <span className="btn-text">{displayText}</span>
+              <span className="icon-container">{renderIcon(activeIcon)}</span>
+            </motion.span>
+          </AnimatePresence>
+        </Link>
+      ) : (
+        <button
+          className={`pay-btn w-full max-w-[240px] md:max-w-[280px] px-5 md:px-6 shrink-0 ${className}`}
+          onClick={onClick}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={contentKey}
+              className="inline-flex items-center gap-2"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            >
+              <span className="btn-text">{displayText}</span>
+              <span className="icon-container">{renderIcon(activeIcon)}</span>
+            </motion.span>
+          </AnimatePresence>
+        </button>
+      )}
       {showArrow && (
         <button
           type="button"
           aria-label={expanded ? 'Collapse details' : 'Expand details'}
-          className={`ml-1 inline-flex items-center justify-center w-9 h-9 rounded-lg border text-sm transition-transform ${
+          className={`inline-flex items-center justify-center w-7 h-7 rounded-lg border text-sm transition-transform ${
             expanded ? 'rotate-180' : ''
           }`}
           onClick={onToggleExpand}
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
             <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
           </svg>
         </button>
