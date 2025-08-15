@@ -16,10 +16,12 @@ export const HeroCTAButton: React.FC<HeroCTAButtonProps> = ({
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
+      // If a custom onClick is provided, let the parent control behavior
       onClick();
+      return;
     }
-    
-    // Scroll to the #why-choose section
+
+    // Default behavior: scroll to the #why-choose section
     const whyChooseSection = document.getElementById('why-choose');
     if (whyChooseSection) {
       e.preventDefault();

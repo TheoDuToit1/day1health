@@ -19,7 +19,8 @@
   cursor: pointer;
   border-radius: var(--radius);
   color: #1f2937;
-  border: none;
+  /* Restore subtle border now that outer glow is removed */
+  border: 1px solid var(--neutral-2);
   box-shadow:
     0 0.5px 0.5px 1px rgba(255, 255, 255, 0.3),
     0 10px 20px rgba(22, 163, 74, 0.15),
@@ -39,8 +40,8 @@
   inset: -7px;
   position: absolute;
   background: rgba(255, 255, 255, 0.2);
+  /* Removed large blue outer glow */
   box-shadow:
-    0 8px 32px 0 rgba(31, 38, 135, 0.4),
     inset 0 -2px 2px rgba(255, 255, 255, 0.4);
   border-radius: 15px;
   transition: all 0.5s ease 0.2s;
@@ -135,9 +136,10 @@
   border-radius: 13px;
   inset: -7px;
   z-index: 0;
-  opacity: 0.3;
+  /* Disable outer blurred gradient halo */
+  opacity: 0;
   transition: all 0.5s linear;
-  filter: blur(10px);
+  filter: none;
 }
 .animated-contact-button:hover .bg-gradient {
   opacity: 0;

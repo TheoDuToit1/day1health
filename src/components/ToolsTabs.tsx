@@ -98,7 +98,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent */}
                   <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                     <img
-                      src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9jb3VwbGUuanBnIiwiaWF0IjoxNzU1MTg3NjU4LCJleHAiOjMxNzA4MzY1MTY1OH0.cTjU30UoW6x9OqcnMyiwybduDlzwOes-mMv30edpR0c"
+                      src="https://placehold.co/1200x800/111/fff?text=Demo"
                       alt=""
                       className="w-full h-full object-cover opacity-50"
                       loading="lazy"
@@ -123,7 +123,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       >
                         Start here
                       </motion.span>
-                      <h3 className={`text-xl font-bold text-white`}>Choose a senior plan that fits your life</h3>
+                      <h3 className={`text-xl font-bold text-white`}>Choose a comprehensive plan that fits your life</h3>
                     </div>
                     <motion.button
                       type="button"
@@ -265,7 +265,18 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   whileHover={{}}
                   style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
                 >
-                  
+                  {/* Background accent (only when expanded) */}
+                  {expanded.student && (
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
+                      <img
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        alt=""
+                        className="w-full h-full object-cover opacity-50"
+                        loading="lazy"
+                      />
+                      <div className={`bg-black/40 absolute inset-0`} />
+                    </div>
+                  )}
                   <div className="mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.student ? (
@@ -425,7 +436,18 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
-                  
+                  {/* Background accent (only when expanded) */}
+                  {expanded.family && (
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
+                      <img
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        alt=""
+                        className="w-full h-full object-cover opacity-50"
+                        loading="lazy"
+                      />
+                      <div className={`bg-black/40 absolute inset-0`} />
+                    </div>
+                  )}
                   <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.family ? (
@@ -569,7 +591,18 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   whileHover={{}}
                   style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
                 >
-                  
+                  {/* Background accent (only when expanded) */}
+                  {expanded.basic && (
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
+                      <img
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        alt=""
+                        className="w-full h-full object-cover opacity-50"
+                        loading="lazy"
+                      />
+                      <div className={`bg-black/40 absolute inset-0`} />
+                    </div>
+                  )}
                   <div className="mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.basic ? (
@@ -741,7 +774,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {/* Background accent */}
                 <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                   <img
-                    src="/assets/images/daytoday/single/daytodaysingle.jpg"
+                    src="https://placehold.co/1200x800/111/fff?text=Demo"
                     alt=""
                     className="w-full h-full object-cover opacity-50"
                     loading="lazy"
@@ -922,7 +955,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/family.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9mYW1pbHkuanBnIiwiaWF0IjoxNzU1MTg4NTQ3LCJleHAiOjMxNzA4MzY1MjU0N30.NrL6YbERXdPQJdRk8lpnXInaRMcaxjEDzV5ca-Oqt-0"
+                      src="https://placehold.co/1200x800/111/fff?text=Demo"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -992,7 +1025,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </div>
                 {expanded.family && (
                   <motion.div
-                    layoutId="family-price"
+                    layoutId={`${activeTab}-family-price`}
                     className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                     transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                   >
@@ -1084,7 +1117,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.label}
                       </div>
-                      <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
+                      <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">193</span>
                         <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/child</span>
@@ -1119,7 +1152,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9jb3VwbGUuanBnIiwiaWF0IjoxNzU1MTg3NzkwLCJleHAiOjMxNzA4MzY1MTc5MH0.7ivABZqzpyhZLCwy09j3oIPFILGzdLeSnn4xjUM1SmI"
+                      src="https://placehold.co/1200x800/111/fff?text=Demo"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1189,7 +1222,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </div>
                 {expanded.basic && (
                   <motion.div
-                    layoutId="basic-price"
+                    layoutId={`${activeTab}-basic-price`}
                     className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                     transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                   >
@@ -1261,7 +1294,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                       {tabs.find(t => t.id === activeTab)?.label}
                     </div>
-                    <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                    <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                       <span className="text-sm align-top mr-1">R</span>
                       <span className="text-2xl font-bold">674</span>
                       <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
@@ -1296,7 +1329,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9jb3VwbGUuanBnIiwiaWF0IjoxNzU1MTg3NzkwLCJleHAiOjMxNzA4MzY1MTc5MH0.7ivABZqzpyhZLCwy09j3oIPFILGzdLeSnn4xjUM1SmI"
+                      src="https://placehold.co/1200x800/111/fff?text=Demo"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1475,7 +1508,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent */}
                   <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                     <img
-                      src="/assets/images/daytoday/single/daytodaysingle.jpg"
+                      src="https://placehold.co/1200x800/111/fff?text=Demo"
                       alt=""
                       className="w-full h-full object-cover opacity-50"
                       loading="lazy"
@@ -1653,7 +1686,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9jb3VwbGUuanBnIiwiaWF0IjoxNzU1MTg3NzkwLCJleHAiOjMxNzA4MzY1MTc5MH0.7ivABZqzpyhZLCwy09j3oIPFILGzdLeSnn4xjUM1SmI"
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -1831,7 +1864,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/family.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9mYW1pbHkuanBnIiwiaWF0IjoxNzU1MTg4NTQ3LCJleHAiOjMxNzA4MzY1MjU0N30.NrL6YbERXdPQJdRk8lpnXInaRMcaxjEDzV5ca-Oqt-0"
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2009,7 +2042,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9jb3VwbGUuanBnIiwiaWF0IjoxNzU1MTg3NzkwLCJleHAiOjMxNzA4MzY1MTc5MH0.7ivABZqzpyhZLCwy09j3oIPFILGzdLeSnn4xjUM1SmI"
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2188,7 +2221,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent */}
                   <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                     <img
-                      src="/assets/images/daytoday/single/daytodaysingle.jpg"
+                      src="https://placehold.co/1200x800/111/fff?text=Demo"
                       alt=""
                       className="w-full h-full object-cover opacity-50"
                       loading="lazy"
@@ -2366,7 +2399,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/single.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9zaW5nbGUuanBnIiwiaWF0IjoxNzU1MjI4NTE4LCJleHAiOjMxNzA4MzY5MjUxOH0.diKrMXulYogdfFb_I82fGZPbm7880owgiJwjumk2d3g"
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2398,7 +2431,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Day-to-Day'.split('')?.map((ch, i) => (
+                              {'Senior-Plan'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -2436,7 +2469,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   </div>
                   {expanded.student && (
                     <motion.div
-                      layoutId="student-price"
+                      layoutId={`${activeTab}-student-price`}
                       className={`relative z-10 mb-4 inline-flex flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                       transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                     >
@@ -2508,7 +2541,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.label}
                       </div>
-                      <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId={`${activeTab}-student-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">425</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
@@ -2542,7 +2575,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/daytoday/single/daytodaysingle.jpg"
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2573,8 +2606,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               initial="hidden"
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.03 } } }}
-                            >
-                              {'Hospital'.split('').map((ch, i) => (
+                           >
+                              {'Senior-Plan'.split('').map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -2593,7 +2626,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             exit={{ opacity: 0, x: 8 }}
                             transition={{ duration: 0.18 }}
                           >
-                            Value
+                            Hospital
                           </motion.span>
                         </motion.div>
                       ) : (
@@ -2717,7 +2750,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://nbfyaovtukciethbtenb.supabase.co/storage/v1/object/sign/website-images/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV81MzFiMmY3ZS00MzhmLTRhODItYTI3NS1hNDhhZWZkZjBmZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ3ZWJzaXRlLWltYWdlcy9jb3VwbGUuanBnIiwiaWF0IjoxNzU1MTg3NzkwLCJleHAiOjMxNzA4MzY1MTc5MH0.7ivABZqzpyhZLCwy09j3oIPFILGzdLeSnn4xjUM1SmI"
+                        src="https://placehold.co/1200x800/111/fff?text=Demo"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2749,7 +2782,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Comprehensive'.split('')?.map((ch, i) => (
+                              {'Senior-Plan'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"

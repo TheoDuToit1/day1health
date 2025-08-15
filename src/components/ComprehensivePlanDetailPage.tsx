@@ -29,6 +29,14 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // Handle sidebar navigation back to main site sections
+  const handleNavigate = (section: string) => {
+    const targetSection = section === 'home' ? 'hero' : section;
+    sessionStorage.setItem('navigatingToSection', targetSection);
+    window.location.href = `/#${targetSection}`;
+    window.scrollTo(0, 0);
+  };
+
   // Initialize selected option from variant
   useEffect(() => {
     const initial = (variantParam === 'couple' || variantParam === 'couples')
@@ -97,7 +105,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
       <div className="flex min-h-screen w-full">
         <Header
           activeSection="plans"
-          onNavigate={() => {}}
+          onNavigate={handleNavigate}
           isSidebarCollapsed={isSidebarCollapsed}
           setIsSidebarCollapsed={setIsSidebarCollapsed}
           isFooterInView={false}

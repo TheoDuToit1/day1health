@@ -19,10 +19,18 @@ function AppWrapper() {
   // Get slide number from route
   const getSlideFromRoute = () => {
     const path = location.pathname;
+    // Handle explicit slide paths
     if (path === '/slide-1') return 0;
     if (path === '/slide-2') return 1;
     if (path === '/slide-3') return 2;
     if (path === '/slide-4') return 3;
+    // Handle dynamic /slide-:num pattern
+    const match = path.match(/^\/slide-(\d+)$/);
+    if (match) {
+      const n = parseInt(match[1], 10);
+      // Map slide-1..4 to indexes 0..3
+      if (n >= 1 && n <= 4) return n - 1;
+    }
     return null; // Main route
   };
 
@@ -166,13 +174,21 @@ function App() {
         <Route path="/slide-2" element={<AppWrapper />} />
         <Route path="/slide-3" element={<AppWrapper />} />
         <Route path="/slide-4" element={<AppWrapper />} />
+        {/* Dynamic slide route to catch /slide-:num */}
+        <Route path="/slide-:num" element={<AppWrapper />} />
         <Route path="/voice-assistants" element={<VoiceAssistantsPage />} />
         <Route path="/whoisyomama" element={<BlogPage />} />
         <Route path="/whoisyomama/:id" element={<BlogDetailPage />} />
         <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
         <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
         <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />
+        {/* Senior plan detail routes (pretty URLs) */}
+        <Route path="/senior/:category/:variant" element={<SeniorPlanDetailPage />} />
+        <Route path="/senior/:category" element={<SeniorPlanDetailPage />} />
+        {/* Legacy route (kept for compatibility) */}
         <Route path="/plans/senior" element={<SeniorPlanDetailPage />} />
+        {/* Catch-all: render the SPA for any other route */}
+        <Route path="*" element={<AppWrapper />} />
       </Routes>
     </ThemeProvider>
   );

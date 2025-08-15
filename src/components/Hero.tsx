@@ -789,23 +789,24 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           {/* Simple CTA Button for Slide 0 */}
                           {slide.id === 0 && (
                             <motion.div 
-                              className="mt-[78px]" /* 48px (original mt-12) + 30px */
+                              className="mt-[108px] flex justify-center" /* moved down +30px from original and centered */
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 2, duration: 0.6 }}
-                              style={{ marginTop: '78px' }}
+                              style={{ marginTop: '108px' }}
                             >
-                              <button 
+                              <HeroCTAButton
+                                className="font-manrope font-bold text-xl"
                                 onClick={() => {
-                                  const whyChoose = document.getElementById('why-choose');
-                                  if (whyChoose) {
-                                    whyChoose.scrollIntoView({ behavior: 'smooth' });
-                                  }
+                                  // Wait for typewriter to finish before scrolling
+                                  setTimeout(() => {
+                                    const whyChoose = document.getElementById('why-choose');
+                                    if (whyChoose) {
+                                      whyChoose.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                  }, 2700); // ~2.7s delay
                                 }}
-                                className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-manrope font-bold text-lg rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-                              >
-                                Why Us
-                              </button>
+                              />
                             </motion.div>
                           )}
                           

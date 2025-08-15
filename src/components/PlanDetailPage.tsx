@@ -127,6 +127,17 @@ const PlanDetailPage: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // Handle sidebar navigation (mirror BlogPage behavior)
+  const handleNavigate = (section: string) => {
+    const targetSection = section === 'home' ? 'hero' : section;
+    // Persist target for main app to pick up and scroll
+    sessionStorage.setItem('navigatingToSection', targetSection);
+    // Redirect to main site with hash
+    window.location.href = `/#${targetSection}`;
+    // Ensure top scroll during transition
+    window.scrollTo(0, 0);
+  };
+
   // Initialize selected option based on URL variant
   useEffect(() => {
     const initial = (variantParam === 'couple' || variantParam === 'couples')
@@ -194,7 +205,7 @@ const PlanDetailPage: React.FC = () => {
       <div className="flex min-h-screen w-full">
         <Header
           activeSection="plans"
-          onNavigate={() => {}}
+          onNavigate={handleNavigate}
           isSidebarCollapsed={isSidebarCollapsed}
           setIsSidebarCollapsed={setIsSidebarCollapsed}
           isFooterInView={false}
