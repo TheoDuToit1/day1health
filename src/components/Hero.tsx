@@ -11,6 +11,7 @@ import { Marquee } from '@/components/ui/3d-testimonials';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { SlideUpTypewriter } from '@/components/ui/slide-up-typewriter';
+import { useTheme } from '../contexts/ThemeContext';
 
 type IconType = React.ComponentType<LucideProps>;
 
@@ -255,6 +256,7 @@ function TestimonialCard({
 }: (typeof testimonials)[number] & { onOpenModal?: (testimonial: any) => void }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const { isDark } = useTheme();
   
   // Use provided savings or generate random amount for gamification
   const savings = propSavings || `$${Math.floor(Math.random() * 3000) + 500}`;
@@ -274,11 +276,10 @@ function TestimonialCard({
   
   return (
     <Card 
-      className={`w-64 mx-2 my-1 bg-white/70 backdrop-blur-md border-white/30 shadow-md transition-all duration-300 cursor-pointer transform ${
-        isHovered ? 'scale-105 shadow-xl bg-white/90' : ''
-      } ${
-        isClicked ? 'scale-110 shadow-2xl bg-green-50/90 border-green-200' : ''
-      }`}
+      className={`w-64 mx-2 my-1 backdrop-blur-md shadow-md transition-all duration-300 cursor-pointer transform 
+        ${isDark ? 'bg-gray-800/70 border-white/10' : 'bg-white/70 border-white/30'} 
+        ${isHovered ? (isDark ? 'scale-105 shadow-xl bg-gray-800/90' : 'scale-105 shadow-xl bg-white/90') : ''}
+        ${isClicked ? (isDark ? 'scale-110 shadow-2xl bg-emerald-900/30 border-emerald-700' : 'scale-110 shadow-2xl bg-green-50/90 border-green-200') : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
@@ -293,30 +294,26 @@ function TestimonialCard({
         
         {/* Clicked state overlay */}
         {isClicked && (
-          <div className="absolute inset-0 bg-green-100/50 rounded-lg flex items-center justify-center">
-            <div className="text-green-600 font-bold text-lg animate-pulse">
+          <div className={`absolute inset-0 rounded-lg flex items-center justify-center ${isDark ? 'bg-emerald-900/35' : 'bg-green-100/50'}` }>
+            <div className={`${isDark ? 'text-emerald-300' : 'text-green-600'} font-bold text-lg animate-pulse`}>
               ✓ Protected!
             </div>
           </div>
         )}
         
         <div className="flex items-center gap-2.5 mb-3">
-          <Avatar className={`size-9 transition-all duration-300 ${
-            isHovered ? 'ring-2 ring-green-400' : ''
-          }`}>
+          <Avatar className={`size-9 transition-all duration-300 ${isHovered ? 'ring-2 ring-green-400' : ''}`}>
             <AvatarImage src={img} alt={name} />
-            <AvatarFallback className="bg-gray-100 text-gray-600">{name[0]}</AvatarFallback>
+            <AvatarFallback className={`${isDark ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-600'}`}>{name[0]}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <figcaption className="text-sm font-medium text-gray-800 flex items-center gap-1">
-              {name} <span className="text-xs text-gray-500">{country}</span>
+            <figcaption className={`text-sm font-medium ${isDark ? 'text-gray-100' : 'text-gray-800'} flex items-center gap-1`}>
+              {name} <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{country}</span>
             </figcaption>
-            <p className="text-xs font-medium text-gray-500">{username}</p>
+            <p className={`text-xs font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{username}</p>
           </div>
         </div>
-        <blockquote className={`text-sm leading-relaxed transition-colors duration-300 ${
-          isClicked ? 'text-green-700' : 'text-gray-700'
-        }`}>
+        <blockquote className={`text-sm leading-relaxed transition-colors duration-300 ${isClicked ? (isDark ? 'text-emerald-300' : 'text-green-700') : (isDark ? 'text-gray-300' : 'text-gray-700')}` }>
           {body}
         </blockquote>
       </CardContent>
@@ -337,6 +334,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
   const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTestimonial, setModalTestimonial] = useState<any>(null);
+  const { isDark } = useTheme();
 
   // Modal handler function
   const handleOpenModal = (testimonial: any) => {
@@ -429,7 +427,13 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className={`min-h-screen flex items-center justify-center bg-gradient-to-br ${slide.bgColor} ${slide.textColor || 'text-white'}`}
+              className={`min-h-screen flex items-center justify-center bg-gradient-to-br transition-colors duration-500 ease-in-out ${
+                isDark && (slide.id === 3 || slide.id === 0)
+                  ? (slide.id === 3 ? 'from-gray-900 to-gray-800' : 'from-gray-950 to-gray-900')
+                  : slide.bgColor
+              } ${
+                isDark && (slide.id === 3 || slide.id === 0) ? 'text-white' : (slide.textColor || 'text-white')
+              }`}
             >
               <div 
                 className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 transition-all duration-500 ease-in-out ${getContentPadding()} ${getHeroPadding()}`}
@@ -484,7 +488,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.6, duration: 0.6 }}
-                              className="text-xl sm:text-2xl text-gray-800 font-manrope font-medium italic leading-relaxed border-l-4 border-green-500 pl-6 mb-4"
+                              className={`text-xl sm:text-2xl ${isDark ? 'text-gray-100' : 'text-gray-800'} font-manrope font-medium italic leading-relaxed border-l-4 ${isDark ? 'border-emerald-400' : 'border-green-500'} pl-6 mb-4`}
                             >
                               "{selectedTestimonial.testimonial}"
                             </motion.blockquote>
@@ -494,7 +498,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.7, duration: 0.6 }}
-                              className="text-lg text-green-600 font-manrope font-semibold mb-6"
+                              className={`text-lg ${isDark ? 'text-emerald-300' : 'text-green-600'} font-manrope font-semibold mb-6`}
                             >
                               — {selectedTestimonial.author}
                             </motion.p>
@@ -504,7 +508,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.8, duration: 0.6 }}
-                              className="text-lg text-gray-600 font-manrope leading-relaxed"
+                              className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'} font-manrope leading-relaxed`}
                             >
                               {selectedTestimonial.detailedDescription}
                             </motion.p>
@@ -517,7 +521,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.4, duration: 0.6 }}
-                              className="text-3xl sm:text-4xl md:text-5xl font-manrope font-bold leading-tight tracking-tight text-gray-900 mb-6"
+                              className={`text-3xl sm:text-4xl md:text-5xl font-manrope font-bold leading-tight tracking-tight ${isDark ? 'text-white' : 'text-gray-900'} mb-6`}
                             >
                               {slide.staticText}
                             </motion.h1>
@@ -529,7 +533,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               transition={{ delay: 0.6, duration: 0.6 }}
                               className="mb-8"
                             >
-                              <span className={`text-2xl sm:text-3xl md:text-4xl font-manrope font-bold transition-all duration-300 ${currentText ? 'text-green-600' : 'text-transparent'}`}>
+                              <span className={`text-2xl sm:text-3xl md:text-4xl font-manrope font-bold transition-all duration-300 ${currentText ? (isDark ? 'text-emerald-400' : 'text-green-600') : 'text-transparent'}`}>
                                 {currentText || 'placeholder'}
                               </span>
                             </motion.div>
@@ -538,7 +542,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.8, duration: 0.6 }}
-                              className="text-lg text-gray-600 font-manrope leading-relaxed mb-6"
+                              className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'} font-manrope leading-relaxed mb-6`}
                             >
                               Click on a testimonial card to hear real stories from our customers and learn more about their experience with Day1Health.
                             </motion.p>
@@ -772,7 +776,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           {slide.id === 0 ? (
                             <SlideUpTypewriter 
                               words={slide.typewriterWords.map(word => word.text)}
-                              className={`font-manrope font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl text-green-600 leading-tight`}
+                              className={`font-manrope font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl ${isDark ? 'text-emerald-400' : 'text-green-600'} leading-tight`}
                               letterDelay={80}
                               wordDisplayTime={1500}
                               wordExitTime={400}
@@ -796,7 +800,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                               style={{ marginTop: '108px' }}
                             >
                               <HeroCTAButton
-                                className="font-manrope font-bold text-xl"
+                                className={`font-manrope font-bold text-xl ${isDark ? 'text-emerald-400' : 'text-green-600'}`}
                                 onClick={() => {
                                   // Wait for typewriter to finish before scrolling
                                   setTimeout(() => {
@@ -811,6 +815,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           )}
                           
                           {/* Enhanced Heartbeat Line - Hidden for slide 2 */}
+
                           {slide.id !== 1 && (
                             <div className={`absolute -bottom-1 left-0 right-0 h-8 overflow-hidden transition-all duration-300 ${currentText ? 'opacity-100' : 'opacity-0'}`}>
                             <svg 
@@ -843,7 +848,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.6 }}
-                        className={`text-base sm:text-xl md:text-2xl text-gray-700 font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
+                        className={`text-base sm:text-xl md:text-2xl ${isDark && slide.id === 0 ? 'text-white' : 'text-gray-700'} font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
                           slide.id === 1 
                             ? 'text-center mt-8 mb-8' // Reduced margins for slide 1
                             : 'mt-12 mb-12' // Slightly reduced for other slides
@@ -917,7 +922,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
       </div>
 
       {/* Section Separator */}
-      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent"></div>
+      <div className={`absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t ${isDark ? 'from-gray-900' : 'from-white'} to-transparent`}></div>
       
       {/* Testimonial Detail Modal */}
       <AnimatePresence>
@@ -930,17 +935,17 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
             onClick={() => setIsModalOpen(false)}
           >
             <motion.div
-              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              className={`${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto`}
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="relative p-6 border-b border-gray-100">
+              <div className={`relative p-6 border-b ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                  className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
                 >
                   ✕
                 </button>
@@ -948,18 +953,18 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                 <div className="flex items-center gap-4">
                   <Avatar className="w-16 h-16">
                     <AvatarImage src={modalTestimonial.img} alt={modalTestimonial.name} />
-                    <AvatarFallback className="bg-green-100 text-green-600 text-xl font-semibold">
+                    <AvatarFallback className={`${isDark ? 'bg-emerald-900/30 text-emerald-300' : 'bg-green-100 text-green-600'} text-xl font-semibold`}>
                       {modalTestimonial.name[0]}
                     </AvatarFallback>
                   </Avatar>
                   
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{modalTestimonial.name}</h2>
-                    <p className="text-gray-600 flex items-center gap-2">
+                    <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{modalTestimonial.name}</h2>
+                    <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} flex items-center gap-2`}>
                       <span>{modalTestimonial.location}</span>
                       <span>{modalTestimonial.country}</span>
                     </p>
-                    <p className="text-sm text-green-600 font-medium mt-1">
+                    <p className={`text-sm ${isDark ? 'text-emerald-300' : 'text-green-600'} font-medium mt-1`}>
                       Member since {modalTestimonial.memberSince}
                     </p>
                   </div>
@@ -970,40 +975,40 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
               <div className="p-6 space-y-6">
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="bg-green-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-green-600">{modalTestimonial.savings}</div>
-                    <div className="text-sm text-gray-600">Annual Savings</div>
+                  <div className={`${isDark ? 'bg-emerald-900/20 border border-emerald-700/40' : 'bg-green-50'} rounded-lg p-4 text-center`}>
+                    <div className={`text-2xl font-bold ${isDark ? 'text-emerald-300' : 'text-green-600'}`}>{modalTestimonial.savings}</div>
+                    <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Annual Savings</div>
                   </div>
-                  <div className="bg-blue-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-blue-600">{modalTestimonial.age}</div>
-                    <div className="text-sm text-gray-600">Age</div>
+                  <div className={`${isDark ? 'bg-blue-900/20 border border-blue-700/40' : 'bg-blue-50'} rounded-lg p-4 text-center`}>
+                    <div className={`text-2xl font-bold ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>{modalTestimonial.age}</div>
+                    <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Age</div>
                   </div>
-                  <div className="bg-green-50 rounded-lg p-4 text-center col-span-2 md:col-span-1">
-                    <div className="text-lg font-bold text-green-600">{modalTestimonial.plan}</div>
-                    <div className="text-sm text-gray-600">Plan</div>
+                  <div className={`${isDark ? 'bg-emerald-900/20 border border-emerald-700/40' : 'bg-green-50'} rounded-lg p-4 text-center col-span-2 md:col-span-1`}>
+                    <div className={`text-lg font-bold ${isDark ? 'text-emerald-300' : 'text-green-600'}`}>{modalTestimonial.plan}</div>
+                    <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Plan</div>
                   </div>
                 </div>
                 
                 {/* Original Testimonial */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Quick Review</h3>
-                  <blockquote className="text-gray-700 italic">
+                <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} rounded-lg p-4`}>
+                  <h3 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Quick Review</h3>
+                  <blockquote className={`${isDark ? 'text-gray-300' : 'text-gray-700'} italic`}>
                     "{modalTestimonial.body}"
                   </blockquote>
                 </div>
                 
                 {/* Detailed Story */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Here's more information</h3>
-                  <p className="text-gray-700 leading-relaxed text-lg">
+                  <h3 className={`text-xl font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Here's more information</h3>
+                  <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'} leading-relaxed text-lg`}>
                     {modalTestimonial.detailedStory}
                   </p>
                 </div>
                 
                 {/* Favorite Feature */}
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Favorite Feature</h3>
-                  <p className="text-gray-700">{modalTestimonial.favoriteFeature}</p>
+                <div className={`bg-gradient-to-r ${isDark ? 'from-emerald-900/20 to-cyan-900/20 border border-white/10' : 'from-green-50 to-blue-50'} rounded-lg p-4`}>
+                  <h3 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Favorite Feature</h3>
+                  <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{modalTestimonial.favoriteFeature}</p>
                 </div>
                 
 

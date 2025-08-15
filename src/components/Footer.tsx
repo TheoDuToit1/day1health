@@ -24,11 +24,19 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold">D1</span>
+            <div className="flex items-center space-x-3 mb-6">
+              {/* Use the exact same logo style as the sidebar, but dark-theme aware */}
+              <div className="relative w-48 h-16 flex items-center justify-center">
+                <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
+                  <div className="absolute inset-0 flex items-center justify-center p-1">
+                    <img 
+                      src="/assets/images/Logo.jpg" 
+                      alt="Day 1 Health Logo" 
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
               </div>
-              <span className="text-2xl font-bold">Day1Health</span>
             </div>
             <p className={`text-xl mb-6 max-w-md ${
               isDark ? 'text-gray-300' : 'text-gray-600'

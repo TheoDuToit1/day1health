@@ -49,7 +49,7 @@ export function TestimonialCard({ handleShuffle, testimonial, position, id, auth
       }}
       transition={{ duration: 0.35 }}
       onClick={onClick}
-      className={`absolute left-0 top-0 grid h-[450px] w-[350px] select-none place-content-center space-y-6 rounded-2xl border-2 ${isSelected ? 'border-green-500 bg-green-50/90' : 'border-slate-200'} bg-white/90 p-6 shadow-xl backdrop-blur-md ${
+      className={`group absolute left-0 top-0 grid h-[450px] w-[350px] select-none place-content-center space-y-6 rounded-2xl border-2 ${isSelected ? 'border-green-500 bg-green-50/90' : 'border-slate-200'} bg-white/90 p-6 shadow-xl backdrop-blur-md ${
         isFront ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
       } hover:bg-slate-800/30 transition-colors`}
     >
@@ -58,7 +58,7 @@ export function TestimonialCard({ handleShuffle, testimonial, position, id, auth
         alt={`Avatar of ${author}`}
         className="pointer-events-none mx-auto h-32 w-32 rounded-full border-2 border-slate-200 bg-slate-100 object-cover shadow-md"
       />
-      <span className="text-center text-lg italic text-gray-800">"{testimonial}"</span>
+      <span className="text-center text-lg italic text-gray-800 transition-colors duration-300 group-hover:text-white">"{testimonial}"</span>
       <span className="text-center text-sm font-medium text-green-600">{author}</span>
     </motion.div>
   );

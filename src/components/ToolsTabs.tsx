@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shield, CreditCard, Heart, Users, Check, Phone, Mail, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
@@ -70,8 +70,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   ];
 
   const handleTabClick = (tabId: string) => {
+    // When changing tabs, ensure any open pricing cards are closed
     setActiveTab(tabId);
+    setExpanded({ intro: false, family: false, basic: false, student: false });
   };
+
+  // Defensive: if activeTab changes from anywhere, collapse any open cards
+  useEffect(() => {
+    setExpanded({ intro: false, family: false, basic: false, student: false });
+    // Keep cards revealed for quick access; adjust per-tab if needed later
+    setShowDayToDayCards(true);
+  }, [activeTab]);
 
   const renderTabContent = () => {
     switch (activeTab) {

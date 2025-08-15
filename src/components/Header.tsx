@@ -154,7 +154,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
             <div className="relative w-48 h-16 flex items-center justify-center">
-              <div className="absolute inset-0 bg-white rounded-lg border-2 border-green-500 shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
                 <div className="absolute inset-0 flex items-center justify-center p-1">
                   <img 
                     src="/assets/images/Logo.jpg" 
