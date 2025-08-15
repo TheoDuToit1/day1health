@@ -5,10 +5,9 @@ import { useTheme } from '../contexts/ThemeContext';
 
 interface FooterProps {
   id?: string;
-  isSidebarCollapsed?: boolean;
 }
 
-const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
+const Footer: React.FC<FooterProps> = ({ id }) => {
   const { isDark } = useTheme();
   
   return (
@@ -16,8 +15,6 @@ const Footer: React.FC<FooterProps> = ({ id, isSidebarCollapsed = false }) => {
       id={id} 
       className={`w-full transition-all duration-700 ease-in-out ${
         isDark ? 'bg-gray-900' : 'bg-white'
-      } ${
-        isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-64'
       }`}
       style={{
         transition: 'padding 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease'

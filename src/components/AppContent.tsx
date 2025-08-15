@@ -55,7 +55,14 @@ const AppContent: React.FC<AppContentProps> = ({
             <FAQs isSidebarCollapsed={isSidebarCollapsed} />
           </main>
           
-          <Footer id="footer" isSidebarCollapsed={isSidebarCollapsed} />
+          <div
+            className={`${isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-64'}`}
+            style={{
+              transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            }}
+          >
+            <Footer id="footer" />
+          </div>
           <SocialLinks isSidebarCollapsed={isSidebarCollapsed} activeSection={activeSection} />
         </div>
       </div>

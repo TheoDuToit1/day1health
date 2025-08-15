@@ -5,6 +5,9 @@ import BlogPage from './components/BlogPage';
 import BlogDetailPage from './components/BlogDetailPage';
 import VoiceAssistantsPage from './components/VoiceAssistantsPage';
 import PlanDetailPage from './components/PlanDetailPage';
+import HospitalPlanDetailPage from './components/HospitalPlanDetailPage';
+import ComprehensivePlanDetailPage from './components/ComprehensivePlanDetailPage';
+import SeniorPlanDetailPage from './components/SeniorPlanDetailPage';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function AppWrapper() {
@@ -167,6 +170,9 @@ function App() {
         <Route path="/whoisyomama" element={<BlogPage />} />
         <Route path="/whoisyomama/:id" element={<BlogDetailPage />} />
         <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
+        <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
+        <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />
+        <Route path="/plans/senior" element={<SeniorPlanDetailPage />} />
       </Routes>
     </ThemeProvider>
   );

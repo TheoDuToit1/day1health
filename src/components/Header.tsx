@@ -157,7 +157,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               <div className="absolute inset-0 bg-white rounded-lg border-2 border-green-500 shadow-md hover:shadow-lg transition-shadow duration-300">
                 <div className="absolute inset-0 flex items-center justify-center p-1">
                   <img 
-                    src="/assets/images/Day_1_logo-removebg-preview.png" 
+                    src="/assets/images/Logo.jpg" 
                     alt="Day 1 Health Logo" 
                     className="w-full h-full object-contain"
                   />
@@ -255,36 +255,42 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               }`} />
               {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Call</span>}
             </button>
-            <button 
-              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
-              } ${
-                isDark 
-                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
-              }`}
-              title="Live Chat"
+            {/* Corporate Hotline Marquee Banner (replaces Chat + Office) */}
+            <div
+              className={`${!isSidebarCollapsed ? 'col-span-2' : ''} relative overflow-hidden rounded-lg ${
+                isDark
+                  ? 'bg-gray-800 border border-gray-700'
+                  : 'bg-green-50 border border-green-200'
+              } p-2.5`}
+              role="region"
+              aria-label="Corporate hotline banner"
             >
-              <MessageCircle className={`${
-                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
-              }`} />
-              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Chat</span>}
-            </button>
-            <button 
-              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
-              } ${
-                isDark 
-                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
-              }`}
-              title="Find Office"
-            >
-              <MapPin className={`${
-                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
-              }`} />
-              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Office</span>}
-            </button>
+              {/* marquee track */}
+              <div
+                className={`flex items-center gap-10 whitespace-nowrap animate-marquee ${
+                  isDark ? 'text-gray-100' : 'text-green-800'
+                }`}
+                style={{
+                  // @ts-ignore custom css var for gap and speed
+                  '--gap': '2.5rem',
+                  '--duration': '18s'
+                }}
+              >
+                {/* Repeat content chunks to create seamless loop */}
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-baseline gap-3">
+                    <span className={`text-[10px] tracking-widest uppercase font-semibold ${
+                      isDark ? 'text-emerald-300' : 'text-emerald-700'
+                    }`}>
+                      Corporate hotline
+                    </span>
+                    <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                      Your 2 step link to our CEO
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -364,7 +370,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               isScrolled ? 'shadow-green-500/20' : ''
             }`}>
               <img 
-                src="/assets/images/Day_1_logo-removebg-preview.png" 
+                src="/assets/images/Logo.jpg" 
                 alt="Day 1 Health Logo" 
                 className="w-full h-full object-cover"
               />
