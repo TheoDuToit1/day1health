@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from './components/AppContent';
 import BlogPage from './components/BlogPage';
@@ -182,11 +182,7 @@ function App() {
         <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
         <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
         <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />
-        {/* Senior plan detail routes (pretty URLs) */}
-        <Route path="/senior/:category/:variant" element={<SeniorPlanDetailPage />} />
-        <Route path="/senior/:category" element={<SeniorPlanDetailPage />} />
-        {/* Legacy route (kept for compatibility) */}
-        <Route path="/plans/senior" element={<SeniorPlanDetailPage />} />
+        <Route path="/plans/senior-plan" element={<SeniorPlanDetailPage />} />
         {/* Catch-all: render the SPA for any other route */}
         <Route path="*" element={<AppWrapper />} />
       </Routes>

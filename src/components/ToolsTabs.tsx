@@ -88,7 +88,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         return (
           <LayoutGroup>
             <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_0.85fr_0.85fr_0.85fr] gap-5 items-start overflow-visible">
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-start overflow-visible">
                 {/* Introduction Column (copied from Day-to-Day) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -159,7 +159,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       >
                         Open introduction
                       </button>
-                      <span className="text-[11px] text-white/80">or jump to</span>
                       <button
                         type="button"
                         className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
@@ -218,16 +217,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className="mt-4 flex flex-wrap items-center gap-3">
                       <button
                         type="button"
-                        className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold transition-all border backdrop-blur-sm hover:scale-[1.02] ${isDark ? 'bg-emerald-500/15 border-emerald-200/20 text-white hover:bg-emerald-500/20' : 'bg-emerald-500/20 border-emerald-500/40 text-white hover:bg-emerald-500/25'}`}
-                        onClick={() => {
-                          setShowDayToDayCards(true);
-                        }}
-                      >
-                        Show pricing
-                      </button>
-                      <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>or jump to</span>
-                      <button
-                        type="button"
                         className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
                         onClick={() => {
                           setShowDayToDayCards(true);
@@ -278,20 +267,20 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.student && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/single (1).jpg"
                         alt=""
-                        className="w-full h-full object-cover opacity-50"
+                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`bg-black/40 absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </div>
                   )}
-                  <div className="mb-[17px]">
+                  <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.student ? (
                         <motion.div
                           key="hdr-expanded-student"
-                          className={`relative z-20 flex items-center justify-between`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
@@ -322,6 +311,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
+                          <motion.span
+                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            initial={{ opacity: 0, x: 8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 8 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            Value
+                          </motion.span>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -347,15 +345,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <span className="text-2xl font-bold text-emerald-400">R390</span>
                         <span className={`text-white text-sm font-normal`}>/month</span>
                       </motion.div>
-                      <motion.span
-                        className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-bold text-emerald-400`}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.18 }}
-                      >
-                        Value
-                      </motion.span>
                     </div>
                   )}
                   <motion.div key="student-content"
@@ -392,12 +381,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/plans/hospital"
+                        to="/plans/comprehensive?variant=single&category=Value"
                       />
                     </div>
                     <button
                       type="button"
-                      aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
+                      aria-label={expanded.student ? 'Collapse Value details' : 'Expand Value details'}
                       className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
@@ -416,7 +405,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div
                       className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                         isDark
-                          ? 'bg-gray-900/80 border-gray-700'
+                          ? 'bg-white/10 border-white/15'
                           : 'bg-white/30 border-white/40'
                       }`}
                     >
@@ -449,12 +438,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.family && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/family (1).jpg"
                         alt=""
-                        className="w-full h-full object-cover opacity-50"
+                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`bg-black/40 absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -462,14 +451,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       {expanded.family ? (
                         <motion.div
                           key="hdr-expanded-family"
-                          className="flex items-center justify-between"
+                          className={`relative z-20 flex flex-col gap-2`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
                           <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -8 }}
@@ -478,7 +467,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             Comprehensive
                           </motion.span>
                           <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
                             initial={{ opacity: 0, x: 8 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 8 }}
@@ -486,6 +475,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           >
                             Executive
                           </motion.span>
+                          {/* Price inside header for visibility */}
+                          <div className="flex items-baseline gap-2 mt-2">
+                            <motion.div
+                              layoutId="family-price"
+                              className={`relative z-30 inline-flex w-fit items-baseline gap-2 rounded-xl border ring-1 backdrop-blur-sm px-4 py-2 shadow-sm ${isDark ? 'bg-black/55 border-white/20 ring-white/10' : 'bg-white/90 border-gray-200 ring-black/5'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>R256</span>
+                            </motion.div>
+                            <span className={`${isDark ? 'text-gray-100' : 'text-gray-700'} text-sm font-medium`}>/month</span>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -501,17 +501,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.family && (
-                    <motion.div
-                      layoutId="family-price"
-                      className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <span className="text-2xl font-bold text-emerald-400">R560</span>
-                      <span className={`text-white text-sm font-normal`}>/month</span>
-                    </motion.div>
-                  )}
-                  <motion.div key="family-content"
+                  
+                  <motion.div key="family-content" className="relative z-10 mt-4"
                     initial={false}
                     animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
                     transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
@@ -530,7 +521,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                   </motion.div>
                   {/* Children stepper removed for Executive card */}
-                  <div className={(expanded.family ? 'mt-[-3px]' : 'mt-8')}>
+                  <div className={(expanded.family ? 'mt-[-3px]' : 'mt-8') + ' relative z-10'}>
                     <div className="relative">
                       <AnimatedPaymentButton 
                         text="Choose Plan"
@@ -545,12 +536,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/hospital"
+                        to="/plans/comprehensive?variant=family&category=Executive"
                       />
                     </div>
                     <button
                       type="button"
-                      aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
+                      aria-label={expanded.family ? 'Collapse Executive details' : 'Expand Executive details'}
                       className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
@@ -567,10 +558,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.family && (
                     <div
-                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${
+                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                         isDark
-                          ? 'bg-gray-900/80 border-gray-700'
-                          : 'bg-white/90 border-gray-200'
+                          ? 'bg-white/10 border-white/15'
+                          : 'bg-white/30 border-white/40'
                       }`}
                     >
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
@@ -604,20 +595,20 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.basic && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/couple (1).jpg"
                         alt=""
-                        className="w-full h-full object-cover opacity-50"
+                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`bg-black/40 absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </div>
                   )}
-                  <div className="mb-[17px]">
+                  <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.basic ? (
                         <motion.div
                           key="hdr-expanded-couple"
-                          className={`relative z-20 flex items-center justify-between`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
@@ -657,6 +648,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           >
                             Platinum
                           </motion.span>
+                          {/* Price inside header for visibility */}
+                          <div className="flex items-baseline gap-2 mt-2">
+                            <motion.div
+                              layoutId="basic-price"
+                              className={`relative z-30 inline-flex w-fit items-baseline gap-2 rounded-xl border ring-1 backdrop-blur-sm px-4 py-2 shadow-sm ${isDark ? 'bg-black/55 border-white/20 ring-white/10' : 'bg-white/90 border-gray-200 ring-black/5'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className={`${isDark ? 'text-white' : 'text-gray-900'} text-2xl font-bold`}>R1152</span>
+                            </motion.div>
+                            <span className={`${isDark ? 'text-gray-100' : 'text-gray-700'} text-sm font-medium`}>/month</span>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -672,17 +674,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.basic && (
-                    <motion.div
-                      layoutId="basic-price"
-                      className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <span className="text-2xl font-bold text-emerald-400">R640</span>
-                      <span className={`text-white text-sm font-normal`}>/month</span>
-                    </motion.div>
-                  )}
-                  <motion.div key="couple-content"
+                  
+                  <motion.div key="couple-content" className="relative z-10 mt-4"
                     initial={false}
                     animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
                     transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
@@ -716,12 +709,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/hospital"
+                        to="/plans/comprehensive?variant=couple&category=Platinum"
                       />
                     </div>
                     <button
                       type="button"
-                      aria-label={expanded.basic ? 'Collapse Couples Care details' : 'Expand Couples Care details'}
+                      aria-label={expanded.basic ? 'Collapse Platinum details' : 'Expand Platinum details'}
                       className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
@@ -740,7 +733,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div
                       className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                         isDark
-                          ? 'bg-gray-900/80 border-gray-700'
+                          ? 'bg-white/10 border-white/15'
                           : 'bg-white/30 border-white/40'
                       }`}
                     >
@@ -764,10 +757,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         return (
           <LayoutGroup>
             <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_0.85fr_0.85fr_0.85fr] gap-5 items-start overflow-visible">
+              <motion.div className="grid md:grid-cols-4 gap-5 items-start overflow-visible">
               {/* Introduction Column */}
               <motion.div 
-                className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
+                className={`min-w-0 relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
                   isDark 
                     ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
                     : 'bg-white border-emerald-200 hover:border-emerald-400'
@@ -835,7 +828,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     >
                       Open introduction
                     </button>
-                    <span className="text-[11px] text-white/80">or jump to</span>
                     <button
                       type="button"
                       className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
@@ -892,16 +884,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   </div>
                   {/* Intro actions: reveal and jump */}
                   <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <button
-                      type="button"
-                      className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold transition-all border backdrop-blur-sm hover:scale-[1.02] ${isDark ? 'bg-emerald-500/15 border-emerald-200/20 text-white hover:bg-emerald-500/20' : 'bg-emerald-500/20 border-emerald-500/40 text-white hover:bg-emerald-500/25'}`}
-                      onClick={() => {
-                        setShowDayToDayCards(true);
-                      }}
-                    >
-                      Show pricing
-                    </button>
-                    <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>or jump to</span>
+                    
                     <button
                       type="button"
                       className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
@@ -941,7 +924,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Family Care */}
               <motion.div 
-                className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                className={`min-w-0 order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
@@ -964,7 +947,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="https://placehold.co/1200x800/111/fff?text=Demo"
+                      src="/assets/images/family (1).jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -977,14 +960,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     {expanded.family ? (
                       <motion.div
                         key="hdr-expanded-family"
-                        className="flex items-center justify-between"
+                        className={`relative z-20 flex flex-col gap-2`}
                         initial={{ opacity: 0, y: -6 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
                       >
                         <motion.span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                          className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                           initial={{ opacity: 0, x: -8 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -8 }}
@@ -1008,15 +991,33 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             ))}
                           </motion.span>
                         </motion.span>
-                        <motion.span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                          initial={{ opacity: 0, x: 8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 8 }}
-                          transition={{ duration: 0.18 }}
-                        >
-                          Family
-                        </motion.span>
+                        <div className="flex items-center gap-2">
+                          <motion.span
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -8 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            Family
+                          </motion.span>
+                          <motion.div
+                            layoutId={`${activeTab}-family-price`}
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE * familyChildren}`}</span>
+                            {familyChildren === 1 ? (
+                              <span className={`text-white text-[11px] font-normal leading-4 text-left`}>
+                                <span>/mo</span>
+                                <br />
+                                <span>per child</span>
+                              </span>
+                            ) : (
+                              <span className={`text-white text-sm font-normal`}>{`/mo for ${familyChildren} children`}</span>
+                            )}
+                          </motion.div>
+                        </div>
                       </motion.div>
                     ) : (
                       <motion.h3
@@ -1032,16 +1033,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     )}
                   </AnimatePresence>
                 </div>
-                {expanded.family && (
-                  <motion.div
-                    layoutId={`${activeTab}-family-price`}
-                    className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                    transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                  >
-                    <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE * familyChildren}`}</span>
-                    <span className={`text-white text-sm font-normal`}>{`/mo for ${familyChildren} ${familyChildren === 1 ? 'child' : 'children'}`}</span>
-                  </motion.div>
-                )}
+                {expanded.family && null}
                 <motion.div key="family-content"
                   initial={false}
                   animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
@@ -1078,7 +1070,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                   </div>
                 </motion.div>
-                <div className={(expanded.family ? 'mt-[-10px]' : 'mt-8')}>
+                <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                   <div className="relative">
                     <AnimatedPaymentButton 
                       text="Choose Plan"
@@ -1137,7 +1129,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Couple Plan */}
               <motion.div 
-                className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                className={`min-w-0 order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
@@ -1161,7 +1153,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="https://placehold.co/1200x800/111/fff?text=Demo"
+                      src="/assets/images/couple (1).jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1174,14 +1166,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     {expanded.basic ? (
                       <motion.div
                         key="hdr-expanded-couple"
-                        className={`relative z-20 flex items-center justify-between`}
+                        className={`relative z-20 flex flex-col gap-2`}
                         initial={{ opacity: 0, y: -6 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
                       >
                         <motion.span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                          className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                           initial={{ opacity: 0, x: -8 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -8 }}
@@ -1205,15 +1197,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             ))}
                           </motion.span>
                         </motion.span>
-                        <motion.span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                          initial={{ opacity: 0, x: 8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 8 }}
-                          transition={{ duration: 0.18 }}
-                        >
-                          Couples
-                        </motion.span>
+                        <div className="flex items-center gap-1">
+                          <motion.span
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -8 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            Couples
+                          </motion.span>
+                          <motion.div
+                            layoutId={`${activeTab}-basic-price`}
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R674</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        </div>
                       </motion.div>
                     ) : (
                       <motion.h3
@@ -1229,16 +1231,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     )}
                   </AnimatePresence>
                 </div>
-                {expanded.basic && (
-                  <motion.div
-                    layoutId={`${activeTab}-basic-price`}
-                    className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                    transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                  >
-                    <span className="text-2xl font-bold text-emerald-400">R674</span>
-                    <span className={`text-white text-sm font-normal`}>/month</span>
-                  </motion.div>
-                )}
+                {expanded.basic && null}
                 <motion.div key="couple-content"
                   initial={false}
                   animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
@@ -1338,7 +1331,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="https://placehold.co/1200x800/111/fff?text=Demo"
+                      src="/assets/images/single (1).jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1351,46 +1344,58 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     {expanded.student ? (
                       <motion.div
                         key="hdr-expanded-student"
-                        className={`relative z-20 flex items-center justify-between`}
+                        className={`relative z-20 flex flex-col items-start gap-1`}
                         initial={{ opacity: 0, y: -6 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
                       >
-                        <motion.span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -8 }}
-                          transition={{ duration: 0.18 }}
-                        >
+                        <div className="flex flex-col items-start gap-2">
                           <motion.span
-                            className="inline-flex"
-                            initial="hidden"
-                            animate="show"
-                            variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -8 }}
+                            transition={{ duration: 0.18 }}
                           >
-                            {'Day-to-Day'.split('')?.map((ch, i) => (
-                              <motion.span
-                                key={i}
-                                className="inline-block"
-                                variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                {ch === ' ' ? '\u00A0' : ch}
-                              </motion.span>
-                            ))}
+                            <motion.span
+                              className="inline-flex"
+                              initial="hidden"
+                              animate="show"
+                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                            >
+                              {'Day-to-Day'.split('')?.map((ch, i) => (
+                                <motion.span
+                                  key={i}
+                                  className="inline-block"
+                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  {ch === ' ' ? '\u00A0' : ch}
+                                </motion.span>
+                              ))}
+                            </motion.span>
                           </motion.span>
-                        </motion.span>
-                        <motion.span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                          initial={{ opacity: 0, x: 8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 8 }}
-                          transition={{ duration: 0.18 }}
-                        >
-                          Single
-                        </motion.span>
+                          <div className="flex items-center gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -4 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -4 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Single
+                            </motion.span>
+                            <motion.div
+                              layoutId="student-price"
+                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R385</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                          </div>
+                        </div>
                       </motion.div>
                     ) : (
                       <motion.h3
@@ -1406,16 +1411,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     )}
                   </AnimatePresence>
                 </div>
-                {expanded.student && (
-                  <motion.div
-                    layoutId="student-price"
-                    className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                    transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                  >
-                    <span className="text-2xl font-bold text-emerald-400">R385</span>
-                    <span className={`text-white text-sm font-normal`}>/month</span>
-                  </motion.div>
-                )}
+                {/* Price shown in header for Single card when expanded */}
                 <motion.div key="student-content"
                   initial={false}
                   animate={{ height: expanded.student ? 'auto' : 0, opacity: expanded.student ? 1 : 0 }}
@@ -1559,7 +1555,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </svg>
                     </motion.button>
                   </div>
-                  {/* Collapsed teaser actions */}
+                  {/* Collapsed teaser action */}
                   {!expanded.intro && (
                     <div className="relative z-10 mt-3 flex flex-wrap items-center gap-2 text-white">
                       <button
@@ -1568,28 +1564,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         onClick={(e) => { e.stopPropagation(); toggleIntro(); setShowDayToDayCards(true); }}
                       >
                         Open introduction
-                      </button>
-                      <span className="text-[11px] text-white/80">or jump to</span>
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
-                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: true, family: false, basic: false })); }}
-                      >
-                        Value
-                      </button>
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
-                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
-                      >
-                        Platinum
-                      </button>
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
-                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: true, basic: false })); }}
-                      >
-                        Executive
                       </button>
                     </div>
                   )}
@@ -1626,16 +1600,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                     {/* Intro actions: reveal and jump */}
                     <div className="mt-4 flex flex-wrap items-center gap-3">
-                      <button
-                        type="button"
-                        className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold transition-all border backdrop-blur-sm hover:scale-[1.02] ${isDark ? 'bg-emerald-500/15 border-emerald-200/20 text-white hover:bg-emerald-500/20' : 'bg-emerald-500/20 border-emerald-500/40 text-white hover:bg-emerald-500/25'}`}
-                        onClick={() => {
-                          setShowDayToDayCards(true);
-                        }}
-                      >
-                        Show pricing
-                      </button>
-                      <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>or jump to</span>
+                      
                       <button
                         type="button"
                         className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
@@ -1695,7 +1660,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/single (1).jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -1703,12 +1668,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </motion.div>
                   )}
-                  <div className="mb-[17px]">
+                  <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.student ? (
                         <motion.div
                           key="hdr-expanded-student"
-                          className={`relative z-20 flex items-center justify-between`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
@@ -1808,7 +1773,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/plans/hospital"
+                        to="/plans/hospital?tier=Value&variant=single"
                       />
                     </div>
                     <button
@@ -1873,7 +1838,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/family (1).jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -1886,12 +1851,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       {expanded.family ? (
                         <motion.div
                           key="hdr-expanded-family"
-                          className="flex items-center justify-between"
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
+                          {/* Main category badge */}
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: -8 }}
@@ -1899,24 +1865,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
-                            <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.03 } } }}
-                            >
-                              {'Hospital'.split('').map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
-                            </motion.span>
+                            Hospital
                           </motion.span>
+                          {/* Tier badge */}
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: 8 }}
@@ -1926,6 +1877,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           >
                             Executive
                           </motion.span>
+                          {/* Price inside header for visibility (Hospital Family/Executive) */}
+                          <motion.div
+                            layoutId="family-price"
+                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 bg-emerald-500/10 border-emerald-500/20 mt-2`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R256</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -1941,16 +1901,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.family && (
-                    <motion.div
-                      layoutId="family-price"
-                      className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <span className="text-2xl font-bold text-emerald-400">R256</span>
-                      <span className={`text-white text-sm font-normal`}>/month</span>
-                    </motion.div>
-                  )}
                   <motion.div key="family-content"
                     initial={false}
                     animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
@@ -1985,7 +1935,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to={`/plans/day-to-day?variant=family&children=${familyChildren}`}
+                        to="/plans/hospital?tier=Executive&variant=family"
                       />
                     </div>
                     <button
@@ -2007,10 +1957,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.family && (
                     <div
-                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${
+                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                         isDark
-                          ? 'bg-gray-900/80 border-gray-700'
-                          : 'bg-white/90 border-gray-200'
+                          ? 'bg-white/10 border-white/15'
+                          : 'bg-white/30 border-white/40'
                       }`}
                     >
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
@@ -2018,8 +1968,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </div>
                         <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
-                          <span className="text-2xl font-bold">580</span>
-                          <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                          <span className="text-2xl font-bold">256</span>
+                          <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                         </motion.div>
                     </div>
                   )}
@@ -2051,7 +2001,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/couple (1).jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2059,17 +2009,18 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </motion.div>
                   )}
-                  <div className="mb-[17px]">
+                  <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.basic ? (
                         <motion.div
                           key="hdr-expanded-couple"
-                          className={`relative z-20 flex items-center justify-between`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
+                          {/* Main category badge */}
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: -8 }}
@@ -2077,24 +2028,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
-                            <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                            >
-                              {'Hospital'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
-                            </motion.span>
+                            Hospital
                           </motion.span>
+                          {/* Tier badge */}
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: 8 }}
@@ -2104,6 +2040,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           >
                             Platinum
                           </motion.span>
+                          {/* Price inside header for visibility (Hospital Couple/Platinum) */}
+                          <motion.div
+                            layoutId="basic-price"
+                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 bg-emerald-500/10 border-emerald-500/20 mt-2`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R1152</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2119,16 +2064,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.basic && (
-                    <motion.div
-                      layoutId="basic-price"
-                      className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <span className="text-2xl font-bold text-emerald-400">R1152</span>
-                      <span className={`text-white text-sm font-normal`}>/month</span>
-                    </motion.div>
-                  )}
                   <motion.div key="couple-content"
                     initial={false}
                     animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
@@ -2163,7 +2098,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/day-to-day?variant=couple"
+                        to="/plans/hospital?tier=Platinum&variant=couple"
                       />
                     </div>
                     <button
@@ -2196,7 +2131,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">875</span>
+                        <span className="text-2xl font-bold">1152</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                       </motion.div>
                     </div>
@@ -2212,7 +2147,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
           <LayoutGroup>
             <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
               <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_0.85fr_0.85fr_0.85fr] gap-5 items-start overflow-visible">
-                {/* Introduction Column (same as Comprehensive/Hospital) */}
+                {/* Introduction Column (Senior-Plan intro) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
                     isDark 
@@ -2272,7 +2207,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </svg>
                     </motion.button>
                   </div>
-                  {/* Collapsed teaser actions */}
+                  {/* Collapsed teaser action (no senior tiers) */}
                   {!expanded.intro && (
                     <div className="relative z-10 mt-3 flex flex-wrap items-center gap-2 text-white">
                       <button
@@ -2281,28 +2216,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         onClick={(e) => { e.stopPropagation(); toggleIntro(); setShowDayToDayCards(true); }}
                       >
                         Open introduction
-                      </button>
-                      <span className="text-[11px] text-white/80">or jump to</span>
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
-                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: true, family: false, basic: false })); }}
-                      >
-                        Value
-                      </button>
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
-                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
-                      >
-                        Platinum
-                      </button>
-                      <button
-                        type="button"
-                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
-                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: true, basic: false })); }}
-                      >
-                        Executive
                       </button>
                     </div>
                   )}
@@ -2337,52 +2250,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className="mt-5 text-sm text-gray-200">
                       Open the Introduction to reveal the pricing options below. Cards will slide in one by one.
                     </div>
-                    {/* Intro actions: reveal and jump */}
-                    <div className="mt-4 flex flex-wrap items-center gap-3">
-                      <button
-                        type="button"
-                        className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold transition-all border backdrop-blur-sm hover:scale-[1.02] ${isDark ? 'bg-emerald-500/15 border-emerald-200/20 text-white hover:bg-emerald-500/20' : 'bg-emerald-500/20 border-emerald-500/40 text-white hover:bg-emerald-500/25'}`}
-                        onClick={() => {
-                          setShowDayToDayCards(true);
-                        }}
-                      >
-                        Show pricing
-                      </button>
-                      <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>or jump to</span>
-                      <button
-                        type="button"
-                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
-                        onClick={() => {
-                          setShowDayToDayCards(true);
-                          setExpanded(prev => ({ ...prev, student: true, family: false, basic: false }));
-                        }}
-                      >
-                        Value
-                      </button>
-                      <button
-                        type="button"
-                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
-                        onClick={() => {
-                          setShowDayToDayCards(true);
-                          setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
-                        }}
-                      >
-                        Platinum
-                      </button>
-                      <button
-                        type="button"
-                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
-                        onClick={() => {
-                          setShowDayToDayCards(true);
-                          setExpanded(prev => ({ ...prev, student: false, family: true, basic: false }));
-                        }}
-                      >
-                        Executive
-                      </button>
+                    {/* Senior-Plan has no Value/Platinum/Executive tiers */}
+                    <div className="mt-4 text-sm text-gray-200">
+                      Senior-Plan offers three categories: Day-to-Day, Hospital, Comprehensive. Each supports Single or Couple.
                     </div>
                   </motion.div>
                 </motion.div>
-                {/* Student Plan (Single) */}
+                {/* Day-to-Day (Single/Couple) */}
                 <motion.div 
                   className={`order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
@@ -2408,7 +2282,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/single (1).jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2416,12 +2290,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </motion.div>
                   )}
-                  <div className="mb-[17px]">
+                  <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.student ? (
                         <motion.div
                           key="hdr-expanded-student"
-                          className={`relative z-20 flex items-center justify-between`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
@@ -2454,9 +2328,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
+                            initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
+                            exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
                             Day-to-Day
@@ -2479,11 +2353,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.student && (
                     <motion.div
                       layoutId={`${activeTab}-student-price`}
-                      className={`relative z-10 mb-4 inline-flex flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                      className={`relative z-10 mb-4 inline-flex w-full flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                       transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                     >
-                      <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R425</span> / month</span>
-                      <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R850</span> / month</span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                        <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R425</span> / month</span>
+                        <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R850</span> / month</span>
+                      </div>
                     </motion.div>
                   )}
                   <motion.div key="student-content"
@@ -2495,12 +2371,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     className="relative z-10"
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Doctor visits (acute & chronic)</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Medication (acute & chronic)</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests & x-rays</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry & optometry</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
+                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits (acute & chronic)</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Medication (acute & chronic)</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Blood tests & x-rays</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Dentistry & optometry</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -2519,7 +2395,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/senior/day-to-day/single?category=Day-to-Day&variant=single"
+                        to="/plans/senior-plan?category=Day-to-Day&variant=single"
                       />
                     </div>
                     <button
@@ -2559,7 +2435,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   )}
                 </motion.div>
 
-                {/* Family Care */}
+                {/* Hospital (Single/Couple) */}
                 <motion.div 
                   className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
@@ -2597,7 +2473,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       {expanded.family ? (
                         <motion.div
                           key="hdr-expanded-family"
-                          className="flex items-center justify-between"
+                          className="relative z-20 flex flex-col items-start gap-1"
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
@@ -2630,9 +2506,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
+                            initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
+                            exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
                             Hospital
@@ -2655,11 +2531,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.family && (
                     <motion.div
                       layoutId="family-price"
-                      className={`relative z-10 mb-4 inline-flex flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                      className={`relative z-10 mb-4 inline-flex w-full flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                       transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                     >
-                      <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R640</span> / month</span>
-                      <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R1280</span> / month</span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                        <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R640</span> / month</span>
+                        <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R1280</span> / month</span>
+                      </div>
                     </motion.div>
                   )}
                   <motion.div key="family-content"
@@ -2670,11 +2548,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     aria-hidden={!expanded.family}
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance services</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
+                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Private Hospital Benefits</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Illness & accident cover</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Ambulance services</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -2693,7 +2571,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/senior/hospital/single?category=Hospital&variant=single"
+                        to="/plans/senior-plan?category=Hospital&variant=single"
                       />
                     </div>
                     <button
@@ -2733,7 +2611,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   )}
                 </motion.div>
 
-                {/* Couple Plan */}
+                {/* Comprehensive (Single/Couple) */}
                 <motion.div 
                   className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
@@ -2767,12 +2645,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
                     </motion.div>
                   )}
-                  <div className="mb-[17px]">
+                  <div className="relative z-10 mb-[17px]">
                     <AnimatePresence mode="wait" initial={false}>
                       {expanded.basic ? (
                         <motion.div
                           key="hdr-expanded-couple"
-                          className={`relative z-20 flex items-center justify-between`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
@@ -2805,9 +2683,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                           <motion.span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
+                            initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
+                            exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
                             Comprehensive
@@ -2830,11 +2708,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.basic && (
                     <motion.div
                       layoutId="basic-price"
-                      className={`relative z-10 mb-4 inline-flex flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                      className={`relative z-10 mb-4 inline-flex w-full flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                       transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                     >
-                      <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R875</span> / month</span>
-                      <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R1750</span> / month</span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                        <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R875</span> / month</span>
+                        <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R1750</span> / month</span>
+                      </div>
                     </motion.div>
                   )}
                   <motion.div key="couple-content"
@@ -2845,13 +2725,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     aria-hidden={!expanded.basic}
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Doctor visits (acute & chronic)</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Medication (acute & chronic)</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests & x-rays</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry & optometry</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance & funeral benefits</span></li>
+                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits (acute & chronic)</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Medication (acute & chronic)</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Blood tests & x-rays</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Dentistry & optometry</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Illness & accident cover</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Ambulance & funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -2870,7 +2750,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/senior/comprehensive/single?category=Comprehensive&variant=single"
+                        to="/plans/senior-plan?category=Comprehensive&variant=couple"
                       />
                     </div>
                     <button
@@ -2974,7 +2854,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   };
 
   return (
-    <div className={`relative z-30 -mt-20 transition-all duration-700 ease-in-out ${
+    <div className={`relative z-30 -mt-[150px] transition-all duration-700 ease-in-out ${
       isDark ? 'bg-gray-900' : 'bg-white'
     }`}>
       <div className={`w-full mx-auto px-4 ${

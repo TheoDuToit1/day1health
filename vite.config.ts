@@ -9,6 +9,8 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    // Ensure only one React instance is bundled to prevent "Invalid hook call"
+    dedupe: ['react', 'react-dom'],
   },
   optimizeDeps: {
     exclude: ['lucide-react'],

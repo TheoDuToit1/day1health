@@ -87,7 +87,6 @@ Day1 Health complies with the principles of open enrollment, community rating an
 const PlanDetailPage: React.FC = () => {
   const { isDark } = useTheme();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [quantity, setQuantity] = useState(1);
   const [option, setOption] = useState('');
   const [childCount, setChildCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
@@ -156,15 +155,7 @@ const PlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  // Initialize quantity from query param for non-family variants
-  useEffect(() => {
-    if (variantParam !== 'family') {
-      const raw = searchParams.get('qty');
-      const parsed = raw ? parseInt(raw, 10) : NaN;
-      const clamped = Math.max(1, isNaN(parsed) ? 1 : parsed);
-      setQuantity(clamped);
-    }
-  }, [variantParam, searchParams]);
+  // Quantity is fixed at 1 for non-family variants; no qty URL handling
 
   // Pricing rules
   const SINGLE_PRICE = 385;
@@ -173,23 +164,22 @@ const PlanDetailPage: React.FC = () => {
   const currentPrice = ((): number => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
     if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
-    if (v === 'couple') return COUPLE_PRICE * quantity;
-    return SINGLE_PRICE * quantity;
+    if (v === 'couple') return COUPLE_PRICE;
+    return SINGLE_PRICE;
   })();
 
   // Helper to keep URL in sync with selections
-  const updateUrl = (nextVariant: string, nextChildren?: number, nextQty?: number) => {
+  const updateUrl = (nextVariant: string, nextChildren?: number) => {
     const params = new URLSearchParams(searchParams);
     params.set('variant', nextVariant);
     if (nextVariant === 'family') {
       const c = Math.max(1, Math.min(4, nextChildren ?? childCount));
       params.set('children', String(c));
-      params.delete('qty');
     } else {
       params.delete('children');
-      const q = Math.max(1, nextQty ?? quantity);
-      params.set('qty', String(q));
     }
+    // Always remove qty for Single/Couple to enforce a fixed quantity of 1
+    params.delete('qty');
     setSearchParams(params);
   };
 
@@ -258,7 +248,6 @@ const PlanDetailPage: React.FC = () => {
                     </div>
                     <div>
                       <h1 className={`text-2xl md:text-3xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
-                      <p className={`mt-1 text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Comprehensive everyday care with predictable costs</p>
                     </div>
                   </div>
                   {/* Right side price block removed per request; title now reflects selected plan name */}
@@ -965,14 +954,13 @@ const PlanDetailPage: React.FC = () => {
                           <select
                             value={option}
                             onChange={(e) => {
-                              const v = e.target.value;
-                              setOption(v);
-                              updateUrl(
-                                v,
-                                v === 'family' ? childCount : undefined,
-                                v !== 'family' ? quantity : undefined
-                              );
-                            }}
+                            const v = e.target.value;
+                            setOption(v);
+                            updateUrl(
+                              v,
+                              v === 'family' ? childCount : undefined
+                            );
+                          }}
                             className={`mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none ${isDark ? 'bg-gray-900/70 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
                           >
                             <option value="">Choose an option</option>
@@ -1000,23 +988,7 @@ const PlanDetailPage: React.FC = () => {
                             />
                             <div className={`mt-1 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Max 4 children</div>
                           </div>
-                        ) : (
-                          <div>
-                            <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Quantity</label>
-                            <input
-                              type="number"
-                              min={1}
-                              value={quantity}
-                              onChange={(e) => {
-                                const val = parseInt(e.target.value || '1', 10);
-                                const q = Math.max(1, isNaN(val) ? 1 : val);
-                                setQuantity(q);
-                                updateUrl(option && option !== 'family' ? option : (variantParam === 'couples' ? 'couple' : variantParam), undefined, q);
-                              }}
-                              className={`mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none ${isDark ? 'bg-gray-900/70 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
-                            />
-                          </div>
-                        )}
+                        ) : null}
                       </div>
 
                       <motion.button
