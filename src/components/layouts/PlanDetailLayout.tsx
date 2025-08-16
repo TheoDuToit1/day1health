@@ -84,6 +84,10 @@ const PlanDetailLayout: React.FC<PlanDetailLayoutProps> = ({
                     <li>
                       <Link
                         to="/"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          (onNavigate ?? handleNavigate)('plans');
+                        }}
                         className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm px-0.5`}
                       >
                         Home

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
+import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
@@ -82,8 +83,10 @@ const SeniorPlanDetailPage: React.FC = () => {
   const rawVariant = (searchParams.get('variant') || 'single').toLowerCase();
   const variantParam = rawVariant === 'family' ? 'single' : rawVariant; // guard
   const variantDisplay = (variantParam === 'couple' || variantParam === 'couples') ? 'couple' : 'single';
-  // Category segment; default to 'value' for Senior if not provided
-  const categoryDisplay = (searchParams.get('category') || 'value').toLowerCase();
+  // Category segment (Senior categories): day-to-day, comprehensive, hospital. Default to 'day-to-day'.
+  const rawCategory = (searchParams.get('category') || 'day-to-day').toLowerCase();
+  const allowedSeniorCategories = new Set(['day-to-day', 'comprehensive', 'hospital']);
+  const categoryDisplay = allowedSeniorCategories.has(rawCategory) ? rawCategory : 'day-to-day';
   const pageTitle = ['Senior-Plan', categoryDisplay, variantDisplay].filter(Boolean).join(' / ');
 
   type CardKey = 'single' | 'couple';
@@ -352,7 +355,7 @@ const SeniorPlanDetailPage: React.FC = () => {
 
                   {/* Related products */}
                   <div className="mt-8">
-                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Related products</h2>
+                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Other related products</h2>
                     <div className="grid md:grid-cols-2 gap-6 items-start">
                       {/* Single */}
                       <motion.div 
@@ -702,14 +705,15 @@ const SeniorPlanDetailPage: React.FC = () => {
                         
                       </div>
 
-                      <motion.button
-                        className={`mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isDark ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
-                        onClick={() => { /* TODO: hook into cart */ }}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <ShoppingCart className="h-4 w-4" /> Add to Cart
-                      </motion.button>
+                      <div className="mt-5">
+                        <AnimatedContactButton
+                          type="button"
+                          className="w-full"
+                          labelDefault="Sign Up Now"
+                          labelSent="Sent"
+                          onClick={() => { /* TODO: hook into sign up flow */ }}
+                        />
+                      </div>
 
                       <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                         <div>SKU: N/A</div>

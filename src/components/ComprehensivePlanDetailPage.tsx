@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
+import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
@@ -387,7 +388,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
 
                   {/* Related products */}
                   <div className="mt-8">
-                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Related products</h2>
+                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Other related products</h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                       {/* Single */}
                       <motion.div 
@@ -523,7 +524,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             showArrow={false}
                             expanded={expanded.single}
                             onToggleExpand={() => toggleExpanded('single')}
-                            to="/plans/comprehensive"
+                            to={`/plans/comprehensive?tier=${tierParam}&variant=single`}
                           />
                           <button
                             type="button"
@@ -691,7 +692,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             showArrow={false}
                             expanded={expanded.couple}
                             onToggleExpand={() => toggleExpanded('couple')}
-                            to="/plans/comprehensive"
+                            to={`/plans/comprehensive?tier=${tierParam}&variant=couple`}
                           />
                           <button
                             type="button"
@@ -860,7 +861,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             showArrow={false}
                             expanded={expanded.family}
                             onToggleExpand={() => toggleExpanded('family')}
-                            to="/plans/comprehensive"
+                            to={`/plans/comprehensive?tier=${tierParam}&variant=family&children=${childCount}`}
                           />
                           <button
                             type="button"
@@ -963,14 +964,15 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                         ) : null}
                       </div>
 
-                      <motion.button
-                        className={`mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isDark ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
-                        onClick={() => { /* TODO: hook into cart */ }}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <ShoppingCart className="h-4 w-4" /> Add to Cart
-                      </motion.button>
+                      <div className="mt-5">
+                        <AnimatedContactButton
+                          type="button"
+                          className="w-full"
+                          labelDefault="Sign Up Now"
+                          labelSent="Sent"
+                          onClick={() => { /* TODO: hook into sign up flow */ }}
+                        />
+                      </div>
 
                       <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                         <div>SKU: N/A</div>

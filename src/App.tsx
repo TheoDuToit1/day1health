@@ -68,7 +68,9 @@ function AppWrapper() {
         const element = document.getElementById(hash);
         if (element) {
           setTimeout(() => {
-            element.scrollIntoView({ behavior: 'smooth' });
+            const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+            const offset = 60; // keep header clearance
+            window.scrollTo({ top: elementTop - offset, behavior: 'smooth' });
           }, 100);
           return;
         }
@@ -83,7 +85,9 @@ function AppWrapper() {
         setTimeout(() => {
           const element = document.getElementById(storedSection);
           if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+            const offset = 60; // keep header clearance
+            window.scrollTo({ top: elementTop - offset, behavior: 'smooth' });
           }
         }, 300);
       }
@@ -103,7 +107,7 @@ function AppWrapper() {
   // Track active section and footer visibility based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'how-it-works', 'feedback', 'why-choose', 'faqs', 'contact'];
+      const sections = ['hero', 'plans', 'how-it-works', 'feedback', 'why-choose', 'faqs', 'contact'];
       const scrollPosition = window.scrollY + 100; // Reduced offset for better accuracy
       
       // Check if footer is in view

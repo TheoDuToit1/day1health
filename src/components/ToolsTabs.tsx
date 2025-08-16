@@ -2854,7 +2854,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   };
 
   return (
-    <div className={`relative z-30 -mt-[150px] transition-all duration-700 ease-in-out ${
+    <div id="plans" className={`relative z-30 -mt-[150px] transition-all duration-700 ease-in-out ${
       isDark ? 'bg-gray-900' : 'bg-white'
     }`}>
       <div className={`w-full mx-auto px-4 ${

@@ -5,12 +5,16 @@ interface AnimatedContactButtonProps {
   onClick?: () => void;
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  labelDefault?: string; // e.g., "Continue To Sign Up"
+  labelSent?: string;    // e.g., "Sent"
 }
 
 export const AnimatedContactButton: React.FC<AnimatedContactButtonProps> = ({ 
   onClick, 
   className = "",
-  type = "button"
+  type = "button",
+  labelDefault = 'Send Message',
+  labelSent = 'Sent',
 }) => {
   const [isSent, setIsSent] = useState(false);
 
@@ -27,6 +31,16 @@ export const AnimatedContactButton: React.FC<AnimatedContactButtonProps> = ({
     }, 3500);
   };
 
+  const renderLabel = (label: string) => (
+    <p>
+      {Array.from(label).map((ch, i) => (
+        <span key={`${ch}-${i}`} style={{ '--i': i } as React.CSSProperties}>
+          {ch === ' ' ? '\u00A0' : ch}
+        </span>
+      ))}
+    </p>
+  );
+
   return (
     <button 
       className={`animated-contact-button ${className} ${isSent ? 'sent-state' : ''}`}
@@ -36,7 +50,7 @@ export const AnimatedContactButton: React.FC<AnimatedContactButtonProps> = ({
     >
       <div className="wrap">
         <div className="state state--default">
-          <div className="icon-cart">
+          <div className="icon-cart" aria-hidden="true">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
@@ -48,43 +62,11 @@ export const AnimatedContactButton: React.FC<AnimatedContactButtonProps> = ({
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <circle cx="8" cy="21" r="1"></circle>
-              <circle cx="19" cy="21" r="1"></circle>
-              <path
-                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
-              ></path>
+              <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
+              <path d="M3 7l9 6 9-6"></path>
             </svg>
           </div>
-          <div className="icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M5 12h14"></path>
-              <path d="M12 5v14"></path>
-            </svg>
-          </div>
-          <p>
-            <span style={{'--i': 0} as React.CSSProperties}>S</span>
-            <span style={{'--i': 1} as React.CSSProperties}>e</span>
-            <span style={{'--i': 2} as React.CSSProperties}>n</span>
-            <span style={{'--i': 3} as React.CSSProperties}>d</span>
-            <span style={{'--i': 4} as React.CSSProperties}>&nbsp;</span>
-            <span style={{'--i': 5} as React.CSSProperties}>M</span>
-            <span style={{'--i': 6} as React.CSSProperties}>e</span>
-            <span style={{'--i': 7} as React.CSSProperties}>s</span>
-            <span style={{'--i': 8} as React.CSSProperties}>s</span>
-            <span style={{'--i': 9} as React.CSSProperties}>a</span>
-            <span style={{'--i': 10} as React.CSSProperties}>g</span>
-            <span style={{'--i': 11} as React.CSSProperties}>e</span>
-          </p>
+          {renderLabel(labelDefault)}
         </div>
         <div className="state state--added">
           <div className="icon">
@@ -102,12 +84,7 @@ export const AnimatedContactButton: React.FC<AnimatedContactButtonProps> = ({
               <path d="M20 6 9 17l-5-5"></path>
             </svg>
           </div>
-          <p>
-            <span style={{'--i': 5} as React.CSSProperties}>S</span>
-            <span style={{'--i': 6} as React.CSSProperties}>e</span>
-            <span style={{'--i': 7} as React.CSSProperties}>n</span>
-            <span style={{'--i': 8} as React.CSSProperties}>t</span>
-          </p>
+          {renderLabel(labelSent)}
         </div>
       </div>
       <div className="bg"></div>

@@ -97,7 +97,17 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
         <Link
           to={to}
           className={`pay-btn w-full max-w-[240px] md:max-w-[280px] px-5 md:px-6 shrink-0 ${className}`}
-          onClick={onClick}
+          onClick={(e) => {
+            // Preserve any consumer onClick behavior
+            if (onClick) onClick();
+            // Ensure page scrolls to top on navigation
+            try {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch {
+              // no-op fallback
+              window.scrollTo(0, 0);
+            }
+          }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
@@ -118,7 +128,14 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
       ) : (
         <button
           className={`pay-btn w-full max-w-[240px] md:max-w-[280px] px-5 md:px-6 shrink-0 ${className}`}
-          onClick={onClick}
+          onClick={(e) => {
+            if (onClick) onClick();
+            try {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch {
+              window.scrollTo(0, 0);
+            }
+          }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >

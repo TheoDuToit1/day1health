@@ -187,7 +187,7 @@
   top: 0;
   bottom: 0;
   margin: auto;
-  transform: translate(-80px, 9px);
+  transform: translate(-120px, 9px);
 }
 .animated-contact-button:focus .state .icon-cart {
   animation: cart 2s linear;
@@ -202,7 +202,7 @@
 
 @keyframes cart {
   0% {
-    transform: translate(-80px, 9px);
+    transform: translate(-120px, 9px);
   }
   18% {
     transform: translate(-20px, 9px);
@@ -453,9 +453,6 @@
   padding-left: 29px;
   display: flex;
   position: relative;
-}
-.state--default span:nth-child(5) {
-  margin-right: 5px;
 }
 .state--added {
   display: none;
