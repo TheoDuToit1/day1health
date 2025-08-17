@@ -20,16 +20,46 @@ const testimonials = [
     profileImage: 'https://randomuser.me/api/portraits/men/32.jpg'
   },
   {
-    name: 'The Ndlovu Family',
+    name: 'The Mokoena Family',
     designation: 'Family Plan',
     description: 'With three kids, we needed a plan that could handle everything from check-ups to emergencies. Day1Health has exceeded our expectations!',
-    profileImage: 'https://randomuser.me/api/portraits/women/68.jpg'
+    profileImage: 'https://psu-gatsby-files-prod.s3.amazonaws.com/s3fs-public/styles/4_3_1500w/public/2022/05/TimekaTounsel.jpg?h=81da5ed6&itok=gBF4t3Yw'
   },
   {
     name: 'David Wilson',
     designation: 'Senior Member',
     description: 'The peace of mind that comes with Day1Health is priceless. Their network of doctors is extensive and the claims process is seamless.',
     profileImage: 'https://randomuser.me/api/portraits/men/75.jpg'
+  },
+  {
+    name: 'Aisha Patel',
+    designation: 'Day-to-Day Plan',
+    description: 'Appointments are easy to book and the co-payments are reasonable. I switched last year and haven\'t looked back.',
+    profileImage: 'https://randomuser.me/api/portraits/women/12.jpg'
+  },
+  {
+    name: 'Johan van Rensburg',
+    designation: 'Platinum Member',
+    description: 'Transparent pricing, quick support, and excellent cover. Day1Health just works.',
+    profileImage: 'https://randomuser.me/api/portraits/men/41.jpg'
+  },
+  {
+    name: 'Lerato M.',
+    designation: 'Executive Plan',
+    description: 'Claims are paid fast and the benefits are exactly what my family needs. Highly recommended.',
+    profileImage: 'https://randomuser.me/api/portraits/women/21.jpg'
+  },
+  {
+    name: 'Carlos Diaz',
+    designation: 'Hospital Plan',
+    description: 'Had an emergency and everything was handled smoothly at the hospital. Grateful for the cover from day one.',
+    profileImage: 'https://randomuser.me/api/portraits/men/19.jpg'
+  },
+  {
+    name: 'Naledi & Thabo',
+    designation: 'Couple, Day-to-Day',
+    description: 'We\'re both covered and it\'s affordable. The app and statements are simple and clear.',
+    profileImage: 'https://randomuser.me/api/portraits/women/50.jpg'
   }
 ];
 

@@ -74,7 +74,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 
 	const handleCardClose = (index: number) => {
 		if (carouselRef.current) {
-			const cardWidth = isMobile() ? 230 : 384;
+			const cardWidth = isMobile() ? 256 : 288;
 			const gap = isMobile() ? 4 : 8;
 			const scrollPosition = (cardWidth + gap) * (index + 1);
 			carouselRef.current.scrollTo({
@@ -109,8 +109,8 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 				/>
 				<div
 					className={cn(
-						"flex flex-row justify-start gap-4 px-4",
-						"w-full max-w-[90%] mx-auto",
+						"flex flex-row justify-start gap-4 pl-2 md:pl-4 pr-4",
+						"w-full",
 					)}
 				>
 					{items.map((item, index) => {
@@ -160,7 +160,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 	);
 };
 
-const MAX_PREVIEW_LENGTH = 100; // Maximum characters to show in preview
+const MAX_PREVIEW_LENGTH = 80; // Maximum characters to show in preview
 
 const TestimonialCard = ({
 	testimonial,
@@ -400,11 +400,11 @@ const TestimonialCard = ({
 					rotateY: 2,
 					rotate: 1,
 					scale: 1.02,
-					transition: {duration: 0.3, ease: "easeOut"},
+					transition: { duration: 0.3, ease: "easeOut" },
 				}}
 			>
 				<div
-					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700 border-gray-600' : 'bg-gradient-to-b from-white to-green-50 border-green-100'} h-[500px] md:h-[550px] w-80 md:w-96 overflow-hidden flex flex-col items-center justify-center relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border`}
+					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700' : 'bg-gradient-to-b from-white to-green-50'} h-[440px] md:h-[480px] w-64 md:w-72 overflow-hidden flex flex-col items-center justify-start py-6 relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-green-500`}
 				>
 					<div className="absolute opacity-10" style={{inset: "-1px 0 0"}}>
 						<div className="absolute inset-0">
@@ -416,11 +416,11 @@ const TestimonialCard = ({
 						</div>
 					</div>
 					<ProfileImage src={testimonial.profileImage} alt={testimonial.name} />
-					<div className="px-6 mt-6 text-center">
-							<motion.p
-								layoutId={layout ? `title-${testimonial.name}` : undefined}
-								className={`${isDark ? 'text-gray-200' : 'text-gray-700'} text-lg md:text-xl font-medium leading-relaxed`}
-							>
+					<div className="px-4 mt-4 text-center">
+						<motion.p
+							layoutId={layout ? `title-${testimonial.name}` : undefined}
+							className={`${isDark ? 'text-gray-200' : 'text-gray-700'} text-base md:text-lg font-medium leading-relaxed`}
+						>
 							"{truncatedText}"
 						</motion.p>
 						{shouldTruncate && (
@@ -442,13 +442,13 @@ const TestimonialCard = ({
 					</div>
 					<motion.p
 						layoutId={layout ? `category-${testimonial.name}` : undefined}
-						className={`${isDark ? 'text-white' : 'text-gray-900'} text-xl md:text-2xl font-bold text-center mt-6`}
+						className={`${isDark ? 'text-white' : 'text-gray-900'} text-lg md:text-xl font-bold text-center mt-4`}
 					>
 						{testimonial.name}
 					</motion.p>
 					<motion.p
 						layoutId={layout ? `category-${testimonial.name}` : undefined}
-						className="text-green-600 text-base md:text-lg font-medium text-center mt-2 underline underline-offset-4"
+						className="text-green-600 text-sm md:text-base font-medium text-center mt-2 underline underline-offset-4"
 					>
 						{testimonial.designation.length > 30
 							? `${testimonial.designation.slice(0, 30)}...`
