@@ -325,14 +325,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             </motion.span>
                           </motion.span>
                           <div className="flex items-baseline gap-2">
-                            <motion.div
-                              layoutId="comprehensive-value-price"
-                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R390</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
@@ -342,6 +334,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Value
                             </motion.span>
+                            <motion.div
+                              layoutId="comprehensive-value-price"
+                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R665</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
                           </div>
                         </motion.div>
                       ) : (
@@ -428,7 +428,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId="comprehensive-value-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">390</span>
+                        <span className="text-2xl font-bold">665</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                       </motion.div>
                     </div>
@@ -481,14 +481,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             Comprehensive
                           </motion.span>
                           <div className="flex items-baseline gap-2 mt-2">
-                            <motion.div
-                              layoutId="comprehensive-executive-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R256</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                             <motion.span
                               className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
                               initial={{ opacity: 0, x: 8 }}
@@ -498,6 +490,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Executive
                             </motion.span>
+                            <motion.div
+                              layoutId="comprehensive-executive-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R985</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
                           </div>
                         </motion.div>
                       ) : (
@@ -586,7 +586,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </div>
                         <motion.div layoutId="comprehensive-executive-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
-                          <span className="text-2xl font-bold">256</span>
+                          <span className="text-2xl font-bold">985</span>
                           <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                         </motion.div>
                     </div>
@@ -657,14 +657,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             </motion.span>
                           </motion.span>
                           <div className="flex items-baseline gap-2 mt-2">
-                            <motion.div
-                              layoutId="comprehensive-platinum-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className={`text-emerald-400 text-2xl font-bold`}>R1152</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
@@ -674,6 +666,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Platinum
                             </motion.span>
+                            <motion.div
+                              layoutId="comprehensive-platinum-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className={`text-emerald-400 text-2xl font-bold`}>R895</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
                           </div>
                         </motion.div>
                       ) : (
@@ -760,7 +760,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">1152</span>
+                        <span className="text-2xl font-bold">895</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                       </motion.div>
                     </div>
@@ -1756,7 +1756,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                               transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                             >
-                              <span className="text-2xl font-bold text-emerald-400">R640</span>
+                              <span className="text-2xl font-bold text-emerald-400">R390</span>
                               <span className={`text-white text-sm font-normal`}>/month</span>
                             </motion.div>
                           </div>
@@ -1841,7 +1841,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">640</span>
+                        <span className="text-2xl font-bold">390</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                       </motion.div>
                     </div>
@@ -1920,7 +1920,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                               transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                             >
-                              <span className="text-2xl font-bold text-emerald-400">R256</span>
+                              <span className="text-2xl font-bold text-emerald-400">R640</span>
                               <span className={`text-white text-sm font-normal`}>/month</span>
                             </motion.div>
                           </div>
@@ -2006,7 +2006,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </div>
                         <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
-                          <span className="text-2xl font-bold">256</span>
+                          <span className="text-2xl font-bold">640</span>
                           <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                         </motion.div>
                     </div>
@@ -2084,7 +2084,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                               transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                             >
-                              <span className="text-2xl font-bold text-emerald-400">R1152</span>
+                              <span className="text-2xl font-bold text-emerald-400">R560</span>
                               <span className={`text-white text-sm font-normal`}>/month</span>
                             </motion.div>
                           </div>
@@ -2169,7 +2169,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">1152</span>
+                        <span className="text-2xl font-bold">560</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                       </motion.div>
                     </div>
@@ -2402,7 +2402,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Senior-Plan'.split('')?.map((ch, i) => (
+                              {'Senior'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -2414,25 +2414,23 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <div className="flex items-baseline gap-2">
-                            <motion.div
-                              layoutId="senior-day-header-price"
-                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R425</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
-                            <motion.span
-                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                              initial={{ opacity: 0, x: -8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -8 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              Day-to-Day
-                            </motion.span>
-                          </div>
+                          <motion.span
+                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -8 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            Day-to-Day
+                          </motion.span>
+                          <motion.div
+                            layoutId="senior-day-header-price"
+                            className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R425</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2578,8 +2576,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               initial="hidden"
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.03 } } }}
-                           >
-                              {'Senior-Plan'.split('').map((ch, i) => (
+                          >
+                              {'Senior'.split('').map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -2600,6 +2598,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           >
                             Hospital
                           </motion.span>
+                          <motion.div
+                            layoutId="senior-hospital-header-price"
+                            className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R580</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2680,7 +2686,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </div>
                         <motion.div layoutId="senior-hospital-header-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
-                          <span className="text-2xl font-bold">640</span>
+                          <span className="text-2xl font-bold">580</span>
                           <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                         </motion.div>
                     </div>
@@ -2745,7 +2751,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Senior-Plan'.split('')?.map((ch, i) => (
+                              {'Senior'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -2757,25 +2763,23 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <div className="flex items-baseline gap-2">
-                            <motion.div
-                              layoutId="senior-comprehensive-header-price"
-                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R875</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
-                            <motion.span
-                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                              initial={{ opacity: 0, x: -8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -8 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              Comprehensive
-                            </motion.span>
-                          </div>
+                          <motion.span
+                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -8 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            Comprehensive
+                          </motion.span>
+                          <motion.div
+                            layoutId="senior-comprehensive-header-price"
+                            className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R875</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3

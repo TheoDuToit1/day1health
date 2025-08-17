@@ -157,9 +157,16 @@ const ComprehensivePlanDetailPage: React.FC = () => {
 
   // Remove qty handling for non-family variants (always 1)
 
-  const SINGLE_PRICE = 385;
-  const COUPLE_PRICE = 674;
-  const FAMILY_CHILD_PRICE = 193;
+  // Tier-based pricing table for Comprehensive
+  const COMP_PRICE_TABLE: Record<string, { single: number; couple: number; child: number }> = {
+    value: { single: 665, couple: 1131, child: 266 },
+    platinum: { single: 895, couple: 1611, child: 358 },
+    executive: { single: 985, couple: 1724, child: 394 },
+  };
+  const compTierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
+  const SINGLE_PRICE = COMP_PRICE_TABLE[compTierKey].single;
+  const COUPLE_PRICE = COMP_PRICE_TABLE[compTierKey].couple;
+  const FAMILY_CHILD_PRICE = COMP_PRICE_TABLE[compTierKey].child;
   const currentPrice = ((): number => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
     if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
@@ -513,7 +520,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R385</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${SINGLE_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -577,7 +584,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Comprehensive</div>
                             <motion.div layoutId="student-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">385</span>
+                              <span className="text-2xl font-bold">{SINGLE_PRICE}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>
@@ -681,7 +688,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R674</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${COUPLE_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -745,7 +752,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Comprehensive</div>
                             <motion.div layoutId="basic-price" className={`leading-none text-green-600`}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">674</span>
+                              <span className="text-2xl font-bold">{COUPLE_PRICE}</span>
                               <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                             </motion.div>
                           </div>
@@ -849,7 +856,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R193</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/child</span>
                           </motion.div>
                         )}
@@ -914,7 +921,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Comprehensive</div>
                             <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">193</span>
+                              <span className="text-2xl font-bold">{FAMILY_CHILD_PRICE}</span>
                               <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/child</span>
                             </motion.div>
                           </div>

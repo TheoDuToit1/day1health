@@ -153,9 +153,16 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  const SINGLE_PRICE = 390;
-  const COUPLE_PRICE = 674;
-  const FAMILY_CHILD_PRICE = 193;
+  // Tier-based pricing table
+  const PRICE_TABLE: Record<string, { single: number; couple: number; child: number }> = {
+    value: { single: 390, couple: 702, child: 156 },
+    platinum: { single: 560, couple: 1008, child: 224 },
+    executive: { single: 640, couple: 1152, child: 256 },
+  };
+  const tierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
+  const SINGLE_PRICE = PRICE_TABLE[tierKey].single;
+  const COUPLE_PRICE = PRICE_TABLE[tierKey].couple;
+  const FAMILY_CHILD_PRICE = PRICE_TABLE[tierKey].child;
   const currentPrice = ((): number => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
     if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
@@ -505,7 +512,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R390</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${SINGLE_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -569,7 +576,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
                             <motion.div layoutId="student-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">390</span>
+                              <span className="text-2xl font-bold">{SINGLE_PRICE}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>
@@ -673,7 +680,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R674</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${COUPLE_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -737,7 +744,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
                             <motion.div layoutId="basic-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">674</span>
+                              <span className="text-2xl font-bold">{COUPLE_PRICE}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>
@@ -841,7 +848,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R193</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/child</span>
                           </motion.div>
                         )}
@@ -906,7 +913,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Hospital</div>
                             <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">193</span>
+                              <span className="text-2xl font-bold">{FAMILY_CHILD_PRICE}</span>
                               <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/child</span>
                             </motion.div>
                           </div>
