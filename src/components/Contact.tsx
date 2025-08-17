@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Phone, Mail, Clock } from 'lucide-react';
+import { Phone, Mail, Clock, X, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { AnimatedContactButton } from './ui/animated-contact-button';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
@@ -9,25 +8,52 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
   const { isDark } = useTheme();
-  const [formData, setFormData] = useState({
-    name: '',
+  const [isExistingMemberOpen, setIsExistingMemberOpen] = useState(false);
+  const [isProspectiveOpen, setIsProspectiveOpen] = useState(false);
+
+  const [existingMemberData, setExistingMemberData] = useState({
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '',
+    enquiry: '',
     message: ''
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [prospectiveData, setProspectiveData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    infoAbout: '',
+    heardFrom: '',
+    message: ''
+  });
+
+  const handleExistingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setExistingMemberData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleProspectiveChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProspectiveData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const submitExisting = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', phone: '', email: '', message: '' });
-    alert('Thank you for your message! We\'ll get back to you soon.');
+    console.log('Existing Member form submitted:', existingMemberData);
+    setIsExistingMemberOpen(false);
+    setExistingMemberData({ firstName: '', lastName: '', phone: '', email: '', enquiry: '', message: '' });
+    alert("Thanks! We'll assist you shortly.");
+  };
+
+  const submitProspective = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Prospective Client form submitted:', prospectiveData);
+    setIsProspectiveOpen(false);
+    setProspectiveData({ firstName: '', lastName: '', phone: '', email: '', infoAbout: '', heardFrom: '', message: '' });
+    alert("Thanks! We'll be in touch soon.");
   };
 
   return (
@@ -146,137 +172,172 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     ? 'text-gray-300 hover:bg-gray-700' 
                     : 'text-gray-900 hover:bg-gray-50'
                 }`}>
-                  📋 Get a Quote Online
+                  📋 Get a Quote
                 </button>
                 <button className={`w-full text-left p-3 rounded-lg transition-colors ${
                   isDark 
                     ? 'text-gray-300 hover:bg-gray-700' 
                     : 'text-gray-900 hover:bg-gray-50'
                 }`}>
-                  📞 Schedule a Call Back
+                  📞 Schedule Call Back
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* Actions and Modal Triggers */}
           <div>
-            <form onSubmit={handleSubmit} className={`rounded-2xl shadow-lg p-8 ${
+            <div className={`rounded-2xl shadow-lg p-8 ${
               isDark ? 'bg-gray-800' : 'bg-white'
             }`}>
-              <h3 className={`text-2xl font-bold mb-6 ${
+              <h3 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${
                 isDark ? 'text-white' : 'text-gray-900'
-              }`}>Send us a Message</h3>
-              
-              <div className="space-y-6">
-                <div>
-                  <label htmlFor="name" className={`block text-sm font-medium mb-2 ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
-                      isDark 
-                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    }`}
-                    placeholder="Enter your full name"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="phone" className={`block text-sm font-medium mb-2 ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
-                      isDark 
-                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    }`}
-                    placeholder="Enter your phone number"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className={`block text-sm font-medium mb-2 ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors ${
-                      isDark 
-                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    }`}
-                    placeholder="Enter your email address"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className={`block text-sm font-medium mb-2 ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none ${
-                      isDark 
-                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    }`}
-                    placeholder="Tell us how we can help you..."
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <AnimatedContactButton
-                    type="button"
-                    className="w-64 px-8 opacity-100"
-                    onClick={() => {
-                      // Demo purposes - just trigger the animation
-                      console.log('Contact button clicked for demo');
-                    }}
-                  />
-                </div>
-              </div>
-
-              <p className={`text-sm mt-4 text-center ${
-                isDark ? 'text-gray-400' : 'text-gray-500'
               }`}>
-                By submitting this form, you agree to our privacy policy and terms of service.
-              </p>
-            </form>
+                <HelpCircle className="w-6 h-6 text-green-600" />
+                How can we help?
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  className={`w-full p-3 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700`}
+                  onClick={() => setIsExistingMemberOpen(true)}
+                >
+                  Existing Member
+                </button>
+                <button
+                  className={`w-full p-3 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700`}
+                  onClick={() => setIsProspectiveOpen(true)}
+                >
+                  Prospective Client
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Existing Member Modal */}
+      {isExistingMemberOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsExistingMemberOpen(false)} />
+          <div className={`relative w-full max-w-2xl mx-4 rounded-2xl shadow-xl ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+            <button
+              aria-label="Close"
+              className={`absolute top-3 right-3 p-2 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+              onClick={() => setIsExistingMemberOpen(false)}
+            >
+              <X className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
+            </button>
+            <form onSubmit={submitExisting} className="p-6 sm:p-8">
+              <h3 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>How can We help</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>First Name</label>
+                  <input name="firstName" value={existingMemberData.firstName} onChange={handleExistingChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Last Name</label>
+                  <input name="lastName" value={existingMemberData.lastName} onChange={handleExistingChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Phone</label>
+                  <input type="tel" name="phone" value={existingMemberData.phone} onChange={handleExistingChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
+                  <input type="email" name="email" value={existingMemberData.email} onChange={handleExistingChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>I have an enquiry about</label>
+                  <select name="enquiry" value={existingMemberData.enquiry} onChange={handleExistingChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                    <option value="">Select an option</option>
+                    <option>Debit Order Claims</option>
+                    <option>Doctor Claims</option>
+                    <option>Administration</option>
+                    <option>Hospital Claims</option>
+                    <option>Remittance</option>
+                    <option>Reimbursements</option>
+                    <option>Authorisations</option>
+                    <option>Complaints</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Message</label>
+                  <textarea name="message" value={existingMemberData.message} onChange={handleExistingChange} rows={4} className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={() => setIsExistingMemberOpen(false)} className={`px-4 py-2 rounded-lg ${isDark ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}>Cancel</button>
+                <button type="submit" className="px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Prospective Client Modal */}
+      {isProspectiveOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsProspectiveOpen(false)} />
+          <div className={`relative w-full max-w-2xl mx-4 rounded-2xl shadow-xl ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+            <button
+              aria-label="Close"
+              className={`absolute top-3 right-3 p-2 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+              onClick={() => setIsProspectiveOpen(false)}
+            >
+              <X className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`} />
+            </button>
+            <form onSubmit={submitProspective} className="p-6 sm:p-8">
+              <h3 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Contact Us Today!</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>First Name</label>
+                  <input name="firstName" value={prospectiveData.firstName} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Last Name</label>
+                  <input name="lastName" value={prospectiveData.lastName} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Phone</label>
+                  <input type="tel" name="phone" value={prospectiveData.phone} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
+                  <input type="email" name="email" value={prospectiveData.email} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>I need Info about..</label>
+                  <select name="infoAbout" value={prospectiveData.infoAbout} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                    <option value="">Select an option</option>
+                    <option>How to Sign Up</option>
+                    <option>General Information</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Where did you hear about us?</label>
+                  <select name="heardFrom" value={prospectiveData.heardFrom} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                    <option value="">Select an option</option>
+                    <option>From a friend</option>
+                    <option>Google search</option>
+                    <option>Google Ad</option>
+                    <option>Facebook</option>
+                    <option>Instagram</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Message</label>
+                  <textarea name="message" value={prospectiveData.message} onChange={handleProspectiveChange} rows={4} className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`} />
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={() => setIsProspectiveOpen(false)} className={`px-4 py-2 rounded-lg ${isDark ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}>Cancel</button>
+                <button type="submit" className="px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
