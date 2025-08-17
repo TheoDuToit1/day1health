@@ -89,15 +89,10 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
           }`}>
             Got Questions? We Have Answers
           </h2>
-          <p className={`text-xl max-w-3xl mx-auto ${
-            isDark ? 'text-gray-300' : 'text-gray-600'
-          }`}>
-            Find answers to the most common questions about Day1Health medical insurance.
-          </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="flex justify-center gap-3 mb-4 w-full">
+          <div className="flex justify-center gap-3 mb-4 w-full -mt-10">
             <button
               onClick={() => setShowFaqs(v => !v)}
               className={`px-6 sm:px-8 py-2 rounded-lg border text-sm font-semibold transition-colors min-w-[9.5rem] ${
@@ -209,7 +204,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
         {/* Contact CTA */}
         <div className="mt-16 text-center">
           <div className={`rounded-2xl p-8 max-w-2xl mx-auto ${
-            isDark ? 'bg-green-900/20' : 'bg-green-50'
+            isDark ? 'bg-blue-900/30' : 'bg-blue-100'
           }`}>
             <h3 className={`text-2xl font-bold mb-4 ${
               isDark ? 'text-white' : 'text-gray-900'
