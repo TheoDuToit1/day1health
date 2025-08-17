@@ -427,14 +427,14 @@ const PlanDetailPage: React.FC = () => {
                   {/* Related products */}
                   <div className="mt-8">
                     <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Other related products</h2>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-7 items-start">
                       {/* Single - replicate full expand behavior */}
                       <motion.div 
-                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                        className={`relative self-start group rounded-2xl shadow-lg py-6 px-[19px] lg:py-7 lg:px-[23px] border-2 transition-all overflow-visible transform-gpu ${
                           isDark 
                             ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                             : 'bg-white border-green-200 hover:border-green-400'
-                        } min-h-[140px]`}
+                        } min-h-[180px]`}
                         initial={{ opacity: 0, y: 30, scale: 0.98 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
@@ -451,7 +451,7 @@ const PlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/daytoday/single/daytodaysingle.png"
+                              src="/assets/images/single (1).jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -599,11 +599,11 @@ const PlanDetailPage: React.FC = () => {
 
                       {/* Couple - replicate full expand behavior */}
                       <motion.div 
-                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                        className={`relative self-start group rounded-2xl shadow-lg py-6 px-[19px] lg:py-7 lg:px-[23px] border-2 transition-all overflow-visible transform-gpu ${
                           isDark 
                             ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                             : 'bg-white border-green-200 hover:border-green-400'
-                        } min-h-[140px]`}
+                        } min-h-[180px]`}
                         initial={{ opacity: 0, y: 30, scale: 0.98 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -620,7 +620,7 @@ const PlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/daytoday/single/daytodaysingle.png"
+                              src="/assets/images/couple (1).jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -768,11 +768,11 @@ const PlanDetailPage: React.FC = () => {
 
                       {/* Family - replicate full expand behavior */}
                       <motion.div 
-                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                        className={`relative self-start group rounded-2xl shadow-lg py-6 px-[14px] lg:py-7 lg:px-[18px] border-2 transition-all overflow-visible transform-gpu ${
                           isDark 
                             ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                             : 'bg-white border-green-200 hover:border-green-400'
-                        } min-h-[140px]`}
+                        } min-h-[180px]`}
                         initial={{ opacity: 0, y: 30, scale: 0.98 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.45, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
@@ -789,7 +789,7 @@ const PlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/daytoday/single/daytodaysingle.png"
+                              src="/assets/images/family (1).jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"

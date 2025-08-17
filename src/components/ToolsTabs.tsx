@@ -37,7 +37,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const tabs = [
     { 
       id: 'daytoday', 
-      label: 'Plan Day-to-Day', 
+      label: 'Day-To-Day Plan', 
       icon: Heart,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -45,7 +45,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'hospital', 
-      label: 'Plan Hospital', 
+      label: 'Hospital Plan', 
       icon: CreditCard,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -53,7 +53,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'comprehensive', 
-      label: 'Plan Comprehensive', 
+      label: 'Comprehensive Plan', 
       icon: Shield,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -61,7 +61,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'senior', 
-      label: 'Plan Senior-Plan', 
+      label: 'Senior Plan', 
       icon: Users,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -324,15 +324,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Value
-                          </motion.span>
+                          <div className="flex items-baseline gap-2">
+                            <motion.div
+                              layoutId="comprehensive-value-price"
+                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R390</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Value
+                            </motion.span>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -348,18 +358,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.student && (
-                    <div className="flex items-baseline gap-2 mb-4">
-                      <motion.div
-                        layoutId="student-price"
-                        className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                        transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                      >
-                        <span className="text-2xl font-bold text-emerald-400">R390</span>
-                        <span className={`text-white text-sm font-normal`}>/month</span>
-                      </motion.div>
-                    </div>
-                  )}
+                  {expanded.student && null}
                   <motion.div key="student-content"
                     initial={false}
                     animate={{ height: expanded.student ? 'auto' : 0, opacity: expanded.student ? 1 : 0 }}
@@ -370,12 +369,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness and accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance services</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Value Plus Plan</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits / Day to Day Benefits</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive primary healthcare benefits and includes</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accident</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Couple: R702 pm</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Per child: R156 pm</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -385,10 +386,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="bronze"
                         hoverMessages={[
-                          'Private Hospital Benefits',
-                          'Illness Top-up',
-                          'Critical illness',
-                          'Accident cover',
+                          'Hospital & Day-to-Day benefits',
+                          'Comprehensive primary care',
+                          'Illness & accident',
+                          'Maternity, ambulance & funeral',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -425,7 +426,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.label}
                       </div>
-                      <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId="comprehensive-value-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">390</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
@@ -479,25 +480,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           >
                             Comprehensive
                           </motion.span>
-                          <motion.span
-                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
-                            initial={{ opacity: 0, x: 8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Executive
-                          </motion.span>
-                          {/* Price inside header for visibility */}
                           <div className="flex items-baseline gap-2 mt-2">
                             <motion.div
-                              layoutId="family-price"
-                              className={`relative z-30 inline-flex w-fit items-baseline gap-2 rounded-xl border ring-1 backdrop-blur-sm px-4 py-2 shadow-sm ${isDark ? 'bg-black/55 border-white/20 ring-white/10' : 'bg-white/90 border-gray-200 ring-black/5'}`}
+                              layoutId="comprehensive-executive-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                               transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                             >
-                              <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>R256</span>
+                              <span className="text-2xl font-bold text-emerald-400">R256</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
                             </motion.div>
-                            <span className={`${isDark ? 'text-gray-100' : 'text-gray-700'} text-sm font-medium`}>/month</span>
+                            <motion.span
+                              className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Executive
+                            </motion.span>
                           </div>
                         </motion.div>
                       ) : (
@@ -524,12 +524,16 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness and accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness and maternity</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits / Day to Day Benefits</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive primary healthcare benefits and includes</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Top-up illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Increased accident cover</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance and funeral benefits</span></li>
-                        
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -540,10 +544,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="bronze"
                         hoverMessages={[
-                          'Private Hospital Benefits',
-                          'Illness Top-up',
+                          'Hospital & Day-to-Day benefits',
+                          'Illness + top-up illness',
                           'Critical illness',
-                          'Accident cover',
+                          'Increased accident cover',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -580,7 +584,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                           {tabs.find(t => t.id === activeTab)?.label}
                         </div>
-                        <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
+                        <motion.div layoutId="comprehensive-executive-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
                           <span className="text-2xl font-bold">256</span>
                           <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
@@ -652,25 +656,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Platinum
-                          </motion.span>
-                          {/* Price inside header for visibility */}
                           <div className="flex items-baseline gap-2 mt-2">
                             <motion.div
-                              layoutId="basic-price"
-                              className={`relative z-30 inline-flex w-fit items-baseline gap-2 rounded-xl border ring-1 backdrop-blur-sm px-4 py-2 shadow-sm ${isDark ? 'bg-black/55 border-white/20 ring-white/10' : 'bg-white/90 border-gray-200 ring-black/5'}`}
+                              layoutId="comprehensive-platinum-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                               transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                             >
-                              <span className={`${isDark ? 'text-white' : 'text-gray-900'} text-2xl font-bold`}>R1152</span>
+                              <span className={`text-emerald-400 text-2xl font-bold`}>R1152</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
                             </motion.div>
-                            <span className={`${isDark ? 'text-gray-100' : 'text-gray-700'} text-sm font-medium`}>/month</span>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Platinum
+                            </motion.span>
                           </div>
                         </motion.div>
                       ) : (
@@ -697,13 +700,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness with top-up</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Increased accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity & accidental permanent disability</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance and funeral benefits</span></li>
-                        
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits / Day to Day Benefits –</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive primary healthcare benefits and includes</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accident</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -713,10 +718,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="silver"
                         hoverMessages={[
-                          'Private Hospital Benefits',
-                          'Illness Top-up',
-                          'Critical illness',
-                          'Accident cover',
+                          'Hospital & Day-to-Day benefits',
+                          'Illness & critical illness',
+                          'Accident & maternity',
+                          'Disability, ambulance & funeral',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -753,7 +758,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.label}
                       </div>
-                      <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">1152</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
@@ -1016,18 +1021,16 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                           <motion.div
                             layoutId={`${activeTab}-family-price`}
-                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            className={`inline-flex flex-col items-start gap-0.5 rounded-xl border backdrop-blur-sm px-5 py-1 min-w-[8.25rem] ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE * familyChildren}`}</span>
                             {familyChildren === 1 ? (
-                              <span className={`text-white text-[11px] font-normal leading-4 text-left`}>
-                                <span>/mo</span>
-                                <br />
-                                <span>per child</span>
+                              <span className={`text-white text-[11px] font-normal`}>
+                                /mo per child
                               </span>
                             ) : (
-                              <span className={`text-white text-sm font-normal`}>{`/mo for ${familyChildren} children`}</span>
+                              <span className={`text-white text-[11px] font-normal`}>{`/mo for ${familyChildren} children`}</span>
                             )}
                           </motion.div>
                         </div>
@@ -1507,7 +1510,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         return (
           <LayoutGroup>
             <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_0.85fr_0.85fr_0.85fr] gap-5 items-start overflow-visible">
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-5 items-start overflow-visible">
                 {/* Introduction Column (same as Comprehensive) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -1568,7 +1571,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </svg>
                     </motion.button>
                   </div>
-                  {/* Collapsed teaser action */}
+                  {/* Collapsed teaser actions (match Day-To-Day style; Hospital uses tiers) */}
                   {!expanded.intro && (
                     <div className="relative z-10 mt-3 flex flex-wrap items-center gap-2 text-white">
                       <button
@@ -1577,6 +1580,27 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         onClick={(e) => { e.stopPropagation(); toggleIntro(); setShowDayToDayCards(true); }}
                       >
                         Open introduction
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
+                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: true, family: false, basic: false })); }}
+                      >
+                        Value
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
+                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
+                      >
+                        Platinum
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
+                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: true, basic: false })); }}
+                      >
+                        Executive
                       </button>
                     </div>
                   )}
@@ -1717,15 +1741,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Value
-                          </motion.span>
+                          <div className="flex items-baseline gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Value
+                            </motion.span>
+                            <motion.div
+                              layoutId="hospital-value-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R640</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -1741,16 +1775,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.student && (
-                    <motion.div
-                      layoutId="student-price"
-                      className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <span className="text-2xl font-bold text-emerald-400">R640</span>
-                      <span className={`text-white text-sm font-normal`}>/month</span>
-                    </motion.div>
-                  )}
+                  {expanded.student && null}
                   <motion.div key="student-content"
                     initial={false}
                     animate={{ height: expanded.student ? 'auto' : 0, opacity: expanded.student ? 1 : 0 }}
@@ -1762,12 +1787,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness cover and Illness Top-up</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Increased accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance and funeral benefits</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance services</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -1778,9 +1800,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="bronze"
                         hoverMessages={[
                           'Private Hospital Benefits',
-                          'Illness Top-up',
-                          'Critical illness',
-                          'Accident cover',
+                          'Illness & accident',
+                          'Ambulance',
+                          'Funeral benefits',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -1871,34 +1893,37 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           transition={{ duration: 0.18 }}
                         >
                           {/* Main category badge */}
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Hospital
-                          </motion.span>
+                          <div className="flex items-baseline gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Hospital
+                            </motion.span>
+                          </div>
                           {/* Tier badge */}
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Executive
-                          </motion.span>
-                          {/* Price inside header for visibility (Hospital Family/Executive) */}
-                          <motion.div
-                            layoutId="family-price"
-                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 bg-emerald-500/10 border-emerald-500/20 mt-2`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">R256</span>
-                            <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
+                          <div className="flex items-baseline gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Executive
+                            </motion.span>
+                            <motion.div
+                              layoutId="hospital-executive-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R256</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -1939,10 +1964,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="bronze"
                         hoverMessages={[
-                          '20 GP visits/year',
-                          'Essential medicines',
-                          'Child immunizations',
-                          'Maternity benefits',
+                          'Private Hospital Benefits',
+                          'Illness Top-up',
+                          'Critical illness',
+                          'Increased accident cover',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -2044,24 +2069,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             Hospital
                           </motion.span>
                           {/* Tier badge */}
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: 8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Platinum
-                          </motion.span>
-                          {/* Price inside header for visibility (Hospital Couple/Platinum) */}
-                          <motion.div
-                            layoutId="basic-price"
-                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 bg-emerald-500/10 border-emerald-500/20 mt-2`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">R1152</span>
-                            <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
+                          <div className="flex items-baseline gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Platinum
+                            </motion.span>
+                            <motion.div
+                              layoutId="hospital-platinum-price"
+                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R1152</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2087,9 +2113,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness cover and Illness Top-up</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Increased accident cover</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance and funeral benefits</span></li>
@@ -2102,10 +2127,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="silver"
                         hoverMessages={[
-                          '12 GP visits/year',
-                          'Acute medication',
-                          'Basic pathology',
-                          'Telehealth services',
+                          'Private Hospital Benefits',
+                          'Illness & accident',
+                          'Critical illness',
+                          'Maternity',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -2159,7 +2184,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         return (
           <LayoutGroup>
             <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_0.85fr_0.85fr_0.85fr] gap-5 items-start overflow-visible">
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-5 items-start overflow-visible">
                 {/* Introduction Column (Senior-Plan intro) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -2220,7 +2245,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </svg>
                     </motion.button>
                   </div>
-                  {/* Collapsed teaser action (no senior tiers) */}
+                  {/* Collapsed teaser actions (match Day-To-Day style; mapped to Senior categories) */}
                   {!expanded.intro && (
                     <div className="relative z-10 mt-3 flex flex-wrap items-center gap-2 text-white">
                       <button
@@ -2229,6 +2254,27 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         onClick={(e) => { e.stopPropagation(); toggleIntro(); setShowDayToDayCards(true); }}
                       >
                         Open introduction
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
+                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: true, family: false, basic: false })); }}
+                      >
+                        Day-to-Day
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
+                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: true, basic: false })); }}
+                      >
+                        Hospital
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
+                        onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
+                      >
+                        Comprehensive
                       </button>
                     </div>
                   )}
@@ -2263,9 +2309,38 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className="mt-5 text-sm text-gray-200">
                       Open the Introduction to reveal the pricing options below. Cards will slide in one by one.
                     </div>
-                    {/* Senior-Plan has no Value/Platinum/Executive tiers */}
-                    <div className="mt-4 text-sm text-gray-200">
-                      Senior-Plan offers three categories: Day-to-Day, Hospital, Comprehensive. Each supports Single or Couple.
+                    {/* Intro actions: reveal and jump (match Day-To-Day style; mapped to Senior categories) */}
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
+                        onClick={() => {
+                          setShowDayToDayCards(true);
+                          setExpanded(prev => ({ ...prev, student: true, family: false, basic: false }));
+                        }}
+                      >
+                        Day-to-Day
+                      </button>
+                      <button
+                        type="button"
+                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
+                        onClick={() => {
+                          setShowDayToDayCards(true);
+                          setExpanded(prev => ({ ...prev, student: false, family: true, basic: false }));
+                        }}
+                      >
+                        Hospital
+                      </button>
+                      <button
+                        type="button"
+                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
+                        onClick={() => {
+                          setShowDayToDayCards(true);
+                          setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
+                        }}
+                      >
+                        Comprehensive
+                      </button>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -2339,15 +2414,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Day-to-Day
-                          </motion.span>
+                          <div className="flex items-baseline gap-2">
+                            <motion.div
+                              layoutId="senior-day-header-price"
+                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R425</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Day-to-Day
+                            </motion.span>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2363,18 +2448,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.student && (
-                    <motion.div
-                      layoutId={`${activeTab}-student-price`}
-                      className={`relative z-10 mb-4 inline-flex w-full flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                        <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R425</span> / month</span>
-                        <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R850</span> / month</span>
-                      </div>
-                    </motion.div>
-                  )}
+                  {/* Removed Senior Day-to-Day detailed price breakdown (Single/Couple) */}
                   <motion.div key="student-content"
                     initial={false}
                     animate={{ height: expanded.student ? 'auto' : 0, opacity: expanded.student ? 1 : 0 }}
@@ -2384,9 +2458,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     className="relative z-10"
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits (acute & chronic)</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Medication (acute & chronic)</span></li>
+                      <ul className="space-y-2">
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Senior Day to Day Plan</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits / acute & chronic medication</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Blood tests & x-rays</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Dentistry & optometry</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Funeral benefits</span></li>
@@ -2399,10 +2473,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="bronze"
                         hoverMessages={[
-                          'Doctor visits',
-                          'Medication',
+                          'Senior Day to Day Plan',
+                          'Doctor visits & medication',
                           'Blood tests & x-rays',
-                          'Dentistry & optometry',
+                          'Dentistry, optometry & funeral',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
@@ -2439,7 +2513,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.label}
                       </div>
-                      <motion.div layoutId={`${activeTab}-student-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId={`senior-day-header-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">425</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
@@ -2541,18 +2615,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.family && (
-                    <motion.div
-                      layoutId="family-price"
-                      className={`relative z-10 mb-4 inline-flex w-full flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                        <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R640</span> / month</span>
-                        <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R1280</span> / month</span>
-                      </div>
-                    </motion.div>
-                  )}
+                  {/* Removed Senior Hospital detailed price breakdown (Single/Couple) */}
                   <motion.div key="family-content"
                     initial={false}
                     animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
@@ -2561,11 +2624,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     aria-hidden={!expanded.family}
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+                      <ul className="space-y-2">
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Illness & accident cover</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Ambulance services</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Funeral benefits</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Illness</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Accident</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Ambulance & funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -2615,7 +2678,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                           {tabs.find(t => t.id === activeTab)?.label}
                         </div>
-                        <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
+                        <motion.div layoutId="senior-hospital-header-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
                           <span className="text-2xl font-bold">640</span>
                           <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
@@ -2694,15 +2757,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               ))}
                             </motion.span>
                           </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Comprehensive
-                          </motion.span>
+                          <div className="flex items-baseline gap-2">
+                            <motion.div
+                              layoutId="senior-comprehensive-header-price"
+                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            >
+                              <span className="text-2xl font-bold text-emerald-400">R875</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
+                            </motion.div>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Comprehensive
+                            </motion.span>
+                          </div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2718,18 +2791,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       )}
                     </AnimatePresence>
                   </div>
-                  {expanded.basic && (
-                    <motion.div
-                      layoutId="basic-price"
-                      className={`relative z-10 mb-4 inline-flex w-full flex-col items-start gap-1 rounded-xl border backdrop-blur-sm px-3 py-2 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                      transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                        <span className="text-sm font-semibold text-white">Single: <span className="text-emerald-400 font-bold">R875</span> / month</span>
-                        <span className="text-sm font-semibold text-white">Couple: <span className="text-emerald-400 font-bold">R1750</span> / month</span>
-                      </div>
-                    </motion.div>
-                  )}
+                  {/* Removed Senior Comprehensive detailed price breakdown (Single/Couple) */}
                   <motion.div key="couple-content"
                     initial={false}
                     animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
@@ -2738,12 +2800,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     aria-hidden={!expanded.basic}
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits (acute & chronic)</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Medication (acute & chronic)</span></li>
+                      <ul className="space-y-2">
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Acute & chronic medication</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Blood tests & x-rays</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Dentistry & optometry</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Illness & accident cover</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Funeral benefits</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Illness</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Accident</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Ambulance & funeral benefits</span></li>
                       </ul>
                     </div>
@@ -2754,9 +2818,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="silver"
                         hoverMessages={[
-                          'Doctor visits',
-                          'Medication',
+                          'Doctor visits & medication',
                           'Blood tests & x-rays',
+                          'Illness & accident',
                           'Ambulance & funeral',
                         ]}
                         hoverIcons={['wallet','card','payment','check']}
@@ -2794,9 +2858,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.label}
                       </div>
-                      <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId="senior-comprehensive-header-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">249</span>
+                        <span className="text-2xl font-bold">875</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                       </motion.div>
                     </div>

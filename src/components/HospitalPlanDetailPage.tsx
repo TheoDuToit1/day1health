@@ -153,7 +153,7 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  const SINGLE_PRICE = 385;
+  const SINGLE_PRICE = 390;
   const COUPLE_PRICE = 674;
   const FAMILY_CHILD_PRICE = 193;
   const currentPrice = ((): number => {
@@ -505,7 +505,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">R385</span>
+                            <span className="text-2xl font-bold text-emerald-400">R390</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -569,7 +569,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
                             <motion.div layoutId="student-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">385</span>
+                              <span className="text-2xl font-bold">390</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>

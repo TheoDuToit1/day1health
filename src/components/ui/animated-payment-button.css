@@ -51,12 +51,14 @@
     system-ui,
     -apple-system,
     sans-serif;
-  transition: font-size 0.2s ease;
+  display: inline-block;
+  transition: font-size 0.2s ease, transform 0.2s ease;
 }
 
 /* Larger text when showing "Sign up" */
 .btn-text.signup {
-  font-size: 15px;
+  font-size: 18px;
+  transform: translateY(-1px) scale(1.1);
 }
 
 /* Removed keyframes and staggered animations; handled by Framer Motion */
