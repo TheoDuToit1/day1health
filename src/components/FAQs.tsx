@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -8,43 +8,59 @@ interface FAQsProps {
 }
 
 const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
-  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  // Support opening multiple and a global open/close all toggle
+  const [expandedAll, setExpandedAll] = useState(false);
+  const [openSet, setOpenSet] = useState<Set<number>>(new Set());
+  const [showFaqs, setShowFaqs] = useState(true);
   const { isDark } = useTheme();
 
+  // Selected 8 most relevant FAQs from the list provided by the user
   const faqs = [
     {
-      question: "What's the difference between medical aid and medical insurance?",
-      answer: "Medical aid is a scheme where members pool resources to cover healthcare costs, regulated by the Medical Schemes Act. Medical insurance (like Day1Health) is an insurance product that covers specific medical events and treatments, offering more flexibility and often more affordable options."
+      question: "Can I go to any private hospital?",
+      answer: "Day1 Health has formal contracts with Life Healthcare, Mediclinic, Africa Health Care and Clinix hospitals nationwide. All hospital admissions must be pre-authorised via Africa Assist (0861 144 144)."
+    },
+    {
+      question: "What is the procedure if I'm diagnosed with a chronic condition?",
+      answer: "Register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP to receive chronic medication. Collect at Clicks, Dischem or Medirite nationwide. Subject to pre-authorisation."
+    },
+    {
+      question: "Can I buy my medication over the counter?",
+      answer: "No. Your Day1 Network GP must prescribe in line with our formulary. Both acute and chronic medication are covered (unlimited) according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
+    },
+    {
+      question: "When I see a GP/Dentist, do I have to pay cash?",
+      answer: "No. By paying your monthly contribution in advance, your consultation is covered. Accredited providers claim directly from Day1 Health."
+    },
+    {
+      question: "What happens if there isn’t a Network doctor in my area?",
+      answer: "Contact us on 0876 100 600 and we will endeavour to contract directly with your preferred GP."
+    },
+    {
+      question: "What happens if I am ill and out of town?",
+      answer: "Your Day-to-Day benefits allow 3 out-of-area visits per policy per year to an alternative Network GP or GP of your choice. For non-network GP visits, submit a Reimbursement Form and receipt to be reimbursed the agreed tariff (e.g. R340)."
     },
     {
       question: "Are pre-existing conditions covered?",
-      answer: "Pre-existing conditions are covered after a 12-month waiting period, except for accidents and emergencies which are covered from Day 1. We assess each case individually and provide clear information about your coverage during the application process."
+      answer: "Yes, after a 12-month waiting period. Accidents and emergencies remain covered from Day 1."
     },
     {
-      question: "What are the waiting periods?",
-      answer: "There are no waiting periods for accidents and emergencies - you're covered from Day 1. General conditions have a 3-month waiting period, and pre-existing conditions have a 12-month waiting period. Maternity benefits have a 10-month waiting period."
-    },
-    {
-      question: "Can I use any doctor or hospital?",
-      answer: "You can visit any healthcare provider, but using our network providers offers direct billing and better rates. Outside the network, you may need to pay upfront and claim back, subject to our benefit limits."
-    },
-    {
-      question: "How do I claim for medical expenses?",
-      answer: "For network providers, we handle direct billing. For out-of-network providers, simply submit your claim online or via our mobile app with your receipts and medical records. Most claims are processed within 48 hours."
-    },
-    {
-      question: "What happens if I miss a payment?",
-      answer: "We offer a 30-day grace period for missed payments. During this time, your cover continues. If payment isn't received within 30 days, your policy will be suspended. You can reinstate your policy by paying outstanding premiums."
-    },
-    {
-      question: "Can I upgrade or downgrade my plan?",
-      answer: "Yes, you can change your plan at any time. Upgrades are subject to waiting periods for new benefits. Downgrades take effect from your next renewal date. Contact our customer service team to discuss your options."
-    },
-    {
-      question: "Is there an age limit for joining?",
-      answer: "You can join Day1Health from birth up to age 64. After 65, you can continue with your existing plan or switch to our Senior Plan designed specifically for older adults with age-appropriate benefits."
+      question: "What are the waiting periods for day-to-day benefits?",
+      answer: "Typical waiting periods: General day-to-day and Acute/Pathology/Radiology – 1 month; Specialists – 3 months; Dentistry – 3 months; Optometry – 12 months; Chronic (unknown) – 3 months; Chronic (pre-existing) – 12 months."
     }
   ];
+
+  const allOpen = useMemo(() => expandedAll || openSet.size === faqs.length, [expandedAll, openSet, faqs.length]);
+
+  const toggleAll = () => {
+    if (allOpen) {
+      setExpandedAll(false);
+      setOpenSet(new Set());
+    } else {
+      setExpandedAll(true);
+      setOpenSet(new Set(faqs.map((_, i) => i)));
+    }
+  };
 
   return (
     <section 
@@ -81,7 +97,31 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          {faqs.map((faq, index) => (
+          <div className="flex justify-end gap-3 mb-4">
+            <button
+              onClick={() => setShowFaqs(v => !v)}
+              className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors ${
+                isDark
+                  ? 'bg-blue-900/30 text-blue-200 hover:bg-blue-900/50 border-blue-800'
+                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-300'
+              }`}
+            >
+              {showFaqs ? 'Hide FAQs' : 'Show FAQs'}
+            </button>
+            {showFaqs && (
+              <button
+                onClick={toggleAll}
+                className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors ${
+                  isDark
+                    ? 'bg-gray-800 text-gray-200 hover:bg-gray-700 border-gray-700'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300'
+                }`}
+              >
+                {allOpen ? 'Collapse all' : 'Expand all'}
+              </button>
+            )}
+          </div>
+          {showFaqs && faqs.map((faq, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -97,20 +137,28 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
                   ? '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)'
                   : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
               }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              
             >
               <motion.button
                 className={`w-full px-8 py-6 text-left flex items-center justify-between transition-colors duration-200 ${
                   isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
                 }`}
-                onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                onClick={() => {
+                  // If previously in expand-all mode, switch to manual and toggle this item
+                  setExpandedAll(false);
+                  setOpenSet(prev => {
+                    const next = new Set(prev);
+                    if (next.has(index)) next.delete(index); else next.add(index);
+                    return next;
+                  });
+                }}
                 whileTap={{ scale: 0.98 }}
               >
                 <h3 className={`text-lg font-semibold pr-4 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>{faq.question}</h3>
                 <motion.div
-                  animate={{ rotate: openFAQ === index ? 180 : 0 }}
+                  animate={{ rotate: (expandedAll || openSet.has(index)) ? 180 : 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <ChevronDown className={`w-6 h-6 flex-shrink-0 ${
@@ -120,7 +168,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
               </motion.button>
               
               <AnimatePresence>
-                {openFAQ === index && (
+                {(expandedAll || openSet.has(index)) && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
