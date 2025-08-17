@@ -14,6 +14,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
       img: '/icons/immunity.png',
       title: "Real Health Cover",
       description: "Not just gap cover - comprehensive medical insurance that covers doctor visits, medications, hospital stays, and emergencies.",
+      size: 'w-[37px] h-[37px] md:w-[45px] md:h-[45px]'
     },
     {
       img: '/icons/duration-alt.png',
@@ -90,7 +91,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
                 isDark ? 'bg-blue-900/30' : 'bg-blue-100'
               } ring-1 ring-blue-500/20`}>
                 {('img' in feature && feature.img) ? (
-                  <img src={feature.img} alt={feature.title} className="w-8 h-8 object-contain" />
+                  <img src={feature.img} alt={feature.title} className={`${(feature as any).size ?? 'w-8 h-8'} object-contain`} />
                 ) : (
                   // Fallback to Lucide if needed
                   <Shield className="w-8 h-8 text-green-600" />
