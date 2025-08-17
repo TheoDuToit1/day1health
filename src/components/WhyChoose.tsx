@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Clock, Users, Heart, Globe, Award } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface WhyChooseProps {
@@ -10,40 +10,47 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
   const { isDark } = useTheme();
   const features = [
     {
-      icon: Shield,
+      // Replaces Lucide Shield with custom icon
+      img: '/icons/immunity.png',
       title: "Real Health Cover",
       description: "Not just gap cover - comprehensive medical insurance that covers doctor visits, medications, hospital stays, and emergencies.",
-      color: "text-green-600"
+      bgLight: 'bg-green-100',
+      bgDark: 'bg-green-900/40',
     },
     {
-      icon: Clock,
+      img: '/icons/duration-alt.png',
       title: "No Waiting Periods",
       description: "Coverage starts from Day 1 for accidents and emergencies. No waiting around when you need care most.",
-      color: "text-blue-600"
+      bgLight: 'bg-blue-100',
+      bgDark: 'bg-blue-900/30',
     },
     {
-      icon: Award,
+      img: '/icons/features-alt.png',
       title: "Underwritten by African Unity",
       description: "Backed by a trusted South African insurer with decades of experience and financial stability.",
-      color: "text-blue-600"
+      bgLight: 'bg-blue-100',
+      bgDark: 'bg-blue-900/30',
     },
     {
-      icon: Globe,
+      img: '/icons/population-globe.png',
       title: "Nationwide Network",
       description: "Access thousands of healthcare providers across South Africa. Use your cover wherever you are.",
-      color: "text-green-600"
+      bgLight: 'bg-green-100',
+      bgDark: 'bg-green-900/40',
     },
     {
-      icon: Users,
+      img: '/icons/users-loyalty.png',
       title: "Inclusive & Accessible",
       description: "Designed for all South Africans with affordable options and support in multiple languages.",
-      color: "text-blue-600"
+      bgLight: 'bg-blue-100',
+      bgDark: 'bg-blue-900/30',
     },
     {
-      icon: Heart,
+      img: '/icons/skill.png',
       title: "24/7 Support",
       description: "Round-the-clock emergency assistance and member support. We're here when you need us most.",
-      color: "text-green-600"
+      bgLight: 'bg-green-100',
+      bgDark: 'bg-green-900/40',
     }
   ];
 
@@ -92,9 +99,14 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
               }`}
             >
               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${
-                isDark ? 'bg-gray-700' : 'bg-gray-50'
-              }`}>
-                <feature.icon className={`w-8 h-8 ${feature.color}`} />
+                isDark ? (feature.bgDark || 'bg-green-900/40') : (feature.bgLight || 'bg-green-100')
+              } ring-1 ring-green-600/20`}>
+                {('img' in feature && feature.img) ? (
+                  <img src={feature.img} alt={feature.title} className="w-8 h-8 object-contain" />
+                ) : (
+                  // Fallback to Lucide if needed
+                  <Shield className="w-8 h-8 text-green-600" />
+                )}
               </div>
               <h3 className={`text-xl font-bold mb-4 ${
                 isDark ? 'text-white' : 'text-gray-900'
