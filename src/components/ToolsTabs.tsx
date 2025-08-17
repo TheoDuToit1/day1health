@@ -37,7 +37,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const tabs = [
     { 
       id: 'daytoday', 
-      label: 'Day-to-Day', 
+      label: 'Plan Day-to-Day', 
       icon: Heart,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -45,7 +45,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'hospital', 
-      label: 'Hospital', 
+      label: 'Plan Hospital', 
       icon: CreditCard,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -53,7 +53,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'comprehensive', 
-      label: 'Comprehensive', 
+      label: 'Plan Comprehensive', 
       icon: Shield,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -61,7 +61,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'senior', 
-      label: 'Senior-Plan', 
+      label: 'Plan Senior-Plan', 
       icon: Users,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
@@ -73,6 +73,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     // When changing tabs, ensure any open pricing cards are closed
     setActiveTab(tabId);
     setExpanded({ intro: false, family: false, basic: false, student: false });
+    try {
+      sessionStorage.setItem('activePlansTab', tabId);
+    } catch {}
   };
 
   // Defensive: if activeTab changes from anywhere, collapse any open cards
@@ -81,6 +84,16 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     // Keep cards revealed for quick access; adjust per-tab if needed later
     setShowDayToDayCards(true);
   }, [activeTab]);
+
+  // On mount, restore the last active tab if present
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('activePlansTab');
+      if (saved && tabs.some(t => t.id === saved)) {
+        setActiveTab(saved);
+      }
+    } catch {}
+  }, []);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -1109,10 +1122,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {/* Hover Badge (collapsed only) */}
                 {!expanded.family && (
                   <div
-                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                       isDark
-                        ? 'bg-gray-900/80 border-gray-700'
-                        : 'bg-white/90 border-gray-200'
+                        ? 'bg-white/10 border-white/15'
+                        : 'bg-white/30 border-white/40'
                     }`}
                   >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
@@ -1289,7 +1302,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div
                     className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                       isDark
-                        ? 'bg-gray-900/80 border-gray-700'
+                        ? 'bg-white/10 border-white/15'
                         : 'bg-white/30 border-white/40'
                     }`}
                   >
@@ -1470,7 +1483,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div
                     className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
                       isDark
-                        ? 'bg-gray-900/80 border-gray-700'
+                        ? 'bg-white/10 border-white/15'
                         : 'bg-white/30 border-white/40'
                     }`}
                   >

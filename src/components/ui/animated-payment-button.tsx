@@ -31,6 +31,7 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
   const [hoverIndex, setHoverIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const intervalRef = useRef<number | null>(null);
+  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
     if (isHovering && hoverMessages.length > 0) {
@@ -46,7 +47,23 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
     };
   }, [isHovering, hoverMessages, hoverCycleMs]);
 
-  const displayText = isHovering && hoverMessages.length > 0 ? hoverMessages[hoverIndex] : text;
+  // While hovering, every 3 seconds toggle the label to "Sign up"
+  useEffect(() => {
+    if (!isHovering) {
+      setShowSignup(false);
+      return;
+    }
+    const id = window.setInterval(() => {
+      setShowSignup((v) => !v);
+    }, 3000);
+    return () => {
+      window.clearInterval(id);
+      setShowSignup(false);
+    };
+  }, [isHovering]);
+
+  const baseDisplay = isHovering && hoverMessages.length > 0 ? hoverMessages[hoverIndex] : text;
+  const displayText = showSignup ? 'Sign up' : baseDisplay;
 
   const activeIndex = isHovering && hoverMessages.length > 0 ? hoverIndex : 0;
   const defaultIcons: ("card" | "payment" | "dollar" | "wallet" | "check")[] = [
@@ -54,7 +71,7 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
   ];
   const iconSeq = hoverIcons && hoverIcons.length > 0 ? hoverIcons : defaultIcons;
   const activeIcon = iconSeq[activeIndex % iconSeq.length];
-  const contentKey = isHovering && hoverMessages.length > 0 ? `hover-${hoverIndex}-${activeIcon}` : `base-${activeIcon}`;
+  const contentKey = `${showSignup ? 'signup' : (isHovering && hoverMessages.length > 0 ? `hover-${hoverIndex}` : 'base')}-${activeIcon}`;
 
   const renderIcon = (key: "card" | "payment" | "dollar" | "wallet" | "check") => {
     switch (key) {
@@ -120,7 +137,7 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
             >
-              <span className="btn-text">{displayText}</span>
+              <span className={`btn-text ${showSignup ? 'signup' : ''}`}>{displayText}</span>
               <span className="icon-container">{renderIcon(activeIcon)}</span>
             </motion.span>
           </AnimatePresence>
@@ -148,7 +165,7 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
             >
-              <span className="btn-text">{displayText}</span>
+              <span className={`btn-text ${showSignup ? 'signup' : ''}`}>{displayText}</span>
               <span className="icon-container">{renderIcon(activeIcon)}</span>
             </motion.span>
           </AnimatePresence>

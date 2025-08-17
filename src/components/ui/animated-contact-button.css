@@ -454,6 +454,10 @@
   display: flex;
   position: relative;
 }
+.state.state--default .icon {
+  /* Ensure only the animated icon-cart is visible in default state */
+  display: none !important;
+}
 .state--added {
   display: none;
   color: #1f2937;

@@ -61,9 +61,11 @@ export const AnimatedContactButton: React.FC<AnimatedContactButtonProps> = ({
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              style={{ transform: 'translateY(-19px)' }}
             >
-              <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
-              <path d="M3 7l9 6 9-6"></path>
+              {/* Pencil / edit icon */}
+              <path d="M3 17.25V21h3.75L17.81 9.94a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0L3 17.25z"></path>
+              <path d="M13.06 6.19l2.75 2.75"></path>
             </svg>
           </div>
           {renderLabel(labelDefault)}
