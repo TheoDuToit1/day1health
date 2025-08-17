@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, Mail, Clock } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 
@@ -111,24 +111,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 ${
-                  isDark ? 'bg-green-900/50' : 'bg-green-100'
-                }`}>
-                  <MapPin className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h4 className={`font-semibold mb-2 ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>Visit Us</h4>
-                  <p className={`mb-1 ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
-                  }`}>Cape Town, Johannesburg, Durban</p>
-                  <p className={`text-sm ${
-                    isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`}>Multiple locations across South Africa</p>
-                </div>
-              </div>
+              
 
               <div className="flex items-start">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 ${
