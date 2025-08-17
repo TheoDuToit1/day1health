@@ -21,22 +21,26 @@ const IntroCarousel: React.FC<{
   }, [images, intervalMs]);
 
   const current = images[index] ?? images[0];
+  const dir = index % 2 === 0 ? 1 : -1; // alternate slide direction for variety
 
   return (
     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
       <AnimatePresence initial={false} mode="wait">
         <motion.img
-          key={current}
+          key={`${current}-${index}`}
           src={current}
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
-          initial={{ x: '10%', opacity: 0 }}
-          animate={{ x: '0%', opacity: 0.9 }}
-          exit={{ x: '-10%', opacity: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ x: `${10 * dir}%`, scale: 1.08, opacity: 0 }}
+          animate={{ x: '0%', scale: 1.0, opacity: 0.95 }}
+          exit={{ x: `${-10 * dir}%`, scale: 1.04, opacity: 0 }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
         />
       </AnimatePresence>
+      {/* Vignette and edge gradients for better text contrast */}
       <div className={`${overlayClassName} absolute inset-0`} />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25" />
     </div>
   );
 };
@@ -145,7 +149,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     isDark 
                       ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
                       : 'bg-white border-emerald-200 hover:border-emerald-400'
-                  } ${expanded.intro ? 'min-h-[420px]' : 'min-h-[140px]'} `}
+                  } ${expanded.intro ? 'min-h-[420px] md:min-h-[460px] lg:min-h-[500px]' : 'min-h-[140px]'} `}
                   layout="position"
                   transition={{ 
                     duration: 0.4,
@@ -817,7 +821,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   isDark 
                     ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
                     : 'bg-white border-emerald-200 hover:border-emerald-400'
-                } ${expanded.intro ? 'min-h-[420px]' : 'min-h-[140px]'} `}
+                } ${expanded.intro ? 'min-h-[420px] md:min-h-[460px] lg:min-h-[500px]' : 'min-h-[140px]'} `}
                 layout="position"
                 transition={{ 
                   duration: 0.4,
