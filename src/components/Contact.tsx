@@ -93,8 +93,8 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Information */}
-          <div>
-            <h3 className={`text-2xl font-bold mb-8 ${
+          <div className="mt-2.5">
+            <h3 className={`text-2xl font-bold mb-6 ${
               isDark ? 'text-white' : 'text-gray-900'
             }`}>Let's Connect</h3>
             
@@ -186,7 +186,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
           </div>
 
           {/* Actions and Modal Triggers */}
-          <div>
+          <div className="lg:-mt-4">
             <div className={`rounded-2xl shadow-lg p-8 ${
               isDark ? 'bg-gray-800' : 'bg-white'
             }`}>
