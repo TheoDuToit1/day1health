@@ -234,7 +234,7 @@ const PlanDetailPage: React.FC = () => {
                         }}
                         className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm px-0.5`}
                       >
-                        Home
+                        Back
                       </Link>
                     </li>
                     <li aria-hidden="true" className={`${isDark ? 'text-gray-500' : 'text-gray-400'} px-1`}>

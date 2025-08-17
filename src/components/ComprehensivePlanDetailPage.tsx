@@ -229,7 +229,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                           handleNavigate('plans');
                         }}
                       >
-                        Home
+                        Back
                       </Link>
                     </li>
                     <li aria-hidden="true" className={`${isDark ? 'text-gray-500' : 'text-gray-400'} px-1`}>

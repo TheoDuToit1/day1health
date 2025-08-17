@@ -4,6 +4,43 @@ import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 
+// Animated background carousel for intro cards
+const IntroCarousel: React.FC<{
+  images: string[];
+  intervalMs?: number;
+  overlayClassName?: string;
+}> = ({ images, intervalMs = 2600, overlayClassName = 'bg-black/40' }) => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (!images || images.length === 0) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % images.length);
+    }, intervalMs);
+    return () => clearInterval(id);
+  }, [images, intervalMs]);
+
+  const current = images[index] ?? images[0];
+
+  return (
+    <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
+      <AnimatePresence initial={false} mode="wait">
+        <motion.img
+          key={current}
+          src={current}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={{ x: '10%', opacity: 0 }}
+          animate={{ x: '0%', opacity: 0.9 }}
+          exit={{ x: '-10%', opacity: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </AnimatePresence>
+      <div className={`${overlayClassName} absolute inset-0`} />
+    </div>
+  );
+};
+
 interface ToolsTabsProps {
   isSidebarCollapsed: boolean;
 }
@@ -117,16 +154,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
-                  {/* Background accent */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
-                    <img
-                      src="https://placehold.co/1200x800/111/fff?text=Demo"
-                      alt=""
-                      className="w-full h-full object-cover opacity-50"
-                      loading="lazy"
-                    />
-                    <div className={`bg-black/40 absolute inset-0`} />
-                  </div>
+                  {/* Background accent: animated Single/Couple/Family */}
+                  <IntroCarousel
+                    images={[
+                      '/assets/images/single (1).jpg',
+                      '/assets/images/couple (1).jpg',
+                      '/assets/images/family (1).jpg',
+                    ]}
+                  />
                   <div
                     className="relative z-10 flex items-start justify-between gap-3 text-white cursor-pointer select-none"
                     onClick={toggleIntro}
@@ -791,16 +826,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{}}
               >
-                {/* Background accent */}
-                <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
-                  <img
-                    src="https://placehold.co/1200x800/111/fff?text=Demo"
-                    alt=""
-                    className="w-full h-full object-cover opacity-50"
-                    loading="lazy"
-                  />
-                  <div className={`bg-black/40 absolute inset-0`} />
-                </div>
+                {/* Background accent: animated Single/Couple/Family */}
+                <IntroCarousel
+                  images={[
+                    '/assets/images/single (1).jpg',
+                    '/assets/images/couple (1).jpg',
+                    '/assets/images/family (1).jpg',
+                  ]}
+                />
                 <div
                   className="relative z-10 flex items-start justify-between gap-3 text-white cursor-pointer select-none"
                   onClick={toggleIntro}
@@ -1526,16 +1559,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
-                  {/* Background accent */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
-                    <img
-                      src="https://placehold.co/1200x800/111/fff?text=Demo"
-                      alt=""
-                      className="w-full h-full object-cover opacity-50"
-                      loading="lazy"
-                    />
-                    <div className={`bg-black/40 absolute inset-0`} />
-                  </div>
+                  {/* Background accent: animated Single/Couple/Family */}
+                  <IntroCarousel
+                    images={[
+                      '/assets/images/single (1).jpg',
+                      '/assets/images/couple (1).jpg',
+                      '/assets/images/family (1).jpg',
+                    ]}
+                  />
                   <div
                     className="relative z-10 flex items-start justify-between gap-3 text-white cursor-pointer select-none"
                     onClick={toggleIntro}
@@ -2200,16 +2231,14 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
-                  {/* Background accent */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
-                    <img
-                      src="https://placehold.co/1200x800/111/fff?text=Demo"
-                      alt=""
-                      className="w-full h-full object-cover opacity-50"
-                      loading="lazy"
-                    />
-                    <div className={`bg-black/40 absolute inset-0`} />
-                  </div>
+                  {/* Background accent: animated Single/Couple/Family */}
+                  <IntroCarousel
+                    images={[
+                      '/assets/images/single (1).jpg',
+                      '/assets/images/couple (1).jpg',
+                      '/assets/images/family (1).jpg',
+                    ]}
+                  />
                   <div
                     className="relative z-10 flex items-start justify-between gap-3 text-white cursor-pointer select-none"
                     onClick={toggleIntro}
