@@ -24,21 +24,9 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="flex items-center space-x-3 mb-6">
-              {/* Use the exact same logo style as the sidebar, but dark-theme aware */}
-              <div className="relative w-48 h-16 flex items-center justify-center">
-                <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
-                  <div className="absolute inset-0 flex items-center justify-center p-1">
-                    <img 
-                      src="/assets/images/Logo.jpg" 
-                      alt="Day 1 Health Logo" 
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p className={`text-xl mb-6 max-w-md ${
+            {/* Heading area without logo (logo moved below FSP) */}
+            <div className="flex items-center space-x-3 mb-6"></div>
+            <p className={`text-xl mb-6 -mt-6 max-w-md ${
               isDark ? 'text-gray-300' : 'text-gray-600'
             }`}>
               Affordable health cover for every South African.
@@ -63,6 +51,20 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               <div className="flex items-center space-x-3">
                 <Shield className="w-5 h-5 text-green-600" />
                 <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 12345</span>
+              </div>
+              {/* Logo moved here, ensure it's clearly lower to align with theme toggle */}
+              <div className="pt-[70px]">
+                <div className="relative w-64 h-[111px] flex items-center justify-center">
+                  <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
+                    <div className="absolute inset-0 flex items-center justify-center p-1.5">
+                      <img 
+                        src="/assets/images/Logo.jpg" 
+                        alt="Day 1 Health Logo" 
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
