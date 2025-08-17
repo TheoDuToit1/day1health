@@ -2389,40 +2389,42 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
                             >
-                              {'Senior'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Senior'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
                             </motion.span>
-                          </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Day-to-Day
-                          </motion.span>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Day-to-Day
+                            </motion.span>
+                          </div>
                           <motion.div
                             layoutId="senior-day-header-price"
                             className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
@@ -2564,40 +2566,42 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.03 } } }}
-                          >
-                              {'Senior'.split('').map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.03 } } }}
+                            >
+                                {'Senior'.split('').map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
                             </motion.span>
-                          </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Hospital
-                          </motion.span>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Hospital
+                            </motion.span>
+                          </div>
                           <motion.div
                             layoutId="senior-hospital-header-price"
                             className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
@@ -2738,40 +2742,42 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
                             >
-                              {'Senior'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Senior'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
                             </motion.span>
-                          </motion.span>
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Comprehensive
-                          </motion.span>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Comprehensive
+                            </motion.span>
+                          </div>
                           <motion.div
                             layoutId="senior-comprehensive-header-price"
                             className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
