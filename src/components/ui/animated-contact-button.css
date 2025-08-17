@@ -181,24 +181,7 @@
 }
 
 /* Cart */
-.state .icon-cart {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  transform: translate(-120px, 9px);
-}
-.animated-contact-button:focus .state .icon-cart {
-  animation: cart 2s linear;
-}
-.animated-contact-button:focus .state .icon-cart svg path {
-  animation: cartPath 2s linear;
-}
-.state .icon-cart svg {
-  height: 30px;
-  width: auto;
-}
+.state .icon-cart { display: none; }
 
 @keyframes cart {
   0% {
@@ -450,9 +433,12 @@
 }
 
 .state {
-  padding-left: 29px;
+  padding-left: 0;
+  padding-right: 0;
   display: flex;
   position: relative;
+  width: 100%;
+  justify-content: center; /* center text horizontally */
 }
 .state.state--default .icon {
   /* Ensure only the animated icon-cart is visible in default state */

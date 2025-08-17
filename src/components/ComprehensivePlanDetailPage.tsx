@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -121,6 +121,17 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     if (activeTab === 'description') setPage(0);
   }, [activeTab]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+
+  // Map tier to the correct Comprehensive plan PDF
+  const comprehensivePdfMap: Record<string, string> = {
+    value: "Day1 Health Value Plus Plan 2025.pdf",
+    platinum: "Day1 Health Platinum Plan 2025.pdf",
+    executive: "", // no dedicated Executive Comprehensive PDF provided
+  };
+  const comprehensivePdfFile = comprehensivePdfMap[tierParam] || '';
+  const compPdfPath = comprehensivePdfFile
+    ? `/assets/pdf's/${comprehensivePdfFile}`
+    : "/assets/pdf's/Day 1 Comparative guide 2025_v2.pdf";
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
@@ -360,6 +371,17 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                         </div>
                       )}
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
+                      <div className="mt-4">
+                        <a
+                          href={compPdfPath}
+                          download
+                          className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400
+                            ${isDark ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'}`}
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Plan details</span>
+                        </a>
+                      </div>
                     </motion.div>
                   ) : (
                     <motion.div 

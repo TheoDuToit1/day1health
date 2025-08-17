@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -104,6 +104,15 @@ const SeniorPlanDetailPage: React.FC = () => {
   const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
   useEffect(() => { if (activeTab === 'description') setPage(0); }, [activeTab]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+
+  // Map Senior category to the correct PDF
+  const seniorPdfMap: Record<string, string> = {
+    'day-to-day': 'Day1 Health Senior Day to Day Plan 2025.pdf',
+    'comprehensive': 'Day1 Health Senior Comprehensive Plan 2025.pdf',
+    'hospital': 'Day1 Health Value Plus Senior Hospital Plan 2025.pdf',
+  };
+  const seniorPdfFile = seniorPdfMap[categoryDisplay] || 'Day 1 Comparative guide 2025_v2.pdf';
+  const seniorPdfPath = `/assets/pdf's/${seniorPdfFile}`;
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
@@ -323,6 +332,17 @@ const SeniorPlanDetailPage: React.FC = () => {
                         </div>
                       )}
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
+                      <div className="mt-4">
+                        <a
+                          href={seniorPdfPath}
+                          download
+                          className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400
+                            ${isDark ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'}`}
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Plan details</span>
+                        </a>
+                      </div>
                     </motion.div>
                   ) : (
                     <motion.div 
