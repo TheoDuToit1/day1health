@@ -14,43 +14,31 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
       img: '/icons/immunity.png',
       title: "Real Health Cover",
       description: "Not just gap cover - comprehensive medical insurance that covers doctor visits, medications, hospital stays, and emergencies.",
-      bgLight: 'bg-green-100',
-      bgDark: 'bg-green-900/40',
     },
     {
       img: '/icons/duration-alt.png',
       title: "No Waiting Periods",
       description: "Coverage starts from Day 1 for accidents and emergencies. No waiting around when you need care most.",
-      bgLight: 'bg-blue-100',
-      bgDark: 'bg-blue-900/30',
     },
     {
       img: '/icons/features-alt.png',
       title: "Underwritten by African Unity",
       description: "Backed by a trusted South African insurer with decades of experience and financial stability.",
-      bgLight: 'bg-blue-100',
-      bgDark: 'bg-blue-900/30',
     },
     {
       img: '/icons/population-globe.png',
       title: "Nationwide Network",
       description: "Access thousands of healthcare providers across South Africa. Use your cover wherever you are.",
-      bgLight: 'bg-green-100',
-      bgDark: 'bg-green-900/40',
     },
     {
       img: '/icons/users-loyalty.png',
       title: "Inclusive & Accessible",
       description: "Designed for all South Africans with affordable options and support in multiple languages.",
-      bgLight: 'bg-blue-100',
-      bgDark: 'bg-blue-900/30',
     },
     {
       img: '/icons/skill.png',
       title: "24/7 Support",
       description: "Round-the-clock emergency assistance and member support. We're here when you need us most.",
-      bgLight: 'bg-green-100',
-      bgDark: 'bg-green-900/40',
     }
   ];
 
@@ -99,8 +87,8 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
               }`}
             >
               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${
-                isDark ? (feature.bgDark || 'bg-green-900/40') : (feature.bgLight || 'bg-green-100')
-              } ring-1 ring-green-600/20`}>
+                isDark ? 'bg-blue-900/30' : 'bg-blue-100'
+              } ring-1 ring-blue-500/20`}>
                 {('img' in feature && feature.img) ? (
                   <img src={feature.img} alt={feature.title} className="w-8 h-8 object-contain" />
                 ) : (
