@@ -114,12 +114,12 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
           }`}>
             <div className="grid md:grid-cols-4 gap-8 text-center">
               <div>
-                <div className="text-4xl font-bold text-green-600 mb-2">10,000+</div>
-                <div className={isDark ? 'text-gray-300' : 'text-gray-600'}>Happy Members</div>
+                <div className="text-4xl font-bold text-green-600 mb-2">Thousand's</div>
+                <div className={isDark ? 'text-gray-300' : 'text-gray-600'}>of Happy Members</div>
               </div>
               <div>
-                <div className="text-4xl font-bold text-green-600 mb-2">5,000+</div>
-                <div className={isDark ? 'text-gray-300' : 'text-gray-600'}>Network Providers</div>
+                <div className="text-4xl font-bold text-green-600 mb-2">Hundred's</div>
+                <div className={isDark ? 'text-gray-300' : 'text-gray-600'}>of Network Providers</div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-green-600 mb-2">24/7</div>
