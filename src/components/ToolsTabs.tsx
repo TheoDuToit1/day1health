@@ -324,7 +324,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -496,7 +496,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -656,7 +656,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -1007,7 +1007,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                   </motion.div>
                 )}
                 <div className="relative z-10 mb-[17px]">
@@ -1021,56 +1021,56 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
                       >
-                        <motion.span
-                          className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -8 }}
-                          transition={{ duration: 0.18 }}
-                        >
-                          <motion.span
-                            className="inline-flex"
-                            initial="hidden"
-                            animate="show"
-                            variants={{ show: { transition: { staggerChildren: 0.03 } } }}
-                          >
-                            {'Day-to-Day'.split('').map((ch, i) => (
-                              <motion.span
-                                key={i}
-                                className="inline-block"
-                                variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                {ch === ' ' ? '\u00A0' : ch}
-                              </motion.span>
-                            ))}
-                          </motion.span>
-                        </motion.span>
                         <div className="flex items-center gap-2">
                           <motion.span
-                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
+                            <motion.span
+                              className="inline-flex"
+                              initial="hidden"
+                              animate="show"
+                              variants={{ show: { transition: { staggerChildren: 0.03 } } }}
+                            >
+                              {'Day-to-Day'.split('').map((ch, i) => (
+                                <motion.span
+                                  key={i}
+                                  className="inline-block"
+                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  {ch === ' ' ? '\u00A0' : ch}
+                                </motion.span>
+                              ))}
+                            </motion.span>
+                          </motion.span>
+                          <motion.span
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -6 }}
+                            transition={{ duration: 0.18 }}
+                          >
                             Family
                           </motion.span>
-                          <motion.div
-                            layoutId={`${activeTab}-family-price`}
-                            className={`inline-flex flex-col items-start gap-0.5 rounded-xl border backdrop-blur-sm px-5 py-1 min-w-[8.25rem] ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE * familyChildren}`}</span>
-                            {familyChildren === 1 ? (
-                              <span className={`text-white text-[11px] font-normal`}>
-                                /mo per child
-                              </span>
-                            ) : (
-                              <span className={`text-white text-[11px] font-normal`}>{`/mo for ${familyChildren} children`}</span>
-                            )}
-                          </motion.div>
                         </div>
+                        <motion.div
+                          layoutId={`${activeTab}-family-price`}
+                          className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                          transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                        >
+                          <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE * familyChildren}`}</span>
+                          {familyChildren === 1 ? (
+                            <span className={`text-white text-sm font-normal`}>
+                              /mo per child
+                            </span>
+                          ) : (
+                            <span className={`text-white text-sm font-normal`}>{`/mo for ${familyChildren} children`}</span>
+                          )}
+                        </motion.div>
                       </motion.div>
                     ) : (
                       <motion.h3
@@ -1211,7 +1211,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                   </motion.div>
                 )}
                 <div className="mb-[17px]">
@@ -1225,50 +1225,50 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
                       >
-                        <motion.span
-                          className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -8 }}
-                          transition={{ duration: 0.18 }}
-                        >
+                        <div className="flex items-center gap-2">
                           <motion.span
-                            className="inline-flex"
-                            initial="hidden"
-                            animate="show"
-                            variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                          >
-                            {'Day-to-Day'.split('')?.map((ch, i) => (
-                              <motion.span
-                                key={i}
-                                className="inline-block"
-                                variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                {ch === ' ' ? '\u00A0' : ch}
-                              </motion.span>
-                            ))}
-                          </motion.span>
-                        </motion.span>
-                        <div className="flex items-center gap-1">
-                          <motion.span
-                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                             initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
+                            <motion.span
+                              className="inline-flex"
+                              initial="hidden"
+                              animate="show"
+                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                            >
+                              {'Day-to-Day'.split('')?.map((ch, i) => (
+                                <motion.span
+                                  key={i}
+                                  className="inline-block"
+                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  {ch === ' ' ? '\u00A0' : ch}
+                                </motion.span>
+                              ))}
+                            </motion.span>
+                          </motion.span>
+                          <motion.span
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -6 }}
+                            transition={{ duration: 0.18 }}
+                          >
                             Couples
                           </motion.span>
-                          <motion.div
-                            layoutId={`${activeTab}-basic-price`}
-                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">R674</span>
-                            <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
                         </div>
+                        <motion.div
+                          layoutId={`${activeTab}-basic-price`}
+                          className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                          transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                        >
+                          <span className="text-2xl font-bold text-emerald-400">R674</span>
+                          <span className={`text-white text-sm font-normal`}>/month</span>
+                        </motion.div>
                       </motion.div>
                     ) : (
                       <motion.h3
@@ -1389,7 +1389,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                   </motion.div>
                 )}
                 <div className="mb-[17px]">
@@ -1404,50 +1404,50 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         transition={{ duration: 0.18 }}
                       >
                         <div className="flex flex-col items-start gap-2">
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                            >
-                              {'Day-to-Day'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
-                            </motion.span>
-                          </motion.span>
                           <div className="flex items-center gap-2">
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                              initial={{ opacity: 0, x: -4 }}
+                              initial={{ opacity: 0, x: -8 }}
                               animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -4 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Day-to-Day'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
+                            </motion.span>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -6 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -6 }}
                               transition={{ duration: 0.18 }}
                             >
                               Single
                             </motion.span>
-                            <motion.div
-                              layoutId="student-price"
-                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R385</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                           </div>
+                          <motion.div
+                            layoutId="student-price"
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R385</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </div>
                       </motion.div>
                     ) : (
@@ -1737,7 +1737,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -1913,7 +1913,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -2079,7 +2079,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -2408,7 +2408,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -2585,7 +2585,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
@@ -2761,7 +2761,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
