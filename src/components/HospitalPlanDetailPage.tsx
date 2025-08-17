@@ -207,7 +207,7 @@ const HospitalPlanDetailPage: React.FC = () => {
             {/* Hero / Title */}
             <section className={`${isDark ? 'bg-gradient-to-b from-gray-900 via-gray-900 to-gray-900' : 'bg-gradient-to-b from-white via-gray-50 to-gray-50'} border-y ${isDark ? 'border-gray-800' : 'border-gray-200'} py-6 md:py-8 mb-6`}>
               <motion.div
-                className={`max-w-[74rem] mx-auto px-4 md:px-6`}
+                className={`max-w-[73rem] mx-auto px-4 md:px-6`}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.4 }}
@@ -272,11 +272,11 @@ const HospitalPlanDetailPage: React.FC = () => {
               </section>
 
             {/* Main content grid */}
-            <div className={`max-w-[74rem] mx-auto px-4 md:px-6`}>
+            <div className={`max-w-[73rem] mx-auto px-4 md:px-6`}>
               <div className="grid grid-cols-12 gap-6">
                 {/* Left: Details & Tabs */}
                 <motion.div 
-                  className="col-span-12 lg:col-span-8"
+                  className="col-span-12 lg:col-span-8 xl:col-span-9"
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
@@ -438,7 +438,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/daytoday/single/daytodaysingle.png"
+                              src="/assets/images/single (1).jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -606,7 +606,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/daytoday/single/daytodaysingle.png"
+                              src="/assets/images/couple (1).jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -774,7 +774,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/daytoday/single/daytodaysingle.png"
+                              src="/assets/images/family (1).jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -924,7 +924,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                 </motion.div>
 
                 {/* Right: Sticky summary / purchase card */}
-                <aside className="col-span-12 lg:col-span-4">
+                <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
                   <div className="lg:sticky lg:top-24">
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-200'}`}
