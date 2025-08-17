@@ -106,7 +106,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
                   : 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-300'
               }`}
             >
-              {showFaqs ? 'Hide FAQs' : 'Show FAQs'}
+              {showFaqs ? 'Hide FAQs' : 'Show Frequently Asked Questions'}
             </button>
             {showFaqs && (
               <button
