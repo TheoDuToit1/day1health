@@ -155,20 +155,6 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 }`}>
                   📞 Schedule a Call Back
                 </button>
-                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
-                  isDark 
-                    ? 'text-gray-300 hover:bg-gray-700' 
-                    : 'text-gray-900 hover:bg-gray-50'
-                }`}>
-                  💬 Start Live Chat
-                </button>
-                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
-                  isDark 
-                    ? 'text-gray-300 hover:bg-gray-700' 
-                    : 'text-gray-900 hover:bg-gray-50'
-                }`}>
-                  📍 Find Nearest Office
-                </button>
               </div>
             </div>
           </div>
