@@ -31,6 +31,23 @@
   padding: 14px 16px;
   font-size: 16px;
 }
+/* Extra small size variant - more compact than sm */
+.hero-cta-button.hero-cta-xs {
+  min-width: 130px;
+  height: 44px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+/* Adjust icon and text spacing for xs */
+.hero-cta-button.hero-cta-xs .hero-state {
+  padding-left: 24px;
+}
+.hero-cta-button.hero-cta-xs .hero-state .hero-icon {
+  transform: scale(1);
+}
+.hero-cta-button.hero-cta-xs .hero-state--sent .hero-icon {
+  transform: scale(1);
+}
 /* Optional fixed width variant - prevents width change on text/state switch */
 .hero-cta-button.hero-cta-fixed {
   width: 220px; /* keep width stable during animation */

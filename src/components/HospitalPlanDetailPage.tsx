@@ -8,12 +8,13 @@ import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
-import { ShimmerDownloadLink } from './ui/shimmer-download-link';
+import { DownloadHeroButton } from './ui/download-hero-button';
 
 const coverItems = [
-  'Unlimited Doctor Visits',
-  'Acute/Chronic Medication',
-  'Dentistry / Optometry',
+  'Private Hospital Benefits',
+  'Illness',
+  'Accident',
+  'Ambulance',
 ];
 
 const additionalInfoOptions: string[] = [
@@ -22,65 +23,14 @@ const additionalInfoOptions: string[] = [
   'Single + 2 Children',
   'Single + 3 Children',
   'Single + 4 Children',
-  'Couples',
-  'Couples + 1 Child',
-  'Couples + 2 Children',
-  'Couples + 3 Children',
-  'Couples + 4 Children',
+  'Couple',
+  'Couple + 1 Child',
+  'Couple + 2 Children',
+  'Couple + 3 Children',
+  'Couple + 4 Children',
 ];
 
-const descriptionItems: { title: string; text: string }[] = [
-  {
-    title: 'Unlimited Managed Doctor Visits',
-    text:
-      'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Pathology',
-    text:
-      'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Specialist Benefit',
-    text:
-      'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
-  },
-  {
-    title: 'Basic Dentistry',
-    text:
-      'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
-  },
-  {
-    title: 'Acute Medication',
-    text:
-      'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network GP or obtained on script from a Network Pharmacy. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Optometry (Iso Leso Optics)',
-    text:
-      'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
-  },
-  {
-    title: 'Chronic Medication',
-    text:
-      'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
-  },
-  {
-    title: 'Out-of-Area Visits',
-    text:
-      'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Radiology',
-    text:
-      'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Family Funeral Benefit',
-    text:
-      'Principal, Spouse & Child > 14 years R10,000. Child > 6 years R5,000. Child > 0 years > R2,500. Stillborn > 28 weeks R1,250. A 3 month waiting period applies.',
-  },
-];
+// descriptionItems are built per tier inside the component
 
 const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
 
@@ -94,9 +44,10 @@ const HospitalPlanDetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
-  const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couples' : variantParam === 'family' ? 'Family' : 'Single';
+  const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const tierParam = (searchParams.get('tier') || 'value').toLowerCase();
   const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : 'Value';
+  const tierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
   const pageTitle = `Hospital - ${tierDisplay} - ${variantDisplay}`;
   type CardKey = 'single' | 'couple' | 'family';
   const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
@@ -116,8 +67,6 @@ const HospitalPlanDetailPage: React.FC = () => {
     });
   const pageSize = 4;
   const [page, setPage] = useState(0);
-  const pageCount = Math.ceil(descriptionItems.length / pageSize);
-  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
   useEffect(() => {
     if (activeTab === 'description') setPage(0);
   }, [activeTab]);
@@ -131,6 +80,13 @@ const HospitalPlanDetailPage: React.FC = () => {
   };
   const hospitalPdfFile = hospitalPdfMap[tierParam] || 'Day 1 Comparative guide 2025_v2.pdf';
   const pdfPath = `/assets/pdf's/${hospitalPdfFile}`;
+
+  // Build cover badges per tier
+  const displayCoverItems = ((): string[] => {
+    if (tierKey === 'executive') return [...coverItems, 'Illness Top-Up', 'Critical Illness'];
+    if (tierKey === 'platinum') return [...coverItems, 'Critical Illness'];
+    return coverItems;
+  })();
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
@@ -160,10 +116,66 @@ const HospitalPlanDetailPage: React.FC = () => {
     platinum: { single: 560, couple: 1008, child: 224 },
     executive: { single: 640, couple: 1152, child: 256 },
   };
-  const tierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
   const SINGLE_PRICE = PRICE_TABLE[tierKey].single;
   const COUPLE_PRICE = PRICE_TABLE[tierKey].couple;
   const FAMILY_CHILD_PRICE = PRICE_TABLE[tierKey].child;
+
+  // Build description items per tier
+  const descriptionItems: { title: string; text: string }[] = (() => {
+    const base: { title: string; text: string }[] = [
+      {
+        title: 'In-hospital Illness Benefit',
+        text:
+          'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R1,500 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.',
+      },
+      { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
+      { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
+      { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
+      { title: 'Every subsequent day thereafter', text: 'R1 500.00' },
+      { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
+    ];
+    if (tierKey === 'executive') {
+      return [
+        {
+          title: 'In-hospital Illness Benefit',
+          text:
+            'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R2,000 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.',
+        },
+        { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
+        { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
+        { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
+        { title: 'Every subsequent day thereafter', text: 'R2 000.00' },
+        { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R66 000.00' },
+        { title: 'Illness Top-up', text: 'Up to R 25,000 per insured person per year subject to an overall limit of 2 events per family policy per annum. A 3 month waiting period applies' },
+        { title: 'Accident/Trauma Benefit', text: 'Up to R 250,000 per single member per incident and up to R 500,000 per family per incident. Immediate cover.' },
+        { title: 'Critical Illness Benefit', text: '1 Incident per family per annum. Critical Illness up to R 250,000, however the benefit is limited to R 50,000 unless the insured person accedes to a short medical examination (at their own cost) to be arranged by Day1 Health. The underwriter’s decision is final. A 3 month waiting period applies.' },
+        { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
+        { title: 'Family Funeral Benefit', text: 'Principal member & Spouse – R 30,000. Child > 14 years – R 10 000. Child > 6 years  – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
+      ];
+    }
+    if (tierKey === 'platinum') {
+      return [
+        ...base,
+        { title: 'Accident/Trauma Benefit', text: 'Up to R 150,000 per single member per incident and up to R 300,000 per family incident. Immediate cover.' },
+        { title: 'Critical Illness Benefit', text: '1 incident per family per annum. Critical Illness up to R250,000, however limited to R50,000 unless a short medical examination (at own cost) is completed as arranged by Day1 Health. Underwriter’s decision is final. A 3 month waiting period applies.' },
+        { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
+        { title: 'Family Funeral Benefit', text: 'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
+      ];
+    }
+    // value tier (default)
+    return [
+      ...base,
+      { title: 'Accident/Trauma Benefit', text: 'Up to R 150,000 per event. A 1 month waiting period applies. (Exclusion: Sports Injuries).' },
+      { title: 'Family Funeral Benefit', text: 'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+      { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
+    ];
+  })();
+
+  // Pagination that depends on built descriptionItems
+  const pageCount = Math.ceil(descriptionItems.length / pageSize);
+  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
   const currentPrice = ((): number => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
     if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
@@ -241,6 +253,27 @@ const HospitalPlanDetailPage: React.FC = () => {
                     </div>
                     <div>
                       <h1 className={`text-2xl md:text-3xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
+                      {tierKey === 'value' && (
+                        <div className="mt-1">
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R390.00 through R1,326.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
+                        </div>
+                      )}
+                      {tierKey === 'platinum' && (
+                        <div className="mt-1">
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Hospital Plan</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R560.00 through R1,904.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
+                        </div>
+                      )}
+                      {tierKey === 'executive' && (
+                        <div className="mt-1">
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Executive Hospital Plan</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R640.00 through R2,176.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -254,7 +287,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
-                    {coverItems.map((c, i) => (
+                    {displayCoverItems.map((c, i) => (
                       <motion.span
                         key={c}
                         className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
@@ -334,7 +367,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                           <button
                             type="button"
                             aria-label="Previous page"
-                            onClick={() => setPage(p => Math.max(0, p - 1))}
+                            onClick={() => setPage((p) => Math.max(0, p - 1))}
                             disabled={page === 0}
                             className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
                               isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
@@ -360,7 +393,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                           <button
                             type="button"
                             aria-label="Next page"
-                            onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))}
+                            onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
                             disabled={page === pageCount - 1}
                             className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
                               isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
@@ -372,19 +405,15 @@ const HospitalPlanDetailPage: React.FC = () => {
                       )}
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
-                        <a
+                        <DownloadHeroButton
                           href={pdfPath}
-                          download
-                          className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400
-                            ${isDark ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'}`}
-                        >
-                          <Download className="h-4 w-4" />
-                          <span>Plan details</span>
-                        </a>
+                          className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
+                          sentText="Downloaded info Plan"
+                        />
                       </div>
                     </motion.div>
                   ) : (
-                    <motion.div 
+                    <motion.div
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
                       whileInView={{ opacity: 1, y: 0 }}

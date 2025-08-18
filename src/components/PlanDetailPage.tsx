@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
+import { DownloadHeroButton } from './ui/download-hero-button';
 
 const coverItems = [
   'Unlimited Doctor Visits',
@@ -385,14 +386,11 @@ const PlanDetailPage: React.FC = () => {
                       )}
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
-                        <a
+                        <DownloadHeroButton
                           href="/assets/pdf's/Day1 Health Day to Day Plan 2025.pdf"
-                          download
-                          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border transition ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100 hover:bg-gray-700/80' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-100'}`}
-                        >
-                          <Download className="w-4 h-4" />
-                          <span>Plan details (PDF)</span>
-                        </a>
+                          className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
+                          sentText="Downloaded info Plan"
+                        />
                       </div>
                     </motion.div>
                   ) : (

@@ -14,60 +14,10 @@ const coverItems = [
   'Unlimited Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
+  'Funeral Cover',
 ];
 
-const descriptionItems: { title: string; text: string }[] = [
-  {
-    title: 'Unlimited Managed Doctor Visits',
-    text:
-      'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Pathology',
-    text:
-      'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Specialist Benefit',
-    text:
-      'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
-  },
-  {
-    title: 'Basic Dentistry',
-    text:
-      'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
-  },
-  {
-    title: 'Acute Medication',
-    text:
-      'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network GP or obtained on script from a Network Pharmacy. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Optometry (Iso Leso Optics)',
-    text:
-      'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
-  },
-  {
-    title: 'Chronic Medication',
-    text:
-      'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
-  },
-  {
-    title: 'Out-of-Area Visits',
-    text:
-      'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Radiology',
-    text:
-      'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Family Funeral Benefit',
-    text:
-      'Principal, Spouse & Child > 14 years R10,000. Child > 6 years R5,000. Child > 0 years > R2,500. Stillborn > 28 weeks R1,250. A 3 month waiting period applies.',
-  },
-];
+// descriptionItems will be set in the component based on Senior category
 
 const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
 
@@ -97,6 +47,119 @@ const SeniorPlanDetailPage: React.FC = () => {
   });
   const toggleExpanded = (key: CardKey) =>
     setExpanded((prev) => ({ single: false, couple: false, [key]: !prev[key] } as Record<CardKey, boolean>));
+
+  // Build cover badges based on Senior category
+  const displayCoverItems: string[] = (() => {
+    if (categoryDisplay === 'hospital') {
+      return [
+        'Private Hospital Benefits',
+        'Illness',
+        'Accident Benefit',
+        'Ambulance',
+        'Funeral Cover',
+      ];
+    }
+    if (categoryDisplay === 'comprehensive') {
+      return [
+        'Unlimited Doctor Visits etc.',
+        'Private Hospital Benefits',
+        'Illness / Accident / Ambulance',
+        'Funeral Cover',
+      ];
+    }
+    // day-to-day uses default with Funeral Cover already included
+    return coverItems;
+  })();
+
+  // Category-aware description list
+  const descriptionItems: { title: string; text: string }[] = (() => {
+    if (categoryDisplay === 'hospital') {
+      return [
+        {
+          title: 'In-hospital Illness Benefit',
+          text:
+            'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R1,500 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies. (Excludes Maternity Benefits)',
+        },
+        { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R 10 000.00' },
+        { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R 10 000.00 payable in units of R 2 500.00' },
+        { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R 10 000.00 payable in units of R 2 500.00' },
+        { title: 'Every subsequent day thereafter', text: 'R 1 500.00' },
+        { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
+        { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per event. Limited to two events per annum. A 1 month waiting period applies. (Excludes Sport Injuries)' },
+        { title: 'FUNERAL BENEFIT', text: 'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+      ];
+    }
+    if (categoryDisplay === 'comprehensive') {
+      return [
+        { title: 'Unlimited Managed Doctor Visits', text: 'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.' },
+        { title: 'Pathology', text: 'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.' },
+        { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.' },
+        { title: 'Basic Dentistry', text: 'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.' },
+        { title: 'Chronic Medication', text: 'Chronic medication is covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. (All chronic medication is subject to preauthorisation. An additional administration fee may be levied on all approved chronic medication).' },
+        { title: 'Optometry (Iso Leso Optics)', text: 'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.' },
+        { title: 'Radiology', text: 'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.' },
+        { title: 'Out-of-Area Visits', text: 'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.' },
+        { title: 'In-hospital Illness Benefit', text: 'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R1,500 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.' },
+        { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
+        { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
+        { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
+        { title: 'Every subsequent day thereafter', text: 'R1 500.00' },
+        { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R57 000.00' },
+        { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per single member and up to R 150,000 per family incident. Immediate cover. (limited to two events per annum)' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: 'FUNERAL BENEFIT', text: 'Principal Member and spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+      ];
+    }
+    // Default to Day-to-Day content
+    return [
+      {
+        title: 'Unlimited Managed Doctor Visits',
+        text:
+          'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Pathology',
+        text:
+          'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Basic Dentistry',
+        text:
+          'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+      },
+      {
+        title: 'Acute Medication',
+        text:
+          'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Optometry (Iso Leso Optics)',
+        text:
+          'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
+      },
+      {
+        title: 'Chronic Medication',
+        text:
+          'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
+      },
+      {
+        title: 'Out-of-Area Visits',
+        text:
+          'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Radiology',
+        text:
+          'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+      },
+      {
+        title: 'FUNERAL BENEFIT',
+        text:
+          'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)',
+      },
+    ];
+  })();
 
   // Pagination for description list
   const pageSize = 4;
@@ -192,6 +255,10 @@ const SeniorPlanDetailPage: React.FC = () => {
                       <Link
                         to="/"
                         className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm px-0.5`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavigate('plans');
+                        }}
                       >
                         Back
                       </Link>
@@ -212,6 +279,27 @@ const SeniorPlanDetailPage: React.FC = () => {
                     </div>
                     <div>
                       <h1 className={`text-2xl md:text-3xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
+                      {categoryDisplay === 'day-to-day' && (
+                        <div className="mt-1">
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Day to Day Plan</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R425.00 through R850.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
+                        </div>
+                      )}
+                      {categoryDisplay === 'comprehensive' && (
+                        <div className="mt-1">
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Comprehensive Plan</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R875.00 through R1,750.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
+                        </div>
+                      )}
+                      {categoryDisplay === 'hospital' && (
+                        <div className="mt-1">
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan | Senior</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R580.00 through R1,160.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -225,7 +313,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
-                    {coverItems.map((c, i) => (
+                    {displayCoverItems.map((c: string, i: number) => (
                       <motion.span
                         key={c}
                         className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
@@ -285,7 +373,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                     >
                       <div className="prose max-w-none">
                         <ul className="space-y-5">
-                          {pagedItems.map((item, i) => (
+                          {pagedItems.map((item: { title: string; text: string }, i: number) => (
                             <motion.li 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
@@ -314,7 +402,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                             <ChevronLeft className="h-4 w-4" />
                           </button>
                           <div className="flex items-center gap-2">
-                            {Array.from({ length: pageCount }).map((_, idx) => (
+                            {Array.from({ length: pageCount }).map((_: unknown, idx: number) => (
                               <button
                                 key={idx}
                                 type="button"
@@ -345,8 +433,8 @@ const SeniorPlanDetailPage: React.FC = () => {
                       <div className="mt-4">
                         <DownloadHeroButton
                           href={seniorPdfPath}
-                          className="hero-cta-sm hero-cta-fixed hero-cta-wide hero-cta-green hero-cta-fast hero-cta-left"
-                          sentText="Plan Details Downloaded"
+                          className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
+                          sentText="Downloaded info Plan"
                         />
                       </div>
                     </motion.div>
@@ -362,7 +450,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                       <div>
                         <div className={`text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>Options</div>
                         <ul className="grid sm:grid-cols-2 gap-2">
-                          {['Single','Couples'].map((opt, i) => (
+                          {['Senior Member','Senior Couple'].map((opt: string, i: number) => (
                             <motion.li
                               key={opt}
                               initial={{ opacity: 0, y: 8 }}
