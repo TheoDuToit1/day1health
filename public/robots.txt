@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://day1health.vercel.app/sitemap.xml

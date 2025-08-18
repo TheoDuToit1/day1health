@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Day1Health provides affordable and comprehensive medical insurance solutions to ensure your health and wellbeing from day one." />
+    <meta name="keywords" content="health insurance, medical insurance, affordable healthcare, Day1Health, health coverage, insurance plans" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="author" content="Day1Health" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://day1health.vercel.app/" />
+    <meta property="og:title" content="Day1Health - Affordable Medical Insurance Solutions" />
+    <meta property="og:description" content="Get comprehensive and affordable medical insurance coverage with Day1Health. Your health matters from day one." />
+    <meta property="og:image" content="https://day1health.vercel.app/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://day1health.vercel.app/" />
+    <meta name="twitter:title" content="Day1Health - Affordable Medical Insurance Solutions" />
+    <meta name="twitter:description" content="Get comprehensive and affordable medical insurance coverage with Day1Health. Your health matters from day one." />
+    <meta name="twitter:image" content="https://day1health.vercel.app/og-image.jpg" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://day1health.vercel.app/" />
+    <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
+
+    <title>Day1Health - Affordable Medical Insurance Solutions</title>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Register service worker for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('ServiceWorker registration successful');
+            })
+            .catch(err => {
+              console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+      }
+
+      // Handle PWA installation prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        
+        // Show install button (you'll need to implement this in your React app)
+        const installButton = document.getElementById('install-button');
+        if (installButton) {
+          installButton.style.display = 'block';
+          
+          installButton.addEventListener('click', () => {
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+              } else {
+                console.log('User dismissed the install prompt');
+              }
+              deferredPrompt = null;
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+/* From Uiverse.io by fthisilak */ 
+.pay-btn {
+  position: relative;
+  padding: 10px 20px;
+  font-size: 13px; /* slightly smaller text */
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.icon-container {
+  position: relative;
+  width: 22px; /* slightly smaller icon */
+  height: 22px;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22px; /* match container */
+  height: 22px;
+  color: #22c55e;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.default-icon { opacity: 1; visibility: visible; }
+
+/* Disable CSS-based icon sequencing; React controls icon swap/animation */
+
+/* Active state kept simple; no forced icon animations */
+.pay-btn:active { transform: translateY(0); }
+
+.btn-text {
+  font-weight: 600;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  display: inline-block;
+  transition: font-size 0.2s ease, transform 0.2s ease;
+}
+
+/* Larger text when showing "Sign up" */
+.btn-text.signup {
+  font-size: 18px;
+  transform: translateY(-1px) scale(1.1);
+}
+
+/* Removed keyframes and staggered animations; handled by Framer Motion */
+
+/* Color variants for different pricing tiers */
+.pay-btn.platinum {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.pay-btn.gold {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.pay-btn.silver {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.pay-btn.bronze {
+  background: linear-gradient(135deg, #22c55e, #15803d);
+}
+
+.pay-btn.platinum:hover,
+.pay-btn.gold:hover,
+.pay-btn.silver:hover,
+.pay-btn.bronze:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
