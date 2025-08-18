@@ -3042,8 +3042,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         ? 'bg-green-900/50 text-green-300 shadow-sm border border-green-800'
                         : 'bg-green-50 text-green-700 shadow-sm border border-green-200'
                       : isDark
-                        ? 'bg-blue-900/20 text-blue-200 border border-blue-800/50 hover:bg-green-900/30 hover:text-green-200 hover:border-green-800/60'
-                        : 'bg-blue-50 text-blue-700 border border-blue-100 hover:bg-green-50 hover:text-green-700 hover:border-green-200'
+                        ? 'bg-blue-900/20 text-green-200 border border-blue-800/50 hover:bg-green-900/30 hover:text-green-200 hover:border-green-800/60'
+                        : 'bg-blue-50 text-green-700 border border-blue-100 hover:bg-green-50 hover:text-green-700 hover:border-green-200'
                   }`}
                 >
                   <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
@@ -3061,8 +3061,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           ? 'text-green-300' 
                           : 'text-green-600'
                       : isDark
-                          ? 'text-blue-300/80'
-                          : 'text-blue-600'
+                          ? 'text-green-300/80'
+                          : 'text-green-600'
                   }`} />
                   </span>
                   <span className="whitespace-nowrap">{tab.label}</span>
