@@ -132,7 +132,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       icon: CreditCard,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
-      hoverBg: 'hover:bg-green-200'
+      hoverBg: 'hover:bg-blue-200'
     },
     { 
       id: 'comprehensive', 
@@ -148,7 +148,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       icon: Users,
       bgColor: 'bg-green-100',
       iconColor: 'text-green-600',
-      hoverBg: 'hover:bg-green-200'
+      hoverBg: 'hover:bg-blue-200'
     }
   ];
 
@@ -3042,8 +3042,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         ? 'bg-green-900/50 text-green-400 shadow-sm border border-green-800'
                         : 'bg-green-50 text-green-700 shadow-sm border border-green-100'
                       : isDark
-                        ? 'text-gray-300 hover:bg-gray-700'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? 'text-gray-300 hover:bg-blue-900/30 hover:text-blue-200 hover:ring-1 hover:ring-blue-700/40'
+                        : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 hover:ring-1 hover:ring-blue-300/60'
                   }`}
                 >
                   <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
