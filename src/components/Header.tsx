@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar } from 'lucide-react';
+import CEOHotlineCTA from './CEOHotlineCTA';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface HeaderProps {
@@ -10,15 +11,11 @@ interface HeaderProps {
   isFooterInView: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView }) => {
+const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView: _isFooterInView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
-  const [showText, setShowText] = useState(!isSidebarCollapsed);
-  const [companyText, setCompanyText] = useState('');
-  const [taglineText, setTaglineText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
 
   // Close mobile menu when switching to desktop view
   useEffect(() => {
@@ -41,56 +38,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     }
   }, [isSidebarCollapsed, isMobile]);
 
-  // Typewriter effect for sidebar text
-  useEffect(() => {
-    if (isSidebarCollapsed) {
-      // Reset text immediately when collapsing
-      setShowText(false);
-      setCompanyText('');
-      setTaglineText('');
-      setIsTyping(false);
-    } else {
-      // Start typewriter effect after sidebar expansion completes (700ms)
-      const timer = setTimeout(() => {
-        setShowText(true);
-        setIsTyping(true);
-        
-        // Type "Day1Health" first
-        const companyName = 'Day1Health';
-        let companyIndex = 0;
-        
-        const typeCompany = () => {
-          if (companyIndex < companyName.length) {
-            setCompanyText(companyName.slice(0, companyIndex + 1));
-            companyIndex++;
-            setTimeout(typeCompany, 80); // 80ms per character
-          } else {
-            // After company name is done, type tagline
-            setTimeout(() => {
-              const tagline = 'Health Solutions';
-              let taglineIndex = 0;
-              
-              const typeTagline = () => {
-                if (taglineIndex < tagline.length) {
-                  setTaglineText(tagline.slice(0, taglineIndex + 1));
-                  taglineIndex++;
-                  setTimeout(typeTagline, 60); // 60ms per character for tagline
-                } else {
-                  setIsTyping(false);
-                }
-              };
-              
-              typeTagline();
-            }, 200); // 200ms pause between company name and tagline
-          }
-        };
-        
-        typeCompany();
-      }, 700);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isSidebarCollapsed]);
+  // Removed legacy typewriter effect and related state
 
   const navItems = [
     { id: 'hero', label: 'Home', icon: Home },
@@ -108,6 +56,8 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // No animations or dynamic behavior for hotline per request
 
   return (
     <>
@@ -255,61 +205,9 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               }`} />
               {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Call</span>}
             </button>
-            {/* Corporate Hotline Marquee Banner (replaces Chat + Office) */}
-            <div
-              className={`${!isSidebarCollapsed ? 'col-span-2' : ''} group relative overflow-hidden rounded-xl ${
-                isDark
-                  ? 'border border-gray-700 bg-gradient-to-br from-gray-800 to-gray-900'
-                  : 'border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50'
-              } px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]`}
-              role="region"
-              aria-label="Corporate hotline banner"
-            >
-              {/* Single-line row: static heading + running text + CTA */}
-              <div className="flex items-center whitespace-nowrap">
-                {/* Left: static heading */}
-                <h5 className={`shrink-0 text-sm font-semibold tracking-wide ${
-                  isDark ? 'text-emerald-300' : 'text-emerald-700'
-                }`}>
-                  Corporate Hotline
-                </h5>
-                {/* Separator */}
-                <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>
-                  •
-                </span>
-                {/* Middle: marquee (takes remaining space) */}
-                <div className="relative overflow-hidden flex-1">
-                  <div
-                    className={`flex items-center animate-marquee ${
-                      isDark ? 'text-gray-100' : 'text-green-800'
-                    } group-hover:[animation-play-state:paused]`}
-                    style={{
-                      // @ts-ignore custom css var for gap and speed
-                      '--gap': isSidebarCollapsed ? '1rem' as any : '1.5rem' as any,
-                      '--duration': '10s'
-                    }}
-                  >
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="flex items-center" style={{ marginRight: 'var(--gap)' }}>
-                        <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>Direct line to our CEO</span>
-                        {!isSidebarCollapsed && (
-                          <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>•</span>
-                        )}
-                        <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>0876 100 600</span>
-                        {!isSidebarCollapsed && (
-                          <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>•</span>
-                        )}
-                        <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>info@day1health.co.za</span>
-                        {!isSidebarCollapsed && (
-                          <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>•</span>
-                        )}
-                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Available 08:00–17:00 Mon–Fri</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* Right CTA removed as requested */}
-              </div>
+            {/* CEO Hotline VIP banner CTA */}
+            <div className={!isSidebarCollapsed ? 'col-span-2' : undefined}>
+              <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
             </div>
           </div>
         </div>
