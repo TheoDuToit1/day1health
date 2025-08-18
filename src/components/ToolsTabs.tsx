@@ -130,8 +130,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       id: 'hospital', 
       label: 'Hospital Plan', 
       icon: CreditCard,
-      bgColor: 'bg-green-100',
-      iconColor: 'text-green-600',
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600',
       hoverBg: 'hover:bg-blue-200'
     },
     { 
@@ -146,8 +146,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       id: 'senior', 
       label: 'Senior Plan', 
       icon: Users,
-      bgColor: 'bg-green-100',
-      iconColor: 'text-green-600',
+      bgColor: 'bg-blue-100',
+      iconColor: 'text-blue-600',
       hoverBg: 'hover:bg-blue-200'
     }
   ];
@@ -3039,31 +3039,31 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   className={`flex items-center px-6 py-3 text-xs md:text-sm font-medium rounded-lg transition-all min-w-[200px] sm:min-w-[240px] justify-center ${
                     activeTab === tab.id
                       ? isDark 
-                        ? 'bg-green-900/50 text-green-400 shadow-sm border border-green-800'
-                        : 'bg-green-50 text-green-700 shadow-sm border border-green-100'
+                        ? 'bg-green-900/50 text-green-300 shadow-sm border border-green-800'
+                        : 'bg-green-50 text-green-700 shadow-sm border border-green-200'
                       : isDark
-                        ? 'text-gray-300 hover:bg-blue-900/30 hover:text-blue-200 hover:ring-1 hover:ring-blue-700/40'
-                        : 'text-gray-700 hover:text-blue-700 hover:bg-blue-50 hover:ring-1 hover:ring-blue-300/60'
+                        ? 'bg-blue-900/20 text-blue-200 border border-blue-800/50 hover:bg-green-900/30 hover:text-green-200 hover:border-green-800/60'
+                        : 'bg-blue-50 text-blue-700 border border-blue-100 hover:bg-green-50 hover:text-green-700 hover:border-green-200'
                   }`}
                 >
                   <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
                     activeTab === tab.id
                       ? isDark
                         ? 'bg-green-900/50 hover:bg-green-900/70'
-                        : tab.bgColor + ' ' + tab.hoverBg
+                        : 'bg-green-100 hover:bg-green-200'
                       : isDark
-                        ? 'bg-gray-700 hover:bg-gray-600'
-                        : tab.bgColor + ' ' + tab.hoverBg
+                        ? 'bg-blue-900/30 hover:bg-green-900/50'
+                        : 'bg-blue-100 hover:bg-green-200'
                   }`}>
-                    <tab.icon className={`w-4 h-4 ${
-                      activeTab === tab.id 
-                        ? isDark 
-                          ? 'text-green-400' 
-                          : tab.iconColor
-                        : isDark
-                          ? 'text-gray-400'
-                          : 'text-gray-600'
-                    }`} />
+                  <tab.icon className={`w-4 h-4 ${
+                    activeTab === tab.id 
+                      ? isDark 
+                          ? 'text-green-300' 
+                          : 'text-green-600'
+                      : isDark
+                          ? 'text-blue-300/80'
+                          : 'text-blue-600'
+                  }`} />
                   </span>
                   <span className="whitespace-nowrap">{tab.label}</span>
                 </button>
