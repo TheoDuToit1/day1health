@@ -159,3 +159,48 @@ textarea:focus {
     display: none !important;
   }
 }
+
+/* Animated shimmer border utility for sections */
+@keyframes shimmer-border-move {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Usage: add `shimmer-border` to a rounded container (e.g., the ToolsTabs wrapper) */
+.shimmer-border {
+  position: relative;
+  /* keep existing rounded corners from the element's classes (e.g., rounded-2xl) */
+}
+
+.shimmer-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px; /* sit just outside current border to avoid clipping */
+  border-radius: inherit;
+  padding: 2px; /* border thickness */
+  background: linear-gradient(
+    90deg,
+    rgba(34,197,94,0) 20%,
+    rgba(34,197,94,0) 40%,
+    #22c55e 50%,
+    #16a34a 55%,
+    rgba(34,197,94,0) 70%,
+    rgba(34,197,94,0) 100%
+  );
+  background-size: 200% auto;
+  /* Mask the center to leave only the ring visible */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 10; /* sit above the element's background but below content */
+  animation: shimmer-border-move 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-border::before {
+    animation: none;
+  }
+}

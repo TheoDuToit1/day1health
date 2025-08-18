@@ -289,7 +289,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
               >
                 <HeroCTAButton 
                   className="font-manrope font-bold text-xl" 
-                  defaultText="Apply"
+                  defaultText="Apply Now"
                   sentText="Applied"
                 />
               </motion.div>

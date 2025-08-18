@@ -2984,7 +2984,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       }}>
         {/* Floating Tabs */}
         <div className="flex justify-center mb-12">
-          <div className={`w-full ${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shadow-lg px-2 py-3 backdrop-blur-sm transition-colors duration-300 ${
+          <div className={`w-full ${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-3 backdrop-blur-sm transition-colors duration-300 ${
             isDark 
               ? 'bg-gray-800/95 border border-gray-700' 
               : 'bg-white/95 border border-gray-100'
