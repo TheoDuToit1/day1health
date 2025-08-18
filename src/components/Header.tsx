@@ -152,7 +152,12 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           style={{
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
-            <div className="relative w-48 h-16 flex items-center justify-center">
+            <a
+              href="#hero"
+              onClick={(e) => { e.preventDefault(); onNavigate('hero'); }}
+              aria-label="Go to Home"
+              className="relative w-48 h-16 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-lg cursor-pointer"
+            >
               <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
                 <div className="absolute inset-0 flex items-center justify-center p-1">
                   <img 
@@ -162,7 +167,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                   />
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
         
