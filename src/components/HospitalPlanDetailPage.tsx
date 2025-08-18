@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
+import { ShimmerDownloadLink } from './ui/shimmer-download-link';
 
 const coverItems = [
   'Unlimited Doctor Visits',

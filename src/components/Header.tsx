@@ -257,38 +257,58 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             </button>
             {/* Corporate Hotline Marquee Banner (replaces Chat + Office) */}
             <div
-              className={`${!isSidebarCollapsed ? 'col-span-2' : ''} relative overflow-hidden rounded-lg ${
+              className={`${!isSidebarCollapsed ? 'col-span-2' : ''} group relative overflow-hidden rounded-xl ${
                 isDark
-                  ? 'bg-gray-800 border border-gray-700'
-                  : 'bg-green-50 border border-green-200'
-              } p-2.5`}
+                  ? 'border border-gray-700 bg-gradient-to-br from-gray-800 to-gray-900'
+                  : 'border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50'
+              } px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]`}
               role="region"
               aria-label="Corporate hotline banner"
             >
-              {/* marquee track */}
-              <div
-                className={`flex items-center gap-10 whitespace-nowrap animate-marquee ${
-                  isDark ? 'text-gray-100' : 'text-green-800'
-                }`}
-                style={{
-                  // @ts-ignore custom css var for gap and speed
-                  '--gap': '2.5rem',
-                  '--duration': '18s'
-                }}
-              >
-                {/* Repeat content chunks to create seamless loop */}
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="flex items-baseline gap-3">
-                    <span className={`text-[10px] tracking-widest uppercase font-semibold ${
-                      isDark ? 'text-emerald-300' : 'text-emerald-700'
-                    }`}>
-                      Corporate hotline
-                    </span>
-                    <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
-                      Your 2 step link to our CEO
-                    </span>
+              {/* Single-line row: static heading + running text + CTA */}
+              <div className="flex items-center whitespace-nowrap">
+                {/* Left: static heading */}
+                <h5 className={`shrink-0 text-sm font-semibold tracking-wide ${
+                  isDark ? 'text-emerald-300' : 'text-emerald-700'
+                }`}>
+                  Corporate Hotline
+                </h5>
+                {/* Separator */}
+                <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>
+                  •
+                </span>
+                {/* Middle: marquee (takes remaining space) */}
+                <div className="relative overflow-hidden flex-1">
+                  <div
+                    className={`flex items-center animate-marquee ${
+                      isDark ? 'text-gray-100' : 'text-green-800'
+                    } group-hover:[animation-play-state:paused]`}
+                    style={{
+                      // @ts-ignore custom css var for gap and speed
+                      '--gap': isSidebarCollapsed ? '1rem' as any : '1.5rem' as any,
+                      '--duration': '10s'
+                    }}
+                  >
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="flex items-center" style={{ marginRight: 'var(--gap)' }}>
+                        <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>Direct line to our CEO</span>
+                        {!isSidebarCollapsed && (
+                          <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>•</span>
+                        )}
+                        <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>0876 100 600</span>
+                        {!isSidebarCollapsed && (
+                          <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>•</span>
+                        )}
+                        <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>info@day1health.co.za</span>
+                        {!isSidebarCollapsed && (
+                          <span className={`mx-2 text-xs ${isDark ? 'text-emerald-300/70' : 'text-emerald-700/70'}`} aria-hidden>•</span>
+                        )}
+                        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Available 08:00–17:00 Mon–Fri</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                {/* Right CTA removed as requested */}
               </div>
             </div>
           </div>

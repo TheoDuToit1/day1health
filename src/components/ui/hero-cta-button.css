@@ -24,6 +24,59 @@
   font-size: 18px;
   font-weight: 600;
 }
+/* Optional small size variant - use with className "hero-cta-sm" */
+.hero-cta-button.hero-cta-sm {
+  min-width: 160px;
+  height: 56px;
+  padding: 14px 16px;
+  font-size: 16px;
+}
+/* Optional fixed width variant - prevents width change on text/state switch */
+.hero-cta-button.hero-cta-fixed {
+  width: 220px; /* keep width stable during animation */
+}
+/* Optional wider fixed width variant */
+.hero-cta-button.hero-cta-wide {
+  width: 260px;
+}
+/* Optional green text variant - forces text to use the same green as icons */
+.hero-cta-button.hero-cta-green .hero-state p {
+  color: var(--primary);
+}
+.hero-cta-button.hero-cta-green .hero-state--sent p {
+  color: var(--primary);
+}
+
+/* Optional fast animation variant - speeds up letter entrance/hover/sent animations */
+.hero-cta-button.hero-cta-fast .hero-state p span {
+  /* Default entrance */
+  animation-duration: 0.5s;
+  animation-delay: calc(var(--i) * 0.015s);
+}
+.hero-cta-button.hero-cta-fast:hover p span {
+  /* Hover wave */
+  animation-duration: 0.35s;
+  animation-delay: calc(var(--i) * 0.01s);
+}
+.hero-cta-button.hero-cta-fast:focus p span {
+  /* Disappear on focus (switching to sent) */
+  animation-duration: 0.4s;
+  animation-delay: calc(var(--i) * 0.015s);
+}
+.hero-cta-button.hero-cta-fast:focus .hero-state--sent span {
+  /* Sent state entrance */
+  animation-duration: 0.5s;
+  animation-delay: calc(var(--i) * 0.08s);
+}
+
+/* Optional left alignment variant - pull sent state content to the left (only when focused) */
+.hero-cta-button.hero-cta-left:focus .hero-state--sent {
+  justify-content: flex-start; /* align icon + text to the left */
+  padding-left: 10px; /* shift only the sent state */
+}
+.hero-cta-button.hero-cta-left .hero-state--sent .hero-icon {
+  margin-right: 4px; /* even tighter spacing */
+}
 .hero-cta-button:hover {
   transform: scale(1.02);
   box-shadow: 0 0 1px 2px rgba(255, 255, 255, 0.3),
