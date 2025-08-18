@@ -4,12 +4,12 @@ import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 
-// Animated background carousel for intro cards
+// Enhanced Animated background carousel for intro cards
 const IntroCarousel: React.FC<{
   images: string[];
   intervalMs?: number;
   overlayClassName?: string;
-}> = ({ images, intervalMs = 2600, overlayClassName = 'bg-black/40' }) => {
+}> = ({ images, intervalMs = 4200, overlayClassName = 'bg-black/40' }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -20,24 +20,66 @@ const IntroCarousel: React.FC<{
     return () => clearInterval(id);
   }, [images, intervalMs]);
 
+  const len = images.length || 1;
   const current = images[index] ?? images[0];
-  const dir = index % 2 === 0 ? 1 : -1; // alternate slide direction for variety
+  const prev = images[(index - 1 + len) % len] ?? images[0];
+  const dir = index % 2 === 0 ? 1 : -1; // alternate direction for Ken Burns
 
   return (
     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
-      <AnimatePresence initial={false} mode="wait">
-        <motion.img
-          key={`${current}-${index}`}
-          src={current}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          initial={{ x: `${10 * dir}%`, scale: 1.08, opacity: 0 }}
-          animate={{ x: '0%', scale: 1.0, opacity: 0.95 }}
-          exit={{ x: `${-10 * dir}%`, scale: 1.04, opacity: 0 }}
-          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-        />
+      {/* Backdrop: previous image, static underlay */}
+      <motion.img
+        key={`prev-${prev}-${index}`}
+        src={prev}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover"
+        initial={false}
+        animate={{
+          scale: 1.08,
+          x: `${-2 * dir}%`,
+          filter: 'saturate(1.0) contrast(1.0) brightness(0.96)'
+        }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* Morph-reveal: current image revealed via blob-like keyframed clip-path (top-left biased) */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={`reveal-${current}-${index}`}
+          className="absolute inset-0"
+          initial={{
+            clipPath:
+              'polygon(18% 10%, 38% 12%, 52% 24%, 44% 40%, 28% 42%, 16% 34%, 12% 22%, 14% 14%)'
+          }}
+          animate={{
+            clipPath: [
+              'polygon(18% 10%, 38% 12%, 52% 24%, 44% 40%, 28% 42%, 16% 34%, 12% 22%, 14% 14%)',
+              'polygon(0% 0%, 50% 8%, 70% 30%, 60% 60%, 35% 65%, 12% 55%, 6% 30%, 8% 10%)',
+              'polygon(-30% -30%, 130% -30%, 130% 130%, -30% 130%, -30% -30%, 130% -30%, 130% 130%, -30% 130%)'
+            ]
+          }}
+          exit={{
+            clipPath:
+              'polygon(-30% -30%, 130% -30%, 130% 130%, -30% 130%, -30% -30%, 130% -30%, 130% 130%, -30% 130%)'
+          }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.img
+            src={current}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={{ scale: 1.06, x: `${6 * dir}%`, opacity: 1, filter: 'blur(6px) saturate(1.08) contrast(1.05) brightness(0.98)' }}
+            animate={{
+              scale: 1.14,
+              x: '0%',
+              filter: 'blur(0px) saturate(1.08) contrast(1.05) brightness(0.98)'
+            }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </motion.div>
       </AnimatePresence>
-      {/* Vignette and edge gradients for better text contrast */}
+
+      {/* Vignettes and edge gradients for text contrast */}
       <div className={`${overlayClassName} absolute inset-0`} />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25" />
