@@ -36,8 +36,7 @@ function ProceduresPage() {
   const buttonLink = (href: string, label: string) => (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      download
       className={`inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-medium mt-4 transition-colors ${
         isDark
           ? 'bg-green-600 text-white hover:bg-green-700'
@@ -75,7 +74,19 @@ function ProceduresPage() {
         content: (
           <div className="space-y-3">
             {p('View our different plans and pricing options.')}
-            {btn("/assets/pdf's/Day 1 Comparative guide 2025_v2.pdf", 'View Plans & Pricing (PDF)')}
+            <button
+              type="button"
+              onClick={() => {
+                sessionStorage.setItem('navigatingToSection', 'plans');
+                navigate('/');
+                window.scrollTo(0, 0);
+              }}
+              className={`inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-medium mt-4 transition-colors ${
+                isDark ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              View Plans & Pricing
+            </button>
           </div>
         )
       },
@@ -100,7 +111,7 @@ function ProceduresPage() {
           <div className="space-y-3">
             {p('If you are diagnosed with a chronic condition, however, you need to register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP in order to receive your chronic medication. Chronic medication may be collected from any Clicks, Dischem or Medirite pharmacy nationwide and is subject to pre-authorisation. (In respect of Day1 Health Senior members, an additional administration fee may be levied on all approved chronic medication.)')}
             {p('You may download the Chronic Application Form by clicking on the button below or you may contact us on 0876 100 600 and request that the application form be faxed or emailed to you.')}
-            {btn("/assets/pdf's/Chronic Application Form.pdf", 'Open Chronic Application Form (PDF)')}
+            {btn("/assets/pdf's/procedures/Chronic-Medication-Application-Form.pdf", 'Download Chronic Application Form (PDF)')}
           </div>
         )
       },
@@ -123,7 +134,7 @@ function ProceduresPage() {
               'Payments are made within 30 days from the date of receipt of the accounts.',
               'Reimbursements must be submitted within 120 days (4 months) from date of service. Any request received after 4 months from date of service will be rejected as stale.',
             ])}
-            {btn("/assets/pdf's/Reimbursement Form.pdf", 'Open Reimbursement Form (PDF)')}
+            {btn("/assets/pdf's/procedures/Day1-Reimbursement-Form.pdf", 'Download Reimbursement Form (PDF)')}
           </div>
         )
       },
@@ -164,7 +175,7 @@ function ProceduresPage() {
               'Please store 0861 144 144 under “Medical Emergency” on your cell phone.',
               'For hospital pre-authorisation, please contact 0861 144 144. All admissions for both Accident & Illness must be authorised.',
             ])}
-            {btn("/assets/pdf's/Hospital Claim Form.pdf", 'Open Hospital Claim Form (PDF)')}
+            {btn("/assets/pdf's/procedures/Hospital-Claim-Form.pdf", 'Download Hospital Claim Form (PDF)')}
           </div>
         )
       },

@@ -44,9 +44,9 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'how-it-works', label: 'How it works', icon: Settings },
     { id: 'feedback', label: 'Reviews', icon: MessageSquare },
     { id: 'why-choose', label: 'Why Us', icon: Users },
-    { id: 'network-search', label: 'Network Search', icon: Search },
     { id: 'contact', label: 'Contact us', icon: Phone },
-    { id: 'faqs', label: 'FAQs', icon: HelpCircle }
+    { id: 'faqs', label: 'FAQs', icon: HelpCircle },
+    { id: 'network-search', label: 'Network Search', icon: Search },
   ];
 
   useEffect(() => {

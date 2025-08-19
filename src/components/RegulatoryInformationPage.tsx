@@ -5,13 +5,13 @@ import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
 
 const links: { title: string; href: string }[] = [
-  { title: 'POPI Website Statement', href: "/assets/pdf's/POPI Website Statement.pdf" },
-  { title: 'Data Subject Enquiry Protocols', href: "/assets/pdf's/Data Subject Enquiry Protocols.pdf" },
-  { title: 'Complaints Policy', href: "/assets/pdf's/Complaints Policy.pdf" },
-  { title: 'Conflict of Interest Management Policy', href: "/assets/pdf's/Conflict of Interest Management Policy.pdf" },
-  { title: 'PAIA Manual', href: "/assets/pdf's/PAIA Manual.pdf" },
-  { title: 'PAIA Request for Access to Records', href: "/assets/pdf's/PAIA Request for Access to Records.pdf" },
-  { title: 'PAIA Outcome and Fees Payable', href: "/assets/pdf's/PAIA Outcome and Fees Payable.pdf" },
+  { title: 'POPI Website Statement', href: "/assets/pdf's/Legal and Regulatory Information/POPI-Website-Statement.pdf" },
+  { title: 'Data Subject Enquiry Protocols', href: "/assets/pdf's/Legal and Regulatory Information/Day1-Health-POPIA-Data-Subject-Enquiry-Protocols.pdf" },
+  { title: 'Complaints Policy', href: "/assets/pdf's/Legal and Regulatory Information/Complaints-Policy.pdf" },
+  { title: 'Conflict of Interest Management Policy', href: "/assets/pdf's/Legal and Regulatory Information/Conflict-of-Interest-Management-Policy.pdf" },
+  { title: 'PAIA Manual', href: "/assets/pdf's/Legal and Regulatory Information/DAY-1-HEALTH-PTY-LTD-PAIA-Manual.pdf" },
+  { title: 'PAIA Request for Access to Records', href: "/assets/pdf's/Legal and Regulatory Information/PAIA-FORM-2.pdf" },
+  { title: 'PAIA Outcome and Fees Payable', href: "/assets/pdf's/Legal and Regulatory Information/PAIA-FORM-3.pdf" },
 ];
 
 function RegulatoryInformationPage() {
@@ -60,8 +60,30 @@ function RegulatoryInformationPage() {
             <section className={`transition-colors duration-300 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <header className="mb-10">
+                  {/* Back button */}
+                  <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className={`inline-flex items-center gap-2 text-sm mb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-md px-1.5 py-1 transition-colors ${
+                      isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                    aria-label="Go back"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                    >
+                      <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                    Back
+                  </button>
                   <h1 className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-3`}>
-                    Regulatory Information
+                    Legal and Regulatory Information
                   </h1>
                   <p className={`text-lg max-w-3xl ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     You can find all the important regulatory information relevant to our industry by exploring the links below.

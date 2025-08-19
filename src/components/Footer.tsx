@@ -237,7 +237,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               <a href="/regulatory-information" className={`transition-colors ${
                 isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
               }`}>
-                Regulatory Information
+                Legal and Regulatory Information
               </a>
               <a href="/procedures" className={`transition-colors ${
                 isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
