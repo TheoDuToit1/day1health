@@ -901,7 +901,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       Start here
                     </motion.span>
                     <h3 className={`text-xl font-bold text-white`}>
-                      Choose a day-to-day that fits your life
+                      Choose a Day-To-Day plan that fits your life
                     </h3>
                   </div>
                   <motion.button
@@ -1632,7 +1632,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a senior that fits your life
+                        Choose a hospital plan that fits your life
                       </h3>
                     </div>
                     <motion.button
@@ -2306,7 +2306,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a senior that fits your life
+                        Choose a hospital plan that fits your life
                       </h3>
                     </div>
                     <motion.button

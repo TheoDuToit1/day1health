@@ -361,12 +361,12 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             ? 'bg-gray-900/95 backdrop-blur-xl shadow-2xl border-b border-gray-800' 
             : 'bg-white/95 backdrop-blur-xl shadow-2xl border-b border-gray-100'
           : isDark 
-            ? 'bg-gray-900/90 backdrop-blur-md' 
-            : 'bg-white/90 backdrop-blur-md'
+            ? 'bg-gray-900/90 backdrop-blur-md border-b border-transparent' 
+            : 'bg-white/90 backdrop-blur-md border-b border-transparent'
       }`}>
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-105 overflow-hidden ${
+            <div className={`w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0 ${
               isScrolled ? 'shadow-green-500/20' : ''
             }`}>
               <img 
@@ -375,11 +375,11 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex flex-col">
-              <span className={`text-xl font-bold transition-colors duration-300 ${
+            <div className="flex flex-col justify-center h-10 min-w-0">
+              <span className={`text-xl font-bold leading-none whitespace-nowrap transition-colors duration-300 ${
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>Day1Health</span>
-              <span className={`text-xs font-medium transition-colors duration-300 ${
+              <span className={`text-xs font-medium leading-none whitespace-nowrap transition-colors duration-300 ${
                 isDark ? 'text-green-400' : 'text-green-600'
               }`}>Smart Health Cover</span>
             </div>
