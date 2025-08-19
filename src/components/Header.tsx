@@ -47,6 +47,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'contact', label: 'Contact us', icon: Phone },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'network-search', label: 'Network Search', icon: Search },
+    { id: 'legal', label: 'Legal & Regulatory Information', icon: HelpCircle },
   ];
 
   useEffect(() => {
@@ -203,6 +204,28 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                         ))}
                       </ul>
                     </div>
+                  </li>
+                );
+              }
+              if (item.id === 'legal') {
+                return (
+                  <li key={item.id}>
+                    <a
+                      href="/regulatory-information"
+                      className={baseClasses}
+                      style={{
+                        transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                      }}
+                    >
+                      <item.icon className={`transition-all duration-500 ease-in-out transform w-5 h-5 ${
+                        isActive ? 'text-white' : 'group-hover:scale-110'
+                      }`} />
+                      {!isSidebarCollapsed && (
+                        <span className="font-medium text-sm transition-all duration-500 ease-in-out">
+                          {item.label}
+                        </span>
+                      )}
+                    </a>
                   </li>
                 );
               }

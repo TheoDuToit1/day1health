@@ -213,6 +213,28 @@ function ProceduresPage() {
             <section className={`transition-colors duration-300 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <header className="mb-8">
+                  {/* Back button */}
+                  <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className={`inline-flex items-center gap-2 text-sm mb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-md px-1.5 py-1 transition-colors ${
+                      isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                    aria-label="Go back"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                    >
+                      <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                    Back
+                  </button>
                   <h1 className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} mb-2`}>
                     Procedures
                   </h1>
