@@ -11,7 +11,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
   // Support opening multiple and a global open/close all toggle
   const [expandedAll, setExpandedAll] = useState(false);
   const [openSet, setOpenSet] = useState<Set<number>>(new Set());
-  const [showFaqs, setShowFaqs] = useState(false);
+  const [showFaqs, setShowFaqs] = useState(true);
   const { isDark } = useTheme();
 
   // Selected 8 most relevant FAQs from the list provided by the user
@@ -77,7 +77,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block mt-2.5 px-4 py-1.5 text-base font-medium rounded-full mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
@@ -92,7 +92,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="flex justify-center gap-3 mb-4 w-full -mt-10">
+          <div className="flex justify-center gap-3 mb-[2px] w-full mt-[26px]">
             <button
               onClick={() => setShowFaqs(v => !v)}
               className={`px-6 sm:px-8 py-2 rounded-lg border text-sm font-semibold transition-colors min-w-[9.5rem] ${
