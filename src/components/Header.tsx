@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'contact', label: 'Contact us', icon: Phone },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'network-search', label: 'Network Search', icon: Search },
-    { id: 'legal', label: 'Legal & Regulatory Information', icon: HelpCircle },
+    { id: 'procedures', label: 'Procedures', icon: HelpCircle },
   ];
 
   useEffect(() => {
@@ -207,11 +207,11 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                   </li>
                 );
               }
-              if (item.id === 'legal') {
+              if (item.id === 'procedures') {
                 return (
                   <li key={item.id}>
                     <a
-                      href="/regulatory-information"
+                      href="/procedures"
                       className={baseClasses}
                       style={{
                         transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'

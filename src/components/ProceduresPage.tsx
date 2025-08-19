@@ -7,7 +7,7 @@ import { useTheme } from '../contexts/ThemeContext';
 function ProceduresPage() {
   const { isDark } = useTheme();
   const navigate = useNavigate();
-  const [activeSection] = useState('hero');
+  const [activeSection] = useState('procedures');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFooterInView, setIsFooterInView] = useState(false);
 
