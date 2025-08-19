@@ -391,9 +391,8 @@ const TestimonialCard = ({
 					</div>
 				)}
 			</AnimatePresence>
-			<motion.button
+			<motion.div
 				layoutId={layout ? `card-${testimonial.name}` : undefined}
-				onClick={handleExpand}
 				className=""
 				whileHover={{
 					rotateX: 2,
@@ -455,7 +454,7 @@ const TestimonialCard = ({
 							: testimonial.designation}
 					</motion.p>
 				</div>
-			</motion.button>
+			</motion.div>
 		</>
 	);
 };

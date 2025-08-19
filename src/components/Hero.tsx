@@ -48,7 +48,7 @@ const heroSlides: HeroSlide[] = [
       { text: 'Checkups covered', icon: Heart },
       { text: 'Confidence always', icon: Star }
     ],
-    subheading: 'Day1Health for today\'s working adults',
+    subheading: 'for today\'s working adults',
     bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
@@ -760,6 +760,19 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           )}
                         </h1>
                       )}
+
+                      {/* Slide 0: Prominent brand heading above typewriter */}
+                      {slide.id === 0 && (
+                        <motion.h1
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.3, duration: 0.6 }}
+                          className={`font-manrope font-extrabold tracking-tight leading-none transform-gpu scale-x-110 scale-y-90 ${isDark ? 'text-emerald-400' : 'text-green-600'}
+                            text-xl sm:text-2xl md:text-3xl lg:text-4xl -mt-[280px] relative left-[490px] mb-[175px]`}
+                        >
+                          Day1Health
+                        </motion.h1>
+                      )}
                       
                       {/* Typewriter Section - Large and Prominent */}
                       <div className={`${slide.id === 1 ? 'mb-4 sm:mb-8' : 'mb-4 sm:mb-8'} flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 ${
@@ -848,10 +861,16 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.6 }}
-                        className={`text-base sm:text-xl md:text-2xl ${isDark && slide.id === 0 ? 'text-white' : 'text-gray-700'} font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
+                        className={`text-lg sm:text-2xl md:text-3xl ${
+                          slide.id === 0 
+                            ? (isDark ? 'text-blue-400' : 'text-blue-600') 
+                            : (isDark ? 'text-gray-300' : 'text-gray-700')
+                        } font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
                           slide.id === 1 
                             ? 'text-center mt-8 mb-8' // Reduced margins for slide 1
-                            : 'mt-12 mb-12' // Slightly reduced for other slides
+                            : (slide.id === 0 
+                                ? 'mt-[63px] mb-12' // Move down 15px for slide 0 (48px + 15px)
+                                : 'mt-12 mb-12') // Default for other slides
                         }`}
                       >
                         {slide.subheading}

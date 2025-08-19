@@ -63,13 +63,13 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
           </span>
           <h2 id="how-it-works" className={`text-4xl lg:text-5xl font-bold ${
             isDark ? 'text-white' : 'text-gray-900'
-          } mb-6`}>
+          } mb-1`}>
             Getting Covered is Simple
           </h2>
           <p className={`text-xl text-center mb-16 max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            From application to using your benefits, we've made healthcare coverage as simple as possible.
+            From application to using your benefits, making healthcare as simple as possible.
           </p>
         </div>
 

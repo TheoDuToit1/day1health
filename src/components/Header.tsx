@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Quote, Calendar } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
 import CEOHotlineCTA from './CEOHotlineCTA';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -45,6 +45,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'how-it-works', label: 'How it works', icon: Settings },
     { id: 'feedback', label: 'Reviews', icon: MessageSquare },
     { id: 'why-choose', label: 'Why Us', icon: Users },
+    { id: 'network-search', label: 'Network Search', icon: Search },
     { id: 'contact', label: 'Contact us', icon: Phone },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle }
   ];
@@ -125,6 +126,71 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           <ul className="space-y-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
+              const baseClasses = `w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
+                isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
+              } ${
+                isActive
+                  ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
+                  : isDark
+                    ? 'text-gray-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-700 hover:text-white hover:shadow-lg hover:scale-102'
+                    : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:text-gray-900 hover:shadow-lg hover:scale-102'
+              }`;
+              if (item.id === 'network-search') {
+                return (
+                  <li key={item.id} className="relative group">
+                    <a
+                      href={`#${item.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigate(item.id);
+                      }}
+                      className={baseClasses}
+                      style={{
+                        transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                      }}
+                    >
+                      <item.icon className={`transition-all duration-500 ease-in-out transform w-5 h-5 ${
+                        isActive ? 'text-white' : 'group-hover:scale-110'
+                      }`} />
+                      {!isSidebarCollapsed && (
+                        <span className="font-medium text-sm transition-all duration-500 ease-in-out">
+                          {item.label}
+                        </span>
+                      )}
+                    </a>
+                    {/* Hover submenu */}
+                    <div
+                      className={`absolute top-0 left-full ml-2 z-50 w-64 rounded-xl border shadow-xl p-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ${
+                        isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+                      }`}
+                    >
+                      <ul className="space-y-2">
+                        {[
+                          'Doctor Directory',
+                          'Life Healthcare Hospitals',
+                          'Mediclinic Hospitals',
+                          'Africa Health Care',
+                          'Iso Leso Optics',
+                          'Clinix Health Group',
+                        ].map((label) => (
+                          <li key={label}>
+                            <a
+                              href="#"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`block text-sm transition-colors ${
+                                isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                              }`}
+                            >
+                              {label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                );
+              }
               return (
                 <li key={item.id}>
                   <a
@@ -133,15 +199,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       e.preventDefault();
                       onNavigate(item.id);
                     }}
-                    className={`w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
-                      isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
-                    } ${
-                      isActive
-                        ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
-                        : isDark
-                          ? 'text-gray-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-700 hover:text-white hover:shadow-lg hover:scale-102'
-                          : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:text-gray-900 hover:shadow-lg hover:scale-102'
-                    }`}
+                    className={baseClasses}
                     style={{
                       transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
                     }}
@@ -161,54 +219,16 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           </ul>
         </nav>
 
-        {/* Quick Actions - Always visible with icons */}
+        
+
+        {/* Sidebar CTA */}
         <div className={`px-6 py-2 transition-all duration-300 ${
           isDark 
             ? 'border-t border-gray-700' 
             : 'border-t border-gray-200'
         }`}>
-          {!isSidebarCollapsed && (
-            <h4 className={`font-medium mb-4 text-sm uppercase tracking-wide ${
-              isDark ? 'text-gray-400' : 'text-gray-500'
-            }`}>Quick Actions</h4>
-          )}
-          <div className={`grid gap-2 ${
-            isSidebarCollapsed ? 'grid-cols-1' : 'grid-cols-2'
-          }`}>
-            <button 
-              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
-              } ${
-                isDark 
-                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
-              }`}
-              title="Get a Quote"
-            >
-              <Quote className={`${
-                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
-              }`} />
-              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Quote</span>}
-            </button>
-            <button 
-              className={`flex items-center justify-center rounded-lg transition-all duration-300 group ${
-                isSidebarCollapsed ? 'p-2.5' : 'p-2.5'
-              } ${
-                isDark 
-                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white' 
-                  : 'bg-gray-100 hover:bg-green-50 text-gray-600 hover:text-green-600'
-              }`}
-              title="Schedule Call"
-            >
-              <Calendar className={`${
-                isSidebarCollapsed ? 'w-5 h-5' : 'w-5 h-5'
-              }`} />
-              {!isSidebarCollapsed && <span className="ml-2 text-sm font-medium">Call</span>}
-            </button>
-            {/* CEO Hotline VIP banner CTA */}
-            <div className={!isSidebarCollapsed ? 'col-span-2' : undefined}>
-              <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
-            </div>
+          <div>
+            <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
           </div>
         </div>
 

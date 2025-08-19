@@ -217,7 +217,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div>
                       <motion.span
                         className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm mb-2 bg-emerald-500/10 border-emerald-200/30 text-white`}
-                        animate={{ scale: [1, 1.05, 1] , boxShadow: [
+                        animate={{ scale: [1, 1.05, 1], boxShadow: [
                           '0 0 0px rgba(16,185,129,0.0)',
                           '0 0 18px rgba(16,185,129,0.35)',
                           '0 0 0px rgba(16,185,129,0.0)'
@@ -226,7 +226,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       >
                         Start here
                       </motion.span>
-                      <h3 className={`text-xl font-bold text-white`}>Choose a comprehensive plan that fits your life</h3>
+                      <h3 className={`text-xl font-bold text-white`}>
+                        Choose a comprehensive plan that fits your life
+                      </h3>
                     </div>
                     <motion.button
                       type="button"
@@ -889,7 +891,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div>
                     <motion.span
                       className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm mb-2 bg-emerald-500/10 border-emerald-200/30 text-white`}
-                      animate={{ scale: [1, 1.05, 1] , boxShadow: [
+                      animate={{ scale: [1, 1.05, 1], boxShadow: [
                         '0 0 0px rgba(16,185,129,0.0)',
                         '0 0 18px rgba(16,185,129,0.35)',
                         '0 0 0px rgba(16,185,129,0.0)'
@@ -898,7 +900,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     >
                       Start here
                     </motion.span>
-                    <h3 className={`text-xl font-bold text-white`}>Choose day-to-day care that fits your life</h3>
+                    <h3 className={`text-xl font-bold text-white`}>
+                      Choose a day-to-day that fits your life
+                    </h3>
                   </div>
                   <motion.button
                     type="button"
@@ -910,7 +914,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     animate={!expanded.intro ? { y: [0, -3, 0] } : { y: 0 }}
                     transition={!expanded.intro ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
                   >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
                       <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
                     </svg>
                   </motion.button>
@@ -1104,14 +1108,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                           transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                         >
-                          <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE * familyChildren}`}</span>
-                          {familyChildren === 1 ? (
-                            <span className={`text-white text-sm font-normal`}>
-                              /mo per child
-                            </span>
-                          ) : (
-                            <span className={`text-white text-sm font-normal`}>{`/mo for ${familyChildren} children`}</span>
-                          )}
+                          <span className="text-2xl font-bold text-emerald-400">R193</span>
+                          <span className={`text-white text-sm font-normal`}>
+                            /mo per child
+                          </span>
                         </motion.div>
                       </motion.div>
                     ) : (
@@ -1215,8 +1215,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">193</span>
-                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/child</span>
+                        <span className="text-2xl font-bold">867.00</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                       </motion.div>
                   </div>
                 )}
@@ -1622,7 +1622,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div>
                       <motion.span
                         className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm mb-2 bg-emerald-500/10 border-emerald-200/30 text-white`}
-                        animate={{ scale: [1, 1.05, 1] , boxShadow: [
+                        animate={{ scale: [1, 1.05, 1], boxShadow: [
                           '0 0 0px rgba(16,185,129,0.0)',
                           '0 0 18px rgba(16,185,129,0.35)',
                           '0 0 0px rgba(16,185,129,0.0)'
@@ -1631,7 +1631,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       >
                         Start here
                       </motion.span>
-                      <h3 className={`text-xl font-bold text-white`}>Choose day-to-day care that fits your life</h3>
+                      <h3 className={`text-xl font-bold text-white`}>
+                        Choose a senior that fits your life
+                      </h3>
                     </div>
                     <motion.button
                       type="button"
@@ -2294,7 +2296,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div>
                       <motion.span
                         className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm mb-2 bg-emerald-500/10 border-emerald-200/30 text-white`}
-                        animate={{ scale: [1, 1.05, 1] , boxShadow: [
+                        animate={{ scale: [1, 1.05, 1], boxShadow: [
                           '0 0 0px rgba(16,185,129,0.0)',
                           '0 0 18px rgba(16,185,129,0.35)',
                           '0 0 0px rgba(16,185,129,0.0)'
@@ -2303,7 +2305,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       >
                         Start here
                       </motion.span>
-                      <h3 className={`text-xl font-bold text-white`}>Choose day-to-day care that fits your life</h3>
+                      <h3 className={`text-xl font-bold text-white`}>
+                        Choose a senior that fits your life
+                      </h3>
                     </div>
                     <motion.button
                       type="button"

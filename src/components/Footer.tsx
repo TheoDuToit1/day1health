@@ -110,6 +110,53 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                   Contact
                 </a>
               </li>
+              <li>
+                <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Network Search</div>
+                <ul className="mt-2 ml-3 space-y-2 list-disc">
+                  <li>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>
+                      Doctor Directory
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>
+                      Life Healthcare Hospitals
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>
+                      Mediclinic Hospitals
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>
+                      Africa Health Care
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>
+                      Iso Leso Optics
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                      isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>
+                      Clinix Health Group
+                    </a>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </div>
 
@@ -187,12 +234,22 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               }`}>
                 Complaints
               </a>
+              <a href="/regulatory-information" className={`transition-colors ${
+                isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+              }`}>
+                Regulatory Information
+              </a>
+              <a href="/procedures" className={`transition-colors ${
+                isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+              }`}>
+                Procedures
+              </a>
             </div>
             
             <div className={`text-sm ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              © 2025 Day1Health. All rights reserved.
+              &copy; 2025 Day1Health. All rights reserved.
             </div>
           </div>
 

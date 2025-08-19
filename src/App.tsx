@@ -8,6 +8,8 @@ import PlanDetailPage from './components/PlanDetailPage';
 import HospitalPlanDetailPage from './components/HospitalPlanDetailPage';
 import ComprehensivePlanDetailPage from './components/ComprehensivePlanDetailPage';
 import SeniorPlanDetailPage from './components/SeniorPlanDetailPage';
+import RegulatoryInformationPage from './components/RegulatoryInformationPage';
+import ProceduresPage from './components/ProceduresPage';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function AppWrapper() {
@@ -187,6 +189,8 @@ function App() {
         <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
         <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />
         <Route path="/plans/senior-plan" element={<SeniorPlanDetailPage />} />
+        <Route path="/regulatory-information" element={<RegulatoryInformationPage />} />
+        <Route path="/procedures" element={<ProceduresPage />} />
         {/* Catch-all: render the SPA for any other route */}
         <Route path="*" element={<AppWrapper />} />
       </Routes>
