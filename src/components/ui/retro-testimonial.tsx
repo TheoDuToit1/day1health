@@ -405,7 +405,7 @@ const TestimonialCard = ({
 				<div
 					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700' : 'bg-gradient-to-b from-white to-green-50'} h-[440px] md:h-[480px] w-64 md:w-72 overflow-hidden flex flex-col items-center justify-start py-6 relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-green-500`}
 				>
-					<div className="absolute opacity-10" style={{inset: "-1px 0 0"}}>
+					<div className="absolute opacity-10 pointer-events-none" style={{inset: "-1px 0 0"}}>
 						<div className="absolute inset-0">
 							<img
 								className="block w-full h-full object-center object-cover"
