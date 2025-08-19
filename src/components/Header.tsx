@@ -178,16 +178,16 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       />
                       <ul className="space-y-1">
                         {[
-                          'Doctor Directory',
-                          'Life Healthcare Hospitals',
-                          'Mediclinic Hospitals',
-                          'Africa Health Care',
-                          'Iso Leso Optics',
-                          'Clinix Health Group',
-                        ].map((label) => (
-                          <li key={label}>
+                          { label: 'Doctor Directory', href: 'https://day1health.co.za/medical-directory/' },
+                          { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
+                          { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
+                          { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },
+                          { label: 'Iso Leso Optics', href: 'https://search.mymembership.co.za/Search/?Id=dff1cb34-a717-47e0-a58d-8e5d15744e77' },
+                          { label: 'Clinix Health Group', href: 'https://clinix.co.za/hospitals/' },
+                        ].map((item) => (
+                          <li key={item.label}>
                             <a
-                              href="#"
+                              href={item.href}
                               target="_blank"
                               rel="noopener noreferrer"
                               role="menuitem"
@@ -197,7 +197,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                                   : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 focus-visible:ring-offset-white'
                               }`}
                             >
-                              <span className="truncate">{label}</span>
+                              <span className="truncate">{item.label}</span>
                               <ChevronRight className={`w-4 h-4 ${isDark ? 'text-gray-400 group-hover:text-white' : 'text-gray-400 group-hover:text-gray-700'}`} />
                             </a>
                           </li>
