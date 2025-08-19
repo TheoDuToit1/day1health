@@ -863,7 +863,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         transition={{ delay: 0.6, duration: 0.6 }}
                         className={`text-lg sm:text-2xl md:text-3xl ${
                           slide.id === 0 
-                            ? (isDark ? 'text-blue-400' : 'text-blue-600') 
+                            ? (isDark ? 'text-black' : 'text-black') 
                             : (isDark ? 'text-gray-300' : 'text-gray-700')
                         } font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
                           slide.id === 1 

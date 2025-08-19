@@ -156,9 +156,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     // When changing tabs, ensure any open pricing cards are closed
     setActiveTab(tabId);
     setExpanded({ intro: false, family: false, basic: false, student: false });
-    try {
-      sessionStorage.setItem('activePlansTab', tabId);
-    } catch {}
   };
 
   // Defensive: if activeTab changes from anywhere, collapse any open cards
@@ -168,14 +165,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     setShowDayToDayCards(true);
   }, [activeTab]);
 
-  // On mount, restore the last active tab if present
+  // On mount, do not restore any saved tab; always default to Day-To-Day
   useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem('activePlansTab');
-      if (saved && tabs.some(t => t.id === saved)) {
-        setActiveTab(saved);
-      }
-    } catch {}
+    setActiveTab('daytoday');
   }, []);
 
   const renderTabContent = () => {
