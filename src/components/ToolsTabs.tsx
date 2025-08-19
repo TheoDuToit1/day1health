@@ -227,18 +227,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a comprehensive plan that fits your life
+                        Choose a Comprehensive Plan that fits your life
                       </h3>
                     </div>
                     <motion.button
                       type="button"
                       aria-label={expanded.intro ? 'Collapse introduction' : 'Expand introduction'}
-                      className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm transition-transform ${
-                        expanded.intro ? 'rotate-180' : ''
-                      } text-white border-white/30 bg-white/10 hover:bg-white/15`}
+                      className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm text-white border-white/30 bg-white/10 hover:bg-white/15`}
                       onClick={(e) => { e.stopPropagation(); toggleIntro(); }}
-                      animate={!expanded.intro ? { y: [0, -3, 0] } : { y: 0 }}
-                      transition={!expanded.intro ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
+                      animate={
+                        expanded.intro
+                          ? { y: 0, rotate: 180 }
+                          : { y: [0, -3, 0], rotate: 0 }
+                      }
+                      transition={
+                        expanded.intro
+                          ? { duration: 0.2 }
+                          : { y: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 0.2 } }
+                      }
                     >
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
                         <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
@@ -907,12 +913,18 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <motion.button
                     type="button"
                     aria-label={expanded.intro ? 'Collapse introduction' : 'Expand introduction'}
-                    className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm transition-transform ${
-                      expanded.intro ? 'rotate-180' : ''
-                    } text-white border-white/30 bg-white/10 hover:bg-white/15`}
+                    className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm text-white border-white/30 bg-white/10 hover:bg-white/15`}
                     onClick={(e) => { e.stopPropagation(); toggleIntro(); }}
-                    animate={!expanded.intro ? { y: [0, -3, 0] } : { y: 0 }}
-                    transition={!expanded.intro ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
+                    animate={
+                      expanded.intro
+                        ? { y: 0, rotate: 180 }
+                        : { y: [0, -3, 0], rotate: 0 }
+                    }
+                    transition={
+                      expanded.intro
+                        ? { duration: 0.2 }
+                        : { y: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 0.2 } }
+                    }
                   >
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
                       <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
@@ -1632,18 +1644,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a hospital plan that fits your life
+                        Choose a Hospital Plan that fits your life
                       </h3>
                     </div>
                     <motion.button
                       type="button"
                       aria-label={expanded.intro ? 'Collapse introduction' : 'Expand introduction'}
-                      className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm transition-transform ${
-                        expanded.intro ? 'rotate-180' : ''
-                      } text-white border-white/30 bg-white/10 hover:bg-white/15`}
+                      className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm text-white border-white/30 bg-white/10 hover:bg-white/15`}
                       onClick={(e) => { e.stopPropagation(); toggleIntro(); }}
-                      animate={!expanded.intro ? { y: [0, -3, 0] } : { y: 0 }}
-                      transition={!expanded.intro ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
+                      animate={
+                        expanded.intro
+                          ? { y: 0, rotate: 180 }
+                          : { y: [0, -3, 0], rotate: 0 }
+                      }
+                      transition={
+                        expanded.intro
+                          ? { duration: 0.2 }
+                          : { y: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 0.2 } }
+                      }
                     >
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
                         <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
@@ -2037,7 +2055,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </ul>
                     </div>
                   </motion.div>
-                  <div className={(expanded.family ? 'mt-[-3px]' : 'mt-8')}>
+                  <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                     <div className="relative">
                       <AnimatedPaymentButton 
                         text="Choose Plan"
@@ -2306,18 +2324,24 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a hospital plan that fits your life
+                        Choose a Senior Plan that fits your life
                       </h3>
                     </div>
                     <motion.button
                       type="button"
                       aria-label={expanded.intro ? 'Collapse introduction' : 'Expand introduction'}
-                      className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm transition-transform ${
-                        expanded.intro ? 'rotate-180' : ''
-                      } text-white border-white/30 bg-white/10 hover:bg-white/15`}
+                      className={`inline-flex items-center justify-center w-8 h-8 rounded-lg border text-sm text-white border-white/30 bg-white/10 hover:bg-white/15`}
                       onClick={(e) => { e.stopPropagation(); toggleIntro(); }}
-                      animate={!expanded.intro ? { y: [0, -3, 0] } : { y: 0 }}
-                      transition={!expanded.intro ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
+                      animate={
+                        expanded.intro
+                          ? { y: 0, rotate: 180 }
+                          : { y: [0, -3, 0], rotate: 0 }
+                      }
+                      transition={
+                        expanded.intro
+                          ? { duration: 0.2 }
+                          : { y: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 0.2 } }
+                      }
                     >
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
                         <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
@@ -2721,7 +2745,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </ul>
                     </div>
                   </motion.div>
-                  <div className={(expanded.family ? 'mt-[-3px]' : 'mt-8')}>
+                  <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                     <div className="relative">
                       <AnimatedPaymentButton 
                         text="Choose Plan"
