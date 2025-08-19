@@ -216,7 +216,11 @@ function ProceduresPage() {
                   {/* Back button */}
                   <button
                     type="button"
-                    onClick={() => navigate(-1)}
+                    onClick={() => {
+                      sessionStorage.setItem('navigatingToSection', 'hero');
+                      navigate('/');
+                      window.scrollTo(0, 0);
+                    }}
                     className={`inline-flex items-center gap-2 text-sm mb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-md px-1.5 py-1 transition-colors ${
                       isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                     }`}
