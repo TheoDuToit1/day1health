@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, Clock, X, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import CEOHotlineCTA from './CEOHotlineCTA';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
@@ -196,6 +197,10 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 <HelpCircle className="w-6 h-6 text-green-600" />
                 How can we help?
               </h3>
+              {/* CEO Hotline moved from sidebar */}
+              <div className="mb-6">
+                <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
                   className={`w-full p-3 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700`}

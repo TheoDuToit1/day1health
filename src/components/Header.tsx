@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
-import CEOHotlineCTA from './CEOHotlineCTA';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface HeaderProps {
@@ -158,13 +157,25 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                         </span>
                       )}
                     </a>
-                    {/* Hover submenu */}
+                    {/* Hover submenu (improved) */}
                     <div
-                      className={`absolute top-0 left-full ml-2 z-50 w-64 rounded-xl border shadow-xl p-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ${
+                      className={`absolute top-0 left-full ml-2 z-50 w-72 rounded-xl border shadow-2xl p-3 opacity-0 invisible translate-y-1 scale-95 origin-left
+                        group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-100
+                        group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100
+                        transition-all duration-200 ${
                         isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
                       }`}
+                      role="menu"
+                      aria-label="Network Search submenu"
                     >
-                      <ul className="space-y-2">
+                      {/* Pointer arrow */}
+                      <div
+                        className={`absolute -left-1 top-3 w-3 h-3 rotate-45 ${
+                          isDark ? 'bg-gray-900 border-l border-t border-gray-700' : 'bg-white border-l border-t border-gray-200'
+                        }`}
+                        aria-hidden="true"
+                      />
+                      <ul className="space-y-1">
                         {[
                           'Doctor Directory',
                           'Life Healthcare Hospitals',
@@ -178,11 +189,15 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                               href="#"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`block text-sm transition-colors ${
-                                isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                              role="menuitem"
+                              className={`flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg outline-none transition-all focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
+                                isDark
+                                  ? 'text-gray-300 hover:text-white hover:bg-gray-800 focus-visible:ring-offset-gray-900'
+                                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 focus-visible:ring-offset-white'
                               }`}
                             >
-                              {label}
+                              <span className="truncate">{label}</span>
+                              <ChevronRight className={`w-4 h-4 ${isDark ? 'text-gray-400 group-hover:text-white' : 'text-gray-400 group-hover:text-gray-700'}`} />
                             </a>
                           </li>
                         ))}
@@ -221,16 +236,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
 
         
 
-        {/* Sidebar CTA */}
-        <div className={`px-6 py-2 transition-all duration-300 ${
-          isDark 
-            ? 'border-t border-gray-700' 
-            : 'border-t border-gray-200'
-        }`}>
-          <div>
-            <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
-          </div>
-        </div>
+        
 
         {/* Contact Information - Always visible */}
         <div className={`p-6 mt-auto transition-all duration-300 ${
