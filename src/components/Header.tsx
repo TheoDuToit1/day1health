@@ -234,9 +234,42 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           </ul>
         </nav>
 
-        
-
-        
+        {/* Sidebar Quick Actions */}
+        <div className="px-6 pt-1 pb-2">
+          <h4 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Quick Actions</h4>
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-sm p-3`}>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate('contact');
+                }}
+                aria-label="Call"
+                className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isDark
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+              >
+                Call
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate('contact');
+                }}
+                aria-label="Quote"
+                className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
+                  isDark
+                    ? 'border-gray-600 text-gray-200 hover:bg-gray-700'
+                    : 'border-gray-300 text-gray-800 hover:bg-gray-50'
+                }`}
+              >
+                Quote
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Contact Information - Always visible */}
         <div className={`p-6 mt-auto transition-all duration-300 ${
