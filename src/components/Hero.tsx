@@ -48,7 +48,7 @@ const heroSlides: HeroSlide[] = [
       { text: 'Checkups covered', icon: Heart },
       { text: 'Confidence always', icon: Star }
     ],
-    subheading: 'For You and your family',
+    subheading: 'for you and your family.',
     bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
@@ -771,10 +771,22 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             text-xl sm:text-2xl md:text-3xl lg:text-4xl -mt-[280px] relative left-[490px] mb-[175px]`}
                         >
                           <span className="uppercase">
-                            <span className="text-green-600">DAY1</span>
+                            <span className="text-green-600">DAY
+                              <span
+                                style={{
+                                  fontSize: 'calc(100% + 4px)',
+                                  display: 'inline-block',
+                                  lineHeight: '1',
+                                  verticalAlign: 'baseline',
+                                  marginLeft: '1px'
+                                }}
+                              >
+                                1
+                              </span>
+                            </span>
                             <span
                               className="text-[#eacf55] ml-1 tracking-wider"
-                              style={{ WebkitTextStrokeWidth: '2px', WebkitTextStrokeColor: 'black' }}
+                              style={{ WebkitTextStrokeWidth: '0.5px', WebkitTextStrokeColor: 'black' }}
                             >
                               HEALTH
                             </span>
