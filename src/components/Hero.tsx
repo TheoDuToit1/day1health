@@ -48,7 +48,7 @@ const heroSlides: HeroSlide[] = [
       { text: 'Checkups covered', icon: Heart },
       { text: 'Confidence always', icon: Star }
     ],
-    subheading: 'for today\'s working adults',
+    subheading: 'For You and your family',
     bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
