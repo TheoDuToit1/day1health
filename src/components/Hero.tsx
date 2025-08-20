@@ -770,7 +770,15 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           className={`font-manrope font-extrabold tracking-tight leading-none transform-gpu scale-x-110 scale-y-90 ${isDark ? 'text-emerald-400' : 'text-green-600'}
                             text-xl sm:text-2xl md:text-3xl lg:text-4xl -mt-[280px] relative left-[490px] mb-[175px]`}
                         >
-                          Day1Health
+                          <span className="uppercase">
+                            <span className="text-green-600">DAY1</span>
+                            <span
+                              className="text-[#eacf55] ml-1 tracking-wider"
+                              style={{ WebkitTextStrokeWidth: '2px', WebkitTextStrokeColor: 'black' }}
+                            >
+                              HEALTH
+                            </span>
+                          </span>
                         </motion.h1>
                       )}
                       
