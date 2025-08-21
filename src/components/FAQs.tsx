@@ -11,7 +11,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
   // Support opening multiple and a global open/close all toggle
   const [expandedAll, setExpandedAll] = useState(false);
   const [openSet, setOpenSet] = useState<Set<number>>(new Set());
-  const [showFaqs, setShowFaqs] = useState(true);
+  const [showFaqs, setShowFaqs] = useState(false);
   const { isDark } = useTheme();
 
   // Selected 8 most relevant FAQs from the list provided by the user
