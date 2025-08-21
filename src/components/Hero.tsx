@@ -761,37 +761,17 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         </h1>
                       )}
 
-                      {/* Slide 0: Prominent brand heading above typewriter */}
+                      {/* Slide 0: Top-right logo watermark (replaces DAY1HEALTH text) */}
                       {slide.id === 0 && (
-                        <motion.h1
-                          initial={{ y: 20, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          transition={{ delay: 0.3, duration: 0.6 }}
-                          className={`font-manrope font-extrabold tracking-tight leading-none transform-gpu scale-x-110 scale-y-90 ${isDark ? 'text-emerald-400' : 'text-green-600'}
-                            text-xl sm:text-2xl md:text-3xl lg:text-4xl -mt-[280px] relative left-[490px] mb-[175px]`}
-                        >
-                          <span className="uppercase">
-                            <span className="text-green-600">DAY
-                              <span
-                                style={{
-                                  fontSize: 'calc(100% + 4px)',
-                                  display: 'inline-block',
-                                  lineHeight: '1',
-                                  verticalAlign: 'baseline',
-                                  marginLeft: '1px'
-                                }}
-                              >
-                                1
-                              </span>
-                            </span>
-                            <span
-                              className="text-[#eacf55] ml-1 tracking-wider"
-                              style={{ WebkitTextStrokeWidth: '0.5px', WebkitTextStrokeColor: 'black' }}
-                            >
-                              HEALTH
-                            </span>
-                          </span>
-                        </motion.h1>
+                        <motion.img
+                          src="/assets/images/Logo.jpg"
+                          alt="DAY1HEALTH logo"
+                          initial={{ y: -10, opacity: 0 }}
+                          animate={{ y: 0, opacity: 0.16 }}
+                          transition={{ delay: 0.3, duration: 0.8 }}
+                          className="absolute top-6 right-16 w-24 sm:w-32 md:w-40 lg:w-48 xl:w-56 pointer-events-none select-none z-10 origin-top-right scale-[0.8]"
+                          onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
+                        />
                       )}
                       
                       {/* Typewriter Section - Large and Prominent */}
