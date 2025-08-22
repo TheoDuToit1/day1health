@@ -761,17 +761,42 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         </h1>
                       )}
 
-                      {/* Slide 0: Top-right logo watermark (replaces DAY1HEALTH text) */}
+                      {/* Slide 0: Three logos with different opacity levels */}
                       {slide.id === 0 && (
-                        <motion.img
-                          src="/assets/images/Logo.jpg"
-                          alt="DAY1HEALTH logo"
-                          initial={{ y: -10, opacity: 0 }}
-                          animate={{ y: 0, opacity: 0.16 }}
-                          transition={{ delay: 0.3, duration: 0.8 }}
-                          className="absolute top-6 right-16 w-24 sm:w-32 md:w-40 lg:w-48 xl:w-56 pointer-events-none select-none z-10 origin-top-right scale-[0.8]"
-                          onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
-                        />
+                        <div className="absolute top-0 right-0 left-0 flex justify-center items-center pt-8 pb-4 bg-gradient-to-b from-black/10 to-transparent w-full z-10">
+                          <div className="flex items-center gap-8 px-6 py-4 bg-white/5 backdrop-blur-sm rounded-full">
+                            {/* Most transparent logo */}
+                            <motion.img
+                              src="/assets/images/Logo.jpg"
+                              alt="DAY1HEALTH logo"
+                              initial={{ y: -10, opacity: 0 }}
+                              animate={{ y: 0, opacity: 0.2 }}
+                              transition={{ delay: 0.3, duration: 0.8 }}
+                              className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
+                              onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                            {/* Medium opacity logo */}
+                            <motion.img
+                              src="/assets/images/Logo.jpg"
+                              alt="DAY1HEALTH logo"
+                              initial={{ y: -10, opacity: 0 }}
+                              animate={{ y: 0, opacity: 0.5 }}
+                              transition={{ delay: 0.4, duration: 0.8 }}
+                              className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
+                              onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                            {/* Full opacity logo */}
+                            <motion.img
+                              src="/assets/images/Logo.jpg"
+                              alt="DAY1HEALTH logo"
+                              initial={{ y: -10, opacity: 0 }}
+                              animate={{ y: 0, opacity: 0.8 }}
+                              transition={{ delay: 0.5, duration: 0.8 }}
+                              className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
+                              onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                          </div>
+                        </div>
                       )}
                       
                       {/* Typewriter Section - Large and Prominent */}
