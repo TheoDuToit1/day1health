@@ -761,41 +761,18 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         </h1>
                       )}
 
-                      {/* Slide 0: Three logos with different opacity levels */}
+                      {/* Slide 0: Single logo on the right */}
                       {slide.id === 0 && (
-                        <div className="absolute top-0 right-0 left-0 flex justify-center items-center pt-8 pb-4 bg-gradient-to-b from-black/10 to-transparent w-full z-10">
-                          <div className="flex items-center gap-8 px-6 py-4 bg-white/5 backdrop-blur-sm rounded-full">
-                            {/* Most transparent logo */}
-                            <motion.img
-                              src="/assets/images/Logo.jpg"
-                              alt="DAY1HEALTH logo"
-                              initial={{ y: -10, opacity: 0 }}
-                              animate={{ y: 0, opacity: 0.2 }}
-                              transition={{ delay: 0.3, duration: 0.8 }}
-                              className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
-                              onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
-                            />
-                            {/* Medium opacity logo */}
-                            <motion.img
-                              src="/assets/images/Logo.jpg"
-                              alt="DAY1HEALTH logo"
-                              initial={{ y: -10, opacity: 0 }}
-                              animate={{ y: 0, opacity: 0.5 }}
-                              transition={{ delay: 0.4, duration: 0.8 }}
-                              className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
-                              onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
-                            />
-                            {/* Full opacity logo */}
-                            <motion.img
-                              src="/assets/images/Logo.jpg"
-                              alt="DAY1HEALTH logo"
-                              initial={{ y: -10, opacity: 0 }}
-                              animate={{ y: 0, opacity: 0.8 }}
-                              transition={{ delay: 0.5, duration: 0.8 }}
-                              className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
-                              onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
-                            />
-                          </div>
+                        <div className="absolute top-0 right-0 pt-8 pr-28 z-10">
+                          <motion.img
+                            src="/assets/images/Logo.jpg"
+                            alt="DAY1HEALTH logo"
+                            initial={{ y: -10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3, duration: 0.8 }}
+                            className="w-28 sm:w-36 md:w-44 lg:w-50 xl:w-58 pointer-events-none select-none"
+                            onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
+                          />
                         </div>
                       )}
                       
