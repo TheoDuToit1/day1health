@@ -42,7 +42,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>info@day1health.co.za</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>jason@day1health.co.za</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-green-600" />
@@ -172,7 +172,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
-                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>info@day1health.co.za</span>
+                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>jason@day1health.co.za</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Shield className="w-5 h-5 text-green-400 mt-0.5" />

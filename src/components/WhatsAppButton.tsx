@@ -1,9 +1,18 @@
 import React from 'react';
 
-const WhatsAppButton: React.FC = () => {
+type WhatsAppButtonProps = {
+  phone?: string; // E.g. 27727205511 (no plus, no spaces)
+  presetText?: string;
+};
+
+const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({
+  phone = '27727205511',
+  presetText = 'Hello Day1 Health',
+}) => {
+  const href = `https://wa.me/${phone}?text=${encodeURIComponent(presetText)}`;
   return (
     <div className="light-button">
-      <button className="bt">
+      <a className="bt" href={href} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
         <div className="light-holder">
           <div className="dot"></div>
           <div className="light"></div>
@@ -16,12 +25,12 @@ const WhatsAppButton: React.FC = () => {
           </svg>
           <p>WhatsApp</p>
         </div>
-      </button>
+      </a>
       <style>{`
         .light-button {
           margin-top: 20px;
         }
-        .light-button button.bt {
+        .light-button .bt {
           position: relative;
           height: 200px;
           display: flex;
@@ -33,7 +42,7 @@ const WhatsAppButton: React.FC = () => {
           padding: 0;
         }
 
-        .light-button button.bt .button-holder {
+        .light-button .bt .button-holder {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -49,13 +58,13 @@ const WhatsAppButton: React.FC = () => {
           outline-offset: 20;
         }
 
-        .light-button button.bt .button-holder svg {
+        .light-button .bt .button-holder svg {
           height: 50px;
           fill: #0f0f0f;
           transition: 300ms;
         }
 
-        .light-button button.bt .light-holder {
+        .light-button .bt .light-holder {
           position: absolute;
           height: 200px;
           width: 100px;
@@ -64,7 +73,7 @@ const WhatsAppButton: React.FC = () => {
           align-items: center;
         }
 
-        .light-button button.bt .light-holder .dot {
+        .light-button .bt .light-holder .dot {
           position: absolute;
           top: 0;
           width: 10px;
@@ -74,7 +83,7 @@ const WhatsAppButton: React.FC = () => {
           z-index: 2;
         }
 
-        .light-button button.bt .light-holder .light {
+        .light-button .bt .light-holder .light {
           position: absolute;
           top: 0;
           width: 200px;
@@ -83,17 +92,17 @@ const WhatsAppButton: React.FC = () => {
           background: transparent;
         }
 
-        .light-button button.bt:hover .button-holder svg {
+        .light-button .bt:hover .button-holder svg {
           fill: rgba(0, 215, 87, 1);
         }
 
-        .light-button button.bt:hover .button-holder {
+        .light-button .bt:hover .button-holder {
           color: rgba(0, 215, 87, 1);
           outline: rgba(0, 215, 87, 1) 2px solid;
           outline-offset: 2px;
         }
 
-        .light-button button.bt:hover .light-holder .light {
+        .light-button .bt:hover .light-holder .light {
           background: rgb(255, 255, 255);
           background: linear-gradient(
             180deg,

@@ -357,7 +357,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                 <div className="flex flex-col">
                   <span className={`text-sm font-medium ${
                     isDark ? 'text-white' : 'text-gray-900'
-                  }`}>info@day1health.co.za</span>
+                  }`}>jason@day1health.co.za</span>
                   <span className={`text-xs ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>Send us an email</span>
@@ -484,7 +484,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     <span className="font-medium text-sm">Call</span>
                   </a>
                   <a 
-                    href="mailto:info@day1health.co.za"
+                    href="mailto:jason@day1health.co.za"
                     className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 ${
                       isDark 
                         ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white shadow-lg'
