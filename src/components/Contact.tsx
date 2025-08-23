@@ -132,6 +132,9 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   <p className={`mb-1 ${
                     isDark ? 'text-gray-300' : 'text-gray-600'
                   }`}>jason@day1health.co.za</p>
+                  <p className={`mb-1 ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>belinda@day1health.co.za</p>
                   <p className={`text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>We'll respond within 24 hours</p>
