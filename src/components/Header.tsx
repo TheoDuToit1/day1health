@@ -274,14 +274,14 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                   onNavigate('contact');
                 }}
                 aria-label="Call"
-                className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-full rounded-lg text-sm font-medium transition-colors ${
                   isDark
                     ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-green-600 text-white hover:bg-green-700'
-                } ${isSidebarCollapsed ? 'flex items-center justify-center p-3' : ''}`}
+                } ${isSidebarCollapsed ? 'flex items-center justify-center h-10 px-5' : 'px-3 py-2'}`}
               >
                 {isSidebarCollapsed ? (
-                  <Phone className="w-6 h-6" />
+                  <Phone className="w-5 h-5 shrink-0 text-white" />
                 ) : (
                   'Call'
                 )}
@@ -292,14 +292,14 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                   onNavigate('contact');
                 }}
                 aria-label="Quote"
-                className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
+                className={`w-full rounded-lg text-sm font-medium transition-colors border ${
                   isDark
                     ? 'border-gray-600 text-gray-200 hover:bg-gray-700'
                     : 'border-gray-300 text-gray-800 hover:bg-gray-50'
-                } ${isSidebarCollapsed ? 'flex items-center justify-center p-3' : ''}`}
+                } ${isSidebarCollapsed ? 'flex items-center justify-center h-10 px-5' : 'px-3 py-2'}`}
               >
                 {isSidebarCollapsed ? (
-                  <MessageSquare className="w-6 h-6" />
+                  <MessageSquare className={`w-5 h-5 shrink-0 ${isDark ? 'text-gray-200' : 'text-gray-900'}`} />
                 ) : (
                   'Quote'
                 )}
