@@ -761,19 +761,21 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         </h1>
                       )}
 
-                      {/* Slide 0: Single logo on the right */}
+                      {/* Logo in top right corner with delayed fade-in */}
                       {slide.id === 0 && (
-                        <div className="absolute top-0 right-0 pt-8 pr-28 z-10">
-                          <motion.img
+                        <motion.div 
+                          className="absolute top-10 right-32 z-10"
+                          initial={{ opacity: 0, x: 20, y: 20, scale: 0.9 }}
+                          animate={{ opacity: 1, x: 0, y: 0, scale: 0.9 }}
+                          transition={{ delay: 1, duration: 0.5 }}
+                        >
+                          <img
                             src="/assets/images/Logo.jpg"
                             alt="DAY1HEALTH logo"
-                            initial={{ y: -10, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.3, duration: 0.8 }}
-                            className="w-28 sm:w-36 md:w-44 lg:w-50 xl:w-58 pointer-events-none select-none"
+                            className="w-20 sm:w-28 md:w-36 lg:w-44 xl:w-48 pointer-events-none select-none"
                             onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
                           />
-                        </div>
+                        </motion.div>
                       )}
                       
                       {/* Typewriter Section - Large and Prominent */}
