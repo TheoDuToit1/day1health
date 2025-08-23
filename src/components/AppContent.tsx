@@ -9,7 +9,7 @@ import FAQs from './FAQs';
 import Contact from './Contact';
 import Footer from './Footer';
 import SocialLinks from './SocialLinks';
-import InstallButton from './InstallButton';
+import FloatingWhatsApp from './FloatingWhatsApp';
 
 interface AppContentProps {
   activeSection: string;
@@ -32,8 +32,7 @@ const AppContent: React.FC<AppContentProps> = ({
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      {/* PWA Install Button */}
-      <InstallButton />
+      
       
       <div className="flex min-h-screen w-full">
         <Header 
@@ -64,6 +63,7 @@ const AppContent: React.FC<AppContentProps> = ({
             <Footer id="footer" />
           </div>
           <SocialLinks isSidebarCollapsed={isSidebarCollapsed} activeSection={activeSection} />
+          <FloatingWhatsApp />
         </div>
       </div>
     </div>
