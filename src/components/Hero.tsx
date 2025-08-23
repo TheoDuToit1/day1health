@@ -770,7 +770,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             initial={{ y: -10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3, duration: 0.8 }}
-                            className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 pointer-events-none select-none"
+                            className="w-28 sm:w-36 md:w-44 lg:w-50 xl:w-58 pointer-events-none select-none"
                             onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
                           />
                         </div>
