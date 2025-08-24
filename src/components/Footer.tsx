@@ -42,11 +42,11 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>jason@day1health.co.za</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>demo@day1health.co.za</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>belinda@day1health.co.za</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>demo@day1health.co.za</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-green-600" />
@@ -176,11 +176,11 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
-                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>jason@day1health.co.za</span>
+                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>demo@day1health.co.za</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
-                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>belinda@day1health.co.za</span>
+                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>demo@day1health.co.za</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Shield className="w-5 h-5 text-green-400 mt-0.5" />
@@ -222,26 +222,6 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
         }`}>
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex flex-wrap gap-6 text-sm">
-              <a href="#" className={`transition-colors ${
-                isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}>
-                Terms of Service
-              </a>
-              <a href="#" className={`transition-colors ${
-                isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}>
-                Privacy Policy
-              </a>
-              <a href="#" className={`transition-colors ${
-                isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}>
-                Cookie Policy
-              </a>
-              <a href="#" className={`transition-colors ${
-                isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}>
-                Complaints
-              </a>
               <a href="/regulatory-information" className={`transition-colors ${
                 isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
               }`}>

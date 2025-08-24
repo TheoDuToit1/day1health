@@ -481,7 +481,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                                 className="mb-6"
                               />
                             </motion.div>
-                            
+                          
                             {/* Selected Testimonial Quote */}
                             <motion.blockquote 
                               key={selectedTestimonial.id}
