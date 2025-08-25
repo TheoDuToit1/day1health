@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Phone, Mail, Clock, X, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import CEOHotlineCTA from './CEOHotlineCTA';
@@ -20,6 +20,20 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
     enquiry: '',
     message: ''
   });
+
+  // Listen for global event or session flag to open Prospective modal
+  useEffect(() => {
+    const handler = () => setIsProspectiveOpen(true);
+    window.addEventListener('openProspective', handler as EventListener);
+    // session flag support
+    if (sessionStorage.getItem('openProspective') === '1') {
+      setIsProspectiveOpen(true);
+      sessionStorage.removeItem('openProspective');
+    }
+    return () => {
+      window.removeEventListener('openProspective', handler as EventListener);
+    };
+  }, []);
 
   const [prospectiveData, setProspectiveData] = useState({
     firstName: '',
@@ -129,12 +143,16 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   <h4 className={`font-semibold mb-2 ${
                     isDark ? 'text-white' : 'text-gray-900'
                   }`}>Email Us</h4>
-                  <p className={`mb-1 ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
-                  }`}>demo@day1health.co.za</p>
-                  <p className={`mb-1 ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
-                  }`}>demo@day1health.co.za</p>
+                  <div>
+                    <a href="mailto:admin@day1.co.za" className={`${
+                      isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>admin@day1.co.za</a>
+                  </div>
+                  <div className="mt-1">
+                    <a href="mailto:sales@day1.co.za" className={`${
+                      isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                    }`}>sales@day1.co.za</a>
+                  </div>
                   <p className={`text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`}>We'll respond within 24 hours</p>
@@ -171,14 +189,14 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>Quick Actions</h4>
               <div className="space-y-3">
-                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
+                <button onClick={() => setIsProspectiveOpen(true)} className={`w-full text-left p-3 rounded-lg transition-colors ${
                   isDark 
                     ? 'text-gray-300 hover:bg-gray-700' 
                     : 'text-gray-900 hover:bg-gray-50'
                 }`}>
                   📋 Get a Quote
                 </button>
-                <button className={`w-full text-left p-3 rounded-lg transition-colors ${
+                <button onClick={() => setIsProspectiveOpen(true)} className={`w-full text-left p-3 rounded-lg transition-colors ${
                   isDark 
                     ? 'text-gray-300 hover:bg-gray-700' 
                     : 'text-gray-900 hover:bg-gray-50'

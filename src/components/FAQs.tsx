@@ -217,10 +217,23 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
               Our friendly consultants are available to help you understand your options and find the right plan for your needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors">
+              <a
+                href="tel:0876100600"
+                aria-label="Call Day1Health"
+                className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors text-center"
+              >
                 Call 0876 100 600
-              </button>
-              <button className="border-2 border-green-600 text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-600 hover:text-white transition-colors">
+              </a>
+              <button
+                onClick={() => {
+                  // Scroll to contact section and open Prospective modal
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  // Support both immediate event and delayed open via sessionStorage (in case of navigation)
+                  try { sessionStorage.setItem('openProspective', '1'); } catch {}
+                  window.dispatchEvent(new Event('openProspective'));
+                }}
+                className="border-2 border-green-600 text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-600 hover:text-white transition-colors"
+              >
                 Email Us
               </button>
             </div>

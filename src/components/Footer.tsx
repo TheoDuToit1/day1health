@@ -42,11 +42,11 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>demo@day1health.co.za</span>
+                <a href="mailto:admin@day1.co.za" className={isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'}>admin@day1.co.za</a>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>demo@day1health.co.za</span>
+                <a href="mailto:sales@day1.co.za" className={isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'}>sales@day1.co.za</a>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-green-600" />
@@ -54,7 +54,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Shield className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 12345</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP11310</span>
               </div>
               {/* Logo moved here, ensure it's clearly lower to align with theme toggle */}
               <div className="pt-[70px]">
@@ -176,11 +176,11 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
-                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>demo@day1health.co.za</span>
+                <a href="mailto:admin@day1.co.za" className={isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>admin@day1.co.za</a>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
-                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>demo@day1health.co.za</span>
+                <a href="mailto:sales@day1.co.za" className={isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>sales@day1.co.za</a>
               </div>
               <div className="flex items-start space-x-3">
                 <Shield className="w-5 h-5 text-green-400 mt-0.5" />

@@ -268,24 +268,21 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           )}
           <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-sm p-3`}>
             <div className={`grid ${isSidebarCollapsed ? 'grid-cols-1 gap-1' : 'grid-cols-2 gap-2'}`}>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  onNavigate('contact');
-                }}
-                aria-label="Call"
+              <a
+                href="tel:0876100600"
+                aria-label="Call Day1Health"
                 className={`w-full rounded-lg text-sm font-medium transition-colors ${
                   isDark
                     ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-green-600 text-white hover:bg-green-700'
-                } ${isSidebarCollapsed ? 'flex items-center justify-center h-10 px-5' : 'px-3 py-2'}`}
+                } ${isSidebarCollapsed ? 'flex items-center justify-center h-10 px-5' : 'px-3 py-2'} text-center`}
               >
                 {isSidebarCollapsed ? (
                   <Phone className="w-5 h-5 shrink-0 text-white" />
                 ) : (
                   'Call'
                 )}
-              </button>
+              </a>
               <button
                 onClick={(e) => {
                   e.preventDefault();
