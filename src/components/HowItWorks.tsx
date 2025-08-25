@@ -276,7 +276,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
               Join thousands of South Africans who trust Day1Health for their healthcare needs.
             </motion.p>
             <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              className="flex flex-row flex-wrap items-center justify-center gap-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
@@ -288,7 +288,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <HeroCTAButton 
-                  className="font-manrope font-bold text-xl" 
+                  className="font-manrope font-semibold text-sm sm:text-base px-4 py-2" 
                   defaultText="Apply Now"
                   sentText="Applied"
                 />
@@ -299,7 +299,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <HeroCTAButton 
-                  className="font-manrope font-bold text-xl hero-cta-secondary" 
+                  className="font-manrope font-semibold text-sm sm:text-base px-4 py-2 hero-cta-secondary" 
                   defaultText="Call"
                   sentText="Calling"
                 />

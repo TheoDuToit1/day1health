@@ -175,8 +175,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'comprehensive':
         return (
           <LayoutGroup>
-            <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 items-start overflow-visible">
+            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-5 sm:px-6 md:px-2`}>
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
                 {/* Introduction Column (copied from Day-to-Day) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -855,8 +855,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'daytoday':
         return (
           <LayoutGroup>
-            <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-4 gap-5 items-start overflow-visible">
+            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
               {/* Introduction Column */}
               <motion.div 
                 className={`min-w-0 relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -1592,8 +1592,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'hospital':
         return (
           <LayoutGroup>
-            <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-5 items-start overflow-visible">
+            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-6 md:gap-5 items-start overflow-visible">
                 {/* Introduction Column (same as Comprehensive) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -2272,8 +2272,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'senior':
         return (
           <LayoutGroup>
-            <motion.div className={`${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-5 items-start overflow-visible">
+            <motion.div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-6 md:gap-5 items-start overflow-visible">
                 {/* Introduction Column (Senior-Plan intro) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -3046,17 +3046,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       }}>
         {/* Floating Tabs */}
         <div className="flex justify-center mb-12">
-          <div className={`w-full ${isSidebarCollapsed ? 'max-w-[74rem]' : 'max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-3 backdrop-blur-sm transition-colors duration-300 ${
+          <div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-3 backdrop-blur-sm transition-colors duration-300 ${
             isDark 
               ? 'bg-gray-800/95 border border-gray-700' 
               : 'bg-white/95 border border-gray-100'
           }`}>
-            <div className="flex flex-wrap justify-between gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-4 px-3 md:px-0">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}
-                  className={`flex items-center px-6 py-3 text-xs md:text-sm font-medium rounded-lg transition-all min-w-[200px] sm:min-w-[240px] justify-center ${
+                  className={`flex flex-col sm:flex-row items-center w-full px-4 py-3 sm:px-5 sm:py-3 text-xs sm:text-sm font-medium rounded-xl transition-all justify-center gap-2 sm:gap-3 ${
                     activeTab === tab.id
                       ? isDark 
                         ? 'bg-green-900/50 text-green-300 shadow-sm border border-green-800'
@@ -3066,7 +3066,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         : 'bg-blue-50 text-green-700 border border-blue-100 hover:bg-green-50 hover:text-green-700 hover:border-green-200'
                   }`}
                 >
-                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg mr-3 transition-colors ${
+                  <span className={`inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:mr-3 transition-colors ${
                     activeTab === tab.id
                       ? isDark
                         ? 'bg-green-900/50 hover:bg-green-900/70'
@@ -3085,7 +3085,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           : 'text-green-600'
                   }`} />
                   </span>
-                  <span className="whitespace-nowrap">{tab.label}</span>
+                  <span className="text-center sm:text-left leading-tight sm:leading-normal sm:whitespace-nowrap">{tab.label}</span>
                 </button>
               ))}
             </div>

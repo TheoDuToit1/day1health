@@ -777,7 +777,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                 </motion.div>
 
                 {/* Right: Sticky summary / purchase card */}
-                <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
+                <aside className="col-span-12 lg:col-span-4 xl:col-span-3 -mt-4 sm:-mt-6 lg:mt-0">
                   <div className="lg:sticky lg:top-24">
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-200'}`}

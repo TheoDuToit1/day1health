@@ -761,10 +761,10 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         </h1>
                       )}
 
-                      {/* Logo in top right corner with delayed fade-in */}
+                      {/* Logo positioning: centered on mobile (nudged left 30px); top-right on larger screens */}
                       {slide.id === 0 && (
                         <motion.div 
-                          className="absolute top-10 right-32 z-10"
+                          className="absolute z-10 top-44 left-1/2 -translate-x-1/2 ml-[-35px] sm:top-10 sm:left-auto sm:right-8 sm:translate-x-0 sm:ml-0"
                           initial={{ opacity: 0, x: 20, y: 20, scale: 0.9 }}
                           animate={{ opacity: 1, x: 0, y: 0, scale: 0.9 }}
                           transition={{ delay: 1, duration: 0.5 }}
@@ -867,7 +867,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         transition={{ delay: 0.6, duration: 0.6 }}
                         className={`text-lg sm:text-2xl md:text-3xl ${
                           slide.id === 0 
-                            ? (isDark ? 'text-black' : 'text-black') 
+                            ? (isDark ? 'text-gray-200' : 'text-black') 
                             : (isDark ? 'text-gray-300' : 'text-gray-700')
                         } font-manrope font-bold max-w-4xl mx-auto leading-relaxed ${
                           slide.id === 1 

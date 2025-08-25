@@ -97,7 +97,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 	return (
 		<div className="relative w-full mt-10">
 			<div
-				className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth [scrollbar-width:none] py-5"
+				className="flex w-full overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] py-5 snap-x snap-mandatory"
 				ref={carouselRef}
 				onScroll={checkScrollability}
 			>
@@ -108,7 +108,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 				/>
 				<div
 					className={cn(
-						"flex flex-row justify-start gap-4 pl-2 md:pl-4 pr-4",
+						"flex flex-row justify-start gap-4 px-0",
 						"w-full",
 					)}
 				>
@@ -127,7 +127,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 								}}
 								viewport={{ once: true }}
 								key={`card-${index}`}
-								className="last:pr-4 rounded-3xl"
+								className="rounded-3xl snap-start shrink-0 first:ml-4 last:mr-4"
 							>
 								{React.cloneElement(item, {
 									onCardClose: () => {
@@ -290,7 +290,7 @@ const TestimonialCard = ({
 				}}
 			>
 				<div
-					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700' : 'bg-gradient-to-b from-white to-green-50'} h-[440px] md:h-[480px] w-64 md:w-72 overflow-hidden flex flex-col items-center justify-start py-6 relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-green-500`}
+					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700' : 'bg-gradient-to-b from-white to-green-50'} h-[440px] md:h-[480px] w-[85vw] sm:w-64 md:w-72 overflow-hidden flex flex-col items-center justify-start py-6 relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-green-500`}
 				>
 					<div className="absolute opacity-10 pointer-events-none" style={{inset: "-1px 0 0"}}>
 						<div className="absolute inset-0">
