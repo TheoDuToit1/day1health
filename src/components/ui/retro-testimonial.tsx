@@ -1,8 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
-import {ArrowLeft, ArrowRight, Quote, X, Play, Pause, RotateCcw} from "lucide-react";
+import {ArrowLeft, ArrowRight, Quote, X} from "lucide-react";
 import {cn} from "@/lib/utils";
-import { speakText } from "@/lib/tts";
 import { useTheme } from "@/contexts/ThemeContext";
 
 // ===== Types and Interfaces =====
@@ -177,14 +176,7 @@ const TestimonialCard = ({
 }) => {
 	const { isDark } = useTheme();
 	const [isExpanded, setIsExpanded] = useState(false);
-	const [isPlaying, setIsPlaying] = useState(false);
-	const [currentTime, setCurrentTime] = useState(0);
-	const [duration, setDuration] = useState(0);
-	const [showAudioPulse, setShowAudioPulse] = useState(false);
-	const audioRef = useRef<ReturnType<typeof speakText> | null>(null);
-	const progressInterval = useRef<number | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
-	const audioButtonRef = useRef<HTMLButtonElement>(null);
 
 	// Truncate text and add ellipsis if needed
 	const shouldTruncate = testimonial.description.length > MAX_PREVIEW_LENGTH;
@@ -192,76 +184,10 @@ const TestimonialCard = ({
 		? `${testimonial.description.slice(0, MAX_PREVIEW_LENGTH).trim()}...` 
 		: testimonial.description;
 
-	const handlePlayPause = () => {
-	  if (isPlaying) {
-		audioRef.current?.stop();
-		if (progressInterval.current) {
-		  clearInterval(progressInterval.current);
-		  progressInterval.current = null;
-		}
-		setIsPlaying(false);
-	  } else {
-		// Stop any currently playing audio
-		window.speechSynthesis.cancel();
-		
-		// Start new speech
-		audioRef.current = speakText(testimonial.description);
-		setIsPlaying(true);
-		setCurrentTime(0);
-		
-		// Estimate duration (average reading speed is about 150 words per minute)
-		const wordCount = testimonial.description.split(/\s+/).length;
-		const estimatedDuration = (wordCount / 150) * 60 * 1000; // in milliseconds
-		setDuration(estimatedDuration);
-		
-		// Update progress
-		const startTime = Date.now();
-		progressInterval.current = window.setInterval(() => {
-		  const elapsed = Date.now() - startTime;
-		  setCurrentTime(Math.min(elapsed, estimatedDuration));
-		  
-		  if (elapsed >= estimatedDuration) {
-			setIsPlaying(false);
-			if (progressInterval.current) {
-			  clearInterval(progressInterval.current);
-			  progressInterval.current = null;
-			}
-		  }
-		}, 100);
-	  }
-	};
-
-	const handleRestart = () => {
-	  if (progressInterval.current) {
-		clearInterval(progressInterval.current);
-	  }
-	  setCurrentTime(0);
-	  
-	  if (isPlaying) {
-		window.speechSynthesis.cancel();
-		handlePlayPause(); // This will restart the speech
-		handlePlayPause(); // First call stops, second call starts again
-	  }
-	};
-
-	// Clean up on unmount
-	useEffect(() => {
-	  return () => {
-		if (progressInterval.current) {
-		  clearInterval(progressInterval.current);
-		}
-		if (audioRef.current) {
-		  audioRef.current.stop();
-		}
-	  };
-	}, []);
+	// Audio functionality removed
 
 	const handleExpand = () => {
 		setIsExpanded(true);
-		// Flash the audio button when popup opens
-		setShowAudioPulse(true);
-		const timer = setTimeout(() => setShowAudioPulse(false), 3000);
-		return () => clearTimeout(timer);
 	};
 	const handleCollapse = () => {
 		setIsExpanded(false);
@@ -340,45 +266,6 @@ const TestimonialCard = ({
 							</div>
 							<div className="p-6 overflow-y-auto flex-grow">
 								<div className={`relative ${isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-green-100'} p-6 rounded-lg border`}>
-									{/* Audio Controls */}
-									<div className="flex items-center justify-between mb-4">
-										<div className="flex-1 pr-4">
-											<div className="w-full bg-gray-100 rounded-full h-1.5">
-												<div 
-													className="bg-green-500 h-full rounded-full transition-all duration-300" 
-													style={{ width: duration ? `${(currentTime / duration) * 100}%` : '0%' }}
-												></div>
-											</div>
-										</div>
-										<div className="flex items-center space-x-2">
-											<button 
-												ref={audioButtonRef}
-												onClick={handlePlayPause}
-												className={`p-2 rounded-full transition-all shadow-sm relative overflow-hidden ${
-													isPlaying 
-														? 'bg-green-100 text-green-700' 
-														: 'bg-green-50 text-green-600 hover:bg-green-100'
-												} ${showAudioPulse ? 'animate-pulse ring-2 ring-green-400' : ''}`}
-												title={isPlaying ? 'Pause' : 'Play'}
-											>
-												{isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-												{showAudioPulse && (
-													<motion.span 
-														className="absolute inset-0 rounded-full bg-green-200 opacity-0"
-														animate={{ opacity: [0, 0.5, 0], scale: [1, 1.5, 2] }}
-														transition={{ duration: 1.5, repeat: 2 }}
-													/>
-												)}
-											</button>
-											<button 
-												onClick={handleRestart}
-												className="p-2 rounded-full bg-gray-50 text-gray-500 hover:bg-gray-100 transition-colors shadow-sm"
-												title="Restart"
-											>
-												<RotateCcw className="w-3.5 h-3.5" />
-											</button>
-										</div>
-									</div>
 									
 									{/* Testimonial Text */}
 									<div className="relative">
@@ -446,7 +333,6 @@ const TestimonialCard = ({
 						{testimonial.name}
 					</motion.p>
 					<motion.p
-						layoutId={layout ? `category-${testimonial.name}` : undefined}
 						className="text-green-600 text-sm md:text-base font-medium text-center mt-2 underline underline-offset-4"
 					>
 						{testimonial.designation.length > 30
@@ -459,28 +345,28 @@ const TestimonialCard = ({
 	);
 };
 
-const ProfileImage = ({src, alt, className, ...rest}: {src: string; alt: string; className?: string}) => {
-	const [isLoading, setLoading] = useState(true);
+const ProfileImage = ({ src: _src, alt, className, ...rest }: { src: string; alt: string; className?: string }) => {
+  const initials = (alt || 'User')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((p) => p[0]?.toUpperCase())
+    .slice(0, 2)
+    .join('') || 'U';
 
-	return (
-		<div className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] overflow-hidden rounded-full border-4 border-green-200 aspect-[1/1] flex-none relative bg-gray-100">
-			<img
-				className={cn(
-					"transition duration-300 absolute top-0 inset-0 rounded-inherit object-cover z-50",
-					isLoading ? "blur-sm" : "blur-0",
-					className
-				)}
-				onLoad={() => {
-					return setLoading(false);
-				}}
-				src={src}
-				loading="lazy"
-				decoding="async"
-				alt={alt || "Profile image"}
-				{...rest}
-			/>
-		</div>
-	);
+  return (
+    <div
+      className={cn(
+        "w-[90px] h-[90px] md:w-[120px] md:h-[120px] overflow-hidden rounded-full border-4 border-green-200 aspect-[1/1] flex-none relative",
+        "bg-green-600 text-white flex items-center justify-center font-semibold text-xl md:text-2xl",
+        className
+      )}
+      aria-label={alt || 'Profile image'}
+      {...rest}
+    >
+      <span aria-hidden="true">{initials}</span>
+      <span className="sr-only">{alt || 'Profile image'}</span>
+    </div>
+  );
 };
 
 // Export the components

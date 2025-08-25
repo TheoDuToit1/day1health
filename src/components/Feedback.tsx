@@ -8,58 +8,52 @@ interface FeedbackProps {
 
 const testimonials = [
   {
-    name: 'Sarah Johnson',
-    designation: 'Premium Member',
-    description: 'Day1Health has completely transformed how I manage my family\'s healthcare. The coverage is comprehensive and the service is outstanding!',
-    profileImage: 'https://randomuser.me/api/portraits/women/43.jpg'
+    name: 'Vinesh Bissin',
+    designation: 'Member',
+    description: 'I’m very happy with Day1 Health and even upgrading to a higher plan. Their service gives me real peace of mind.',
+    profileImage: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'Michael Chen',
-    designation: 'Executive Plan',
-    description: 'As someone who travels frequently, having reliable health coverage is crucial. Day1Health has been there for me across multiple countries.',
-    profileImage: 'https://randomuser.me/api/portraits/men/32.jpg'
+    name: 'Bukeka Msibi',
+    designation: 'Member',
+    description: 'Day1 Health has been excellent. I misplaced my product guide, and they quickly helped me. I’ll gladly leave a review on Google.',
+    profileImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'The Mokoena Family',
-    designation: 'Family Plan',
-    description: 'With three kids, we needed a plan that could handle everything from check-ups to emergencies. Day1Health has exceeded our expectations!',
-    profileImage: 'https://psu-gatsby-files-prod.s3.amazonaws.com/s3fs-public/styles/4_3_1500w/public/2022/05/TimekaTounsel.jpg?h=81da5ed6&itok=gBF4t3Yw'
+    name: 'Violet Joseph',
+    designation: 'Member',
+    description: 'My recent GP visit was smooth with no complaints. I’m happy with Day1 Health and will leave a review online.',
+    profileImage: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'David Wilson',
-    designation: 'Senior Member',
-    description: 'The peace of mind that comes with Day1Health is priceless. Their network of doctors is extensive and the claims process is seamless.',
-    profileImage: 'https://randomuser.me/api/portraits/men/75.jpg'
+    name: 'Maria Maswangai',
+    designation: 'Member',
+    description: 'I’m really happy with my medical insurance. I’ll follow Day1 Health on Facebook and give them a Google Review.',
+    profileImage: 'https://images.unsplash.com/photo-1525134479668-1bee5c7c6845?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'Aisha Patel',
-    designation: 'Day-to-Day Plan',
-    description: 'Appointments are easy to book and the co-payments are reasonable. I switched last year and haven\'t looked back.',
-    profileImage: 'https://randomuser.me/api/portraits/women/12.jpg'
+    name: 'Salim Jadwat',
+    designation: 'Member',
+    description: 'Everything is good with Day1 Health and my GP. I’m happy with the service and will leave a review and follow on Facebook.',
+    profileImage: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'Johan van Rensburg',
-    designation: 'Platinum Member',
-    description: 'Transparent pricing, quick support, and excellent cover. Day1Health just works.',
-    profileImage: 'https://randomuser.me/api/portraits/men/41.jpg'
+    name: 'Rakesh Ramal',
+    designation: 'Member',
+    description: 'I was so happy to receive a call from Day1 Health. I have no complaints and I’m comfortable following them on social media.',
+    profileImage: 'https://images.unsplash.com/photo-1546525848-3ce03ca516f6?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'Lerato M.',
-    designation: 'Executive Plan',
-    description: 'Claims are paid fast and the benefits are exactly what my family needs. Highly recommended.',
-    profileImage: 'https://randomuser.me/api/portraits/women/21.jpg'
+    name: 'Trevor Williams',
+    designation: 'Member',
+    description: 'I really appreciate the cover I have with Day1 Health. No complaints at all – only positive experiences. I’ll gladly give a review.',
+    profileImage: 'https://images.unsplash.com/photo-1544005313-ef5b7f8e3e32?w=400&auto=format&fit=crop&q=60'
   },
   {
-    name: 'Carlos Diaz',
-    designation: 'Hospital Plan',
-    description: 'Had an emergency and everything was handled smoothly at the hospital. Grateful for the cover from day one.',
-    profileImage: 'https://randomuser.me/api/portraits/men/19.jpg'
-  },
-  {
-    name: 'Naledi & Thabo',
-    designation: 'Couple, Day-to-Day',
-    description: 'We\'re both covered and it\'s affordable. The app and statements are simple and clear.',
-    profileImage: 'https://randomuser.me/api/portraits/women/50.jpg'
+    name: 'Martina Van Wyk',
+    designation: 'Member',
+    description: 'I’m such a fan of Day1 Health. I’ve already left a review before and will gladly do another. Please keep up the excellent work!',
+    profileImage: 'https://images.unsplash.com/photo-1541216970279-affbfdd55aa8?w=400&auto=format&fit=crop&q=60'
   }
 ];
 
