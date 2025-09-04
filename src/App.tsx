@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from './components/AppContent';
-import BlogPage from './components/BlogPage';
-import BlogDetailPage from './components/BlogDetailPage';
-import VoiceAssistantsPage from './components/VoiceAssistantsPage';
 import PlanDetailPage from './components/PlanDetailPage';
 import HospitalPlanDetailPage from './components/HospitalPlanDetailPage';
 import ComprehensivePlanDetailPage from './components/ComprehensivePlanDetailPage';
@@ -183,9 +180,6 @@ function App() {
         <Route path="/slide-4" element={<AppWrapper />} />
         {/* Dynamic slide route to catch /slide-:num */}
         <Route path="/slide-:num" element={<AppWrapper />} />
-        <Route path="/voice-assistants" element={<VoiceAssistantsPage />} />
-        <Route path="/whoisyomama" element={<BlogPage />} />
-        <Route path="/whoisyomama/:id" element={<BlogDetailPage />} />
         <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
         <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
         <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />

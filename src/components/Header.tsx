@@ -379,16 +379,8 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             : 'bg-white/90 backdrop-blur-md border-b border-transparent'
       }`}>
         <div className="flex items-center justify-between px-4 py-2">
-          <div className="flex items-center space-x-3">
-            <div className={`w-9 h-9 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0 ${
-              isScrolled ? 'shadow-green-500/20' : ''
-            }`}>
-              <img 
-                src="/assets/images/Logo.jpg" 
-                alt="Day 1 Health Logo" 
-                className="w-full h-full object-cover"
-              />
-            </div>
+          <div className="flex items-center space-x-0">
+            {/* Logo removed on mobile per request */}
             <div className="flex flex-col justify-center h-9 min-w-0">
               <span className={`text-lg font-bold leading-none whitespace-nowrap transition-colors duration-300 ${
                 isDark ? 'text-white' : 'text-gray-900'

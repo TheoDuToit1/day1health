@@ -6,7 +6,6 @@ import UniqueButton from '@/components/ui/unique-button';
 import { HeroCTAButton } from './ui/hero-cta-button';
 import type { LucideProps } from 'lucide-react';
 import { ShuffleCards } from '@/components/ui/shuffle-cards';
-import { AudioPlayer } from '@/components/ui/audio-player';
 import { Marquee } from '@/components/ui/3d-testimonials';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
@@ -471,16 +470,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                         {selectedTestimonial ? (
                           <>
                             {/* Audio Player */}
-                            <motion.div
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              transition={{ delay: 0.4, duration: 0.6 }}
-                            >
-                              <AudioPlayer 
-                                text={selectedTestimonial.testimonial}
-                                className="mb-6"
-                              />
-                            </motion.div>
+                            {/* Removed Audio Player (TTS) to decouple voice features */}
                           
                             {/* Selected Testimonial Quote */}
                             <motion.blockquote 
