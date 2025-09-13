@@ -248,7 +248,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             </div>
           </div>
 
-          <div className={`mt-4 p-3 rounded-lg text-center ${
+          <div className={`mt-4 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-center max-w-5xl mx-auto ${
             isDark ? 'bg-gray-800' : 'bg-gray-100'
           }`}>
             <p className={`text-sm ${
