@@ -42,7 +42,7 @@ const heroSlides: HeroSlide[] = [
     staticText: 'you\'re one smart choice away',
     icon: HeartPulse,
     typewriterWords: [
-      { text: 'Protected daily', icon: ShieldCheck },
+      { text: 'Protection daily', icon: ShieldCheck },
       { text: 'Health sorted', icon: Activity },
       { text: 'Affordable health', icon: Heart },
       { text: 'Confidence always', icon: Star }

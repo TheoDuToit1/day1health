@@ -254,8 +254,9 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             <p className={`text-sm ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Day1 Health (Pty) Ltd is an authorised Financial Services Provider (FSP 11319), underwritten by African Unity Life Ltd. (2003/016142/06), a licensed life insurer and an authorised Financial Services Provider - FSP 8447.<br/>
-              The Day1 Health Plan is demarcated by CMS. This product is a Medical Insurance Product and not a Medical Aid registered by the Council for Medical Schemes DM1053A.
+              Day1 Health (Pty) Ltd is an authorised Financial Services Provider (FSP 11319), underwritten by African Unity Life Ltd. (2003/016142/06),<br/>
+              a licensed life insurer and an authorised Financial Services Provider - FSP 8447. The Day1 Health Plan is demarcated by CMS.<br/>
+              This product is a Medical Insurance Product and not a Medical Aid registered by the Council for Medical Schemes DM1053A.
             </p>
           </div>
         </div>

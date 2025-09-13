@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search, Plus } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+
+// Simple medical-style plus icon (circle with cross)
+const MedicalPlusIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 8v8" />
+    <path d="M8 12h8" />
+  </svg>
+);
 
 interface HeaderProps {
   activeSection: string;
@@ -47,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'contact', label: 'Contact us', icon: Phone },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'network-search', label: 'Network Search', icon: Search },
-    { id: 'procedures', label: 'Procedures', icon: Plus },
+    { id: 'procedures', label: 'Legal / Procedures', icon: MedicalPlusIcon },
   ];
 
   useEffect(() => {
