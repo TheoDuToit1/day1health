@@ -147,13 +147,18 @@ const PlanDetailPage: React.FC = () => {
     setOption(initial);
   }, [variantParam]);
 
-  // Initialize child count from query param when family is selected
+  // Initialize child count from query param for family and single
   useEffect(() => {
+    const raw = searchParams.get('children');
+    const parsed = raw ? parseInt(raw, 10) : NaN;
     if (variantParam === 'family') {
-      const raw = searchParams.get('children');
-      const parsed = raw ? parseInt(raw, 10) : NaN;
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
+    } else if (variantParam === 'single') {
+      const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
+      setChildCount(clamped);
+    } else {
+      setChildCount(0);
     }
   }, [variantParam, searchParams]);
 
@@ -163,12 +168,21 @@ const PlanDetailPage: React.FC = () => {
   const SINGLE_PRICE = 385;
   const COUPLE_PRICE = 674;
   const FAMILY_CHILD_PRICE = 193;
-  const currentPrice = ((): number => {
+  const [currentPrice, setCurrentPrice] = useState(() => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
     if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
     if (v === 'couple') return COUPLE_PRICE;
-    return SINGLE_PRICE;
-  })();
+    // single: base + per-child
+    return SINGLE_PRICE + FAMILY_CHILD_PRICE * childCount;
+  });
+
+  useEffect(() => {
+    const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
+    let next = SINGLE_PRICE + FAMILY_CHILD_PRICE * childCount;
+    if (v === 'family') next = FAMILY_CHILD_PRICE * childCount;
+    else if (v === 'couple') next = COUPLE_PRICE;
+    setCurrentPrice(next);
+  }, [childCount, option, variantParam]);
 
   // Helper to keep URL in sync with selections
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
@@ -176,6 +190,9 @@ const PlanDetailPage: React.FC = () => {
     params.set('variant', nextVariant);
     if (nextVariant === 'family') {
       const c = Math.max(1, Math.min(4, nextChildren ?? childCount));
+      params.set('children', String(c));
+    } else if (nextVariant === 'single') {
+      const c = Math.max(0, Math.min(4, nextChildren ?? childCount));
       params.set('children', String(c));
     } else {
       params.delete('children');
