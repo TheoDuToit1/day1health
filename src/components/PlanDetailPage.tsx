@@ -90,7 +90,7 @@ const PlanDetailPage: React.FC = () => {
   const { isDark } = useTheme();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [option, setOption] = useState('');
-  const [childCount, setChildCount] = useState(1);
+  const [childCount, setChildCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
@@ -983,6 +983,34 @@ const PlanDetailPage: React.FC = () => {
                           </select>
                         </div>
 
+                        {option === 'single' && (
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children</label>
+                              <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                            </div>
+                            <div className="mt-1 inline-flex items-center gap-2">
+                              {[0,1,2,3,4].map((n) => (
+                                <button
+                                  key={n}
+                                  type="button"
+                                  aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
+                                  onClick={() => { setChildCount(n); updateUrl('single', n); }}
+                                  className={[
+                                    'h-8 px-2 rounded-md border text-xs transition-colors',
+                                    isDark ? 'border-gray-700' : 'border-gray-300',
+                                    childCount === n
+                                      ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                      : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
+                                  ].join(' ')}
+                                  aria-pressed={n === childCount}
+                                >
+                                  {n}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                         {option === 'family' ? (
                           <div>
                             <div className="flex items-center justify-between">
