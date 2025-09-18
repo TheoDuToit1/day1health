@@ -3038,12 +3038,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   return (
     <div id="plans" className={`relative z-30 -mt-[150px] transition-all duration-700 ease-in-out ${
       isDark ? 'bg-gray-900' : 'bg-white'
-    }`}>
-      <div className={`w-full mx-auto px-4 ${
-        isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
-      }`} style={{
-        transition: 'padding-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      }}>
+    } ${
+      isSidebarCollapsed ? 'lg:ml-24 lg:w-[calc(100%-6rem)]' : 'lg:ml-64 lg:w-[calc(100%-16rem)]'
+    }`} style={{
+      transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    }}>
+      <div className={`w-full mx-auto px-4`}>
         {/* Floating Tabs */}
         <div className="flex justify-center mb-12">
           <div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-3 backdrop-blur-sm transition-colors duration-300 ${

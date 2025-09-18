@@ -800,11 +800,11 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           {/* Simple CTA Button for Slide 0 */}
                           {slide.id === 0 && (
                             <motion.div 
-                              className="mt-[108px] flex justify-center" /* moved down +30px from original and centered */
+                              className="mt-[140px] flex justify-center" /* moved further down (+32px) and centered */
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 2, duration: 0.6 }}
-                              style={{ marginTop: '108px' }}
+                              style={{ marginTop: '140px' }}
                             >
                               <HeroCTAButton
                                 className={`font-manrope font-bold text-xl ${isDark ? 'text-emerald-400' : 'text-green-600'}`}
