@@ -393,7 +393,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Comprehensive'.split('')?.map((ch, i) => (
+                              {'Value Plus Plan'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -468,7 +468,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="bronze"
                         hoverMessages={[
                           'Hospital & Day-to-Day benefits',
-                          'Comprehensive primary care',
+                          'Value Plus Plan primary care',
                           'Illness & accident',
                           'Maternity, ambulance & funeral',
                         ]}
@@ -559,7 +559,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
-                            Comprehensive
+                            Value Plus Plan
                           </motion.span>
                           <div className="flex items-baseline gap-2 mt-2">
                             <motion.span
@@ -725,7 +725,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Comprehensive'.split('')?.map((ch, i) => (
+                              {'Value Plus Plan'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -2369,7 +2369,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
                         onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
                       >
-                        Comprehensive
+                        Value Plus Plan
                       </button>
                     </div>
                   )}
@@ -2434,7 +2434,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
                         }}
                       >
-                        Comprehensive
+                        Value Plus Plan
                       </button>
                     </div>
                   </motion.div>
@@ -2870,7 +2870,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: -8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Comprehensive
+                              Value Plus Plan
                             </motion.span>
                           </div>
                           <motion.div
@@ -2891,7 +2891,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          Comprehensive
+                          Value Plus Plan
                         </motion.h3>
                       )}
                     </AnimatePresence>
