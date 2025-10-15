@@ -808,6 +808,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             >
                               <HeroCTAButton
                                 className={`font-manrope font-bold text-xl ${isDark ? 'text-emerald-400' : 'text-green-600'}`}
+                                defaultText="Contact Now"
                                 onClick={() => {
                                   // Wait for typewriter to finish before scrolling
                                   setTimeout(() => {
