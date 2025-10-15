@@ -812,9 +812,9 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                                 onClick={() => {
                                   // Wait for typewriter to finish before scrolling
                                   setTimeout(() => {
-                                    const whyChoose = document.getElementById('why-choose');
-                                    if (whyChoose) {
-                                      whyChoose.scrollIntoView({ behavior: 'smooth' });
+                                    const contactSection = document.getElementById('contact');
+                                    if (contactSection) {
+                                      contactSection.scrollIntoView({ behavior: 'smooth' });
                                     }
                                   }, 2700); // ~2.7s delay
                                 }}
