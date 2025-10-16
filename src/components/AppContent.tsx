@@ -5,6 +5,7 @@ import ToolsTabs from './ToolsTabs';
 import HowItWorks from './HowItWorks';
 import Feedback from './Feedback';
 import WhyChoose from './WhyChoose';
+import BrandCarousel from './BrandCarousel';
 import FAQs from './FAQs';
 import Contact from './Contact';
 import Footer from './Footer';
@@ -50,6 +51,7 @@ const AppContent: React.FC<AppContentProps> = ({
             <HowItWorks isSidebarCollapsed={isSidebarCollapsed} />
             <Feedback isSidebarCollapsed={isSidebarCollapsed} />
             <WhyChoose isSidebarCollapsed={isSidebarCollapsed} />
+            <BrandCarousel isSidebarCollapsed={isSidebarCollapsed} />
             <Contact isSidebarCollapsed={isSidebarCollapsed} />
             <FAQs isSidebarCollapsed={isSidebarCollapsed} />
           </main>

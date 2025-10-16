@@ -22,11 +22,11 @@ const additionalInfoOptions: string[] = [
   'Single + 2 Children',
   'Single + 3 Children',
   'Single + 4 Children',
-  'Couples',
-  'Couples + 1 Child',
-  'Couples + 2 Children',
-  'Couples + 3 Children',
-  'Couples + 4 Children',
+  'Couple',
+  'Couple + 1 Child',
+  'Couple + 2 Children',
+  'Couple + 3 Children',
+  'Couple + 4 Children',
 ];
 
 const descriptionItems: { title: string; text: string }[] = [
@@ -91,10 +91,11 @@ const PlanDetailPage: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [option, setOption] = useState('');
   const [childCount, setChildCount] = useState(0);
+  const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
-  const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couples' : variantParam === 'family' ? 'Family' : 'Single';
+  const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const pageTitle = `Day-to-Day - ${variantDisplay}`;
   // Expanded state for Related products cards
   type CardKey = 'single' | 'couple' | 'family';
@@ -147,18 +148,24 @@ const PlanDetailPage: React.FC = () => {
     setOption(initial);
   }, [variantParam]);
 
-  // Initialize child count from query param for family and single
+  // Initialize adult and child counts based on variant
   useEffect(() => {
     const raw = searchParams.get('children');
     const parsed = raw ? parseInt(raw, 10) : NaN;
     if (variantParam === 'family') {
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
+      setAdultCount(1); // Family starts with 1 adult
     } else if (variantParam === 'single') {
+      setChildCount(0); // Single always has 0 children
+      setAdultCount(1); // Single is 1 adult
+    } else if (variantParam === 'couple' || variantParam === 'couples') {
       const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
       setChildCount(clamped);
+      setAdultCount(2); // Couple is 2 adults
     } else {
       setChildCount(0);
+      setAdultCount(1);
     }
   }, [variantParam, searchParams]);
 
@@ -168,10 +175,11 @@ const PlanDetailPage: React.FC = () => {
   const SINGLE_PRICE = 385;
   const COUPLE_PRICE = 674;
   const FAMILY_CHILD_PRICE = 193;
+  const ADULT_PRICE = 385;
   const [currentPrice, setCurrentPrice] = useState(() => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
-    if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
-    if (v === 'couple') return COUPLE_PRICE;
+    if (v === 'family') return ADULT_PRICE * adultCount + FAMILY_CHILD_PRICE * childCount;
+    if (v === 'couple') return COUPLE_PRICE + FAMILY_CHILD_PRICE * childCount;
     // single: base + per-child
     return SINGLE_PRICE + FAMILY_CHILD_PRICE * childCount;
   });
@@ -179,10 +187,10 @@ const PlanDetailPage: React.FC = () => {
   useEffect(() => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
     let next = SINGLE_PRICE + FAMILY_CHILD_PRICE * childCount;
-    if (v === 'family') next = FAMILY_CHILD_PRICE * childCount;
-    else if (v === 'couple') next = COUPLE_PRICE;
+    if (v === 'family') next = ADULT_PRICE * adultCount + FAMILY_CHILD_PRICE * childCount;
+    else if (v === 'couple') next = COUPLE_PRICE + FAMILY_CHILD_PRICE * childCount;
     setCurrentPrice(next);
-  }, [childCount, option, variantParam]);
+  }, [childCount, adultCount, option, variantParam]);
 
   // Helper to keep URL in sync with selections
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
@@ -344,63 +352,30 @@ const PlanDetailPage: React.FC = () => {
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
-                        <ul className="space-y-5">
-                          {pagedItems.map((item, i) => (
-                            <motion.li 
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {descriptionItems.map((item, i) => (
+                            <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
+                              className={`rounded-lg border p-4 ${
+                                isDark 
+                                  ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50' 
+                                  : 'bg-gray-50 border-gray-200 hover:border-emerald-400/50'
+                              } transition-colors duration-200`}
                             >
-                              <div className="font-semibold">{item.title}</div>
-                              <div className="text-sm opacity-90 leading-relaxed">{item.text}</div>
-                            </motion.li>
+                              <div className={`font-semibold mb-2 text-base ${
+                                isDark ? 'text-emerald-400' : 'text-emerald-600'
+                              }`}>{item.title}</div>
+                              <div className={`text-sm leading-relaxed ${
+                                isDark ? 'text-gray-300' : 'text-gray-700'
+                              }`}>{item.text}</div>
+                            </motion.div>
                           ))}
-                        </ul>
-                      </div>
-                      {/* Pagination controls */}
-                      {pageCount > 1 && (
-                        <div className="mt-6 flex items-center justify-center gap-3">
-                          <button
-                            type="button"
-                            aria-label="Previous page"
-                            onClick={() => setPage(p => Math.max(0, p - 1))}
-                            disabled={page === 0}
-                            className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
-                              isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
-                            }`}
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                          </button>
-                          <div className="flex items-center gap-2">
-                            {Array.from({ length: pageCount }).map((_, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                aria-label={`Go to page ${idx + 1}`}
-                                onClick={() => setPage(idx)}
-                                className={`h-2.5 w-2.5 rounded-full transition-all ${
-                                  idx === page
-                                    ? (isDark ? 'bg-emerald-400 w-6' : 'bg-emerald-600 w-6')
-                                    : (isDark ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-300 hover:bg-gray-400')
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <button
-                            type="button"
-                            aria-label="Next page"
-                            onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))}
-                            disabled={page === pageCount - 1}
-                            className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
-                              isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
-                            }`}
-                          >
-                            <ChevronRight className="h-4 w-4" />
-                          </button>
                         </div>
-                      )}
+                      </div>
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
@@ -686,7 +661,7 @@ const PlanDetailPage: React.FC = () => {
                                   exit={{ opacity: 0, x: 8 }}
                                   transition={{ duration: 0.18 }}
                                 >
-                                  Couples
+                                  Couple
                                 </motion.span>
                               </motion.div>
                             ) : (
@@ -698,7 +673,7 @@ const PlanDetailPage: React.FC = () => {
                                 exit={{ opacity: 0, y: 6 }}
                                 transition={{ duration: 0.18 }}
                               >
-                                Couples
+                                Couple
                               </motion.h3>
                             )}
                           </AnimatePresence>
@@ -750,7 +725,7 @@ const PlanDetailPage: React.FC = () => {
                           />
                           <button
                             type="button"
-                            aria-label={expanded.couple ? 'Collapse Couples details' : 'Expand Couples details'}
+                            aria-label={expanded.couple ? 'Collapse Couple details' : 'Expand Couple details'}
                             className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                               transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                               ${isDark 
@@ -995,65 +970,130 @@ const PlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couples</option>
+                            <option value="couple">Couple</option>
                             <option value="family">Family</option>
                           </select>
                         </div>
 
                         {option === 'single' && (
-                          <div>
-                            <div className="flex items-center justify-between">
-                              <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children</label>
-                              <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                              </div>
+                              <div className="mt-1 inline-flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border text-xs flex items-center ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
+                                  1
+                                </div>
+                              </div>
                             </div>
-                            <div className="mt-1 inline-flex items-center gap-2">
-                              {[0,1,2,3,4].map((n) => (
-                                <button
-                                  key={n}
-                                  type="button"
-                                  aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
-                                  onClick={() => { setChildCount(n); updateUrl('single', n); }}
-                                  className={[
-                                    'h-8 px-2 rounded-md border text-xs transition-colors',
-                                    isDark ? 'border-gray-700' : 'border-gray-300',
-                                    childCount === n
-                                      ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                      : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
-                                  ].join(' ')}
-                                  aria-pressed={n === childCount}
-                                >
-                                  {n}
-                                </button>
-                              ))}
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                              </div>
+                              <div className="mt-1 inline-flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border text-xs flex items-center ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
+                                  0
+                                </div>
+                              </div>
                             </div>
-                          </div>
+                          </>
+                        )}
+                        {option === 'couple' && (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                              </div>
+                              <div className="mt-1 inline-flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border text-xs flex items-center ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
+                                  2
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                              </div>
+                              <div className="mt-1 inline-flex items-center gap-2">
+                                {[0,1,2,3,4].map((n) => (
+                                  <button
+                                    key={n}
+                                    type="button"
+                                    aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
+                                    onClick={() => { setChildCount(n); updateUrl('couple', n); }}
+                                    className={[
+                                      'h-8 px-2 rounded-md border text-xs transition-colors',
+                                      isDark ? 'border-gray-700' : 'border-gray-300',
+                                      childCount === n
+                                        ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                        : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
+                                    ].join(' ')}
+                                    aria-pressed={n === childCount}
+                                  >
+                                    {n}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </>
                         )}
                         {option === 'family' ? (
-                          <div>
-                            <div className="flex items-center justify-between">
-                              <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children</label>
-                              <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                              </div>
+                              <div className="mt-1 inline-flex items-center gap-2">
+                                {[1,2,3,4].map((n) => (
+                                  <button
+                                    key={n}
+                                    type="button"
+                                    aria-label={`Select ${n} ${n === 1 ? 'adult' : 'adults'}`}
+                                    onClick={() => { setAdultCount(n); }}
+                                    className={[
+                                      'h-8 px-2 rounded-md border text-xs transition-colors',
+                                      isDark ? 'border-gray-700' : 'border-gray-300',
+                                      adultCount === n
+                                        ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                        : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
+                                    ].join(' ')}
+                                    aria-pressed={n === adultCount}
+                                  >
+                                    {n}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                            <div className="mt-1 inline-flex items-center gap-2">
-                              {[1,2,3,4].map((n) => (
-                                <button
-                                  key={n}
-                                  type="button"
-                                  aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
-                                  onClick={() => { setChildCount(n); updateUrl('family', n); }}
-                                  className={[
-                                    'h-8 px-2 rounded-md border text-xs transition-colors',
-                                    isDark ? 'border-gray-700' : 'border-gray-300',
-                                    childCount === n
-                                      ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                      : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
-                                  ].join(' ')}
-                                >
-                                  {n}
-                                </button>
-                              ))}
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                              </div>
+                              <div className="mt-1 inline-flex items-center gap-2">
+                                {[1,2,3,4].map((n) => (
+                                  <button
+                                    key={n}
+                                    type="button"
+                                    aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
+                                    onClick={() => { setChildCount(n); updateUrl('family', n); }}
+                                    className={[
+                                      'h-8 px-2 rounded-md border text-xs transition-colors',
+                                      isDark ? 'border-gray-700' : 'border-gray-300',
+                                      childCount === n
+                                        ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                        : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
+                                    ].join(' ')}
+                                    aria-pressed={n === childCount}
+                                  >
+                                    {n}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          </>
                         ) : null}
                       </div>
 

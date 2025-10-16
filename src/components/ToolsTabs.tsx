@@ -120,7 +120,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const tabs = [
     { 
       id: 'daytoday', 
-      label: 'Day-To-Day Plan', 
+      label: 'Day-To-Day Plan',
+      cardLabel: 'Day-To-Day',
       icon: Heart,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -128,7 +129,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'hospital', 
-      label: 'Hospital Plan', 
+      label: 'Hospital Plan',
+      cardLabel: 'Hospital',
       icon: CreditCard,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -136,7 +138,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'comprehensive', 
-      label: 'Value Plus Plan', 
+      label: 'Comprehensive Plan',
+      cardLabel: 'Comprehensive',
       icon: Shield,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -144,7 +147,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'senior', 
-      label: 'Senior Plan', 
+      label: 'Senior Plan',
+      cardLabel: 'Senior',
       icon: Users,
       bgColor: 'bg-blue-100',
       iconColor: 'text-blue-600',
@@ -219,7 +223,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Value Plus Plan that fits your life
+                        Choose a Comprehensive that fits your life
                       </h3>
                     </div>
                     <motion.button
@@ -393,7 +397,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Value Plus Plan'.split('')?.map((ch, i) => (
+                              {'Comprehensive'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -450,9 +454,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Value Plus Plan</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits / Day to Day Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Value Plus Plan primary healthcare benefits and includes</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive primary healthcare benefits and includes</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accident</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
@@ -468,7 +472,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="bronze"
                         hoverMessages={[
                           'Hospital & Day-to-Day benefits',
-                          'Value Plus Plan primary care',
+                          'Comprehensive primary care',
                           'Illness & accident',
                           'Maternity, ambulance & funeral',
                         ]}
@@ -505,7 +509,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId="comprehensive-value-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
@@ -559,7 +563,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             exit={{ opacity: 0, x: -8 }}
                             transition={{ duration: 0.18 }}
                           >
-                            Value Plus Plan
+                            Comprehensive
                           </motion.span>
                           <div className="flex items-baseline gap-2 mt-2">
                             <motion.span
@@ -606,7 +610,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits / Day to Day Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Value Plus Plan primary healthcare benefits and includes</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive primary healthcare benefits and includes</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Top-up illness</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
@@ -663,7 +667,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                          {tabs.find(t => t.id === activeTab)?.label}
+                          {tabs.find(t => t.id === activeTab)?.cardLabel}
                         </div>
                         <motion.div layoutId="comprehensive-executive-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
@@ -725,7 +729,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               animate="show"
                               variants={{ show: { transition: { staggerChildren: 0.035 } } }}
                             >
-                              {'Value Plus Plan'.split('')?.map((ch, i) => (
+                              {'Comprehensive'.split('')?.map((ch, i) => (
                                 <motion.span
                                   key={i}
                                   className="inline-block"
@@ -782,7 +786,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-3">
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits / Day to Day Benefits –</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Value Plus Plan primary healthcare benefits and includes</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Comprehensive primary healthcare benefits and includes</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accident</span></li>
@@ -837,7 +841,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
@@ -899,7 +903,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       Start here
                     </motion.span>
                     <h3 className={`text-xl font-bold text-white`}>
-                      Choose a Day-To-Day Plan that fits your life
+                      Choose a Day-To-Day that fits your life
                     </h3>
                   </div>
                   <motion.button
@@ -945,7 +949,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
                       onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
                     >
-                      Couples
+                      Couple
                     </button>
                     <button
                       type="button"
@@ -1008,7 +1012,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
                       }}
                     >
-                      Couples
+                      Couple
                     </button>
                     <button
                       type="button"
@@ -1215,7 +1219,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     }`}
                   >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
@@ -1304,7 +1308,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             exit={{ opacity: 0, x: -6 }}
                             transition={{ duration: 0.18 }}
                           >
-                            Couples
+                            Couple
                           </motion.span>
                         </div>
                         <motion.div
@@ -1325,7 +1329,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.18 }}
                       >
-                        Couples
+                        Couple
                       </motion.h3>
                     )}
                   </AnimatePresence>
@@ -1369,7 +1373,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   </div>
                   <button
                     type="button"
-                    aria-label={expanded.basic ? 'Collapse Couples Care details' : 'Expand Couples Care details'}
+                    aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
                     className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                       transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                       ${isDark 
@@ -1393,7 +1397,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     }`}
                   >
                     <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                      {tabs.find(t => t.id === activeTab)?.label}
+                      {tabs.find(t => t.id === activeTab)?.cardLabel}
                     </div>
                     <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                       <span className="text-sm align-top mr-1">R</span>
@@ -1574,7 +1578,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     }`}
                   >
                     <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                      {tabs.find(t => t.id === activeTab)?.label}
+                      {tabs.find(t => t.id === activeTab)?.cardLabel}
                     </div>
                     <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                       <span className="text-sm align-top mr-1">R</span>
@@ -1636,7 +1640,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Hospital Plan that fits your life
+                        Choose a Hospital that fits your life
                       </h3>
                     </div>
                     <motion.button
@@ -1926,7 +1930,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
@@ -2091,7 +2095,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                          {tabs.find(t => t.id === activeTab)?.label}
+                          {tabs.find(t => t.id === activeTab)?.cardLabel}
                         </div>
                         <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
@@ -2230,7 +2234,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                     <button
                       type="button"
-                      aria-label={expanded.basic ? 'Collapse Couples Care details' : 'Expand Couples Care details'}
+                      aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
                       className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
@@ -2254,7 +2258,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
@@ -2316,7 +2320,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Senior Plan that fits your life
+                        Choose a Senior that fits your life
                       </h3>
                     </div>
                     <motion.button
@@ -2369,7 +2373,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
                         onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: false, family: false, basic: true })); }}
                       >
-                        Value Plus Plan
+                        Comprehensive
                       </button>
                     </div>
                   )}
@@ -2434,7 +2438,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
                         }}
                       >
-                        Value Plus Plan
+                        Comprehensive
                       </button>
                     </div>
                   </motion.div>
@@ -2606,7 +2610,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId={`senior-day-header-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
@@ -2781,7 +2785,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                          {tabs.find(t => t.id === activeTab)?.label}
+                          {tabs.find(t => t.id === activeTab)?.cardLabel}
                         </div>
                         <motion.div layoutId="senior-hospital-header-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
@@ -2870,7 +2874,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: -8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Value Plus Plan
+                              Comprehensive
                             </motion.span>
                           </div>
                           <motion.div
@@ -2891,7 +2895,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          Value Plus Plan
+                          Comprehensive
                         </motion.h3>
                       )}
                     </AnimatePresence>
@@ -2937,7 +2941,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                     <button
                       type="button"
-                      aria-label={expanded.basic ? 'Collapse Couples Care details' : 'Expand Couples Care details'}
+                      aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
                       className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
@@ -2961,7 +2965,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       }`}
                     >
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
                       <motion.div layoutId="senior-comprehensive-header-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
