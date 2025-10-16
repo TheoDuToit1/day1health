@@ -1223,7 +1223,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">867.00</span>
+                        <span className="text-2xl font-bold">867</span>
                         <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                       </motion.div>
                   </div>

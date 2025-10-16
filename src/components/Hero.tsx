@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, HeartPulse, Briefcase, UsersRound, Users2, ShieldCheck, Activity, Heart, Star, Magnet } from 'lucide-react';
-import { MagnetizeButton } from '@/components/ui/magnetize-button';
+import { HeartPulse, Briefcase, UsersRound, Users2, ShieldCheck, Activity, Heart, Star } from 'lucide-react';
 import UniqueButton from '@/components/ui/unique-button';
 import { HeroCTAButton } from './ui/hero-cta-button';
 import type { LucideProps } from 'lucide-react';

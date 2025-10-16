@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -41,6 +41,7 @@ const HospitalPlanDetailPage: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [option, setOption] = useState('');
   const [childCount, setChildCount] = useState(1);
+  const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
@@ -65,11 +66,7 @@ const HospitalPlanDetailPage: React.FC = () => {
         [key]: willOpen,
       } as Record<CardKey, boolean>;
     });
-  const pageSize = 4;
-  const [page, setPage] = useState(0);
-  useEffect(() => {
-    if (activeTab === 'description') setPage(0);
-  }, [activeTab]);
+
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
   // Map tier to the correct Hospital plan PDF
@@ -88,6 +85,60 @@ const HospitalPlanDetailPage: React.FC = () => {
     return coverItems;
   })();
 
+  // Tier-aware description items (Value base; Platinum/Executive add-ons)
+  const descriptionItems: { title: string; text: string }[] = (() => {
+    const base: { title: string; text: string }[] = [
+      {
+        title: 'In-hospital Illness Benefit',
+        text:
+          'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R1,500 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.',
+      },
+      { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
+      { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R 2 500.00' },
+      { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R 10 000.00 payable in units of R 2 500.00' },
+      { title: 'Every subsequent day thereafter', text: 'R1 500.00' },
+      { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
+      { title: 'Accident/Trauma Benefit', text: 'Up to R 150,000 per single member per incident and up to R 300,000 per family incident. Immediate cover.' },
+      { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
+      { title: 'Maternity Benefit', text: 'Covers up to R20,000 for the birth of a child in hospital. 12 month waiting period applies. Benefit only available to plan members (16 years and older).' },
+      {
+        title: 'Family Funeral Benefit',
+        text:
+          'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3 month waiting period applies. (Benefit only available to plan members.)',
+      },
+    ];
+    if (tierKey === 'platinum') {
+      return [
+        ...base,
+        { title: 'Critical Illness Benefit', text: '1 Incident per family per annum. Critical Illness up to R250,000, however the benefit is limited to R50,000 unless the insured person accedes to a short medical examination (at their own cost) to be arranged by Day1 Health. The underwriter’s decision is final. A 3 month waiting period applies.' },
+        { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
+      ];
+    }
+    if (tierKey === 'executive') {
+      return [
+        base[0],
+        base[1],
+        base[2],
+        base[3],
+        base[4],
+        base[5],
+        { title: 'In-hospital Illness Benefit', text: 'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R2,000 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.' },
+        { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R 2 500.00' },
+        { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R 10 000.00 payable in units of R 2 500.00' },
+        { title: 'Every subsequent day thereafter', text: 'R2 000.00' },
+        { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 66 000.00' },
+        { title: 'Illness Top-up', text: 'Up to R25,000 per insured person per year subject to an overall limit of 2 events per family policy per annum. A 3 month waiting period applies' },
+        { title: 'Accident/Trauma Benefit', text: 'Up to R250,000 per single member per incident and up to R500,000 per family per incident. Immediate cover.' },
+        { title: 'Critical Illness Benefit', text: '1 Incident per family per annum. Critical Illness up to R250,000, however the benefit is limited to R50,000 unless the insured person accedes to a short medical examination (at their own cost) to be arranged by Day1 Health. The underwriter’s decision is final. A 3 month waiting period applies.' },
+        { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: 'Maternity Benefit', text: 'Covers up to R20,000 for the birth of a child in hospital. 12 month waiting period applies. Benefit only available to plan members (16 years and older).' },
+        { title: 'Family Funeral Benefit', text: 'Principal member & Spouse – R 30,000. Child > 14 years – R 10,000. Child > 6 years  – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+      ];
+    }
+    return base;
+  })();
+
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
     sessionStorage.setItem('navigatingToSection', targetSection);
@@ -102,85 +153,30 @@ const HospitalPlanDetailPage: React.FC = () => {
   }, [variantParam]);
 
   useEffect(() => {
+    const raw = searchParams.get('children');
+    const parsed = raw ? parseInt(raw, 10) : NaN;
     if (variantParam === 'family') {
-      const raw = searchParams.get('children');
-      const parsed = raw ? parseInt(raw, 10) : NaN;
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
+      setAdultCount(1); // Family starts with 1 adult
+    } else if (variantParam === 'single') {
+      setChildCount(0); // Single always has 0 children
+      setAdultCount(1); // Single is 1 adult
+    } else if (variantParam === 'couple' || variantParam === 'couples') {
+      const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
+      setChildCount(clamped);
+      setAdultCount(2); // Couple is 2 adults
+    } else {
+      setChildCount(0);
+      setAdultCount(1);
     }
   }, [variantParam, searchParams]);
 
-  // Tier-based pricing table
-  const PRICE_TABLE: Record<string, { single: number; couple: number; child: number }> = {
-    value: { single: 390, couple: 702, child: 156 },
-    platinum: { single: 560, couple: 1008, child: 224 },
-    executive: { single: 640, couple: 1152, child: 256 },
-  };
-  const SINGLE_PRICE = PRICE_TABLE[tierKey].single;
-  const COUPLE_PRICE = PRICE_TABLE[tierKey].couple;
-  const FAMILY_CHILD_PRICE = PRICE_TABLE[tierKey].child;
-
-  // Build description items per tier
-  const descriptionItems: { title: string; text: string }[] = (() => {
-    const base: { title: string; text: string }[] = [
-      {
-        title: 'In-hospital Illness Benefit',
-        text:
-          'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R1,500 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.',
-      },
-      { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
-      { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
-      { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
-      { title: 'Every subsequent day thereafter', text: 'R1 500.00' },
-      { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
-    ];
-    if (tierKey === 'executive') {
-      return [
-        {
-          title: 'In-hospital Illness Benefit',
-          text:
-            'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R2,000 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.',
-        },
-        { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
-        { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
-        { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
-        { title: 'Every subsequent day thereafter', text: 'R2 000.00' },
-        { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R66 000.00' },
-        { title: 'Illness Top-up', text: 'Up to R 25,000 per insured person per year subject to an overall limit of 2 events per family policy per annum. A 3 month waiting period applies' },
-        { title: 'Accident/Trauma Benefit', text: 'Up to R 250,000 per single member per incident and up to R 500,000 per family per incident. Immediate cover.' },
-        { title: 'Critical Illness Benefit', text: '1 Incident per family per annum. Critical Illness up to R 250,000, however the benefit is limited to R 50,000 unless the insured person accedes to a short medical examination (at their own cost) to be arranged by Day1 Health. The underwriter’s decision is final. A 3 month waiting period applies.' },
-        { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
-        { title: 'Family Funeral Benefit', text: 'Principal member & Spouse – R 30,000. Child > 14 years – R 10 000. Child > 6 years  – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
-      ];
-    }
-    if (tierKey === 'platinum') {
-      return [
-        ...base,
-        { title: 'Accident/Trauma Benefit', text: 'Up to R 150,000 per single member per incident and up to R 300,000 per family incident. Immediate cover.' },
-        { title: 'Critical Illness Benefit', text: '1 incident per family per annum. Critical Illness up to R250,000, however limited to R50,000 unless a short medical examination (at own cost) is completed as arranged by Day1 Health. Underwriter’s decision is final. A 3 month waiting period applies.' },
-        { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
-        { title: 'Family Funeral Benefit', text: 'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
-      ];
-    }
-    // value tier (default)
-    return [
-      ...base,
-      { title: 'Accident/Trauma Benefit', text: 'Up to R 150,000 per event. A 1 month waiting period applies. (Exclusion: Sports Injuries).' },
-      { title: 'Family Funeral Benefit', text: 'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-      { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
-    ];
-  })();
-
-  // Pagination that depends on built descriptionItems
-  const pageCount = Math.ceil(descriptionItems.length / pageSize);
-  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
+  // All Hospital plans: R390 per adult + R156 per child
+  const ADULT_PRICE = 390;
+  const CHILD_PRICE = 156;
   const currentPrice = ((): number => {
-    const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
-    if (v === 'family') return FAMILY_CHILD_PRICE * childCount;
-    if (v === 'couple') return COUPLE_PRICE;
-    return SINGLE_PRICE;
+    return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;
   })();
 
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
@@ -346,63 +342,30 @@ const HospitalPlanDetailPage: React.FC = () => {
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
-                        <ul className="space-y-5">
-                          {pagedItems.map((item, i) => (
-                            <motion.li 
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {descriptionItems.map((item, i) => (
+                            <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
+                              className={`rounded-lg border p-4 ${
+                                isDark 
+                                  ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50' 
+                                  : 'bg-gray-50 border-gray-200 hover:border-emerald-400/50'
+                              } transition-colors duration-200`}
                             >
-                              <div className="font-semibold">{item.title}</div>
-                              <div className="text-sm opacity-90 leading-relaxed">{item.text}</div>
-                            </motion.li>
+                              <div className={`font-semibold mb-2 text-base ${
+                                isDark ? 'text-emerald-400' : 'text-emerald-600'
+                              }`}>{item.title}</div>
+                              <div className={`text-sm leading-relaxed ${
+                                isDark ? 'text-gray-300' : 'text-gray-700'
+                              }`}>{item.text}</div>
+                            </motion.div>
                           ))}
-                        </ul>
-                      </div>
-                      {/* Pagination controls */}
-                      {pageCount > 1 && (
-                        <div className="mt-6 flex items-center justify-center gap-3">
-                          <button
-                            type="button"
-                            aria-label="Previous page"
-                            onClick={() => setPage((p) => Math.max(0, p - 1))}
-                            disabled={page === 0}
-                            className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
-                              isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
-                            }`}
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                          </button>
-                          <div className="flex items-center gap-2">
-                            {Array.from({ length: pageCount }).map((_, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                aria-label={`Go to page ${idx + 1}`}
-                                onClick={() => setPage(idx)}
-                                className={`h-2.5 w-2.5 rounded-full transition-all ${
-                                  idx === page
-                                    ? (isDark ? 'bg-emerald-400 w-6' : 'bg-emerald-600 w-6')
-                                    : (isDark ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-300 hover:bg-gray-400')
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <button
-                            type="button"
-                            aria-label="Next page"
-                            onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
-                            disabled={page === pageCount - 1}
-                            className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
-                              isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
-                            }`}
-                          >
-                            <ChevronRight className="h-4 w-4" />
-                          </button>
                         </div>
-                      )}
+                      </div>
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
@@ -542,7 +505,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${SINGLE_PRICE}`}</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -606,7 +569,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
                             <motion.div layoutId="student-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{SINGLE_PRICE}</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>
@@ -710,7 +673,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${COUPLE_PRICE}`}</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE * 2}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -774,7 +737,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
                             <motion.div layoutId="basic-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{COUPLE_PRICE}</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE * 2}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>
@@ -878,8 +841,8 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${FAMILY_CHILD_PRICE}`}</span>
-                            <span className={`text-white text-sm font-normal`}>/child</span>
+                              <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE * adultCount + CHILD_PRICE * childCount}`}</span>
+                              <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
                         <motion.div key="family-content"
@@ -943,8 +906,8 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Hospital</div>
                             <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{FAMILY_CHILD_PRICE}</span>
-                              <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/child</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE * adultCount + CHILD_PRICE * childCount}</span>
+                              <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                             </motion.div>
                           </div>
                         )}
@@ -998,32 +961,146 @@ const HospitalPlanDetailPage: React.FC = () => {
                           </select>
                         </div>
 
-                        {option === 'family' ? (
-                          <div>
-                            <div className="flex items-center justify-between">
-                              <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children</label>
-                              <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                        {option === 'single' && (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                }`}>
+                                  {adultCount}
+                                </div>
+                              </div>
                             </div>
-                            <div className="mt-1 inline-flex items-center gap-2">
-                              {[1,2,3,4].map((n) => (
+                          </>
+                        )}
+                        {option === 'couple' && (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                }`}>
+                                  {adultCount}
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
                                 <button
-                                  key={n}
                                   type="button"
-                                  aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
-                                  onClick={() => { setChildCount(n); updateUrl('family', n); }}
-                                  className={[
-                                    'h-8 px-2 rounded-md border text-xs transition-colors',
-                                    isDark ? 'border-gray-700' : 'border-gray-300',
-                                    childCount === n
-                                      ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                      : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
-                                  ].join(' ')}
+                                  aria-label="Decrease children"
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('couple', Math.max(0, childCount - 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
                                 >
-                                  {n}
+                                  -
                                 </button>
-                              ))}
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  childCount === 0
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {childCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase children"
+                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('couple', Math.min(4, childCount + 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
+                              </div>
                             </div>
-                          </div>
+                          </>
+                        )}
+                        {option === 'family' ? (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease adults"
+                                  onClick={() => setAdultCount(Math.max(1, adultCount - 1))}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  adultCount === 1
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {adultCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase adults"
+                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease children"
+                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  childCount === 1
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {childCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase children"
+                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('family', Math.min(4, childCount + 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                          </>
                         ) : null}
                       </div>
 

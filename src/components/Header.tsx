@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
     { id: 'hero', label: 'Home', icon: Home },
     { id: 'how-it-works', label: 'How it works', icon: Settings },
     { id: 'feedback', label: 'Reviews', icon: MessageSquare },
-    { id: 'why-choose', label: 'Why Us', icon: Users },
+    { id: 'why-choose', label: 'About Us', icon: Users },
     { id: 'contact', label: 'Contact us', icon: Phone },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'network-search', label: 'Network Search', icon: Search },
