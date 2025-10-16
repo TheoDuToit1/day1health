@@ -365,7 +365,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 <HelpCircle className="w-6 h-6 text-green-600" />
                 How can we help?
               </h3>
-              {/* CEO Hotline moved from sidebar */}
+              {/* Executive Hotline moved from sidebar */}
               <div className="mb-6">
                 <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
               </div>

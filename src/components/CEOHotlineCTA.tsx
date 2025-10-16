@@ -26,7 +26,7 @@ export default function CEOHotlineCTA({
   return (
     <Wrapper
       {...(wrapperProps as any)}
-      aria-label="CEO Hotline: 2-step link for CEOs & business owners only"
+      aria-label="Executive Hotline: 2-step link for CEOs & business owners only"
       className={cn(
         'group relative block w-full rounded-2xl p-[2px] transition',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
@@ -52,7 +52,7 @@ export default function CEOHotlineCTA({
           </div>
 
           <div className="flex-1 leading-tight">
-            <div className="font-semibold text-sm sm:text-[15px]">CEO Hotline:</div>
+            <div className="font-semibold text-sm sm:text-[15px]">Executive Hotline:</div>
             <div className="text-xs sm:text-[13px] opacity-95">
               2-step link for CEOs & Business Owners only
             </div>
