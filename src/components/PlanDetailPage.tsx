@@ -981,19 +981,11 @@ const PlanDetailPage: React.FC = () => {
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
                               </div>
-                              <div className="mt-1 inline-flex items-center gap-2">
-                                <div className={`h-8 px-3 rounded-md border text-xs flex items-center ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
-                                  1
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
-                              </div>
-                              <div className="mt-1 inline-flex items-center gap-2">
-                                <div className={`h-8 px-3 rounded-md border text-xs flex items-center ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
-                                  0
+                              <div className="mt-1 flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                }`}>
+                                  {adultCount}
                                 </div>
                               </div>
                             </div>
@@ -1005,9 +997,11 @@ const PlanDetailPage: React.FC = () => {
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
                               </div>
-                              <div className="mt-1 inline-flex items-center gap-2">
-                                <div className={`h-8 px-3 rounded-md border text-xs flex items-center ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
-                                  2
+                              <div className="mt-1 flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                }`}>
+                                  {adultCount}
                                 </div>
                               </div>
                             </div>
@@ -1016,25 +1010,34 @@ const PlanDetailPage: React.FC = () => {
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
-                              <div className="mt-1 inline-flex items-center gap-2">
-                                {[0,1,2,3,4].map((n) => (
-                                  <button
-                                    key={n}
-                                    type="button"
-                                    aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
-                                    onClick={() => { setChildCount(n); updateUrl('couple', n); }}
-                                    className={[
-                                      'h-8 px-2 rounded-md border text-xs transition-colors',
-                                      isDark ? 'border-gray-700' : 'border-gray-300',
-                                      childCount === n
-                                        ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                        : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
-                                    ].join(' ')}
-                                    aria-pressed={n === childCount}
-                                  >
-                                    {n}
-                                  </button>
-                                ))}
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease children"
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('couple', Math.max(0, childCount - 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  childCount === 0
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {childCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase children"
+                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('couple', Math.min(4, childCount + 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
                               </div>
                             </div>
                           </>
@@ -1046,25 +1049,34 @@ const PlanDetailPage: React.FC = () => {
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
                               </div>
-                              <div className="mt-1 inline-flex items-center gap-2">
-                                {[1,2,3,4].map((n) => (
-                                  <button
-                                    key={n}
-                                    type="button"
-                                    aria-label={`Select ${n} ${n === 1 ? 'adult' : 'adults'}`}
-                                    onClick={() => { setAdultCount(n); }}
-                                    className={[
-                                      'h-8 px-2 rounded-md border text-xs transition-colors',
-                                      isDark ? 'border-gray-700' : 'border-gray-300',
-                                      adultCount === n
-                                        ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                        : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
-                                    ].join(' ')}
-                                    aria-pressed={n === adultCount}
-                                  >
-                                    {n}
-                                  </button>
-                                ))}
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease adults"
+                                  onClick={() => setAdultCount(Math.max(1, adultCount - 1))}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  adultCount === 1
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {adultCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase adults"
+                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
                               </div>
                             </div>
                             <div>
@@ -1072,25 +1084,34 @@ const PlanDetailPage: React.FC = () => {
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
                               </div>
-                              <div className="mt-1 inline-flex items-center gap-2">
-                                {[1,2,3,4].map((n) => (
-                                  <button
-                                    key={n}
-                                    type="button"
-                                    aria-label={`Select ${n} ${n === 1 ? 'child' : 'children'}`}
-                                    onClick={() => { setChildCount(n); updateUrl('family', n); }}
-                                    className={[
-                                      'h-8 px-2 rounded-md border text-xs transition-colors',
-                                      isDark ? 'border-gray-700' : 'border-gray-300',
-                                      childCount === n
-                                        ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                        : (isDark ? 'bg-gray-900/60 text-gray-200 hover:border-gray-600' : 'bg-white text-gray-800 hover:border-gray-400')
-                                    ].join(' ')}
-                                    aria-pressed={n === childCount}
-                                  >
-                                    {n}
-                                  </button>
-                                ))}
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease children"
+                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  childCount === 1
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {childCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase children"
+                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('family', Math.min(4, childCount + 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
                               </div>
                             </div>
                           </>

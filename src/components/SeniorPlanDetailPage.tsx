@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -164,8 +164,6 @@ const SeniorPlanDetailPage: React.FC = () => {
   // Pagination for description list
   const pageSize = 4;
   const [page, setPage] = useState(0);
-  const pageCount = Math.ceil(descriptionItems.length / pageSize);
-  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
   useEffect(() => { if (activeTab === 'description') setPage(0); }, [activeTab]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
@@ -192,22 +190,11 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   // Quantity is fixed to 1 for Senior (Single/Couple only); no qty handling
 
-  // Pricing per Senior category
-  // Day-To-Day: Single R425, Couple R850
-  // Comprehensive: Single R875, Couple R1750
-  // Hospital: Single R580, Couple R1160
-  const SENIOR_PRICE_TABLE: Record<string, { single: number; couple: number }> = {
-    'day-to-day': { single: 425, couple: 850 },
-    'comprehensive': { single: 875, couple: 1750 },
-    'hospital': { single: 580, couple: 1160 },
-  };
-  const catKey = (categoryDisplay in SENIOR_PRICE_TABLE) ? categoryDisplay : 'day-to-day';
-  const SINGLE_PRICE = SENIOR_PRICE_TABLE[catKey].single;
-  const COUPLE_PRICE = SENIOR_PRICE_TABLE[catKey].couple;
+  // All Senior plans: R425 per adult
+  const ADULT_PRICE = 425;
   const currentPrice = ((): number => {
-    const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple';
-    if (v === 'couple') return COUPLE_PRICE;
-    return SINGLE_PRICE;
+    const adultCount = (option === 'couple') ? 2 : 1;
+    return ADULT_PRICE * adultCount;
   })();
 
   const updateUrl = (nextVariant: 'single' | 'couple') => {
@@ -372,63 +359,30 @@ const SeniorPlanDetailPage: React.FC = () => {
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
-                        <ul className="space-y-5">
-                          {pagedItems.map((item: { title: string; text: string }, i: number) => (
-                            <motion.li 
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {descriptionItems.map((item: { title: string; text: string }, i: number) => (
+                            <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
+                              className={`rounded-lg border p-4 ${
+                                isDark 
+                                  ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50' 
+                                  : 'bg-gray-50 border-gray-200 hover:border-emerald-400/50'
+                              } transition-colors duration-200`}
                             >
-                              <div className="font-semibold">{item.title}</div>
-                              <div className="text-sm opacity-90 leading-relaxed">{item.text}</div>
-                            </motion.li>
+                              <div className={`font-semibold mb-2 text-base ${
+                                isDark ? 'text-emerald-400' : 'text-emerald-600'
+                              }`}>{item.title}</div>
+                              <div className={`text-sm leading-relaxed ${
+                                isDark ? 'text-gray-300' : 'text-gray-700'
+                              }`}>{item.text}</div>
+                            </motion.div>
                           ))}
-                        </ul>
-                      </div>
-                      {/* Pagination controls */}
-                      {pageCount > 1 && (
-                        <div className="mt-6 flex items-center justify-center gap-3">
-                          <button
-                            type="button"
-                            aria-label="Previous page"
-                            onClick={() => setPage(p => Math.max(0, p - 1))}
-                            disabled={page === 0}
-                            className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
-                              isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
-                            }`}
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                          </button>
-                          <div className="flex items-center gap-2">
-                            {Array.from({ length: pageCount }).map((_: unknown, idx: number) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                aria-label={`Go to page ${idx + 1}`}
-                                onClick={() => setPage(idx)}
-                                className={`h-2.5 w-2.5 rounded-full transition-all ${
-                                  idx === page
-                                    ? (isDark ? 'bg-emerald-400 w-6' : 'bg-emerald-600 w-6')
-                                    : (isDark ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-300 hover:bg-gray-400')
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <button
-                            type="button"
-                            aria-label="Next page"
-                            onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))}
-                            disabled={page === pageCount - 1}
-                            className={`inline-flex items-center justify-center h-9 w-9 rounded-full border transition ${
-                              isDark ? 'border-gray-700 text-gray-200 hover:bg-gray-700/60 disabled:opacity-40' : 'border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-40'
-                            }`}
-                          >
-                            <ChevronRight className="h-4 w-4" />
-                          </button>
                         </div>
-                      )}
+                      </div>
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
@@ -552,7 +506,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${SINGLE_PRICE}`}</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -616,7 +570,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Senior-Plan</div>
                             <motion.div layoutId="senior-single-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{SINGLE_PRICE}</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>
@@ -704,7 +658,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${COUPLE_PRICE}`}</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE * 2}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -766,7 +720,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Senior-Plan</div>
                             <motion.div layoutId="senior-couple-price" className={`leading-none text-green-600`}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{COUPLE_PRICE}</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE * 2}</span>
                               <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                             </motion.div>
                           </div>
