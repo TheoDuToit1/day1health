@@ -164,8 +164,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
   // Defensive: if activeTab changes from anywhere, collapse any open cards
   useEffect(() => {
+    // Force complete reset of expanded state
     setExpanded({ intro: false, family: false, basic: false, student: false });
-    // Keep cards revealed for quick access; adjust per-tab if needed later
+    // Keep cards visible - no flashing
     setShowDayToDayCards(true);
   }, [activeTab]);
 
@@ -374,10 +375,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.student ? (
                         <motion.div
-                          key="hdr-expanded-student"
+                          key={`${activeTab}-hdr-expanded-student-${expanded.student}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -420,9 +421,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               Value Plus
                             </motion.span>
                             <motion.div
-                              layoutId="comprehensive-value-price"
-                              className={`relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.18 }}
                             >
                               <span className="text-2xl font-bold text-emerald-400">R665</span>
                               <span className={`text-white text-sm font-normal`}>/month</span>
@@ -431,7 +434,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-student"
+                          key={`${activeTab}-hdr-collapsed-student`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -511,10 +514,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
-                      <motion.div layoutId="comprehensive-value-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId={`${activeTab}-student-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">665</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                       </motion.div>
                     </div>
                   )}
@@ -546,10 +549,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.family ? (
                         <motion.div
-                          key="hdr-expanded-family"
+                          key={`${activeTab}-hdr-expanded-family-${expanded.family}`}
                           className={`relative z-20 flex flex-col gap-2`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -576,9 +579,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               Executive
                             </motion.span>
                             <motion.div
-                              layoutId="comprehensive-executive-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.18 }}
                             >
                               <span className="text-2xl font-bold text-emerald-400">R985</span>
                               <span className={`text-white text-sm font-normal`}>/month</span>
@@ -587,7 +592,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-family"
+                          key={`${activeTab}-hdr-collapsed-family`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -706,10 +711,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.basic ? (
                         <motion.div
-                          key="hdr-expanded-couple"
+                          key={`${activeTab}-hdr-expanded-couple-${expanded.basic}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -752,9 +757,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               Platinum
                             </motion.span>
                             <motion.div
-                              layoutId="comprehensive-platinum-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.18 }}
                             >
                               <span className={`text-emerald-400 text-2xl font-bold`}>R895</span>
                               <span className={`text-white text-sm font-normal`}>/month</span>
@@ -763,7 +770,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-couple"
+                          key={`${activeTab}-hdr-collapsed-couple`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -1112,9 +1119,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                         </div>
                         <motion.div
-                          layoutId={`${activeTab}-family-price`}
                           className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                          transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.18 }}
                         >
                           <span className="text-2xl font-bold text-emerald-400">R193</span>
                           <span className={`text-white text-sm font-normal`}>
@@ -1312,9 +1321,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                         </div>
                         <motion.div
-                          layoutId={`${activeTab}-basic-price`}
                           className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                          transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.18 }}
                         >
                           <span className="text-2xl font-bold text-emerald-400">R674</span>
                           <span className={`text-white text-sm font-normal`}>/month</span>
@@ -1799,10 +1810,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.student ? (
                         <motion.div
-                          key="hdr-expanded-student"
+                          key={`${activeTab}-hdr-expanded-student-${expanded.student}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -1856,7 +1867,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-student"
+                          key={`${activeTab}-hdr-collapsed-student`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -1975,10 +1986,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.family ? (
                         <motion.div
-                          key="hdr-expanded-family"
+                          key={`${activeTab}-hdr-expanded-family-${expanded.family}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2020,7 +2031,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-family"
+                          key={`${activeTab}-hdr-collapsed-family`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2141,10 +2152,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.basic ? (
                         <motion.div
-                          key="hdr-expanded-couple"
+                          key={`${activeTab}-hdr-expanded-couple-${expanded.basic}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2184,7 +2195,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-couple"
+                          key={`${activeTab}-hdr-collapsed-couple`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2478,10 +2489,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.student ? (
                         <motion.div
-                          key="hdr-expanded-student"
+                          key={`${activeTab}-hdr-expanded-student-${expanded.student}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2525,9 +2536,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             </motion.span>
                           </div>
                           <motion.div
-                            layoutId="senior-day-header-price"
-                            className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            className={`mt-2 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.18 }}
                           >
                             <span className="text-2xl font-bold text-emerald-400">R425</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
@@ -2535,7 +2548,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-student"
+                          key={`${activeTab}-hdr-collapsed-student`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2612,10 +2625,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
-                      <motion.div layoutId={`senior-day-header-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId={`${activeTab}-student-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">425</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                       </motion.div>
                     </div>
                   )}
@@ -2655,10 +2668,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.family ? (
                         <motion.div
-                          key="hdr-expanded-family"
+                          key={`${activeTab}-hdr-expanded-family-${expanded.family}`}
                           className="relative z-20 flex flex-col items-start gap-1"
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2702,9 +2715,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             </motion.span>
                           </div>
                           <motion.div
-                            layoutId="senior-hospital-header-price"
-                            className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            className={`mt-2 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.18 }}
                           >
                             <span className="text-2xl font-bold text-emerald-400">R580</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
@@ -2712,7 +2727,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-family"
+                          key={`${activeTab}-hdr-collapsed-family`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2787,7 +2802,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                           {tabs.find(t => t.id === activeTab)?.cardLabel}
                         </div>
-                        <motion.div layoutId="senior-hospital-header-price" className={`leading-none text-green-600`}>
+                        <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
                           <span className="text-2xl font-bold">580</span>
                           <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
@@ -2831,10 +2846,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </motion.div>
                   )}
                   <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {expanded.basic ? (
                         <motion.div
-                          key="hdr-expanded-couple"
+                          key={`${activeTab}-hdr-expanded-couple-${expanded.basic}`}
                           className={`relative z-20 flex flex-col items-start gap-1`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2878,9 +2893,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             </motion.span>
                           </div>
                           <motion.div
-                            layoutId="senior-comprehensive-header-price"
-                            className={`mt-2 relative z-10 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            className={`mt-2 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.18 }}
                           >
                             <span className="text-2xl font-bold text-emerald-400">R875</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
@@ -2888,7 +2905,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </motion.div>
                       ) : (
                         <motion.h3
-                          key="hdr-collapsed-couple"
+                          key={`${activeTab}-hdr-collapsed-couple`}
                           className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -2967,10 +2984,10 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
                         {tabs.find(t => t.id === activeTab)?.cardLabel}
                       </div>
-                      <motion.div layoutId="senior-comprehensive-header-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">875</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
                       </motion.div>
                     </div>
                   )}
