@@ -46,7 +46,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const tierParam = (searchParams.get('tier') || 'value').toLowerCase();
-  const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : 'Value';
+  const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : 'Value Plus';
   const pageTitle = `Comprehensive - ${tierDisplay} - ${variantDisplay}`;
   type CardKey = 'single' | 'couple' | 'family';
   const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({

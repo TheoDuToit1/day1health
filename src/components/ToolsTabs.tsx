@@ -223,7 +223,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Comprehensive that fits your life
+                        Choose a Comprehensive Plan that fits your life
                       </h3>
                     </div>
                     <motion.button
@@ -262,7 +262,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
                         onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: true, family: false, basic: false })); }}
                       >
-                        Value
+                        Value Plus
                       </button>
                       <button
                         type="button"
@@ -321,7 +321,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setExpanded(prev => ({ ...prev, student: true, family: false, basic: false }));
                         }}
                       >
-                        Value
+                        Value Plus
                       </button>
                       <button
                         type="button"
@@ -417,7 +417,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: 8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Value
+                              Value Plus
                             </motion.span>
                             <motion.div
                               layoutId="comprehensive-value-price"
@@ -438,7 +438,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          Value
+                          Value Plus
                         </motion.h3>
                       )}
                     </AnimatePresence>
@@ -485,7 +485,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                     <button
                       type="button"
-                      aria-label={expanded.student ? 'Collapse Value details' : 'Expand Value details'}
+                      aria-label={expanded.student ? 'Collapse Value Plus details' : 'Expand Value Plus details'}
                       className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
@@ -903,7 +903,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       Start here
                     </motion.span>
                     <h3 className={`text-xl font-bold text-white`}>
-                      Choose a Day-To-Day that fits your life
+                      Choose a Day-To-Day plan that fits your life
                     </h3>
                   </div>
                   <motion.button
@@ -1640,7 +1640,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Hospital that fits your life
+                        Choose a Hospital Plan that fits your life
                       </h3>
                     </div>
                     <motion.button
@@ -2320,7 +2320,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Senior that fits your life
+                        Choose a Senior Plan that fits your life
                       </h3>
                     </div>
                     <motion.button
