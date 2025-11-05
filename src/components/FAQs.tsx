@@ -42,11 +42,11 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     },
     {
       question: "Are pre-existing conditions covered?",
-      answer: "Yes, after a 12-month waiting period. Accidents and emergencies remain covered from Day 1."
+      answer: "Yes, after a 12-month waiting period. Accidents and emergency ambulance services remain covered from Day 1."
     },
     {
       question: "What are the waiting periods for day-to-day benefits?",
-      answer: "Typical waiting periods: General day-to-day and Acute/Pathology/Radiology – 1 month; Specialists – 3 months; Dentistry – 3 months; Optometry – 12 months; Chronic (unknown) – 3 months; Chronic (pre-existing) – 12 months."
+      answer: "• GP/Acute/Pathology/Radiology/Out-of-Area: 1 month\n• Specialists/Dentistry: 3 months\n• Chronic (new): 3 months\n• Chronic (pre-existing): 12 months",
     }
   ];
 

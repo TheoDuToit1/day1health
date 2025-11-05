@@ -54,7 +54,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Shield className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP11319</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 11319 • CMS Ref. 1074</span>
               </div>
               {/* Logo moved here, ensure it's clearly lower to align with theme toggle */}
               <div className="pt-[70px]">
@@ -181,15 +181,6 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400" />
                 <a href="mailto:sales@day1.co.za" className={isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>sales@day1.co.za</a>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Shield className="w-5 h-5 text-green-400 mt-0.5" />
-                <div>
-                  <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>Underwritten by</div>
-                  <div className={`font-medium ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>African Unity Life Ltd</div>
-                </div>
               </div>
             </div>
 

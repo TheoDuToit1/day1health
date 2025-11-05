@@ -150,7 +150,7 @@ function ProceduresPage() {
               'Allow any unauthorised person to use your Day1 Health membership card.',
               'Without a good explanation, neglect to inform Day1 Health that it has paid for services or supplies that were not delivered or received.',
               'Commit any other fraudulent act.',
-              'Fail to pay monthly contributions and/or premiums.',
+              'failure to pay monthly contributions and/or premiums.',
               'Day1 Health reserves the right to cancel your membership/policy at any time by furnishing you with 30 (thirty) days’ notice in writing (or such other period as may be mutually agreed upon).',
             ])}
           </div>

@@ -46,7 +46,7 @@ const testimonials = [
   {
     name: 'Trevor Williams',
     designation: 'Member',
-    description: 'I really appreciate the cover I have with Day1 Health. No complaints at all – only positive experiences. I’ll gladly give a review.',
+    description: 'I really appreciate the cover I have with Day1 Health. No complaints at all – only positive experiences.',
     profileImage: 'https://images.unsplash.com/photo-1544005313-ef5b7f8e3e32?w=400&auto=format&fit=crop&q=60'
   },
   {
@@ -77,7 +77,7 @@ const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
           }`}>
-            Testimonials
+            Reviews
           </span>
           <h2 id="feedback" className={`text-4xl font-bold text-center mb-4 ${
           isDark ? 'text-white' : 'text-gray-900'

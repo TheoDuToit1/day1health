@@ -343,21 +343,18 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R665.00 through R2,195.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierParam === 'platinum' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R895.00 through R3,043.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierParam === 'executive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Executive Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R985.00 through R3,300.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                     </div>
