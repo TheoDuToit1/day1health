@@ -120,7 +120,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   const tabs = [
     { 
       id: 'daytoday', 
-      label: 'Day-To-Day Plan',
+      label: 'Day-To-Day Plans',
       cardLabel: 'Day-To-Day',
       icon: Heart,
       bgColor: 'bg-blue-100',
@@ -129,7 +129,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'hospital', 
-      label: 'Hospital Plan',
+      label: 'Hospital Plans',
       cardLabel: 'Hospital',
       icon: CreditCard,
       bgColor: 'bg-blue-100',
@@ -138,7 +138,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'comprehensive', 
-      label: 'Comprehensive Plan',
+      label: 'Comprehensive Plans',
       cardLabel: 'Comprehensive',
       icon: Shield,
       bgColor: 'bg-blue-100',
@@ -147,7 +147,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     },
     { 
       id: 'senior', 
-      label: 'Senior Plan',
+      label: 'Senior Plans',
       cardLabel: 'Senior',
       icon: Users,
       bgColor: 'bg-blue-100',
@@ -517,7 +517,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId={`${activeTab}-student-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">665</span>
-                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                       </motion.div>
                     </div>
                   )}
@@ -643,7 +643,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/comprehensive?variant=family&category=Executive"
+                        to="/plans/comprehensive?variant=single&tier=Executive"
                       />
                     </div>
                     <button
@@ -677,7 +677,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <motion.div layoutId="comprehensive-executive-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
                           <span className="text-2xl font-bold">985</span>
-                          <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                          <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                         </motion.div>
                     </div>
                   )}
@@ -819,7 +819,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/comprehensive?variant=couple&category=Platinum"
+                        to="/plans/comprehensive?variant=single&tier=Platinum"
                       />
                     </div>
                     <button
@@ -853,7 +853,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">895</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                       </motion.div>
                     </div>
                   )}
@@ -1127,7 +1127,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         >
                           <span className="text-2xl font-bold text-emerald-400">R193</span>
                           <span className={`text-white text-sm font-normal`}>
-                            /mo per child
+                            /mth per child
                           </span>
                         </motion.div>
                       </motion.div>
@@ -1233,7 +1233,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">867</span>
-                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                       </motion.div>
                   </div>
                 )}
@@ -1413,7 +1413,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                       <span className="text-sm align-top mr-1">R</span>
                       <span className="text-2xl font-bold">674</span>
-                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                     </motion.div>
                   </div>
                 )}
@@ -1594,7 +1594,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                       <span className="text-sm align-top mr-1">R</span>
                       <span className="text-2xl font-bold">385</span>
-                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                     </motion.div>
                   </div>
                 )}
@@ -1893,6 +1893,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance services</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity Benefit</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
@@ -1946,7 +1947,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">390</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                       </motion.div>
                     </div>
                   )}
@@ -2058,7 +2059,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Increased accident cover</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance and funeral benefits</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -2111,7 +2113,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
                           <span className="text-2xl font-bold">640</span>
-                          <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                          <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                         </motion.div>
                     </div>
                   )}
@@ -2221,7 +2223,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance and funeral benefits</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
                   </motion.div>
@@ -2274,7 +2277,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">560</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                       </motion.div>
                     </div>
                   )}
@@ -2446,7 +2449,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold border backdrop-blur-sm bg-white/10 border-white/15 text-white hover:bg-white/15 transition-all`}
                         onClick={() => {
                           setShowDayToDayCards(true);
-                          setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
+                          setExpanded(prev => ({ ...prev, student: false, basic: true, family: false }));
                         }}
                       >
                         Comprehensive
@@ -2571,7 +2574,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   >
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-2">
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Senior Day to Day Plan</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Senior Day-to-Day Plan</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits / acute & chronic medication</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Blood tests & x-rays</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Dentistry & optometry</span></li>
@@ -2585,7 +2588,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         text="Choose Plan"
                         className="bronze"
                         hoverMessages={[
-                          'Senior Day to Day Plan',
+                          'Senior Day-to-Day Plan',
                           'Doctor visits & medication',
                           'Blood tests & x-rays',
                           'Dentistry, optometry & funeral',
@@ -2628,7 +2631,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId={`${activeTab}-student-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">425</span>
-                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                       </motion.div>
                     </div>
                   )}
@@ -2636,7 +2639,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Hospital (Single/Couple) */}
                 <motion.div 
-                  className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2644,7 +2647,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   layout="position"
                   initial={false}
                   animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
@@ -2805,7 +2808,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <motion.div layoutId={`${activeTab}-family-price`} className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
                           <span className="text-2xl font-bold">580</span>
-                          <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                          <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                         </motion.div>
                     </div>
                   )}
@@ -2813,7 +2816,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Comprehensive (Single/Couple) */}
                 <motion.div 
-                  className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2821,7 +2824,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   layout="position"
                   initial={false}
                   animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                   style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
@@ -2987,7 +2990,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`}>
                         <span className="text-sm align-top mr-1">R</span>
                         <span className="text-2xl font-bold">875</span>
-                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                        <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                       </motion.div>
                     </div>
                   )}

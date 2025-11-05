@@ -43,10 +43,10 @@ const heroSlides: HeroSlide[] = [
     typewriterWords: [
       { text: 'Protection daily', icon: ShieldCheck },
       { text: 'Health sorted', icon: Activity },
-      { text: 'Affordable health', icon: Heart },
+      { text: 'Healthcare', icon: Heart },
       { text: 'Confidence always', icon: Star }
     ],
-    subheading: 'for you and your family.',
+    subheading: 'for you and your family',
     bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',

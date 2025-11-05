@@ -15,6 +15,10 @@ const coverItems = [
   'Illness',
   'Accident',
   'Ambulance',
+  'Specialist',
+  'Radiology',
+  'Pathology',
+  'Out-of-Area Visits',
 ];
 
 const additionalInfoOptions: string[] = [
@@ -116,13 +120,8 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
     if (tierKey === 'executive') {
       return [
-        base[0],
-        base[1],
-        base[2],
-        base[3],
-        base[4],
-        base[5],
         { title: 'In-hospital Illness Benefit', text: 'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R2,000 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.' },
+        { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
         { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R 2 500.00' },
         { title: '3rd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R 10 000.00 payable in units of R 2 500.00' },
         { title: 'Every subsequent day thereafter', text: 'R2 000.00' },
@@ -224,7 +223,7 @@ const HospitalPlanDetailPage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
-                  <ol className="flex items-center gap-1 text-[13px]">
+                  <ol className="flex items-center gap-1 text-[16px]">
                     <li>
                       <Link
                         to="/"
@@ -370,6 +369,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                       <div className="mt-4">
                         <DownloadHeroButton
                           href={pdfPath}
+                          filename={hospitalPdfFile}
                           className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
                           sentText="Downloaded info Plan"
                         />
@@ -956,7 +956,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couples</option>
+                            <option value="couple">Couple</option>
                             <option value="family">Family</option>
                           </select>
                         </div>
@@ -993,7 +993,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
@@ -1033,7 +1033,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
@@ -1056,7 +1056,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -1067,14 +1067,14 @@ const HospitalPlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('family', Math.max(0, childCount - 1)); }}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -1082,7 +1082,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                                   -
                                 </button>
                                 <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 1
+                                  childCount === 0
                                     ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
                                     : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
                                 }`}>
@@ -1114,10 +1114,6 @@ const HospitalPlanDetailPage: React.FC = () => {
                         />
                       </div>
 
-                      <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                        <div>SKU: N/A</div>
-                        <div>Category: Hospital</div>
-                      </div>
                     </motion.div>
                   </div>
                 </aside>
