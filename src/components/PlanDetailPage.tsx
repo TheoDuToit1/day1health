@@ -11,9 +11,14 @@ import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
 
 const coverItems = [
-  'Unlimited Doctor Visits',
+  'Unlimited Managed Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
+  'Specialist',
+  'Radiology',
+  'Pathology',
+  'Out-of-Area Visits',
+  'Funeral Benefit',
 ];
 
 const additionalInfoOptions: string[] = [
@@ -250,7 +255,7 @@ const PlanDetailPage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
-                  <ol className="flex items-center gap-1 text-[13px]">
+                  <ol className="flex items-center gap-1 text-[16px]">
                     <li>
                       <Link
                         to="/"
@@ -1007,7 +1012,7 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
@@ -1047,7 +1052,7 @@ const PlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
@@ -1070,7 +1075,7 @@ const PlanDetailPage: React.FC = () => {
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -1081,14 +1086,14 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('family', Math.max(0, childCount - 1)); }}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -1096,7 +1101,7 @@ const PlanDetailPage: React.FC = () => {
                                   -
                                 </button>
                                 <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 1
+                                  childCount === 0
                                     ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
                                     : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
                                 }`}>
@@ -1128,10 +1133,6 @@ const PlanDetailPage: React.FC = () => {
                         />
                       </div>
 
-                      <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                        <div>SKU: N/A</div>
-                        <div>Category: Normal</div>
-                      </div>
                     </motion.div>
                   </div>
                 </aside>

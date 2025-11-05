@@ -14,6 +14,10 @@ const coverItems = [
   'Unlimited Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
+  'Specialist',
+  'Radiology',
+  'Pathology',
+  'Out-of-Area Visits',
   'Funeral Cover',
 ];
 
@@ -38,7 +42,11 @@ const SeniorPlanDetailPage: React.FC = () => {
   const rawCategory = (searchParams.get('category') || 'day-to-day').toLowerCase();
   const allowedSeniorCategories = new Set(['day-to-day', 'comprehensive', 'hospital']);
   const categoryDisplay = allowedSeniorCategories.has(rawCategory) ? rawCategory : 'day-to-day';
-  const pageTitle = ['Senior-Plan', categoryDisplay, variantDisplay].filter(Boolean).join(' / ');
+  // Create display-friendly version for page title
+  const categoryDisplayTitle = categoryDisplay === 'day-to-day' ? 'Day-to-Day' : 
+                               categoryDisplay === 'comprehensive' ? 'Comprehensive' : 
+                               categoryDisplay === 'hospital' ? 'Hospital' : 'Day-to-Day';
+  const pageTitle = ['Senior-Plan', categoryDisplayTitle, variantDisplay].filter(Boolean).join(' / ');
 
   type CardKey = 'single' | 'couple';
   const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
@@ -53,9 +61,7 @@ const SeniorPlanDetailPage: React.FC = () => {
     if (categoryDisplay === 'hospital') {
       return [
         'Private Hospital Benefits',
-        'Illness',
-        'Accident Benefit',
-        'Ambulance',
+        'Illness / Accident Benefit / Ambulance',
         'Funeral Cover',
       ];
     }
@@ -124,6 +130,11 @@ const SeniorPlanDetailPage: React.FC = () => {
           'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
       },
       {
+        title: 'Specialist Benefit',
+        text:
+          'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
+      },
+      {
         title: 'Basic Dentistry',
         text:
           'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
@@ -131,7 +142,7 @@ const SeniorPlanDetailPage: React.FC = () => {
       {
         title: 'Acute Medication',
         text:
-          'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.',
+          'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network GP or obtained on script from a Network Pharmacy. A 1 month waiting period applies.',
       },
       {
         title: 'Optometry (Iso Leso Optics)',
@@ -146,7 +157,7 @@ const SeniorPlanDetailPage: React.FC = () => {
       {
         title: 'Out-of-Area Visits',
         text:
-          'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+          'In the event that you cannot see your Network GP, the Plan will allow 3 "out of area" visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
       },
       {
         title: 'Radiology',
@@ -154,9 +165,9 @@ const SeniorPlanDetailPage: React.FC = () => {
           'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
       },
       {
-        title: 'FUNERAL BENEFIT',
+        title: 'Family Funeral Benefit',
         text:
-          'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)',
+          'Principal, Spouse & Child > 14 years R10,000. Child > 6 years R5,000. Child > 0 years > R2,500. Stillborn > 28 weeks R1,250. A 3 month waiting period applies.',
       },
     ];
   })();
@@ -190,8 +201,18 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   // Quantity is fixed to 1 for Senior (Single/Couple only); no qty handling
 
-  // All Senior plans: R425 per adult
-  const ADULT_PRICE = 425;
+  // Category-aware pricing: Different prices per category
+  const ADULT_PRICE = (() => {
+    switch (categoryDisplay) {
+      case 'comprehensive':
+        return 875;
+      case 'hospital':
+        return 580;
+      case 'day-to-day':
+      default:
+        return 425;
+    }
+  })();
   const currentPrice = ((): number => {
     const adultCount = (option === 'couple') ? 2 : 1;
     return ADULT_PRICE * adultCount;
@@ -237,7 +258,7 @@ const SeniorPlanDetailPage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
-                  <ol className="flex items-center gap-1 text-[13px]">
+                  <ol className="flex items-center gap-1 text-[16px]">
                     <li>
                       <Link
                         to="/"
@@ -767,7 +788,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couples</option>
+                            <option value="couple">Couple</option>
                           </select>
                         </div>
                         
@@ -783,10 +804,6 @@ const SeniorPlanDetailPage: React.FC = () => {
                         />
                       </div>
 
-                      <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                        <div>SKU: N/A</div>
-                        <div>Category: Senior-Plan</div>
-                      </div>
                     </motion.div>
                   </div>
                 </aside>

@@ -14,6 +14,11 @@ const coverItems = [
   'Unlimited Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
+  'Specialist',
+  'Radiology',
+  'Pathology',
+  'Out-of-Area Visits',
+  'Funeral Benefit',
 ];
 
 const additionalInfoOptions: string[] = [
@@ -68,9 +73,9 @@ const ComprehensivePlanDetailPage: React.FC = () => {
 
   // Map tier to the correct Comprehensive plan PDF
   const comprehensivePdfMap: Record<string, string> = {
-    value: "Day1 Health Value Plus Plan 2025.pdf",
-    platinum: "Day1 Health Platinum Plan 2025.pdf",
-    executive: "", // no dedicated Executive Comprehensive PDF provided
+    value: "Comprehensive Value Plus Plan 2025.pdf",
+    platinum: "Comprehensive Platinum Plan 2025.pdf",
+    executive: "Comprehensive Executive Plan 2025.pdf",
   };
 
   // Build cover badges per Comprehensive tier
@@ -242,9 +247,20 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  // All Comprehensive plans: R665 per adult + R266 per child
-  const ADULT_PRICE = 665;
-  const CHILD_PRICE = 266;
+  // Tier-aware pricing: All Comprehensive plans have different base prices per adult + per child
+  const pricing = (() => {
+    switch (tierParam) {
+      case 'platinum':
+        return { adult: 895, child: 358 };
+      case 'executive':
+        return { adult: 985, child: 394 };
+      case 'value':
+      default:
+        return { adult: 665, child: 266 };
+    }
+  })();
+  const ADULT_PRICE = pricing.adult;
+  const CHILD_PRICE = pricing.child;
   const currentPrice = ((): number => {
     return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;
   })();
@@ -294,7 +310,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
-                  <ol className="flex items-center gap-1 text-[13px]">
+                  <ol className="flex items-center gap-1 text-[16px]">
                     <li>
                       <Link
                         to="/"
@@ -1030,7 +1046,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couples</option>
+                            <option value="couple">Couple</option>
                             <option value="family">Family</option>
                           </select>
                         </div>
@@ -1067,7 +1083,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
@@ -1107,7 +1123,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
@@ -1130,7 +1146,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -1141,14 +1157,14 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('family', Math.max(0, childCount - 1)); }}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -1156,7 +1172,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                                   -
                                 </button>
                                 <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 1
+                                  childCount === 0
                                     ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
                                     : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
                                 }`}>
@@ -1188,10 +1204,6 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                         />
                       </div>
 
-                      <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                        <div>SKU: N/A</div>
-                        <div>Category: Comprehensive</div>
-                      </div>
                     </motion.div>
                   </div>
                 </aside>
