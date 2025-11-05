@@ -144,6 +144,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 					className="relative z-40 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center disabled:opacity-50 hover:bg-green-700 transition-colors duration-200"
 					onClick={handleScrollLeft}
 					disabled={!canScrollLeft}
+					aria-label="Previous testimonial"
 				>
 					<ArrowLeft className="h-6 w-6 text-white" />
 				</button>
@@ -151,6 +152,7 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 					className="relative z-40 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center disabled:opacity-50 hover:bg-green-700 transition-colors duration-200"
 					onClick={handleScrollRight}
 					disabled={!canScrollRight}
+					aria-label="Next testimonial"
 				>
 					<ArrowRight className="h-6 w-6 text-white" />
 				</button>
@@ -166,13 +168,11 @@ const TestimonialCard = ({
 	index,
 	layout = false,
 	onCardClose = () => {},
-	backgroundImage = "https://images.unsplash.com/photo-1686806372726-388d03ff49c8?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 }: {
 	testimonial: iTestimonial;
 	index: number;
 	layout?: boolean;
 	onCardClose?: () => void;
-	backgroundImage?: string;
 }) => {
 	const { isDark } = useTheme();
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -302,15 +302,6 @@ const TestimonialCard = ({
 				<div
 					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700' : 'bg-gradient-to-b from-white to-green-50'} h-[440px] md:h-[480px] w-[85vw] sm:w-64 md:w-72 overflow-hidden flex flex-col items-center justify-start py-6 relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-green-500`}
 				>
-					<div className="absolute opacity-10 pointer-events-none" style={{inset: "-1px 0 0"}}>
-						<div className="absolute inset-0">
-							<img
-								className="block w-full h-full object-center object-cover"
-								src={backgroundImage}
-								alt="Background layer"
-							/>
-						</div>
-					</div>
 					<ProfileImage src={testimonial.profileImage} alt={testimonial.name} />
 					<div className="px-4 mt-4 text-center">
 						<motion.p

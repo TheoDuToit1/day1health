@@ -761,6 +761,8 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                           <img
                             src="/assets/images/Logo.jpg"
                             alt="DAY1HEALTH logo"
+                            width="192"
+                            height="48"
                             className="w-20 sm:w-28 md:w-36 lg:w-44 xl:w-48 pointer-events-none select-none"
                             onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
                           />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { smoothScrollTo } from '../utils/smoothScroll';
@@ -102,6 +102,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         {/* Sidebar Toggle Button */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           className={`absolute -right-4 top-8 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shadow-lg hover:shadow-xl transform hover:scale-110 ${
             isDark 
               ? 'bg-gray-800 border border-gray-600 hover:bg-gray-700' 
