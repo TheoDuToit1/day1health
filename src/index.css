@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scrolling with accessibility consideration */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
