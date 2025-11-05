@@ -180,11 +180,11 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   // Map Senior category to the correct PDF
   const seniorPdfMap: Record<string, string> = {
-    'day-to-day': 'Day1 Health Senior Day to Day Plan 2025.pdf',
-    'comprehensive': 'Day1 Health Senior Comprehensive Plan 2025.pdf',
-    'hospital': 'Day1 Health Value Plus Senior Hospital Plan 2025.pdf',
+    'day-to-day': 'Senior Day-To-Day Plan.pdf',
+    'comprehensive': 'Senior Comprehensive Plan.pdf',
+    'hospital': 'Senior Hospital Plan.pdf',
   };
-  const seniorPdfFile = seniorPdfMap[categoryDisplay] || 'Day 1 Comparative guide 2025_v2.pdf';
+  const seniorPdfFile = seniorPdfMap[categoryDisplay] || seniorPdfMap['day-to-day'];
   const seniorPdfPath = `/assets/pdf's/${seniorPdfFile}`;
 
   const handleNavigate = (section: string) => {
