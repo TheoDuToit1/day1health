@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 // Simple medical-style plus icon (circle with cross)
 const MedicalPlusIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
@@ -134,7 +135,11 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           }}>
             <a
               href="#hero"
-              onClick={(e) => { e.preventDefault(); onNavigate('hero'); }}
+              onClick={(e) => { 
+                e.preventDefault(); 
+                smoothScrollTo('hero');
+                onNavigate('hero'); 
+              }}
               aria-label="Go to Home"
               className="relative w-48 h-16 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-lg cursor-pointer"
             >
@@ -173,6 +178,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       href={`#${item.id}`}
                       onClick={(e) => {
                         e.preventDefault();
+                        smoothScrollTo(item.id);
                         onNavigate(item.id);
                       }}
                       className={baseClasses}
@@ -245,6 +251,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       href="#footer"
                       onClick={(e) => {
                         e.preventDefault();
+                        smoothScrollTo('footer');
                         onNavigate('footer');
                       }}
                       className={baseClasses}
@@ -270,6 +277,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     href={`#${item.id}`}
                     onClick={(e) => {
                       e.preventDefault();
+                      smoothScrollTo(item.id);
                       onNavigate(item.id);
                     }}
                     className={baseClasses}
@@ -467,8 +475,10 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       key={item.id}
                       onClick={() => {
                         if (item.id === 'procedures') {
+                          smoothScrollTo('footer');
                           onNavigate('footer');
                         } else {
+                          smoothScrollTo(item.id);
                           onNavigate(item.id);
                         }
                         setIsMenuOpen(false);

@@ -10,11 +10,57 @@ import JuniorExecutivePlanDetailPage from './components/JuniorExecutivePlanDetai
 import ProceduresPage from './components/ProceduresPage';
 import { ThemeProvider } from './contexts/ThemeContext';
 
+// Smooth scroll enhancement hook
+const useSmoothScrollEnhancement = () => {
+  useEffect(() => {
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+      return; // Don't enhance scrolling for users who prefer reduced motion
+    }
+
+    // Enhanced smooth scrolling for mouse wheel (optional enhancement)
+    // This is disabled by default as native smooth scrolling is usually sufficient
+    // Uncomment if you want custom wheel smoothing:
+    /*
+    let isScrolling = false;
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (isScrolling) return;
+      
+      e.preventDefault();
+      isScrolling = true;
+      
+      const scrollAmount = e.deltaY * 0.8; // Adjust multiplier for sensitivity
+      
+      window.scrollBy({
+        top: scrollAmount,
+        behavior: 'smooth'
+      });
+      
+      setTimeout(() => {
+        isScrolling = false;
+      }, 50);
+    };
+    
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+    */
+  }, []);
+};
+
 function AppWrapper() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFooterInView, setIsFooterInView] = useState(false);
   const location = useLocation();
+  
+  // Enable smooth scrolling enhancements
+  useSmoothScrollEnhancement();
 
   // Get slide number from route
   const getSlideFromRoute = () => {
