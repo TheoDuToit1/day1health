@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AppContent from './components/AppContent';
-import PlanDetailPage from './components/PlanDetailPage';
-import HospitalPlanDetailPage from './components/HospitalPlanDetailPage';
-import ComprehensivePlanDetailPage from './components/ComprehensivePlanDetailPage';
-import SeniorPlanDetailPage from './components/SeniorPlanDetailPage';
-import RegulatoryInformationPage from './components/RegulatoryInformationPage';
-import JuniorExecutivePlanDetailPage from './components/JuniorExecutivePlanDetailPage';
-import ProceduresPage from './components/ProceduresPage';
 import { ThemeProvider } from './contexts/ThemeContext';
+
+// Lazy load route components for code splitting
+const PlanDetailPage = lazy(() => import('./components/PlanDetailPage'));
+const HospitalPlanDetailPage = lazy(() => import('./components/HospitalPlanDetailPage'));
+const ComprehensivePlanDetailPage = lazy(() => import('./components/ComprehensivePlanDetailPage'));
+const SeniorPlanDetailPage = lazy(() => import('./components/SeniorPlanDetailPage'));
+const RegulatoryInformationPage = lazy(() => import('./components/RegulatoryInformationPage'));
+const JuniorExecutivePlanDetailPage = lazy(() => import('./components/JuniorExecutivePlanDetailPage'));
+const ProceduresPage = lazy(() => import('./components/ProceduresPage'));
 
 // Smooth scroll enhancement hook
 const useSmoothScrollEnhancement = () => {
@@ -241,13 +243,41 @@ function App() {
         <Route path="/slide-4" element={<AppWrapper />} />
         {/* Dynamic slide route to catch /slide-:num */}
         <Route path="/slide-:num" element={<AppWrapper />} />
-        <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
-        <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
-        <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />
-        <Route path="/plans/senior-plan" element={<SeniorPlanDetailPage />} />
-        <Route path="/plans/junior-executive" element={<JuniorExecutivePlanDetailPage />} />
-        <Route path="/regulatory-information" element={<RegulatoryInformationPage />} />
-        <Route path="/procedures" element={<ProceduresPage />} />
+        <Route path="/plans/day-to-day" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <PlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/hospital" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <HospitalPlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/comprehensive" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ComprehensivePlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/senior-plan" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <SeniorPlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/junior-executive" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <JuniorExecutivePlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/regulatory-information" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <RegulatoryInformationPage />
+          </Suspense>
+        } />
+        <Route path="/procedures" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ProceduresPage />
+          </Suspense>
+        } />
         {/* Catch-all: render the SPA for any other route */}
         <Route path="*" element={<AppWrapper />} />
       </Routes>

@@ -321,6 +321,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setShowDayToDayCards(true);
                           setExpanded(prev => ({ ...prev, student: true, family: false, basic: false }));
                         }}
+                        tabIndex={expanded.intro ? 0 : -1}
                       >
                         Value Plus
                       </button>
@@ -331,6 +332,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setShowDayToDayCards(true);
                           setExpanded(prev => ({ ...prev, student: false, family: false, basic: true }));
                         }}
+                        tabIndex={expanded.intro ? 0 : -1}
                       >
                         Platinum
                       </button>
@@ -341,6 +343,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setShowDayToDayCards(true);
                           setExpanded(prev => ({ ...prev, student: false, family: true, basic: false }));
                         }}
+                        tabIndex={expanded.intro ? 0 : -1}
                       >
                         Executive
                       </button>
@@ -1186,6 +1189,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className={`w-8 h-8 rounded-md border text-sm font-semibold ${isDark ? 'bg-gray-900/70 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} disabled:opacity-50`}
                         onClick={() => setFamilyChildren((c) => Math.min(4, c + 1))}
                         disabled={familyChildren >= 4}
+                        tabIndex={expanded.family ? 0 : -1}
                       >
                         +
                       </button>
@@ -1195,7 +1199,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                   <div className="relative">
                     <AnimatedPaymentButton 
-                      text="Choose Plan"
+                      text="Choose Family Plan"
                       className="bronze"
                       hoverMessages={[
                         'GP and specialist consultations',
@@ -1386,7 +1390,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <div className={(expanded.basic ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                   <div className="relative">
                     <AnimatedPaymentButton 
-                      text="Choose Plan"
+                      text="Choose Couple Plan"
                       className="silver"
                       hoverMessages={[
                         'GP and specialist consultations',
@@ -1579,7 +1583,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <div className={(expanded.student ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                   <div className="relative">
                     <AnimatedPaymentButton 
-                      text="Choose Plan"
+                      text="Choose Single Plan"
                       className="bronze"
                       hoverMessages={[
                         'GP and specialist consultations',

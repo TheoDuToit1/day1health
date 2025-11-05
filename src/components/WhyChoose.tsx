@@ -91,7 +91,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
                 isDark ? 'bg-blue-900/30' : 'bg-blue-100'
               } ring-1 ring-blue-500/20`}>
                 {('img' in feature && feature.img) ? (
-                  <img src={feature.img} alt={feature.title} className={`${(feature as any).size ?? 'w-8 h-8'} object-contain`} />
+                  <img src={feature.img} alt={feature.title} width="32" height="32" className={`${(feature as any).size ?? 'w-8 h-8'} object-contain`} />
                 ) : (
                   // Fallback to Lucide if needed
                   <Shield className="w-8 h-8 text-green-600" />
