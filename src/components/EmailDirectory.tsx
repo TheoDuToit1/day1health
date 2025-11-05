@@ -7,12 +7,16 @@ interface EmailDirectoryProps {
 }
 
 const demoEmails = [
-  { label: 'General Inquiries', email: 'info@day1health.co.za' },
-  { label: 'Sales Team', email: 'sales@day1health.co.za' },
-  { label: 'Admin Support', email: 'admin@day1health.co.za' },
-  { label: 'Claims Department', email: 'claims@day1health.co.za' },
-  { label: 'Technical Support', email: 'support@day1health.co.za' },
-  { label: 'Business Partnerships', email: 'business@day1health.co.za' },
+  { label: 'Debit Order / Bank Queries', email: 'retentions@day1.co.za' },
+  { label: 'Chronic Applications and Queries', email: 'chronic@1doctor.co.za' },
+  { label: 'New Claims Submission (Unattended Inbox)', email: '1Doctorclaims@Day1.co.za' },
+  { label: 'Membership-Related Queries', email: 'admin@Day1.co.za' },
+  { label: 'Claims & General Queries', email: 'claimsqueries@Day1.co.za' },
+  { label: 'Provider Outstanding Remittance Requests', email: 'remittance@Day1.co.za' },
+  { label: 'New Sales / Quote Requests', email: 'sales@day1.co.za' },
+  { label: 'Complaints', email: 'complaints@day1.co.za' },
+  { label: 'Member Claim Refunds', email: 'reimbursement@1doctor.co.za' },
+  { label: 'Hospital-Related Claims', email: 'claimshospital@day1.co.za' },
 ];
 
 export default function EmailDirectory({ className }: EmailDirectoryProps) {
@@ -34,7 +38,7 @@ export default function EmailDirectory({ className }: EmailDirectoryProps) {
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between p-4 rounded-xl border transition-colors ${
           isDark
-            ? 'bg-gray-800 border-gray-700 hover:bg-gray-750 text-white'
+            ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-white'
             : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
         }`}
         aria-expanded={isOpen}
