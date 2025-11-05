@@ -209,10 +209,10 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     }
     return base;
   })();
-  const comprehensivePdfFile = comprehensivePdfMap[tierParam] || '';
-  const compPdfPath = comprehensivePdfFile
-    ? `/assets/pdf's/${comprehensivePdfFile}`
-    : "/assets/pdf's/Day 1 Comparative guide 2025_v2.pdf";
+  // Normalize tierParam to handle 'value', 'value plus', etc.
+  const tierKey = tierParam === 'platinum' ? 'platinum' : tierParam === 'executive' ? 'executive' : 'value';
+  const comprehensivePdfFile = comprehensivePdfMap[tierKey] || comprehensivePdfMap['value'];
+  const compPdfPath = `/assets/pdf's/${comprehensivePdfFile}`;
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;

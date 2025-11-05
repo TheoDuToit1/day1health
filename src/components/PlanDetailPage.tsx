@@ -102,6 +102,16 @@ const PlanDetailPage: React.FC = () => {
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const pageTitle = `Day-to-Day - ${variantDisplay}`;
+  
+  // Map variant to the correct Day-to-Day plan PDF
+  const dayToDayPdfMap: Record<string, string> = {
+    single: 'Day-To-Day Single Plan.pdf',
+    couple: 'Day-To-Day Couple Plan.pdf',
+    couples: 'Day-To-Day Couple Plan.pdf',
+    family: 'Day-To-Day Family Plan.pdf',
+  };
+  const dayToDayPdfFile = dayToDayPdfMap[variantParam] || 'Day-To-Day Single Plan.pdf';
+  const pdfPath = `/assets/pdf's/${dayToDayPdfFile}`;
   // Expanded state for Related products cards
   type CardKey = 'single' | 'couple' | 'family';
   const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
@@ -384,7 +394,7 @@ const PlanDetailPage: React.FC = () => {
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
-                          href="/assets/pdf's/Day1 Health Day to Day Plan 2025.pdf"
+                          href={pdfPath}
                           className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
                           sentText="Downloaded info Plan"
                         />

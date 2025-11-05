@@ -133,6 +133,8 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     src="/assets/images/Logo.jpg" 
                     alt="Day 1 Health Logo" 
                     className="w-full h-full object-contain"
+                    width="192"
+                    height="64"
                   />
                 </div>
               </div>

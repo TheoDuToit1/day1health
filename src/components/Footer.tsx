@@ -65,6 +65,8 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                         src="/assets/images/Logo.jpg" 
                         alt="Day 1 Health Logo" 
                         className="w-full h-full object-contain"
+                        width="256"
+                        height="111"
                       />
                     </div>
                   </div>

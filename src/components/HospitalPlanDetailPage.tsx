@@ -75,11 +75,11 @@ const HospitalPlanDetailPage: React.FC = () => {
 
   // Map tier to the correct Hospital plan PDF
   const hospitalPdfMap: Record<string, string> = {
-    value: "Day1 Health Value Plus Hospital Plan 2025.pdf",
-    platinum: "Day1 Health Platinum Hospital Plan 2025.pdf",
-    executive: "Day1 Health Executive Hospital Plan 2025.pdf",
+    value: "Hospital Value Plus Plan.pdf",
+    platinum: "Hospital Platinum Plan.pdf",
+    executive: "Hospital Executive Plan.pdf",
   };
-  const hospitalPdfFile = hospitalPdfMap[tierParam] || 'Day 1 Comparative guide 2025_v2.pdf';
+  const hospitalPdfFile = hospitalPdfMap[tierKey] || hospitalPdfMap['value'];
   const pdfPath = `/assets/pdf's/${hospitalPdfFile}`;
 
   // Build cover badges per tier
