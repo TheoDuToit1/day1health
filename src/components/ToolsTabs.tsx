@@ -1040,15 +1040,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Family Care */}
               <motion.div 
-                className={`min-w-0 order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                className={`flex-1 min-w-[280px] max-w-[320px] order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
-                } min-h-[140px] `}
-                layout="position"
+                } ${expanded.family ? 'min-h-[400px]' : 'min-h-[140px]'} `}
+                layout={false}
                 initial={false}
                 animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{}}
               >
@@ -1063,7 +1063,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="/assets/images/family (1).jpg"
+                      src="/assets/images/Family.jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1119,11 +1119,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                         </div>
                         <motion.div
+                          layoutId="family-price-container"
                           className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.18 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeOut' }}
                         >
                           <span className="text-2xl font-bold text-emerald-400">R193</span>
                           <span className={`text-white text-sm font-normal`}>
@@ -1148,8 +1149,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {expanded.family && null}
                 <motion.div key="family-content"
                   initial={false}
-                  animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
-                  transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                  animate={{ 
+                    height: expanded.family ? 'auto' : 0, 
+                    opacity: expanded.family ? 1 : 0,
+                    marginTop: expanded.family ? 16 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                    height: { duration: 0.5 },
+                    opacity: { duration: 0.3, delay: expanded.family ? 0.1 : 0 }
+                  }}
                   style={{ overflow: 'hidden' }}
                   aria-hidden={!expanded.family}
                 >
@@ -1241,15 +1251,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Couple Plan */}
               <motion.div 
-                className={`min-w-0 order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                className={`flex-1 min-w-[280px] max-w-[320px] order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
-                } min-h-[140px] `}
-                layout="position"
+                } ${expanded.basic ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                layout={false}
                 initial={false}
                 animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{}}
                 style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
@@ -1265,7 +1275,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="/assets/images/couple (1).jpg"
+                      src="/assets/images/Couple.jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1321,11 +1331,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           </motion.span>
                         </div>
                         <motion.div
+                          layoutId="couple-price-container"
                           className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.18 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeOut' }}
                         >
                           <span className="text-2xl font-bold text-emerald-400">R674</span>
                           <span className={`text-white text-sm font-normal`}>/month</span>
@@ -1348,8 +1359,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {expanded.basic && null}
                 <motion.div key="couple-content"
                   initial={false}
-                  animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
-                  transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                  animate={{ 
+                    height: expanded.basic ? 'auto' : 0, 
+                    opacity: expanded.basic ? 1 : 0,
+                    marginTop: expanded.basic ? 16 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                    height: { duration: 0.5 },
+                    opacity: { duration: 0.3, delay: expanded.basic ? 0.1 : 0 }
+                  }}
                   style={{ overflow: 'hidden' }}
                   aria-hidden={!expanded.basic}
                 >
@@ -1421,15 +1441,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Student Plan (Single) */}
               <motion.div 
-                className={`order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                className={`flex-1 min-w-[280px] max-w-[320px] order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
-                } min-h-[140px] `}
-                layout="position"
+                } ${expanded.student ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                layout={false}
                 initial={false}
                 animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.6, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
                 viewport={{ once: true, margin: "-50px" }}
                 whileHover={{}}
                 style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
@@ -1445,7 +1465,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="/assets/images/single (1).jpg"
+                      src="/assets/images/Single.jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1502,9 +1522,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             </motion.span>
                           </div>
                           <motion.div
-                            layoutId="student-price"
+                            layoutId="student-price-container"
                             className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
                           >
                             <span className="text-2xl font-bold text-emerald-400">R385</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
@@ -1528,8 +1551,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {/* Price shown in header for Single card when expanded */}
                 <motion.div key="student-content"
                   initial={false}
-                  animate={{ height: expanded.student ? 'auto' : 0, opacity: expanded.student ? 1 : 0 }}
-                  transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                  animate={{ 
+                    height: expanded.student ? 'auto' : 0, 
+                    opacity: expanded.student ? 1 : 0,
+                    marginTop: expanded.student ? 16 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                    height: { duration: 0.5 },
+                    opacity: { duration: 0.3, delay: expanded.student ? 0.1 : 0 }
+                  }}
                   style={{ overflow: 'hidden' }}
                   aria-hidden={!expanded.student}
                   className="relative z-10"
@@ -3075,11 +3107,48 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
               ? 'bg-gray-800/95 border border-gray-700' 
               : 'bg-white/95 border border-gray-100'
           }`}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-4 px-3 md:px-0">
-              {tabs.map((tab) => (
-                <button
+            <motion.div 
+              className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-4 px-3 md:px-0"
+              initial="hidden"
+              animate="show"
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 0.2
+                  }
+                }
+              }}
+            >
+              {tabs.map((tab, index) => (
+                <motion.button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}
+                  variants={{
+                    hidden: { 
+                      opacity: 0, 
+                      y: 20,
+                      scale: 0.9
+                    },
+                    show: { 
+                      opacity: 1, 
+                      y: 0,
+                      scale: 1,
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                        mass: 1
+                      }
+                    }
+                  }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.2 }
+                  }}
+                  whileTap={{ scale: 0.98 }}
                   className={`flex flex-col sm:flex-row items-center w-full px-4 py-3 sm:px-5 sm:py-3 text-xs sm:text-sm font-medium rounded-xl transition-all justify-center gap-2 sm:gap-3 ${
                     activeTab === tab.id
                       ? isDark 
@@ -3110,9 +3179,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   }`} />
                   </span>
                   <span className="text-center sm:text-left leading-tight sm:leading-normal sm:whitespace-nowrap">{tab.label}</span>
-                </button>
+                </motion.button>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
         
