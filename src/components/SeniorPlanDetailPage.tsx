@@ -291,21 +291,18 @@ const SeniorPlanDetailPage: React.FC = () => {
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Day to Day Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R425.00 through R850.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'comprehensive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Comprehensive Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R875.00 through R1,750.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'hospital' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan | Senior</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R580.00 through R1,160.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                     </div>

@@ -14,7 +14,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     {
       icon: Search,
       title: "Choose a Plan",
-      description: "Browse our transparent plans and select the one that fits your needs and budget. No hidden fees, just clear pricing.",
+      description: "Browse our transparent plans and select the one that fits your needs and budget. Clear pricing, no hidden costs.",
       color: "bg-blue-500"
     },
     {
@@ -25,14 +25,14 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     },
     {
       icon: Stethoscope,
-      title: "Visit Any Network Provider",
+      title: "Visit Our Network Providers",
       description: "Use your cover at thousands of healthcare providers across South Africa. Present your membership card and you're covered.",
       color: "bg-blue-500"
     },
     {
       icon: Shield,
       title: "Start Your Cover from Day 1",
-      description: "No waiting periods for accidents and emergencies. Your cover starts immediately after approval and payment.",
+      description: "No waiting periods for accidents and emergency ambulance services. Your cover starts immediately after approval and payment.\n\n*Terms & Conditions Apply*",
       color: "bg-green-500"
     }
   ];

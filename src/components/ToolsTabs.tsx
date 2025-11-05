@@ -224,7 +224,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Comprehensive Plan that fits your life
+                        Choose a Comprehensive Plan that fits your Healthcare needs
                       </h3>
                     </div>
                     <motion.button
@@ -297,7 +297,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <ul className="space-y-3 mt-4">
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>GP consultations and virtual care</span>
+                        <span className={`text-white`}>GP consultations</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
@@ -910,7 +910,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       Start here
                     </motion.span>
                     <h3 className={`text-xl font-bold text-white`}>
-                      Choose a Day-To-Day plan that fits your life
+                      Choose a Day-To-Day plan that fits your Healthcare needs
                     </h3>
                   </div>
                   <motion.button
@@ -983,7 +983,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <ul className="space-y-3 mt-4">
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                      <span className={`text-white`}>GP consultations and virtual care</span>
+                      <span className={`text-white`}>GP consultations</span>
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
@@ -1651,7 +1651,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Hospital Plan that fits your life
+                        Choose a Hospital Plan that fits your Healthcare needs
                       </h3>
                     </div>
                     <motion.button
@@ -1690,7 +1690,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         className="inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold border backdrop-blur-sm bg-white/10 border-white/15 hover:bg-white/15 transition-all"
                         onClick={(e) => { e.stopPropagation(); setShowDayToDayCards(true); setExpanded(prev => ({ ...prev, student: true, family: false, basic: false })); }}
                       >
-                        Value
+                        Value Plus
                       </button>
                       <button
                         type="button"
@@ -1724,7 +1724,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <ul className="space-y-3 mt-4">
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>GP consultations and virtual care</span>
+                        <span className={`text-white`}>GP consultations</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
@@ -1750,7 +1750,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           setExpanded(prev => ({ ...prev, student: true, family: false, basic: false }));
                         }}
                       >
-                        Value
+                        Value Plus
                       </button>
                       <button
                         type="button"
@@ -1853,7 +1853,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: 8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Value
+                              Value Plus
                             </motion.span>
                             <motion.div
                               layoutId="hospital-value-price"
@@ -1874,7 +1874,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          Value
+                          Value Plus
                         </motion.h3>
                       )}
                     </AnimatePresence>
@@ -1913,7 +1913,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/plans/hospital?tier=Value&variant=single"
+                        to="/plans/hospital?tier=Value Plus&variant=single"
                       />
                     </div>
                     <button
@@ -2334,7 +2334,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         Start here
                       </motion.span>
                       <h3 className={`text-xl font-bold text-white`}>
-                        Choose a Senior Plan that fits your life
+                        Choose a Senior Plan that fits your Healthcare needs
                       </h3>
                     </div>
                     <motion.button
@@ -2407,7 +2407,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <ul className="space-y-3 mt-4">
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>GP consultations and virtual care</span>
+                        <span className={`text-white`}>GP consultations</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />

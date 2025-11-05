@@ -51,7 +51,7 @@ const HospitalPlanDetailPage: React.FC = () => {
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const tierParam = (searchParams.get('tier') || 'value').toLowerCase();
-  const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : 'Value';
+  const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : tierParam === 'value plus' ? 'Value Plus' : 'Value';
   const tierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
   const pageTitle = `Hospital - ${tierDisplay} - ${variantDisplay}`;
   type CardKey = 'single' | 'couple' | 'family';
@@ -252,21 +252,18 @@ const HospitalPlanDetailPage: React.FC = () => {
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R390.00 through R1,326.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierKey === 'platinum' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Hospital Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R560.00 through R1,904.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierKey === 'executive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Executive Hospital Plan</div>
                           <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R640.00 through R2,176.00</div>
-                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                     </div>

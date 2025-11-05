@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Phone, Mail, Clock, X, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import CEOHotlineCTA from './CEOHotlineCTA';
+import EmailDirectory from './EmailDirectory';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
@@ -213,7 +213,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
           <p className={`text-xl max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            Ready to get covered or have questions? Our team is here to help you find the perfect healthcare solution.
+            Ready to get covered or have any questions? Our team is here to help you find the perfect healthcare solution.
           </p>
         </div>
 
@@ -281,7 +281,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   }`}>0876 100 600</p>
                   <p className={`text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`}>Mon - Fri: 8AM - 6PM | Sat: 8AM - 1PM</p>
+                  }`}>Mon–Fri 8:00–16:30, Sat 8:00–13:00</p>
                 </div>
               </div>
 
@@ -365,9 +365,9 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 <HelpCircle className="w-6 h-6 text-green-600" />
                 How can we help?
               </h3>
-              {/* Executive Hotline moved from sidebar */}
+              {/* Email Directory */}
               <div className="mb-6">
-                <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
+                <EmailDirectory />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
