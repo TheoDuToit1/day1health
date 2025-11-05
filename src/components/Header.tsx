@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -81,12 +82,22 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-xl lg:z-40 lg:flex lg:flex-col transition-all duration-700 ease-in-out ${
-        isSidebarCollapsed ? 'w-24' : 'w-64'
-      } ${isDark ? 'bg-gray-900' : 'bg-white'}`}
-      style={{
-        transition: 'width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease'
-      }}>
+      <motion.aside 
+        className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-xl lg:z-40 lg:flex lg:flex-col transition-all duration-700 ease-in-out ${
+          isSidebarCollapsed ? 'w-24' : 'w-64'
+        } ${isDark ? 'bg-gray-900' : 'bg-white'}`}
+        initial={{ x: -300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ 
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 1,
+          duration: 0.8
+        }}
+        style={{
+          transition: 'width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease'
+        }}>
         {/* Sidebar Toggle Button */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -117,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }}>
           <div 
-          className="flex items-center justify-center h-16 w-full"
+          className="flex items-center justify-center h-16 w-full -mt-1"
           style={{
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
@@ -142,12 +153,12 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           </div>
         </div>
         
-        <nav className="p-6 pb-2">
-          <ul className="space-y-1">
+        <nav className="px-6 pt-3 pb-2">
+          <ul className="space-y-0.5">
             {navItems.map((item) => {
               const isActive = _isFooterInView ? (item.id === 'procedures') : (activeSection === item.id);
               const baseClasses = `w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
-                isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
+                isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-2 py-3 justify-start space-x-3'
               } ${
                 isActive
                   ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
@@ -284,7 +295,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         {/* Sidebar Quick Actions */}
         <div className={`${isSidebarCollapsed ? 'px-0' : 'px-6'} pt-1 pb-2 transition-all duration-700 ease-in-out`}>
           {!isSidebarCollapsed && (
-            <h4 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <h4 className={`font-semibold mb-0 ${isDark ? 'text-white' : 'text-gray-900'}`}>
               Quick Actions
             </h4>
           )}
@@ -333,13 +344,13 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         </div>
 
         {/* Contact Information - Always visible */}
-        <div className={`p-6 mt-auto transition-all duration-300 ${
+        <div className={`px-6 pt-3 pb-6 mt-auto transition-all duration-300 ${
           isDark 
             ? 'border-t border-gray-700 bg-gradient-to-b from-gray-800 to-gray-900' 
             : 'border-t border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100'
         }`}>
           {!isSidebarCollapsed && (
-            <h4 className={`font-medium mb-4 text-sm uppercase tracking-wide ${
+            <h4 className={`font-medium mb-2 text-sm uppercase tracking-wide ${
               isDark ? 'text-gray-400' : 'text-gray-500'
             }`}>Contact Info</h4>
           )}
@@ -390,7 +401,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             </div>
           </div>
         </div>
-      </aside>
+      </motion.aside>
 
       {/* Mobile Header */}
       <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
