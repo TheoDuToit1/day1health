@@ -200,9 +200,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent: animated Single/Couple/Family */}
                   <IntroCarousel
                     images={[
-                      '/assets/images/single (1).jpg',
-                      '/assets/images/couple (1).jpg',
-                      '/assets/images/family (1).jpg',
+                      '/assets/images/Single.jpg',
+                      '/assets/images/Couple.jpg',
+                      '/assets/images/Family.jpg',
                     ]}
                   />
                   <div
@@ -352,24 +352,23 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Student Plan (Single) (copied from Day-to-Day) */}
                 <motion.div 
-                  className={`order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.student ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
-                  style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
                 >
                   {/* Background accent (only when expanded) */}
                   {expanded.student && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="/assets/images/single (1).jpg"
+                        src="/assets/images/Single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -388,32 +387,32 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
                             >
-                              {'Comprehensive'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Compr'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
                             </motion.span>
-                          </motion.span>
-                          <div className="flex items-baseline gap-2">
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
@@ -423,17 +422,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Value Plus
                             </motion.span>
-                            <motion.div
-                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.95 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R665</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                           </div>
+                          <motion.div
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R665</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -527,15 +526,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Family Care (copied from Day-to-Day) */}
                 <motion.div 
-                  className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.family ? 'min-h-[400px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
@@ -543,7 +542,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.family && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="/assets/images/family (1).jpg"
+                        src="/assets/images/Family.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -562,36 +561,36 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Comprehensive
-                          </motion.span>
-                          <div className="flex items-baseline gap-2 mt-2">
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                              className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Compr
+                            </motion.span>
+                            <motion.span
+                              className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
                               animate={{ opacity: 1, x: 0 }}
                               exit={{ opacity: 0, x: 8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Executive
+                              Platinum
                             </motion.span>
-                            <motion.div
-                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.95 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R985</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                           </div>
+                          <motion.div
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R895</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -602,7 +601,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          Executive
+                          Platinum
                         </motion.h3>
                       )}
                     </AnimatePresence>
@@ -679,7 +678,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         </div>
                         <motion.div layoutId="comprehensive-executive-price" className={`leading-none text-green-600`}>
                           <span className="text-sm align-top mr-1">R</span>
-                          <span className="text-2xl font-bold">985</span>
+                          <span className="text-2xl font-bold">895</span>
                           <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mth</span>
                         </motion.div>
                     </div>
@@ -688,24 +687,23 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Couple Plan (copied from Day-to-Day) */}
                 <motion.div 
-                  className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.basic ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
-                  style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
                 >
                   {/* Background accent (only when expanded) */}
                   {expanded.basic && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="/assets/images/couple (1).jpg"
+                        src="/assets/images/Couple.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -724,32 +722,32 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
                             >
-                              {'Comprehensive'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Compr'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
                             </motion.span>
-                          </motion.span>
-                          <div className="flex items-baseline gap-2 mt-2">
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
@@ -757,19 +755,19 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: 8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Platinum
+                              Executive
                             </motion.span>
-                            <motion.div
-                              className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.95 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              <span className={`text-emerald-400 text-2xl font-bold`}>R895</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                           </div>
+                          <motion.div
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            <span className={`text-emerald-400 text-2xl font-bold`}>R985</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -780,7 +778,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          Platinum
+                          Executive
                         </motion.h3>
                       )}
                     </AnimatePresence>
@@ -855,7 +853,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </div>
                       <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                         <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">895</span>
+                        <span className="text-2xl font-bold">985</span>
                         <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
                       </motion.div>
                     </div>
@@ -889,9 +887,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {/* Background accent: animated Single/Couple/Family */}
                 <IntroCarousel
                   images={[
-                    '/assets/images/single (1).jpg',
-                    '/assets/images/couple (1).jpg',
-                    '/assets/images/family (1).jpg',
+                    '/assets/images/Single.jpg',
+                    '/assets/images/Couple.jpg',
+                    '/assets/images/Family.jpg',
                   ]}
                 />
                 <div
@@ -1041,9 +1039,388 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
               </motion.div>
 
+              {/* Student Plan (Single) */}
+              <motion.div 
+                className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                } ${expanded.student ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                layout={false}
+                initial={false}
+                animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{}}
+                style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
+              >
+                {expanded.student && (
+                  <motion.div
+                    key="student-bg"
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                  >
+                    <img
+                      src="/assets/images/Single.jpg"
+                      alt=""
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
+                  </motion.div>
+                )}
+                <div className="mb-[17px]">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {expanded.student ? (
+                      <motion.div
+                        key="hdr-expanded-student"
+                        className={`relative z-20 flex flex-col items-start gap-1`}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.18 }}
+                      >
+                        <div className="flex flex-col items-start gap-2">
+                          <div className="flex items-center gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Day-to-Day'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
+                            </motion.span>
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -6 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -6 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Single
+                            </motion.span>
+                          </div>
+                          <motion.div
+                            layoutId="student-price-container"
+                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R385</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.h3
+                        key="hdr-collapsed-student"
+                        className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.18 }}
+                      >
+                        Single
+                      </motion.h3>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <motion.div key="student-content"
+                  initial={false}
+                  animate={{ 
+                    height: expanded.student ? 'auto' : 0, 
+                    opacity: expanded.student ? 1 : 0,
+                    marginTop: expanded.student ? 16 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                    height: { duration: 0.5 },
+                    opacity: { duration: 0.3, delay: expanded.student ? 0.1 : 0 }
+                  }}
+                  style={{ overflow: 'hidden' }}
+                  aria-hidden={!expanded.student}
+                  className="relative z-10"
+                >
+                  <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                    <ul className="space-y-3">
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
+                    </ul>
+                  </div>
+                </motion.div>
+                <div className={(expanded.student ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
+                  <div className="relative">
+                    <AnimatedPaymentButton 
+                      text="Choose Single Plan"
+                      className="bronze"
+                      hoverMessages={[
+                        'GP and specialist consultations',
+                        'Acute and chronic medication',
+                        'Blood tests and x-rays',
+                        'Dentistry and optometry',
+                        'Funeral benefit',
+                      ]}
+                      hoverIcons={['wallet','card','payment','check']}
+                      showArrow={false}
+                      expanded={expanded.student}
+                      onToggleExpand={() => toggleExpanded('student')}
+                      to="/plans/day-to-day?variant=single"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.student ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('student')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
+                </div>
+                {!expanded.student && (
+                  <div
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                      isDark
+                        ? 'bg-white/10 border-white/15'
+                        : 'bg-white/30 border-white/40'
+                    }`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.cardLabel}
+                    </div>
+                    <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <span className="text-sm align-top mr-1">R</span>
+                      <span className="text-2xl font-bold">385</span>
+                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
+                    </motion.div>
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Couple Plan */}
+              <motion.div 
+                className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  isDark 
+                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                    : 'bg-white border-green-200 hover:border-green-400'
+                } ${expanded.basic ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                layout={false}
+                initial={false}
+                animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{}}
+                style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
+              >
+                {expanded.basic && (
+                  <motion.div
+                    key="couple-bg"
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                  >
+                    <img
+                      src="/assets/images/Couple.jpg"
+                      alt=""
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
+                  </motion.div>
+                )}
+                <div className="mb-[17px]">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {expanded.basic ? (
+                      <motion.div
+                        key="hdr-expanded-couple"
+                        className={`relative z-20 flex flex-col gap-2`}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.18 }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <motion.span
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -8 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            <motion.span
+                              className="inline-flex"
+                              initial="hidden"
+                              animate="show"
+                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                            >
+                              {'Day-to-Day'.split('').map((ch, i) => (
+                                <motion.span
+                                  key={i}
+                                  className="inline-block"
+                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  {ch === ' ' ? '\u00A0' : ch}
+                                </motion.span>
+                              ))}
+                            </motion.span>
+                          </motion.span>
+                          <motion.span
+                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -6 }}
+                            transition={{ duration: 0.18 }}
+                          >
+                            Couple
+                          </motion.span>
+                        </div>
+                        <motion.div
+                          layoutId="couple-price-container"
+                          className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeOut' }}
+                        >
+                          <span className="text-2xl font-bold text-emerald-400">R674</span>
+                          <span className={`text-white text-sm font-normal`}>/month</span>
+                        </motion.div>
+                      </motion.div>
+                    ) : (
+                      <motion.h3
+                        key="hdr-collapsed-couple"
+                        className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.18 }}
+                      >
+                        Couple
+                      </motion.h3>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <motion.div key="couple-content"
+                  initial={false}
+                  animate={{ 
+                    height: expanded.basic ? 'auto' : 0, 
+                    opacity: expanded.basic ? 1 : 0,
+                    marginTop: expanded.basic ? 16 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                    height: { duration: 0.5 },
+                    opacity: { duration: 0.3, delay: expanded.basic ? 0.1 : 0 }
+                  }}
+                  style={{ overflow: 'hidden' }}
+                  aria-hidden={!expanded.basic}
+                >
+                  <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                    <ul className="space-y-3">
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
+                    </ul>
+                  </div>
+                </motion.div>
+                <div className={(expanded.basic ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
+                  <div className="relative">
+                    <AnimatedPaymentButton 
+                      text="Choose Couple Plan"
+                      className="silver"
+                      hoverMessages={[
+                        'GP and specialist consultations',
+                        'Acute and chronic medication',
+                        'Blood tests and x-rays',
+                        'Dentistry and optometry',
+                        'Funeral benefit',
+                      ]}
+                      hoverIcons={['wallet','card','payment','check']}
+                      showArrow={false}
+                      expanded={expanded.basic}
+                      onToggleExpand={() => toggleExpanded('basic')}
+                      to="/plans/comprehensive?variant=single&tier=Platinum"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.basic ? 'Collapse Platinum details' : 'Expand Platinum details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.basic ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('basic')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
+                </div>
+                {!expanded.basic && (
+                  <div
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                      isDark
+                        ? 'bg-white/10 border-white/15'
+                        : 'bg-white/30 border-white/40'
+                    }`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.cardLabel}
+                    </div>
+                    <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <span className="text-sm align-top mr-1">R</span>
+                      <span className="text-2xl font-bold">674</span>
+                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
+                    </motion.div>
+                  </div>
+                )}
+              </motion.div>
+
               {/* Family Care */}
               <motion.div 
-                className={`flex-1 min-w-[280px] max-w-[320px] order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
@@ -1131,7 +1508,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         >
                           <span className="text-2xl font-bold text-emerald-400">R193</span>
                           <span className={`text-white text-sm font-normal`}>
-                            /mth per child
+                            /month per child
                           </span>
                         </motion.div>
                       </motion.div>
@@ -1253,388 +1630,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 )}
               </motion.div>
 
-              {/* Couple Plan */}
-              <motion.div 
-                className={`flex-1 min-w-[280px] max-w-[320px] order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
-                  isDark 
-                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                    : 'bg-white border-green-200 hover:border-green-400'
-                } ${expanded.basic ? 'min-h-[380px]' : 'min-h-[140px]'} `}
-                layout={false}
-                initial={false}
-                animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{}}
-                style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
-              >
-                {expanded.basic && (
-                  <motion.div
-                    key="couple-bg"
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
-                  >
-                    <img
-                      src="/assets/images/Couple.jpg"
-                      alt=""
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
-                  </motion.div>
-                )}
-                <div className="mb-[17px]">
-                  <AnimatePresence mode="wait" initial={false}>
-                    {expanded.basic ? (
-                      <motion.div
-                        key="hdr-expanded-couple"
-                        className={`relative z-20 flex flex-col gap-2`}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.18 }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <motion.span
-                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                            >
-                              {'Day-to-Day'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
-                            </motion.span>
-                          </motion.span>
-                          <motion.span
-                            className={`inline-flex w-fit items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-base font-semibold text-emerald-300`}
-                            initial={{ opacity: 0, x: -6 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -6 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Couple
-                          </motion.span>
-                        </div>
-                        <motion.div
-                          layoutId="couple-price-container"
-                          className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.3, ease: 'easeOut' }}
-                        >
-                          <span className="text-2xl font-bold text-emerald-400">R674</span>
-                          <span className={`text-white text-sm font-normal`}>/month</span>
-                        </motion.div>
-                      </motion.div>
-                    ) : (
-                      <motion.h3
-                        key="hdr-collapsed-couple"
-                        className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.18 }}
-                      >
-                        Couple
-                      </motion.h3>
-                    )}
-                  </AnimatePresence>
-                </div>
-                {expanded.basic && null}
-                <motion.div key="couple-content"
-                  initial={false}
-                  animate={{ 
-                    height: expanded.basic ? 'auto' : 0, 
-                    opacity: expanded.basic ? 1 : 0,
-                    marginTop: expanded.basic ? 16 : 0
-                  }}
-                  transition={{ 
-                    duration: 0.4, 
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                    height: { duration: 0.5 },
-                    opacity: { duration: 0.3, delay: expanded.basic ? 0.1 : 0 }
-                  }}
-                  style={{ overflow: 'hidden' }}
-                  aria-hidden={!expanded.basic}
-                >
-                  <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                    <ul className="space-y-3">
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
-                    </ul>
-                  </div>
-                </motion.div>
-                <div className={(expanded.basic ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
-                  <div className="relative">
-                    <AnimatedPaymentButton 
-                      text="Choose Couple Plan"
-                      className="silver"
-                      hoverMessages={[
-                        'GP and specialist consultations',
-                        'Acute and chronic medication',
-                        'Blood tests and x-rays',
-                        'Dentistry and optometry',
-                        'Funeral benefit',
-                      ]}
-                      hoverIcons={['wallet','card','payment','check']}
-                      showArrow={false}
-                      expanded={expanded.basic}
-                      onToggleExpand={() => toggleExpanded('basic')}
-                      to="/plans/day-to-day?variant=couple"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
-                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                      ${isDark 
-                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                      ${expanded.basic ? 'rotate-180' : ''}`}
-                    onClick={() => toggleExpanded('basic')}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                    </svg>
-                  </button>
-                </div>
-                {/* Hover Badge (collapsed only) */}
-                {!expanded.basic && (
-                  <div
-                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
-                      isDark
-                        ? 'bg-white/10 border-white/15'
-                        : 'bg-white/30 border-white/40'
-                    }`}
-                  >
-                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                      {tabs.find(t => t.id === activeTab)?.cardLabel}
-                    </div>
-                    <motion.div layoutId={`${activeTab}-basic-price`} className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
-                      <span className="text-sm align-top mr-1">R</span>
-                      <span className="text-2xl font-bold">674</span>
-                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
-                    </motion.div>
-                  </div>
-                )}
-              </motion.div>
-
-              {/* Student Plan (Single) */}
-              <motion.div 
-                className={`flex-1 min-w-[280px] max-w-[320px] order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
-                  isDark 
-                    ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                    : 'bg-white border-green-200 hover:border-green-400'
-                } ${expanded.student ? 'min-h-[380px]' : 'min-h-[140px]'} `}
-                layout={false}
-                initial={false}
-                animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.6, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{}}
-                style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
-              >
-                {expanded.student && (
-                  <motion.div
-                    key="student-bg"
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
-                  >
-                    <img
-                      src="/assets/images/Single.jpg"
-                      alt=""
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
-                  </motion.div>
-                )}
-                <div className="mb-[17px]">
-                  <AnimatePresence mode="wait" initial={false}>
-                    {expanded.student ? (
-                      <motion.div
-                        key="hdr-expanded-student"
-                        className={`relative z-20 flex flex-col items-start gap-1`}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.18 }}
-                      >
-                        <div className="flex flex-col items-start gap-2">
-                          <div className="flex items-center gap-2">
-                            <motion.span
-                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                              initial={{ opacity: 0, x: -8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -8 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              <motion.span
-                                className="inline-flex"
-                                initial="hidden"
-                                animate="show"
-                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                              >
-                                {'Day-to-Day'.split('')?.map((ch, i) => (
-                                  <motion.span
-                                    key={i}
-                                    className="inline-block"
-                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                    transition={{ duration: 0.18 }}
-                                  >
-                                    {ch === ' ' ? '\u00A0' : ch}
-                                  </motion.span>
-                                ))}
-                              </motion.span>
-                            </motion.span>
-                            <motion.span
-                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                              initial={{ opacity: 0, x: -6 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -6 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              Single
-                            </motion.span>
-                          </div>
-                          <motion.div
-                            layoutId="student-price-container"
-                            className={`inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 w-fit whitespace-nowrap self-start ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3, ease: 'easeOut' }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">R385</span>
-                            <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <motion.h3
-                        key="hdr-collapsed-student"
-                        className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.18 }}
-                      >
-                        Single
-                      </motion.h3>
-                    )}
-                  </AnimatePresence>
-                </div>
-                {/* Price shown in header for Single card when expanded */}
-                <motion.div key="student-content"
-                  initial={false}
-                  animate={{ 
-                    height: expanded.student ? 'auto' : 0, 
-                    opacity: expanded.student ? 1 : 0,
-                    marginTop: expanded.student ? 16 : 0
-                  }}
-                  transition={{ 
-                    duration: 0.4, 
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                    height: { duration: 0.5 },
-                    opacity: { duration: 0.3, delay: expanded.student ? 0.1 : 0 }
-                  }}
-                  style={{ overflow: 'hidden' }}
-                  aria-hidden={!expanded.student}
-                  className="relative z-10"
-                >
-                  <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                    <ul className="space-y-3">
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
-                    </ul>
-                  </div>
-                </motion.div>
-                <div className={(expanded.student ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
-                  <div className="relative">
-                    <AnimatedPaymentButton 
-                      text="Choose Single Plan"
-                      className="bronze"
-                      hoverMessages={[
-                        'GP and specialist consultations',
-                        'Acute and chronic medication',
-                        'Blood tests and x-rays',
-                        'Dentistry and optometry',
-                        'Funeral benefit',
-                      ]}
-                      hoverIcons={['wallet','card','payment','check']}
-                      showArrow={false}
-                      expanded={expanded.student}
-                      onToggleExpand={() => toggleExpanded('student')}
-                      to="/plans/day-to-day?variant=single"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
-                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                      ${isDark 
-                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                      ${expanded.student ? 'rotate-180' : ''}`}
-                    onClick={() => toggleExpanded('student')}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                    </svg>
-                  </button>
-                </div>
-                {/* Hover Badge (collapsed only) */}
-                {!expanded.student && (
-                  <div
-                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
-                      isDark
-                        ? 'bg-white/10 border-white/15'
-                        : 'bg-white/30 border-white/40'
-                    }`}
-                  >
-                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                      {tabs.find(t => t.id === activeTab)?.cardLabel}
-                    </div>
-                    <motion.div layoutId="student-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
-                      <span className="text-sm align-top mr-1">R</span>
-                      <span className="text-2xl font-bold">385</span>
-                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
-                    </motion.div>
-                  </div>
-                )}
-              </motion.div>
             </motion.div>
           </motion.div>
         </LayoutGroup>
@@ -1663,9 +1658,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent: animated Single/Couple/Family */}
                   <IntroCarousel
                     images={[
-                      '/assets/images/single (1).jpg',
-                      '/assets/images/couple (1).jpg',
-                      '/assets/images/family (1).jpg',
+                      '/assets/images/Single.jpg',
+                      '/assets/images/Couple.jpg',
+                      '/assets/images/Family.jpg',
                     ]}
                   />
                   <div
@@ -1813,18 +1808,18 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Student Plan (Single) (same as Comprehensive) */}
                 <motion.div 
-                  className={`order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.student ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
-                  style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
+                  style={{ pointerEvents: 'auto' }}
                 >
                   {expanded.student && (
                     <motion.div
@@ -1837,7 +1832,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/single (1).jpg"
+                        src="/assets/images/Single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -1856,32 +1851,32 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.18 }}
                         >
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
+                          <div className="flex items-center gap-2">
                             <motion.span
-                              className="inline-flex"
-                              initial="hidden"
-                              animate="show"
-                              variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
                             >
-                              {'Hospital'.split('')?.map((ch, i) => (
-                                <motion.span
-                                  key={i}
-                                  className="inline-block"
-                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  {ch === ' ' ? '\u00A0' : ch}
-                                </motion.span>
-                              ))}
+                              <motion.span
+                                className="inline-flex"
+                                initial="hidden"
+                                animate="show"
+                                variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                              >
+                                {'Hospital'.split('')?.map((ch, i) => (
+                                  <motion.span
+                                    key={i}
+                                    className="inline-block"
+                                    variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                    transition={{ duration: 0.18 }}
+                                  >
+                                    {ch === ' ' ? '\u00A0' : ch}
+                                  </motion.span>
+                                ))}
+                              </motion.span>
                             </motion.span>
-                          </motion.span>
-                          <div className="flex items-baseline gap-2">
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
@@ -1891,15 +1886,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Value Plus
                             </motion.span>
-                            <motion.div
-                              layoutId="hospital-value-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R390</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                           </div>
+                          <motion.div
+                            layoutId="hospital-value-price"
+                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R390</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -1929,7 +1924,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance services</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity Benefit</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity benefit</span></li>
                         <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
                       </ul>
                     </div>
@@ -1989,17 +1984,180 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   )}
                 </motion.div>
 
-                {/* Family Care (same as Comprehensive) */}
+                {/* Couple Plan (same as Comprehensive) */}
                 <motion.div 
-                  className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.basic ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  whileHover={{}}
+                >
+                  {expanded.basic && (
+                    <motion.div
+                      key="couple-bg"
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                    >
+                      <img
+                        src="/assets/images/Couple.jpg"
+                        alt=""
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
+                    </motion.div>
+                  )}
+                  <div className="relative z-10 mb-[17px]">
+                    <AnimatePresence mode="wait">
+                      {expanded.basic ? (
+                        <motion.div
+                          key={`${activeTab}-hdr-expanded-couple-${expanded.basic}`}
+                          className={`relative z-20 flex flex-col items-start gap-1`}
+                          initial={{ opacity: 0, y: -6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 6 }}
+                          transition={{ duration: 0.18 }}
+                        >
+                          {/* Main category badge */}
+                          <div className="flex items-center gap-2">
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Hospital
+                            </motion.span>
+                            {/* Tier badge */}
+                            <motion.span
+                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 8 }}
+                              transition={{ duration: 0.18 }}
+                            >
+                              Platinum
+                            </motion.span>
+                          </div>
+                          <motion.div
+                            layoutId="hospital-platinum-price"
+                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R560</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        </motion.div>
+                      ) : (
+                        <motion.h3
+                          key={`${activeTab}-hdr-collapsed-couple`}
+                          className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                          initial={{ opacity: 0, y: -6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 6 }}
+                          transition={{ duration: 0.18 }}
+                        >
+                          Platinum
+                        </motion.h3>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  <motion.div key="couple-content"
+                    initial={false}
+                    animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
+                    transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                    style={{ overflow: 'hidden' }}
+                    aria-hidden={!expanded.basic}
+                  >
+                    <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                      <ul className="space-y-3">
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
+                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
+                      </ul>
+                    </div>
+                  </motion.div>
+                  <div className={(expanded.basic ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
+                    <div className="relative">
+                      <AnimatedPaymentButton 
+                        text="Choose Plan"
+                        className="silver"
+                        hoverMessages={[
+                          'Private Hospital Benefits',
+                          'Illness & accident',
+                          'Critical illness',
+                          'Maternity',
+                        ]}
+                        hoverIcons={['wallet','card','payment','check']}
+                        showArrow={false}
+                        expanded={expanded.basic}
+                        onToggleExpand={() => toggleExpanded('basic')}
+                        to="/plans/hospital?tier=Platinum&variant=couple"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                        ${isDark 
+                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                        ${expanded.basic ? 'rotate-180' : ''}`}
+                      onClick={() => toggleExpanded('basic')}
+                    >
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* Hover Badge (collapsed only) */}
+                  {!expanded.basic && (
+                    <div
+                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                        isDark
+                          ? 'bg-white/10 border-white/15'
+                          : 'bg-white/30 border-white/40'
+                      }`}
+                    >
+                      <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                        {tabs.find(t => t.id === activeTab)?.cardLabel}
+                      </div>
+                      <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                        <span className="text-sm align-top mr-1">R</span>
+                        <span className="text-2xl font-bold">560</span>
+                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
+                      </motion.div>
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Family Care (same as Comprehensive) */}
+                <motion.div 
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                    isDark 
+                      ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                      : 'bg-white border-green-200 hover:border-green-400'
+                  } ${expanded.family ? 'min-h-[400px]' : 'min-h-[140px]'} `}
+                  layout={false}
+                  initial={false}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
@@ -2014,7 +2172,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/family (1).jpg"
+                        src="/assets/images/Family.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2034,7 +2192,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           transition={{ duration: 0.18 }}
                         >
                           {/* Main category badge */}
-                          <div className="flex items-baseline gap-2">
+                          <div className="flex items-center gap-2">
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: -8 }}
@@ -2044,9 +2202,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Hospital
                             </motion.span>
-                          </div>
-                          {/* Tier badge */}
-                          <div className="flex items-baseline gap-2">
+                            {/* Tier badge */}
                             <motion.span
                               className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
                               initial={{ opacity: 0, x: 8 }}
@@ -2056,15 +2212,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                             >
                               Executive
                             </motion.span>
-                            <motion.div
-                              layoutId="hospital-executive-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R640</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
                           </div>
+                          <motion.div
+                            layoutId="hospital-executive-price"
+                            className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R640</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.h3
@@ -2154,173 +2310,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </div>
                   )}
                 </motion.div>
-
-                {/* Couple Plan (same as Comprehensive) */}
-                <motion.div 
-                  className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
-                    isDark 
-                      ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                      : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
-                  initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  whileHover={{}}
-                  style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
-                >
-                  {expanded.basic && (
-                    <motion.div
-                      key="couple-bg"
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
-                    >
-                      <img
-                        src="/assets/images/couple (1).jpg"
-                        alt=""
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <div className={`${isDark ? 'bg-black/50' : 'bg-black/35'} absolute inset-0`} />
-                    </motion.div>
-                  )}
-                  <div className="relative z-10 mb-[17px]">
-                    <AnimatePresence mode="wait">
-                      {expanded.basic ? (
-                        <motion.div
-                          key={`${activeTab}-hdr-expanded-couple-${expanded.basic}`}
-                          className={`relative z-20 flex flex-col items-start gap-1`}
-                          initial={{ opacity: 0, y: -6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 6 }}
-                          transition={{ duration: 0.18 }}
-                        >
-                          {/* Main category badge */}
-                          <motion.span
-                            className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                            initial={{ opacity: 0, x: -8 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }}
-                            transition={{ duration: 0.18 }}
-                          >
-                            Hospital
-                          </motion.span>
-                          {/* Tier badge */}
-                          <div className="flex items-baseline gap-2">
-                            <motion.span
-                              className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                              initial={{ opacity: 0, x: 8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: 8 }}
-                              transition={{ duration: 0.18 }}
-                            >
-                              Platinum
-                            </motion.span>
-                            <motion.div
-                              layoutId="hospital-platinum-price"
-                              className={`relative z-30 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                              transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                            >
-                              <span className="text-2xl font-bold text-emerald-400">R560</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                            </motion.div>
-                          </div>
-                        </motion.div>
-                      ) : (
-                        <motion.h3
-                          key={`${activeTab}-hdr-collapsed-couple`}
-                          className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
-                          initial={{ opacity: 0, y: -6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 6 }}
-                          transition={{ duration: 0.18 }}
-                        >
-                          Platinum
-                        </motion.h3>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                  <motion.div key="couple-content"
-                    initial={false}
-                    animate={{ height: expanded.basic ? 'auto' : 0, opacity: expanded.basic ? 1 : 0 }}
-                    transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                    style={{ overflow: 'hidden' }}
-                    aria-hidden={!expanded.basic}
-                  >
-                    <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                      <ul className="space-y-3">
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Private Hospital Benefits</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Illness & accident cover</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Critical illness</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Maternity</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Accidental permanent disability</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Ambulance</span></li>
-                        <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefits</span></li>
-                      </ul>
-                    </div>
-                  </motion.div>
-                  <div className={(expanded.basic ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
-                    <div className="relative">
-                      <AnimatedPaymentButton 
-                        text="Choose Plan"
-                        className="silver"
-                        hoverMessages={[
-                          'Private Hospital Benefits',
-                          'Illness & accident',
-                          'Critical illness',
-                          'Maternity',
-                        ]}
-                        hoverIcons={['wallet','card','payment','check']}
-                        showArrow={false}
-                        expanded={expanded.basic}
-                        onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/hospital?tier=Platinum&variant=couple"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.basic ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('basic')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
-                  </div>
-                  {/* Hover Badge (collapsed only) */}
-                  {!expanded.basic && (
-                    <div
-                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
-                        isDark
-                          ? 'bg-white/10 border-white/15'
-                          : 'bg-white/30 border-white/40'
-                      }`}
-                    >
-                      <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.cardLabel}
-                      </div>
-                      <motion.div layoutId="basic-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
-                        <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">560</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
-                      </motion.div>
-                    </div>
-                  )}
-                </motion.div>
-              </motion.div>
             </motion.div>
-          </LayoutGroup>
+          </motion.div>
+        </LayoutGroup>
         );
       
       case 'senior':
@@ -2346,9 +2338,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent: animated Single/Couple/Family */}
                   <IntroCarousel
                     images={[
-                      '/assets/images/single (1).jpg',
-                      '/assets/images/couple (1).jpg',
-                      '/assets/images/family (1).jpg',
+                      '/assets/images/Single.jpg',
+                      '/assets/images/Couple.jpg',
+                      '/assets/images/Family.jpg',
                     ]}
                   />
                   <div
@@ -2495,18 +2487,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Day-to-Day (Single/Couple) */}
                 <motion.div 
-                  className={`order-1 relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.student ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
-                  style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
                 >
                   {expanded.student && (
                     <motion.div
@@ -2519,7 +2510,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/single (1).jpg"
+                        src="/assets/images/Single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2675,15 +2666,15 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Hospital (Single/Couple) */}
                 <motion.div 
-                  className={`order-2 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.family ? 'min-h-[400px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
                 >
@@ -2698,7 +2689,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/Couple.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2852,18 +2843,17 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Comprehensive (Single/Couple) */}
                 <motion.div 
-                  className={`order-3 relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
-                  } min-h-[140px] `}
-                  layout="position"
+                  } ${expanded.basic ? 'min-h-[380px]' : 'min-h-[140px]'} `}
+                  layout={false}
                   initial={false}
-                  animate={showDayToDayCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{}}
-                  style={{ pointerEvents: showDayToDayCards ? 'auto' : 'none' }}
                 >
                   {expanded.basic && (
                     <motion.div
@@ -2876,7 +2866,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/Family.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2928,7 +2918,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: -8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Comprehensive
+                              Compr
                             </motion.span>
                           </div>
                           <motion.div
