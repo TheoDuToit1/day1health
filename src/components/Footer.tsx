@@ -54,7 +54,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Shield className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 11319 • CMS Ref. 1074</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 11319 • CMS Ref. DM 1074</span>
               </div>
               {/* Logo moved here, ensure it's clearly lower to align with theme toggle */}
               <div className="pt-[70px]">
@@ -99,7 +99,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 <a href="#why-choose" className={`transition-colors ${
                   isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                 }`}>
-                  Why Choose Us
+                  About Us
                 </a>
               </li>
               <li>
@@ -123,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                     <a href="https://day1health.co.za/medical-directory/" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
                       isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                     }`}>
-                      Doctor Directory
+                      GP & Dental Directory
                     </a>
                   </li>
                   <li>

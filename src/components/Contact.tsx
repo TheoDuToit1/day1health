@@ -504,7 +504,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Tier</label>
                     <select name="tier" value={quoteData.tier} onChange={handleQuoteChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                       <option value="">Select a tier</option>
-                      <option value="value">Value</option>
+                      <option value="value">Value Plus</option>
                       <option value="platinum">Platinum</option>
                       <option value="executive">Executive</option>
                     </select>

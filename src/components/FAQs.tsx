@@ -18,7 +18,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
   const faqs = [
     {
       question: "Can I go to any private hospital?",
-      answer: "Day1 Health has formal contracts with Life Healthcare, Mediclinic, Africa Health Care and Clinix hospitals nationwide. All hospital admissions must be pre-authorised via Africa Assist (0861 144 144)."
+      answer: "Day1 Health has formal contracts with Life Healthcare, Mediclinic, Africa Health Care and Clinix hospitals. Admission into net care hospital is at their discretion nationwide. All hospital admissions must be pre-authorised via Africa Assist (0861 144 144)."
     },
     {
       question: "What is the procedure if I'm diagnosed with a chronic condition?",
@@ -26,7 +26,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     },
     {
       question: "Can I buy my medication over the counter?",
-      answer: "No. Your Day1 Network GP must prescribe in line with our formulary. Both acute and chronic medication are covered (unlimited) according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
+      answer: "No. Your Day1 Network GP must prescribe in line with our formulary. Both acute and chronic medication are covered according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
     },
     {
       question: "When I see a GP/Dentist, do I have to pay cash?",
@@ -42,11 +42,11 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     },
     {
       question: "Are pre-existing conditions covered?",
-      answer: "Yes, after a 12-month waiting period. Accidents and emergency ambulance services remain covered from Day 1."
+      answer: "Yes, after a 12-month waiting period."
     },
     {
       question: "What are the waiting periods for day-to-day benefits?",
-      answer: "• GP/Acute/Pathology/Radiology/Out-of-Area: 1 month\n• Specialists/Dentistry: 3 months\n• Chronic (new): 3 months\n• Chronic (pre-existing): 12 months",
+      answer: "• GP/Acute/Pathology/Radiology/Out-of-Area: 1 month\n• Specialists/Dentistry: 3 months\n• Chronic (new): 3 months\n• Chronic (pre-existing): 12 months\n• Optometry: 12 months",
     }
   ];
 

@@ -110,8 +110,8 @@ function ProceduresPage() {
         title: 'CHRONIC MEDICATION',
         content: (
           <div className="space-y-3">
-            {p('If you are diagnosed with a chronic condition, however, you need to register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP in order to receive your chronic medication. Chronic medication may be collected from any Clicks, Dischem or Medirite pharmacy nationwide and is subject to pre-authorisation. (In respect of Day1 Health Senior members, an additional administration fee may be levied on all approved chronic medication.)')}
-            {p('You may download the Chronic Application Form by clicking on the button below or you may contact us on 0876 100 600 and request that the application form be faxed or emailed to you.')}
+            {p('If you are diagnosed with a chronic condition, however, you need to register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP in order to receive your chronic medication. Chronic medication may be collected from any Clicks, Dischem or Medirite pharmacy nationwide and is subject to pre-authorisation. (An additional administration fee may be levied on all approved chronic medication.)')}
+            {p('You may download the Chronic Application Form by clicking on the button below or you may contact us on 0876 100 600 and request that the application form be emailed to you.')}
             {btn("/assets/pdf's/procedures/Chronic-Medication-Application-Form.pdf", 'Download Chronic Application Form (PDF)')}
           </div>
         )
@@ -121,7 +121,7 @@ function ProceduresPage() {
         title: 'CLAIMS PROCEDURE',
         content: (
           <div className="space-y-4">
-            {p('Your GP visits, prescribed medication and other listed day-to-day benefits are covered within the approved Day1 Health Provider Network & formulary. To claim for out-of-area GP consultations, minor procedures and/or medication, you may download the Reimbursement Form or contact us to request one via fax or email.')}
+            {p('Your GP visits, prescribed medication and other listed day-to-day benefits are covered within the approved Day1 Health Provider Network & formulary. To claim for out-of-area GP consultations, minor procedures and/or medication, you may download the Reimbursement Form or contact us to request one via email.')}
             {p('The following information must be attached to your completed Day1 Health Reimbursement Form in order for it to be processed successfully:')}
             {list([
               'Copy of detailed account (invoice/statement)',
@@ -144,6 +144,7 @@ function ProceduresPage() {
         title: 'RESERVATION OF RIGHTS',
         content: (
           <div className="space-y-3">
+            {p('Day1health reserves the right to cancel your membership if you-')}
             {list([
               'Provide false information or fail to disclose medical information when applying for primary healthcare benefits or a hospital insurance plan.',
               'Provide false information upon submission of a claim, submit a fraudulent claim or intentionally allow a service provider to do so on your behalf.',
@@ -151,7 +152,6 @@ function ProceduresPage() {
               'Without a good explanation, neglect to inform Day1 Health that it has paid for services or supplies that were not delivered or received.',
               'Commit any other fraudulent act.',
               'failure to pay monthly contributions and/or premiums.',
-              'Day1 Health reserves the right to cancel your membership/policy at any time by furnishing you with 30 (thirty) days’ notice in writing (or such other period as may be mutually agreed upon).',
             ])}
           </div>
         )
@@ -162,12 +162,6 @@ function ProceduresPage() {
         content: (
           <div className="space-y-4">
             {p('What is the procedure to follow in the event of a medical emergency or illness and you need to go to the hospital?')}
-            <div className="w-full aspect-video rounded-lg overflow-hidden border border-gray-200 bg-black">
-              <video controls className="w-full h-full">
-                <source src="https://day1health.co.za/wp-content/uploads/2024/11/Day1-Pre-Auth-Process_video_1080.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
             {p('Always call Africa-Assist: 0861 144 144. Tell the Africa-Assist operator that you are a Day1 Health member. The operator will prompt you or the caller and request all the information that is required to get help to you as quickly as possible. Have your membership number or ID number readily available.')}
             {p('Useful hints to remember about Africa-Assist and Hospital Pre-Authorisations:')}
             {list([

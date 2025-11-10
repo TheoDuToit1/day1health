@@ -15,10 +15,7 @@ const coverItems = [
   'Illness',
   'Accident',
   'Ambulance',
-  'Specialist',
-  'Radiology',
-  'Pathology',
-  'Out-of-Area Visits',
+  'Funeral',
 ];
 
 const additionalInfoOptions: string[] = [
@@ -84,8 +81,8 @@ const HospitalPlanDetailPage: React.FC = () => {
 
   // Build cover badges per tier
   const displayCoverItems = ((): string[] => {
-    if (tierKey === 'executive') return [...coverItems, 'Illness Top-Up', 'Critical Illness'];
-    if (tierKey === 'platinum') return [...coverItems, 'Critical Illness'];
+    if (tierKey === 'executive') return [...coverItems, 'Illness Top-Up', 'Critical Illness', 'Accidental Permanent Disability'];
+    if (tierKey === 'platinum') return [...coverItems, 'Critical Illness', 'Accidental Permanent Disability'];
     return coverItems;
   })();
 
@@ -171,8 +168,8 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  // All Hospital plans: R390 per adult + R156 per child
-  const ADULT_PRICE = 390;
+  // Hospital plan pricing by tier
+  const ADULT_PRICE = tierKey === 'platinum' ? 560 : tierKey === 'executive' ? 640 : 390;
   const CHILD_PRICE = 156;
   const currentPrice = ((): number => {
     return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;

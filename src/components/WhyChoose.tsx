@@ -24,7 +24,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
     {
       img: '/icons/features-alt.png',
       title: "Underwritten by African Unity",
-      description: "Underwritten by African Unity Life — with decades of experience in the South African medical insurance market.",
+      description: "Underwritten by African Unity Life LTD — with decades of experience in the South African medical insurance market.",
     },
     {
       img: '/icons/population-globe.png',
@@ -63,7 +63,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
           }`}>
-            Why Choose Day1Health
+            About Us
           </span>
           <h2 id="why-choose" className={`text-4xl lg:text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
@@ -73,7 +73,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
           <p className={`text-xl max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            We believe every South African deserves access to quality healthcare. Here's what makes us different.
+            We believe every South African resident deserves access to quality healthcare. Here's what makes us different.
           </p>
         </div>
 

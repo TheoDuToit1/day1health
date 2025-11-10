@@ -645,7 +645,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/comprehensive?variant=single&tier=Executive"
+                        to="/plans/comprehensive?variant=single&tier=Platinum"
                       />
                     </div>
                     <button
@@ -820,7 +820,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/comprehensive?variant=single&tier=Platinum"
+                        to="/plans/comprehensive?variant=single&tier=Executive"
                       />
                     </div>
                     <button
@@ -2107,7 +2107,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/hospital?tier=Platinum&variant=couple"
+                        to="/plans/hospital?tier=Platinum&variant=single"
                       />
                     </div>
                     <button
@@ -2271,7 +2271,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/hospital?tier=Executive&variant=family"
+                        to="/plans/hospital?tier=Executive&variant=single"
                       />
                     </div>
                     <button
@@ -2982,7 +2982,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/senior-plan?category=Comprehensive&variant=couple"
+                        to="/plans/senior-plan?category=Comprehensive&variant=single"
                       />
                     </div>
                     <button
