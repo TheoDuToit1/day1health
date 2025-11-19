@@ -198,7 +198,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     </a>
                     {/* Hover submenu (improved) */}
                     <div
-                      className={`absolute top-0 left-full ml-2 z-50 w-72 rounded-xl border shadow-2xl p-3 opacity-0 invisible translate-y-1 scale-95 origin-left
+                      className={`absolute -top-20 left-full ml-2 z-50 w-72 rounded-xl border shadow-2xl p-3 opacity-0 invisible translate-y-1 scale-95 origin-left
                         group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-100
                         group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100
                         transition-all duration-200 ${
@@ -209,14 +209,14 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     >
                       {/* Pointer arrow */}
                       <div
-                        className={`absolute -left-1 top-3 w-3 h-3 rotate-45 ${
+                        className={`absolute -left-1 top-24 w-3 h-3 rotate-45 ${
                           isDark ? 'bg-gray-900 border-l border-t border-gray-700' : 'bg-white border-l border-t border-gray-200'
                         }`}
                         aria-hidden="true"
                       />
                       <ul className="space-y-1">
                         {[
-                          { label: 'Doctor Directory', href: 'https://day1health.co.za/medical-directory/' },
+                          { label: 'GP & Dental Directory', href: 'https://day1health.co.za/medical-directory/' },
                           { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
                           { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
                           { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },

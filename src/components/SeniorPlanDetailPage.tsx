@@ -14,7 +14,6 @@ const coverItems = [
   'Unlimited Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
-  'Specialist',
   'Radiology',
   'Pathology',
   'Out-of-Area Visits',
@@ -66,12 +65,20 @@ const SeniorPlanDetailPage: React.FC = () => {
       ];
     }
     if (categoryDisplay === 'comprehensive') {
-      return [
+      const dayToDayItems = coverItems;
+      const extraItems = [
         'Unlimited Doctor Visits etc.',
         'Private Hospital Benefits',
         'Illness / Accident / Ambulance',
         'Funeral Cover',
       ];
+      const combined: string[] = [...dayToDayItems];
+      extraItems.forEach((item) => {
+        if (!combined.includes(item)) {
+          combined.push(item);
+        }
+      });
+      return combined;
     }
     // day-to-day uses default with Funeral Cover already included
     return coverItems;
@@ -125,16 +132,6 @@ const SeniorPlanDetailPage: React.FC = () => {
           'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
       },
       {
-        title: 'Pathology',
-        text:
-          'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
-      },
-      {
-        title: 'Specialist Benefit',
-        text:
-          'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
-      },
-      {
         title: 'Basic Dentistry',
         text:
           'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
@@ -167,7 +164,7 @@ const SeniorPlanDetailPage: React.FC = () => {
       {
         title: 'Family Funeral Benefit',
         text:
-          'Principal, Spouse & Child > 14 years R10,000. Child > 6 years R5,000. Child > 0 years > R2,500. Stillborn > 28 weeks R1,250. A 3 month waiting period applies.',
+          'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)',
       },
     ];
   })();

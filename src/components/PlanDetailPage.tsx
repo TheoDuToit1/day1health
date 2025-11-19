@@ -887,7 +887,6 @@ const PlanDetailPage: React.FC = () => {
                               <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
                               <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
                               <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Up to 4 children</span></li>
                             </ul>
                           </div>
                         </motion.div>
@@ -901,7 +900,6 @@ const PlanDetailPage: React.FC = () => {
                               'Blood tests and x-rays',
                               'Dentistry and optometry',
                               'Funeral benefit',
-                              'Up to 4 children',
                             ]}
                             hoverIcons={['wallet','card','payment','check']}
                             showArrow={false}

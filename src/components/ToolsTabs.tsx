@@ -113,7 +113,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     });
 
   // Family children selection (1-4 children), used to compute total price
-  const FAMILY_CHILD_PRICE = 193;
+  // const FAMILY_CHILD_PRICE = 193; // Currently unused but kept for future pricing calculations
   const [familyChildren, setFamilyChildren] = useState(1);
 
 
@@ -157,17 +157,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
   ];
 
   const handleTabClick = (tabId: string) => {
-    // When changing tabs, ensure any open pricing cards are closed
-    setActiveTab(tabId);
+    // When changing tabs, ensure any open pricing cards are closed immediately
     setExpanded({ intro: false, family: false, basic: false, student: false });
+    // Small delay to ensure state is reset before tab change
+    setTimeout(() => {
+      setActiveTab(tabId);
+    }, 10);
   };
 
   // Defensive: if activeTab changes from anywhere, collapse any open cards
   useEffect(() => {
-    // Force complete reset of expanded state
+    // Force immediate and complete reset of expanded state
     setExpanded({ intro: false, family: false, basic: false, student: false });
-    // Keep cards visible - no flashing
-    setShowDayToDayCards(true);
+    // Reset day-to-day cards visibility for clean state
+    if (activeTab === 'daytoday') {
+      setShowDayToDayCards(true);
+    }
   }, [activeTab]);
 
   // On mount, do not restore any saved tab; always default to Day-To-Day
@@ -179,8 +184,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     switch (activeTab) {
       case 'comprehensive':
         return (
-          <LayoutGroup>
-            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-5 sm:px-6 md:px-2`}>
+          <LayoutGroup key={`comprehensive-${activeTab}`}>
+            <motion.div key={`comprehensive-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-5 sm:px-6 md:px-2`}>
               <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
                 {/* Introduction Column (copied from Day-to-Day) */}
                 <motion.div 
@@ -352,7 +357,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Student Plan (Single) (copied from Day-to-Day) */}
                 <motion.div 
-                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -488,22 +493,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/comprehensive?variant=single&category=Value"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.student ? 'Collapse Value Plus details' : 'Expand Value Plus details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.student ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('student')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.student ? 'Collapse Value Plus details' : 'Expand Value Plus details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.student ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('student')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.student && (
                     <div
@@ -526,7 +531,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Family Care (copied from Day-to-Day) */}
                 <motion.div 
-                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -645,25 +650,25 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/comprehensive?variant=single&tier=Executive"
+                        to="/plans/comprehensive?variant=single&tier=Platinum"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.family ? 'Collapse Executive details' : 'Expand Executive details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.family ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('family')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
-                  </div>
+                </div>
+                <button
+                  type="button"
+                  aria-label={expanded.family ? 'Collapse Executive details' : 'Expand Executive details'}
+                  className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                  transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                  ${isDark 
+                    ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                    : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                  ${expanded.family ? 'rotate-180' : ''}`}
+                  onClick={() => toggleExpanded('family')}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                  </svg>
+                </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.family && (
                     <div
@@ -687,7 +692,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Couple Plan (copied from Day-to-Day) */}
                 <motion.div 
-                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -820,45 +825,44 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/comprehensive?variant=single&tier=Platinum"
+                        to="/plans/comprehensive?variant=single&tier=Executive"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.basic ? 'Collapse Platinum details' : 'Expand Platinum details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.basic ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('basic')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
-                  </div>
-                  {/* Hover Badge (collapsed only) */}
-                  {!expanded.basic && (
-                    <div
-                      className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
-                        isDark
-                          ? 'bg-white/10 border-white/15'
-                          : 'bg-white/30 border-white/40'
-                      }`}
-                    >
-                      <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
-                        {tabs.find(t => t.id === activeTab)?.cardLabel}
-                      </div>
-                      <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
-                        <span className="text-sm align-top mr-1">R</span>
-                        <span className="text-2xl font-bold">985</span>
-                        <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
-                      </motion.div>
+                </div>
+                <button
+                  type="button"
+                  aria-label={expanded.basic ? 'Collapse Platinum details' : 'Expand Platinum details'}
+                  className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                  transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                  ${isDark 
+                    ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                    : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                  ${expanded.basic ? 'rotate-180' : ''}`}
+                  onClick={() => toggleExpanded('basic')}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                  </svg>
+                </button>
+                {!expanded.basic && (
+                  <div
+                    className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                      isDark
+                        ? 'bg-white/10 border-white/15'
+                        : 'bg-white/30 border-white/40'
+                    }`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>
+                      {tabs.find(t => t.id === activeTab)?.cardLabel}
                     </div>
-                  )}
-                </motion.div>
+                    <motion.div layoutId="comprehensive-platinum-price" className={`leading-none text-green-600`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                      <span className="text-sm align-top mr-1">R</span>
+                      <span className="text-2xl font-bold">985</span>
+                      <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mth</span>
+                    </motion.div>
+                  </div>
+                )}
+              </motion.div>
               </motion.div>
             </motion.div>
           </LayoutGroup>
@@ -866,9 +870,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       
       case 'daytoday':
         return (
-          <LayoutGroup>
-            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
-              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
+          <LayoutGroup key={`daytoday-${activeTab}`}>
+            <motion.div key={`daytoday-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible pb-8">
               {/* Introduction Column */}
               <motion.div 
                 className={`min-w-0 relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -1041,7 +1045,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Student Plan (Single) */}
               <motion.div 
-                className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
@@ -1194,22 +1198,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       to="/plans/day-to-day?variant=single"
                     />
                   </div>
-                  <button
-                    type="button"
-                    aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
-                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                      ${isDark 
-                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                      ${expanded.student ? 'rotate-180' : ''}`}
-                    onClick={() => toggleExpanded('student')}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                    </svg>
-                  </button>
                 </div>
+                <button
+                  type="button"
+                  aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
+                  className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                  transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                  ${isDark 
+                    ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                    : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                  ${expanded.student ? 'rotate-180' : ''}`}
+                  onClick={() => toggleExpanded('student')}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                  </svg>
+                </button>
                 {!expanded.student && (
                   <div
                     className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
@@ -1232,7 +1236,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Couple Plan */}
               <motion.div 
-                className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
@@ -1382,22 +1386,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       to="/plans/comprehensive?variant=single&tier=Platinum"
                     />
                   </div>
-                  <button
-                    type="button"
-                    aria-label={expanded.basic ? 'Collapse Platinum details' : 'Expand Platinum details'}
-                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                      ${isDark 
-                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                      ${expanded.basic ? 'rotate-180' : ''}`}
-                    onClick={() => toggleExpanded('basic')}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                    </svg>
-                  </button>
                 </div>
+                <button
+                  type="button"
+                  aria-label={expanded.basic ? 'Collapse Platinum details' : 'Expand Platinum details'}
+                  className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                  transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                  ${isDark 
+                    ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                    : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                  ${expanded.basic ? 'rotate-180' : ''}`}
+                  onClick={() => toggleExpanded('basic')}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                  </svg>
+                </button>
                 {!expanded.basic && (
                   <div
                     className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
@@ -1420,7 +1424,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
               {/* Family Care */}
               <motion.div 
-                className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                   isDark 
                     ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                     : 'bg-white border-green-200 hover:border-green-400'
@@ -1593,22 +1597,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       to={`/plans/day-to-day?variant=family&children=${familyChildren}`}
                     />
                   </div>
-                  <button
-                    type="button"
-                    aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
-                    className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                      ${isDark 
-                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                      ${expanded.family ? 'rotate-180' : ''}`}
-                    onClick={() => toggleExpanded('family')}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                    </svg>
-                  </button>
                 </div>
+                <button
+                  type="button"
+                  aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
+                  className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                  transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                  ${isDark 
+                    ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                    : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                  ${expanded.family ? 'rotate-180' : ''}`}
+                  onClick={() => toggleExpanded('family')}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                  </svg>
+                </button>
                 {/* Hover Badge (collapsed only) */}
                 {!expanded.family && (
                   <div
@@ -1637,8 +1641,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     
       case 'hospital':
         return (
-          <LayoutGroup>
-            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+          <LayoutGroup key={`hospital-${activeTab}`}>
+            <motion.div key={`hospital-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
               <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-6 md:gap-5 items-start overflow-visible">
                 {/* Introduction Column (same as Comprehensive) */}
                 <motion.div 
@@ -1808,7 +1812,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Student Plan (Single) (same as Comprehensive) */}
                 <motion.div 
-                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -1950,7 +1954,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <button
                       type="button"
                       aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
                           ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
@@ -1986,7 +1990,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Couple Plan (same as Comprehensive) */}
                 <motion.div 
-                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2107,13 +2111,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/hospital?tier=Platinum&variant=couple"
+                        to="/plans/hospital?tier=Platinum&variant=single"
                       />
                     </div>
                     <button
                       type="button"
                       aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
                           ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
@@ -2149,7 +2153,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Family Care (same as Comprehensive) */}
                 <motion.div 
-                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2271,13 +2275,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/hospital?tier=Executive&variant=family"
+                        to="/plans/hospital?tier=Executive&variant=single"
                       />
                     </div>
                     <button
                       type="button"
                       aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
                           ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
@@ -2317,8 +2321,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       
       case 'senior':
         return (
-          <LayoutGroup>
-            <motion.div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+          <LayoutGroup key={`senior-${activeTab}`}>
+            <motion.div key={`senior-container-${activeTab}`} className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
               <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-6 md:gap-5 items-start overflow-visible">
                 {/* Introduction Column (Senior-Plan intro) */}
                 <motion.div 
@@ -2487,7 +2491,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 </motion.div>
                 {/* Day-to-Day (Single/Couple) */}
                 <motion.div 
-                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative z-30 group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2630,7 +2634,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <button
                       type="button"
                       aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
                           ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
@@ -2666,7 +2670,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Hospital (Single/Couple) */}
                 <motion.div 
-                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2807,7 +2811,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <button
                       type="button"
                       aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
                           ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
@@ -2843,7 +2847,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 
                 {/* Comprehensive (Single/Couple) */}
                 <motion.div 
-                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-hidden transform-gpu ${
+                  className={`relative group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
                     isDark 
                       ? 'bg-gray-800 border-green-700 hover:border-green-500' 
                       : 'bg-white border-green-200 hover:border-green-400'
@@ -2982,13 +2986,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/senior-plan?category=Comprehensive&variant=couple"
+                        to="/plans/senior-plan?category=Comprehensive&variant=single"
                       />
                     </div>
                     <button
                       type="button"
                       aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
                         transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
                         ${isDark 
                           ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
@@ -3116,7 +3120,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 }
               }}
             >
-              {tabs.map((tab, index) => (
+              {tabs.map((tab) => (
                 <motion.button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}

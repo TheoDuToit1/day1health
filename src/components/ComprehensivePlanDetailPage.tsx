@@ -91,23 +91,31 @@ const ComprehensivePlanDetailPage: React.FC = () => {
       ];
     }
     if (tierParam === 'platinum') {
+      const filteredCoverItems = coverItems.filter(item => 
+        !['Specialist', 'Radiology', 'Pathology', 'Out-of-Area Visits'].includes(item)
+      );
       return [
-        ...coverItems,
+        ...filteredCoverItems,
         'Private Hospital Benefits',
         'Illness',
         'Accident',
         'Critical Illness',
+        'Accidental Permanent Disability',
         'Ambulance',
       ];
     }
     if (tierParam === 'executive') {
+      const filteredCoverItems = coverItems.filter(item => 
+        !['Specialist', 'Radiology', 'Pathology', 'Out-of-Area Visits'].includes(item)
+      );
       return [
-        ...coverItems,
+        ...filteredCoverItems,
         'Private Hospital Benefits',
         'Illness',
         'Illness Top-Up',
         'Accident',
         'Critical Illness',
+        'Accidental Permanent Disability',
         'Ambulance',
       ];
     }

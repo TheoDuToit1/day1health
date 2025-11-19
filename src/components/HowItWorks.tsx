@@ -26,7 +26,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     {
       icon: Stethoscope,
       title: "Visit Our Network Providers",
-      description: "Use your cover at thousands of healthcare providers across South Africa. Present your membership card and you're covered.",
+      description: "Use your cover at thousands of healthcare providers across South Africa. Present your membership card and you're covered.\n\n*Terms & Conditions Apply*",
       color: "bg-blue-500"
     },
     {
@@ -217,7 +217,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                       {step.title}
                     </h3>
                     
-                    <p className={`text-sm ${
+                    <p className={`text-sm whitespace-pre-line ${
                       isDark ? '!text-gray-300' : '!text-gray-600'
                     }`}>
                       {step.description}
@@ -273,7 +273,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
               transition={{ delay: 0.6, duration: 0.6 }}
               viewport={{ once: true }}
             >
-              Join thousands of South Africans who trust Day1Health for their healthcare needs.
+              Join thousands of South African residence who trust Day1Health for their healthcare needs.
             </motion.p>
             <motion.div 
               className="flex flex-row flex-wrap items-center justify-center gap-3"
