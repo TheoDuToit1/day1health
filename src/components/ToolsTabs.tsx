@@ -1951,22 +1951,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/hospital?tier=Value Plus&variant=single"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.student ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('student')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.student ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('student')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.student && (
                     <div
@@ -2114,22 +2114,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/hospital?tier=Platinum&variant=single"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.basic ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('basic')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.basic ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('basic')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.basic && (
                     <div
@@ -2278,22 +2278,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/hospital?tier=Executive&variant=single"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.family ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('family')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.family ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('family')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.family && (
                     <div
@@ -2631,22 +2631,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/senior-plan?category=Day-to-Day&variant=single"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.student ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('student')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.student ? 'Collapse Student Care details' : 'Expand Student Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.student ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('student')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.student && (
                     <div
@@ -2808,22 +2808,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/senior-plan?category=Hospital&variant=single"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.family ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('family')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.family ? 'Collapse Family Care details' : 'Expand Family Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.family ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('family')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.family && (
                     <div
@@ -2989,22 +2989,22 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         to="/plans/senior-plan?category=Comprehensive&variant=single"
                       />
                     </div>
-                    <button
-                      type="button"
-                      aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
-                      className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                        transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                        ${isDark 
-                          ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                          : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                        ${expanded.basic ? 'rotate-180' : ''}`}
-                      onClick={() => toggleExpanded('basic')}
-                    >
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                      </svg>
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    aria-label={expanded.basic ? 'Collapse Couple Care details' : 'Expand Couple Care details'}
+                    className={`absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                      transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                      ${isDark 
+                        ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                        : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                      ${expanded.basic ? 'rotate-180' : ''}`}
+                    onClick={() => toggleExpanded('basic')}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                    </svg>
+                  </button>
                   {/* Hover Badge (collapsed only) */}
                   {!expanded.basic && (
                     <div
