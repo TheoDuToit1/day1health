@@ -12,6 +12,7 @@ const links: { title: string; href: string }[] = [
   { title: 'PAIA Manual', href: "/assets/pdf's/Legal and Regulatory Information/DAY-1-HEALTH-PTY-LTD-PAIA-Manual.pdf" },
   { title: 'PAIA Request for Access to Records', href: "/assets/pdf's/Legal and Regulatory Information/PAIA-FORM-2.pdf" },
   { title: 'PAIA Outcome and Fees Payable', href: "/assets/pdf's/Legal and Regulatory Information/PAIA-FORM-3.pdf" },
+  { title: 'POPI Privacy Policy', href: "/assets/pdf's/DAY 1 HEALTH PTY LTD - Privacy Policy.pdf" },
 ];
 
 function RegulatoryInformationPage() {
