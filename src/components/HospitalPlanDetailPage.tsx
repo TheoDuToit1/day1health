@@ -170,8 +170,12 @@ const HospitalPlanDetailPage: React.FC = () => {
 
   // Hospital plan pricing by tier
   const ADULT_PRICE = tierKey === 'platinum' ? 560 : tierKey === 'executive' ? 640 : 390;
-  const CHILD_PRICE = 156;
+  const COUPLE_PRICE = tierKey === 'platinum' ? 1008 : tierKey === 'executive' ? 1152 : 702;
+  const CHILD_PRICE = tierKey === 'platinum' ? 224 : tierKey === 'executive' ? 256 : 156;
   const currentPrice = ((): number => {
+    if (adultCount === 2) {
+      return COUPLE_PRICE + CHILD_PRICE * childCount;
+    }
     return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;
   })();
 
@@ -667,7 +671,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
                             transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
                           >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE * 2}`}</span>
+                            <span className="text-2xl font-bold text-emerald-400">{`R${COUPLE_PRICE}`}</span>
                             <span className={`text-white text-sm font-normal`}>/month</span>
                           </motion.div>
                         )}
@@ -731,7 +735,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
                             <motion.div layoutId="basic-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
                               <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{ADULT_PRICE * 2}</span>
+                              <span className="text-2xl font-bold">{COUPLE_PRICE}</span>
                               <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
                             </motion.div>
                           </div>

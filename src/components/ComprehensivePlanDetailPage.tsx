@@ -259,17 +259,21 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   const pricing = (() => {
     switch (tierParam) {
       case 'platinum':
-        return { adult: 895, child: 358 };
+        return { adult: 895, child: 358, couple: 1611 };
       case 'executive':
-        return { adult: 985, child: 394 };
+        return { adult: 985, child: 394, couple: 1724 };
       case 'value':
       default:
-        return { adult: 665, child: 266 };
+        return { adult: 665, child: 266, couple: 1131 };
     }
   })();
   const ADULT_PRICE = pricing.adult;
   const CHILD_PRICE = pricing.child;
+  const COUPLE_PRICE = pricing.couple;
   const currentPrice = ((): number => {
+    if (adultCount === 2) {
+      return COUPLE_PRICE + CHILD_PRICE * childCount;
+    }
     return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;
   })();
 
