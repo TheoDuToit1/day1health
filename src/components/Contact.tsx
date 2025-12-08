@@ -660,7 +660,17 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   <select name="infoAbout" value={prospectiveData.infoAbout} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                     <option value="">Select an option</option>
                     <option>How to Sign Up</option>
-                    <option>General Information</option>
+                    <option>Plan Benefits & Pricing</option>
+                    <option>Doctor Visits & Day-to-Day Cover</option>
+                    <option>Private Hospital Cover</option>
+                    <option>Combined Cover (Hospital + Doctor Visits)</option>
+                    <option>Existing Member Support</option>
+                    <option>Claims & Benefits Enquiries</option>
+                    <option>Add a Spouse / Child / Family Member</option>
+                    <option>Upgrade or Change My Plan</option>
+                    <option>Employer / Business Group Cover</option>
+                    <option>Partnership or Broker Enquiries</option>
+                    <option>Technical Support (App Login)</option>
                   </select>
                 </div>
                 <div className="sm:col-span-2">
