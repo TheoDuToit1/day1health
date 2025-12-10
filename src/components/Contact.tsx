@@ -150,28 +150,70 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
     setScheduleData(prev => ({ ...prev, [name]: value }));
   };
 
-  const submitExisting = (e: React.FormEvent) => {
+  const submitExisting = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Existing Member form submitted:', existingMemberData);
-    setIsExistingMemberOpen(false);
-    setExistingMemberData({ firstName: '', lastName: '', phone: '', email: '', enquiry: '', message: '' });
-    alert("Thanks! We'll assist you shortly.");
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'existing', data: existingMemberData })
+      });
+      
+      if (response.ok) {
+        setIsExistingMemberOpen(false);
+        setExistingMemberData({ firstName: '', lastName: '', phone: '', email: '', enquiry: '', message: '' });
+        alert("Thanks! We'll assist you shortly.");
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
-  const submitProspective = (e: React.FormEvent) => {
+  const submitProspective = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Prospective Client form submitted:', prospectiveData);
-    setIsProspectiveOpen(false);
-    setProspectiveData({ firstName: '', lastName: '', phone: '', email: '', infoAbout: '', heardFrom: '', message: '' });
-    alert("Thanks! We'll be in touch soon.");
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'prospective', data: prospectiveData })
+      });
+      
+      if (response.ok) {
+        setIsProspectiveOpen(false);
+        setProspectiveData({ firstName: '', lastName: '', phone: '', email: '', infoAbout: '', heardFrom: '', message: '' });
+        alert("Thanks! We'll be in touch soon.");
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
-  const submitQuote = (e: React.FormEvent) => {
+  const submitQuote = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Quote me form submitted:', quoteData);
-    setIsQuoteOpen(false);
-    setQuoteData({ firstName: '', lastName: '', phone: '', email: '', planCategory: '', seniorCategory: '', tier: '', subCategory: '', message: '', children: [] });
-    alert('Thanks! We\'ll prepare a quote and contact you shortly.');
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'quote', data: quoteData })
+      });
+      
+      if (response.ok) {
+        setIsQuoteOpen(false);
+        setQuoteData({ firstName: '', lastName: '', phone: '', email: '', planCategory: '', seniorCategory: '', tier: '', subCategory: '', message: '', children: [] });
+        alert('Thanks! We\'ll prepare a quote and contact you shortly.');
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   const submitSchedule = (e: React.FormEvent) => {
