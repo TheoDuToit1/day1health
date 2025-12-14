@@ -32,6 +32,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView: _isFooterInView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNetworkSearchOpen, setIsNetworkSearchOpen] = useState(false);
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -471,6 +472,73 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               <div className="space-y-2">
                 {navItems.map((item, index) => {
                   const isItemActive = _isFooterInView ? (item.id === 'procedures') : (activeSection === item.id);
+                  
+                  if (item.id === 'network-search') {
+                    return (
+                      <div key={item.id} className="relative">
+                        <button
+                          onClick={() => setIsNetworkSearchOpen(!isNetworkSearchOpen)}
+                          className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center space-x-4 group ${
+                            isItemActive
+                              ? isDark 
+                                ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/25'
+                                : 'bg-gradient-to-r from-green-50 to-green-100 text-green-700 border-2 border-green-200 shadow-lg shadow-green-500/10'
+                              : isDark 
+                                ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                          }`}
+                          style={{
+                            animationDelay: `${index * 50}ms`,
+                            animation: isMenuOpen ? 'slideInFromRight 0.4s ease-out forwards' : 'none'
+                          }}
+                        >
+                          <item.icon className={`w-5 h-5 transition-all duration-300 ${
+                            isItemActive 
+                              ? 'text-current scale-110' 
+                              : 'group-hover:scale-105'
+                          }`} />
+                          <span className="font-medium text-base">{item.label}</span>
+                          <ChevronRight className={`ml-auto w-5 h-5 transition-transform duration-300 ${
+                            isNetworkSearchOpen ? 'rotate-90' : ''
+                          }`} />
+                        </button>
+                        
+                        {/* Dropdown submenu - positioned above */}
+                        {isNetworkSearchOpen && (
+                          <div className={`absolute left-0 right-0 bottom-full mb-2 mx-4 rounded-xl border shadow-2xl p-3 z-50 ${
+                            isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+                          }`}>
+                            <div className="space-y-1">
+                              {[
+                                { label: 'GP & Dental Directory', href: 'https://day1health.co.za/medical-directory/' },
+                                { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
+                                { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
+                                { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },
+                                { label: 'Iso Leso Optics', href: 'https://search.mymembership.co.za/Search/?Id=dff1cb34-a717-47e0-a58d-8e5d15744e77' },
+                                { label: 'Clinix Health Group', href: 'https://clinix.co.za/hospitals/' },
+                              ].map((subItem) => (
+                                <a
+                                  key={subItem.label}
+                                  href={subItem.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`block px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
+                                    isDark
+                                      ? 'text-gray-300 hover:text-white hover:bg-gray-800'
+                                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                                  }`}
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  {subItem.label}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  
                   return (
                     <button
                       key={item.id}

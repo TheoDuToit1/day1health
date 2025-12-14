@@ -11,6 +11,8 @@ const SeniorPlanDetailPage = lazy(() => import('./components/SeniorPlanDetailPag
 const RegulatoryInformationPage = lazy(() => import('./components/RegulatoryInformationPage'));
 const JuniorExecutivePlanDetailPage = lazy(() => import('./components/JuniorExecutivePlanDetailPage'));
 const ProceduresPage = lazy(() => import('./components/ProceduresPage'));
+const ProtectedAdminPage = lazy(() => import('./admin/ProtectedAdminPage'));
+const DirectoryPage = lazy(() => import('./directory/DirectoryPage'));
 
 // Smooth scroll enhancement hook
 const useSmoothScrollEnhancement = () => {
@@ -276,6 +278,16 @@ function App() {
         <Route path="/procedures" element={
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <ProceduresPage />
+          </Suspense>
+        } />
+        <Route path="/admin" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ProtectedAdminPage />
+          </Suspense>
+        } />
+        <Route path="/directory" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <DirectoryPage />
           </Suspense>
         } />
         {/* Catch-all: render the SPA for any other route */}

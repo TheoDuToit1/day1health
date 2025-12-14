@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -47,6 +47,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   const [childCount, setChildCount] = useState(0);
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
+  const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
@@ -354,19 +355,19 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                       {tierParam === 'value' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R665.00 through R2,195.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R665.00 - R2,195.00</div>
                         </div>
                       )}
                       {tierParam === 'platinum' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R895.00 through R3,043.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R895.00 - R3,043.00</div>
                         </div>
                       )}
                       {tierParam === 'executive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Executive Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R985.00 through R3,300.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R985.00 - R3,300.00</div>
                         </div>
                       )}
                     </div>
@@ -376,25 +377,63 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                 <motion.div
                   className={`mt-4 rounded-xl border p-4 ${isDark ? 'bg-emerald-900/10 border-emerald-800' : 'bg-white/70 backdrop-blur-md border-gray-200'}`}
                   initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.4 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
-                  <div className="flex flex-wrap items-center gap-2">
+                  {/* Desktop: Grid layout */}
+                  <div className="hidden sm:flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
                     {displayCoverItems.map((c: string, i: number) => (
                       <motion.span
                         key={c}
                         className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
                         initial={{ opacity: 0, y: 8 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.05 * i }}
                         whileHover={{ scale: 1.03 }}
                       >
                         <Check className="w-3.5 h-3.5" /> {c}
                       </motion.span>
                     ))}
+                  </div>
+
+                  {/* Mobile: Carousel */}
+                  <div className="sm:hidden">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{coverCarouselIndex + 1} / {displayCoverItems.length}</div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setCoverCarouselIndex((prev) => (prev === 0 ? displayCoverItems.length - 1 : prev - 1))}
+                        className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
+                        aria-label="Previous cover item"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <motion.div
+                        key={coverCarouselIndex}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex-1"
+                      >
+                        <motion.span
+                          className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border w-full justify-center ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
+                          whileHover={{ scale: 1.03 }}
+                        >
+                          <Check className="w-3.5 h-3.5" /> {displayCoverItems[coverCarouselIndex]}
+                        </motion.span>
+                      </motion.div>
+                      <button
+                        onClick={() => setCoverCarouselIndex((prev) => (prev === displayCoverItems.length - 1 ? 0 : prev + 1))}
+                        className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
+                        aria-label="Next cover item"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               </motion.div>
@@ -407,8 +446,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                 <motion.div 
                   className="col-span-12 lg:col-span-8 xl:col-span-9"
                   initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
                   {/* Tabs */}
@@ -436,8 +474,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
@@ -446,8 +483,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                             <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
+                              animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
                               className={`rounded-lg border p-4 ${
                                 isDark 
@@ -478,8 +514,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <h3 className={`text-base font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Additional information</h3>
