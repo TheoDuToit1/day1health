@@ -175,10 +175,13 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                 }`}>Phone</th>
                 <th className={`px-6 py-4 text-left text-sm font-semibold ${
                   isDark ? 'text-gray-300' : 'text-gray-900'
-                }`}>Status</th>
+                }`}>Latitude</th>
                 <th className={`px-6 py-4 text-left text-sm font-semibold ${
                   isDark ? 'text-gray-300' : 'text-gray-900'
-                }`}>Verified</th>
+                }`}>Longitude</th>
+                <th className={`px-6 py-4 text-left text-sm font-semibold ${
+                  isDark ? 'text-gray-300' : 'text-gray-900'
+                }`}>Status</th>
                 <th className={`px-6 py-4 text-left text-sm font-semibold ${
                   isDark ? 'text-gray-300' : 'text-gray-900'
                 }`}>Actions</th>
@@ -239,6 +242,16 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                     >
                       {provider.phone}
                     </a>
+                  </td>
+                  <td className={`px-6 py-4 text-sm font-mono ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>
+                    {provider.latitude ? provider.latitude.toFixed(6) : '—'}
+                  </td>
+                  <td className={`px-6 py-4 text-sm font-mono ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>
+                    {provider.longitude ? provider.longitude.toFixed(6) : '—'}
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium gap-1 ${
