@@ -753,7 +753,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                       {/* Logo positioning: left-aligned on mobile; top-right on larger screens */}
                       {slide.id === 0 && (
                         <motion.div 
-                          className="absolute z-10 top-44 left-1/2 -translate-x-1/2 -ml-16 sm:top-10 sm:left-auto sm:right-[102px] sm:translate-x-0 sm:ml-0 flex flex-col items-center"
+                          className="absolute z-10 top-16 left-1/2 -translate-x-1/2 -ml-20 sm:top-10 sm:left-auto sm:right-[102px] sm:translate-x-0 sm:ml-0 flex flex-col items-center"
                           initial={{ opacity: 0, x: 20, y: 20, scale: 0.9 }}
                           animate={{ opacity: 1, x: 0, y: 0, scale: 0.9 }}
                           transition={{ delay: 1, duration: 0.5 }}
@@ -763,11 +763,11 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             alt="DAY1HEALTH logo"
                             width="192"
                             height="48"
-                            className="w-20 sm:w-28 md:w-36 lg:w-44 xl:w-48 pointer-events-none select-none"
+                            className="w-22 sm:w-28 md:w-36 lg:w-44 xl:w-48 pointer-events-none select-none"
                             onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
                           />
                           <motion.p
-                            className="text-xs sm:text-sm md:text-base -mt-4 text-center font-medium"
+                            className="text-xs sm:text-sm md:text-base -mt-8 text-center font-medium"
                             style={{ color: '#1a568c' }}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
