@@ -110,10 +110,10 @@ app.post('/api/send-email', async (req, res) => {
       subject = `[PROSPECTIVE CLIENT] ${data.firstName} ${data.lastName} - ${data.infoAbout}`;
       htmlContent = generateProspectiveClientEmail(data, 'sales@day1.co.za');
     } else if (isQuote(data)) {
-      toEmail = 'sales@day1.co.za';
+      toEmail = 'riegal.evip@gmail.com';
       fromEmail = 'website@day1.co.za';
       subject = `[QUOTE REQUEST] ${data.firstName} ${data.lastName} - ${data.planCategory}`;
-      htmlContent = generateQuoteEmail(data, 'sales@day1.co.za');
+      htmlContent = generateQuoteEmail(data, 'riegal.evip@gmail.com');
     } else {
       return res.status(400).json({ error: 'Invalid form data' });
     }
