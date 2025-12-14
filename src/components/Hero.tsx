@@ -767,7 +767,7 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed, specificSlide }: HeroPr
                             onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
                           />
                           <motion.p
-                            className="text-xs sm:text-sm md:text-base -mt-2 text-center font-medium"
+                            className="text-xs sm:text-sm md:text-base -mt-4 text-center font-medium"
                             style={{ color: '#1a568c' }}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
