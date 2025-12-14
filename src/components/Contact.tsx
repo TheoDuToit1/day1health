@@ -153,7 +153,8 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
   const submitExisting = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/send-email', {
+      const apiUrl = import.meta.env.PROD ? '/api/send-email' : 'http://localhost:3001/api/send-email';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ formType: 'existing', data: existingMemberData })
@@ -175,7 +176,8 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
   const submitProspective = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/send-email', {
+      const apiUrl = import.meta.env.PROD ? '/api/send-email' : 'http://localhost:3001/api/send-email';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ formType: 'prospective', data: prospectiveData })
@@ -197,7 +199,8 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
   const submitQuote = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/send-email', {
+      const apiUrl = import.meta.env.PROD ? '/api/send-email' : 'http://localhost:3001/api/send-email';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ formType: 'quote', data: quoteData })

@@ -1,7 +1,13 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
+import cors from 'cors';
 
 const app = express();
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true
+}));
 app.use(express.json());
 
 const transporter = nodemailer.createTransport({
@@ -11,6 +17,9 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: 'website@day1.co.za',
     pass: '@@Day001@@'
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
 
@@ -91,20 +100,20 @@ app.post('/api/send-email', async (req, res) => {
     let toEmail, fromEmail, subject, htmlContent;
 
     if (isExistingMember(data)) {
-      toEmail = 'info@day1health.co.za';
-      fromEmail = 'info@day1health.co.za';
-      subject = `New Existing Member Enquiry - ${data.firstName} ${data.lastName}`;
-      htmlContent = generateExistingMemberEmail(data, toEmail);
+      toEmail = 'info@day1.co.za';
+      fromEmail = 'website@day1.co.za';
+      subject = `[EXISTING MEMBER] ${data.firstName} ${data.lastName} - ${data.enquiry}`;
+      htmlContent = generateExistingMemberEmail(data, 'info@day1.co.za');
     } else if (isProspectiveClient(data)) {
-      toEmail = 'sales@day1health.co.za';
-      fromEmail = 'sales@day1health.co.za';
-      subject = `New Prospective Client - ${data.firstName} ${data.lastName}`;
-      htmlContent = generateProspectiveClientEmail(data, toEmail);
+      toEmail = 'info@day1.co.za';
+      fromEmail = 'website@day1.co.za';
+      subject = `[PROSPECTIVE CLIENT] ${data.firstName} ${data.lastName} - ${data.infoAbout}`;
+      htmlContent = generateProspectiveClientEmail(data, 'sales@day1.co.za');
     } else if (isQuote(data)) {
-      toEmail = 'sales@day1health.co.za';
-      fromEmail = 'sales@day1health.co.za';
-      subject = `New Quote Request - ${data.firstName} ${data.lastName}`;
-      htmlContent = generateQuoteEmail(data, toEmail);
+      toEmail = 'sales@day1.co.za';
+      fromEmail = 'website@day1.co.za';
+      subject = `[QUOTE REQUEST] ${data.firstName} ${data.lastName} - ${data.planCategory}`;
+      htmlContent = generateQuoteEmail(data, 'sales@day1.co.za');
     } else {
       return res.status(400).json({ error: 'Invalid form data' });
     }

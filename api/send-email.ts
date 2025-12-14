@@ -129,20 +129,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let htmlContent: string;
 
     if (isExistingMember(data)) {
-      toEmail = 'info@day1health.co.za';
-      fromEmail = 'info@day1health.co.za';
-      subject = `New Existing Member Enquiry - ${data.firstName} ${data.lastName}`;
-      htmlContent = generateExistingMemberEmail(data, toEmail);
+      toEmail = 'info@day1.co.za';
+      fromEmail = 'website@day1.co.za';
+      subject = `[EXISTING MEMBER] ${data.firstName} ${data.lastName} - ${data.enquiry}`;
+      htmlContent = generateExistingMemberEmail(data, 'info@day1.co.za');
     } else if (isProspectiveClient(data)) {
-      toEmail = 'sales@day1health.co.za';
-      fromEmail = 'sales@day1health.co.za';
-      subject = `New Prospective Client - ${data.firstName} ${data.lastName}`;
-      htmlContent = generateProspectiveClientEmail(data, toEmail);
+      toEmail = 'info@day1.co.za';
+      fromEmail = 'website@day1.co.za';
+      subject = `[PROSPECTIVE CLIENT] ${data.firstName} ${data.lastName} - ${data.infoAbout}`;
+      htmlContent = generateProspectiveClientEmail(data, 'sales@day1.co.za');
     } else if (isQuote(data)) {
-      toEmail = 'sales@day1health.co.za';
-      fromEmail = 'sales@day1health.co.za';
-      subject = `New Quote Request - ${data.firstName} ${data.lastName}`;
-      htmlContent = generateQuoteEmail(data, toEmail);
+      toEmail = 'sales@day1.co.za';
+      fromEmail = 'website@day1.co.za';
+      subject = `[QUOTE REQUEST] ${data.firstName} ${data.lastName} - ${data.planCategory}`;
+      htmlContent = generateQuoteEmail(data, 'sales@day1.co.za');
     } else {
       return res.status(400).json({ error: 'Invalid form data' });
     }

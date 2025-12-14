@@ -12,9 +12,13 @@
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-slot": "^1.2.3",
+    "@supabase/supabase-js": "^2.38.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
     "framer-motion": "^12.23.9",
+    "jspdf": "^2.5.1",
     "lucide-react": "^0.344.0",
     "nodemailer": "^7.0.11",
     "react": "^18.3.1",
