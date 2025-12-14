@@ -91,9 +91,9 @@ const DirectoryPage: React.FC = () => {
       >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch relative min-h-screen lg:min-h-auto">
           {/* Left Column - White Background */}
-          <div className={`lg:col-span-2 p-4 sm:p-8 lg:p-12 flex flex-col justify-center min-h-screen lg:min-h-96 ${isDark ? 'bg-white/95' : 'bg-white'} relative z-10`}>
+          <div className={`lg:col-span-2 p-2 sm:p-4 lg:p-6 flex flex-col justify-start min-h-screen lg:min-h-96 ${isDark ? 'bg-white/95' : 'bg-white'} relative z-10`}>
               {/* Heading with Logo */}
-              <div className="flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
+              <div className="flex items-center justify-between gap-8 sm:gap-12 mb-6 sm:mb-8">
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
                   Discover A New<br />
                   World Of Doctors with us
@@ -101,7 +101,7 @@ const DirectoryPage: React.FC = () => {
                 <img 
                   src="/assets/images/Logo.jpg" 
                   alt="Day1 Health Logo" 
-                  className="h-12 sm:h-14 lg:h-16 w-auto object-contain flex-shrink-0"
+                  className="h-24 sm:h-32 lg:h-40 w-auto object-contain flex-shrink-0"
                 />
               </div>
 
