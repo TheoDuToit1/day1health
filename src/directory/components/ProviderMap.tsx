@@ -142,13 +142,22 @@ const ProviderMap: React.FC<ProviderMapProps> = ({ provider, isDark }) => {
             : [],
         });
 
-        // Add marker
-        marker.current = new window.google.maps.Marker({
-          position: location,
-          map: map.current,
-          title: provider.full_name,
-          animation: window.google.maps.Animation.DROP,
-        });
+        // Add marker using AdvancedMarkerElement (new API)
+        if (window.google.maps.marker?.AdvancedMarkerElement) {
+          marker.current = new window.google.maps.marker.AdvancedMarkerElement({
+            position: location,
+            map: map.current,
+            title: provider.full_name,
+          });
+        } else {
+          // Fallback to old Marker API if AdvancedMarkerElement not available
+          marker.current = new window.google.maps.Marker({
+            position: location,
+            map: map.current,
+            title: provider.full_name,
+            animation: window.google.maps.Animation.DROP,
+          });
+        }
 
         // Add info window
         const infoWindow = new window.google.maps.InfoWindow({
