@@ -57,7 +57,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 11319 • CMS Ref. DM 1074</span>
               </div>
               {/* Logo moved here, ensure it's clearly lower to align with theme toggle */}
-              <div className="pt-[70px]">
+              <div className="pt-[70px] ml-0.5">
                 <div className="relative w-64 h-[111px] flex flex-col items-center justify-center">
                   <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
                     <div className="absolute inset-0 flex items-center justify-center p-1.5">
@@ -71,8 +71,8 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                     </div>
                   </div>
                 </div>
-                <p className="text-xs sm:text-sm text-left font-medium mt-2" style={{ color: '#1a568c' }}>
-                  Health Cover Since 2003
+                <p className="text-xs sm:text-sm text-left font-medium mt-2 ml-2 sm:-ml-0.5" style={{ color: '#1a568c' }}>
+                  Providing Health cover benefits since 2003
                 </p>
               </div>
             </div>
