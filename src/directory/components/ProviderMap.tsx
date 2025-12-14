@@ -46,11 +46,6 @@ const ProviderMap: React.FC<ProviderMapProps> = ({ provider, isDark }) => {
 
         if (!isMounted || !mapContainer.current) return;
 
-        // Clear previous map if it exists
-        if (mapContainer.current.innerHTML) {
-          mapContainer.current.innerHTML = '';
-        }
-
         const location = {
           lat: provider.latitude!,
           lng: provider.longitude!,
@@ -184,11 +179,14 @@ const ProviderMap: React.FC<ProviderMapProps> = ({ provider, isDark }) => {
 
     return () => {
       isMounted = false;
-      // Clean up map instance
+      // Clean up map instance properly
       if (map.current) {
+        // Unbind all events
+        window.google?.maps?.event?.clearInstanceListeners(map.current);
         map.current = null;
       }
       if (marker.current) {
+        window.google?.maps?.event?.clearInstanceListeners(marker.current);
         marker.current = null;
       }
     };
@@ -253,12 +251,13 @@ const ProviderMap: React.FC<ProviderMapProps> = ({ provider, isDark }) => {
         Location Map
       </p>
 
-      <div
-        ref={mapContainer}
-        className={`w-full h-64 rounded-lg overflow-hidden border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}
-      >
+      <div className={`relative w-full h-64 rounded-lg overflow-hidden border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+        <div
+          ref={mapContainer}
+          className="w-full h-full"
+        />
         {loading && (
-          <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
+          <div className={`absolute inset-0 flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
             <Loader className="w-6 h-6 animate-spin text-green-600" />
           </div>
         )}

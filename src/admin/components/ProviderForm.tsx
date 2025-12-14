@@ -386,6 +386,34 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
               </div>
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
+                  Latitude
+                </label>
+                <input
+                  type="number"
+                  name="latitude"
+                  value={formData.latitude || ''}
+                  onChange={handleChange}
+                  step="0.000001"
+                  placeholder="e.g., -33.9249"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
+                />
+              </div>
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
+                  Longitude
+                </label>
+                <input
+                  type="number"
+                  name="longitude"
+                  value={formData.longitude || ''}
+                  onChange={handleChange}
+                  step="0.000001"
+                  placeholder="e.g., 18.4241"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
+                />
+              </div>
             </div>
           </div>
 
