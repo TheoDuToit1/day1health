@@ -13,7 +13,6 @@ const DirectoryPage: React.FC = () => {
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
   const [professionFilter, setProfessionFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('All');
-  const [availabilityFilter, setAvailabilityFilter] = useState<string>('All');
   const [showStickyFilter, setShowStickyFilter] = useState(false);
 
   useEffect(() => {
@@ -178,25 +177,7 @@ const DirectoryPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Availability Filter */}
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Availability</p>
-                  <div className="flex flex-col gap-2">
-                    {['All', 'Available', 'Busy'].map((avail) => (
-                      <button
-                        key={avail}
-                        onClick={() => setAvailabilityFilter(avail)}
-                        className={`px-2 py-1 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                          availabilityFilter === avail
-                            ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        {avail}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+
               </div>
               </div>
 
@@ -346,24 +327,7 @@ const DirectoryPage: React.FC = () => {
             </div>
 
             {/* Availability Filter */}
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Availability</p>
-              <div className="flex flex-col gap-2">
-                {['All', 'Available', 'Busy'].map((avail) => (
-                  <button
-                    key={avail}
-                    onClick={() => setAvailabilityFilter(avail)}
-                    className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                      availabilityFilter === avail
-                        ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30'
-                        : isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {avail}
-                  </button>
-                ))}
-              </div>
-            </div>
+
           </div>
         </div>
       )}
