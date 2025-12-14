@@ -100,15 +100,15 @@ app.post('/api/send-email', async (req, res) => {
     let toEmail, fromEmail, subject, htmlContent;
 
     if (isExistingMember(data)) {
-      toEmail = 'info@day1.co.za';
+      toEmail = 'day1healthdeveloper@gmail.com';
       fromEmail = 'website@day1.co.za';
       subject = `[EXISTING MEMBER] ${data.firstName} ${data.lastName} - ${data.enquiry}`;
-      htmlContent = generateExistingMemberEmail(data, 'info@day1.co.za');
+      htmlContent = generateExistingMemberEmail(data, 'day1healthdeveloper@gmail.com');
     } else if (isProspectiveClient(data)) {
-      toEmail = 'info@day1.co.za';
+      toEmail = 'day1healthdeveloper@gmail.com';
       fromEmail = 'website@day1.co.za';
       subject = `[PROSPECTIVE CLIENT] ${data.firstName} ${data.lastName} - ${data.infoAbout}`;
-      htmlContent = generateProspectiveClientEmail(data, 'sales@day1.co.za');
+      htmlContent = generateProspectiveClientEmail(data, 'day1healthdeveloper@gmail.com');
     } else if (isQuote(data)) {
       toEmail = 'day1healthdeveloper@gmail.com';
       fromEmail = 'website@day1.co.za';
