@@ -147,16 +147,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Invalid form data' });
     }
 
-    // Send email to Day1 Health
-    await transporter.sendMail({
-      from: fromEmail,
+    // Send admin notification email FIRST
+    console.log('ADMIN EMAIL SENDING TO:', toEmail);
+    const adminResult = await transporter.sendMail({
+      from: '"Day1 Health Website" <website@day1.co.za>',
       to: toEmail,
       subject: subject,
       html: htmlContent,
       replyTo: data.email
     });
+    console.log('ADMIN EMAIL SENT:', adminResult.messageId);
 
-    // Send confirmation email to client
+    // Send confirmation email to client SECOND
     const confirmationHtml = `
       <h2>Thank you for contacting Day1 Health</h2>
       <p>Hi ${data.firstName},</p>
@@ -164,14 +166,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       <p>Best regards,<br>Day1 Health Team</p>
     `;
 
-    await transporter.sendMail({
-      from: fromEmail,
+    console.log('USER CONFIRMATION SENDING TO:', data.email);
+    const userResult = await transporter.sendMail({
+      from: '"Day1 Health" <website@day1.co.za>',
       to: data.email,
       subject: 'We received your enquiry - Day1 Health',
       html: confirmationHtml
     });
+    console.log('USER CONFIRMATION SENT:', userResult.messageId);
 
-    return res.status(200).json({ success: true, message: 'Email sent successfully' });
+    return res.status(200).json({ success: true, message: 'Email sent successfully', adminMessageId: adminResult.messageId, userMessageId: userResult.messageId });
   } catch (error) {
     console.error('Email sending error:', error);
     return res.status(500).json({ error: 'Failed to send email', details: String(error) });
