@@ -104,14 +104,8 @@ const PlanDetailPage: React.FC = () => {
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const pageTitle = `Day-to-Day - ${variantDisplay}`;
   
-  // Map variant to the correct Day-to-Day plan PDF
-  const dayToDayPdfMap: Record<string, string> = {
-    single: 'Day-To-Day Single Plan.pdf',
-    couple: 'Day-To-Day Couple Plan.pdf',
-    couples: 'Day-To-Day Couple Plan.pdf',
-    family: 'Day-To-Day Family Plan.pdf',
-  };
-  const dayToDayPdfFile = dayToDayPdfMap[variantParam] || 'Day-To-Day Single Plan.pdf';
+  // All Day-to-Day plan variants download the same PDF
+  const dayToDayPdfFile = 'Application forms/Day-to-day.pdf';
   const pdfPath = `/assets/pdf's/${dayToDayPdfFile}`;
   // Expanded state for Related products cards
   type CardKey = 'single' | 'couple' | 'family';
