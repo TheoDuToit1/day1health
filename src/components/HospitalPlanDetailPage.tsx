@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
-import { AnimatedPaymentButton } from './ui/animated-payment-button';
-import { AnimatedContactButton } from './ui/animated-contact-button';
-import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
+import { RollingNumber } from './ui/rolling-number';
 
 const coverItems = [
   'Private Hospital Benefits',
@@ -52,24 +50,34 @@ const HospitalPlanDetailPage: React.FC = () => {
   const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : tierParam === 'value plus' ? 'Value Plus' : 'Value';
   const tierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
   const pageTitle = `Hospital - ${tierDisplay} - ${variantDisplay}`;
-  type CardKey = 'single' | 'couple' | 'family';
-  const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
-    single: false,
-    couple: false,
-    family: false,
-  });
-  const toggleExpanded = (key: CardKey) =>
-    setExpanded((prev) => {
-      const willOpen = !prev[key];
-      return {
-        single: false,
-        couple: false,
-        family: false,
-        [key]: willOpen,
-      } as Record<CardKey, boolean>;
-    });
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+
+  useEffect(() => {
+    const initial = (variantParam === 'couple' || variantParam === 'couples')
+      ? 'couple' : (variantParam === 'family' ? 'family' : 'single');
+    setOption(initial);
+  }, [variantParam]);
+
+  useEffect(() => {
+    const raw = searchParams.get('children');
+    const parsed = raw ? parseInt(raw, 10) : NaN;
+    if (variantParam === 'family') {
+      const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
+      setChildCount(clamped);
+      setAdultCount(1); // Family starts with 1 adult
+    } else if (variantParam === 'single') {
+      setChildCount(0); // Single always has 0 children
+      setAdultCount(1); // Single is 1 adult
+    } else if (variantParam === 'couple' || variantParam === 'couples') {
+      const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
+      setChildCount(clamped);
+      setAdultCount(2); // Couple is 2 adults
+    } else {
+      setChildCount(0);
+      setAdultCount(1);
+    }
+  }, [variantParam, searchParams]);
 
   // Map tier to the correct Hospital plan PDF
   const hospitalPdfMap: Record<string, string> = {
@@ -136,39 +144,6 @@ const HospitalPlanDetailPage: React.FC = () => {
     return base;
   })();
 
-  const handleNavigate = (section: string) => {
-    const targetSection = section === 'home' ? 'hero' : section;
-    sessionStorage.setItem('navigatingToSection', targetSection);
-    window.location.href = `/#${targetSection}`;
-    window.scrollTo(0, 0);
-  };
-
-  useEffect(() => {
-    const initial = (variantParam === 'couple' || variantParam === 'couples')
-      ? 'couple' : (variantParam === 'family' ? 'family' : 'single');
-    setOption(initial);
-  }, [variantParam]);
-
-  useEffect(() => {
-    const raw = searchParams.get('children');
-    const parsed = raw ? parseInt(raw, 10) : NaN;
-    if (variantParam === 'family') {
-      const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
-      setChildCount(clamped);
-      setAdultCount(1); // Family starts with 1 adult
-    } else if (variantParam === 'single') {
-      setChildCount(0); // Single always has 0 children
-      setAdultCount(1); // Single is 1 adult
-    } else if (variantParam === 'couple' || variantParam === 'couples') {
-      const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
-      setChildCount(clamped);
-      setAdultCount(2); // Couple is 2 adults
-    } else {
-      setChildCount(0);
-      setAdultCount(1);
-    }
-  }, [variantParam, searchParams]);
-
   // Hospital plan pricing by tier
   const ADULT_PRICE = tierKey === 'platinum' ? 560 : tierKey === 'executive' ? 640 : 390;
   const COUPLE_PRICE = tierKey === 'platinum' ? 1008 : tierKey === 'executive' ? 1152 : 702;
@@ -193,6 +168,14 @@ const HospitalPlanDetailPage: React.FC = () => {
     params.delete('qty');
     setSearchParams(params);
   };
+
+  const handleNavigate = (section: string) => {
+    const targetSection = section === 'home' ? 'hero' : section;
+    sessionStorage.setItem('navigatingToSection', targetSection);
+    window.location.href = `/#${targetSection}`;
+    window.scrollTo(0, 0);
+  };
+
 
   return (
     <div
@@ -440,523 +423,12 @@ const HospitalPlanDetailPage: React.FC = () => {
                       </div>
                     </motion.div>
                   )}
-
-                  {/* Related products */}
-                  <div className="mt-8">
-                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Other related products</h2>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-                      {/* Single */}
-                      <motion.div 
-                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
-                          isDark 
-                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                            : 'bg-white border-green-200 hover:border-green-400'
-                        } min-h-[140px]`}
-                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                        viewport={{ once: true, margin: '-50px' }}
-                      >
-                        {expanded.single && (
-                          <motion.div
-                            key="single-bg"
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <img
-                              src="/assets/images/single (1).jpg"
-                              alt=""
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
-                          </motion.div>
-                        )}
-                        <div className="mb-[17px]">
-                          <AnimatePresence mode="wait" initial={false}>
-                            {expanded.single ? (
-                              <motion.div
-                                key="hdr-expanded-single"
-                                className={`relative z-20 flex items-center justify-between`}
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                <motion.span
-                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                                  initial={{ opacity: 0, x: -8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: -8 }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  <motion.span
-                                    className="inline-flex"
-                                    initial="hidden"
-                                    animate="show"
-                                    variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                                  >
-                                    {'Hospital'.split('')?.map((ch, i) => (
-                                      <motion.span
-                                        key={i}
-                                        className="inline-block"
-                                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                        transition={{ duration: 0.18 }}
-                                      >
-                                        {ch === ' ' ? '\u00A0' : ch}
-                                      </motion.span>
-                                    ))}
-                                  </motion.span>
-                                </motion.span>
-                                <motion.span
-                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                                  initial={{ opacity: 0, x: 8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: 8 }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  Single
-                                </motion.span>
-                              </motion.div>
-                            ) : (
-                              <motion.h3
-                                key="hdr-collapsed-single"
-                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                Single
-                              </motion.h3>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                        {expanded.single && (
-                          <motion.div
-                            layoutId="student-price"
-                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE}`}</span>
-                            <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
-                        )}
-                        <motion.div key="single-content"
-                          initial={false}
-                          animate={{ height: expanded.single ? 'auto' : 0, opacity: expanded.single ? 1 : 0 }}
-                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          style={{ overflow: 'hidden' }}
-                          aria-hidden={!expanded.single}
-                          className="relative z-10"
-                        >
-                           <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                            <ul className="space-y-3">
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
-                            </ul>
-                          </div>
-                        </motion.div>
-                        <div className={(expanded.single ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
-                          <AnimatedPaymentButton 
-                            text="Choose Plan"
-                            className="bronze"
-                            hoverMessages={[
-                              'GP and specialist consultations',
-                              'Acute and chronic medication',
-                              'Blood tests and x-rays',
-                              'Dentistry and optometry',
-                              'Funeral benefit',
-                            ]}
-                            hoverIcons={['wallet','card','payment','check']}
-                            showArrow={false}
-                            expanded={expanded.single}
-                            onToggleExpand={() => toggleExpanded('single')}
-                            to={`/plans/hospital?tier=${tierParam}&variant=single`}
-                          />
-                          <button
-                            type="button"
-                            aria-label={expanded.single ? 'Collapse Single details' : 'Expand Single details'}
-                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                              ${isDark 
-                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                              ${expanded.single ? 'rotate-180' : ''}`}
-                            onClick={() => toggleExpanded('single')}
-                          >
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                            </svg>
-                          </button>
-                        </div>
-                        {!expanded.single && (
-                          <div
-                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
-                              isDark ? 'bg-white/10 border-white/15' : 'bg-white/30 border-white/40'
-                            }`}
-                          >
-                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
-                            <motion.div layoutId="student-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
-                              <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{ADULT_PRICE}</span>
-                              <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
-                            </motion.div>
-                          </div>
-                        )}
-                      </motion.div>
-
-                      {/* Couple */}
-                      <motion.div 
-                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
-                          isDark 
-                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                            : 'bg-white border-green-200 hover:border-green-400'
-                        } min-h-[140px]`}
-                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                        viewport={{ once: true, margin: '-50px' }}
-                      >
-                        {expanded.couple && (
-                          <motion.div
-                            key="couple-bg"
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <img
-                              src="/assets/images/couple (1).jpg"
-                              alt=""
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
-                          </motion.div>
-                        )}
-                        <div className="mb-[17px]">
-                          <AnimatePresence mode="wait" initial={false}>
-                            {expanded.couple ? (
-                              <motion.div
-                                key="hdr-expanded-couple"
-                                className={`relative z-20 flex items-center justify-between`}
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                <motion.span
-                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                                  initial={{ opacity: 0, x: -8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: -8 }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  <motion.span
-                                    className="inline-flex"
-                                    initial="hidden"
-                                    animate="show"
-                                    variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                                  >
-                                    {'Hospital'.split('')?.map((ch, i) => (
-                                      <motion.span
-                                        key={i}
-                                        className="inline-block"
-                                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                        transition={{ duration: 0.18 }}
-                                      >
-                                        {ch === ' ' ? '\u00A0' : ch}
-                                      </motion.span>
-                                    ))}
-                                  </motion.span>
-                                </motion.span>
-                                <motion.span
-                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                                  initial={{ opacity: 0, x: 8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: 8 }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  Couples
-                                </motion.span>
-                              </motion.div>
-                            ) : (
-                              <motion.h3
-                                key="hdr-collapsed-couple"
-                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                Couples
-                              </motion.h3>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                        {expanded.couple && (
-                          <motion.div
-                            layoutId="basic-price"
-                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <span className="text-2xl font-bold text-emerald-400">{`R${COUPLE_PRICE}`}</span>
-                            <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
-                        )}
-                        <motion.div key="couple-content"
-                          initial={false}
-                          animate={{ height: expanded.couple ? 'auto' : 0, opacity: expanded.couple ? 1 : 0 }}
-                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          style={{ overflow: 'hidden' }}
-                          aria-hidden={!expanded.couple}
-                          className="relative z-10"
-                        >
-                          <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                            <ul className="space-y-3">
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
-                            </ul>
-                          </div>
-                        </motion.div>
-                        <div className={(expanded.couple ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
-                          <AnimatedPaymentButton 
-                            text="Choose Plan"
-                            className="silver"
-                            hoverMessages={[
-                              'GP and specialist consultations',
-                              'Acute and chronic medication',
-                              'Blood tests and x-rays',
-                              'Dentistry and optometry',
-                              'Funeral benefit',
-                            ]}
-                            hoverIcons={['wallet','card','payment','check']}
-                            showArrow={false}
-                            expanded={expanded.couple}
-                            onToggleExpand={() => toggleExpanded('couple')}
-                            to={`/plans/hospital?tier=${tierParam}&variant=couple`}
-                          />
-                          <button
-                            type="button"
-                            aria-label={expanded.couple ? 'Collapse Couples details' : 'Expand Couples details'}
-                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                              ${isDark 
-                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                              ${expanded.couple ? 'rotate-180' : ''}`}
-                            onClick={() => toggleExpanded('couple')}
-                          >
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                            </svg>
-                          </button>
-                        </div>
-                        {!expanded.couple && (
-                          <div
-                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
-                              isDark ? 'bg-white/10 border-white/15' : 'bg-white/30 border-white/40'
-                            }`}
-                          >
-                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Hospital</div>
-                            <motion.div layoutId="basic-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
-                              <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{COUPLE_PRICE}</span>
-                              <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
-                            </motion.div>
-                          </div>
-                        )}
-                      </motion.div>
-
-                      {/* Family */}
-                      <motion.div 
-                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
-                          isDark 
-                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
-                            : 'bg-white border-green-200 hover:border-green-400'
-                        } min-h-[140px]`}
-                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.45, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                        viewport={{ once: true, margin: '-50px' }}
-                      >
-                        {expanded.family && (
-                          <motion.div
-                            key="family-bg"
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                            <img
-                              src="/assets/images/family (1).jpg"
-                              alt=""
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
-                          </motion.div>
-                        )}
-                        <div className="mb-[17px]">
-                          <AnimatePresence mode="wait" initial={false}>
-                            {expanded.family ? (
-                              <motion.div
-                                key="hdr-expanded-family"
-                                className={`relative z-20 flex items-center justify-between`}
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                <motion.span
-                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                                  initial={{ opacity: 0, x: -8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: -8 }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  <motion.span
-                                    className="inline-flex"
-                                    initial="hidden"
-                                    animate="show"
-                                    variants={{ show: { transition: { staggerChildren: 0.035 } } }}
-                                  >
-                                    {'Hospital'.split('')?.map((ch, i) => (
-                                      <motion.span
-                                        key={i}
-                                        className="inline-block"
-                                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
-                                        transition={{ duration: 0.18 }}
-                                      >
-                                        {ch === ' ' ? '\u00A0' : ch}
-                                      </motion.span>
-                                    ))}
-                                  </motion.span>
-                                </motion.span>
-                                <motion.span
-                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
-                                  initial={{ opacity: 0, x: 8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: 8 }}
-                                  transition={{ duration: 0.18 }}
-                                >
-                                  Family
-                                </motion.span>
-                              </motion.div>
-                            ) : (
-                              <motion.h3
-                                key="hdr-collapsed-family"
-                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
-                                initial={{ opacity: 0, y: -6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 6 }}
-                                transition={{ duration: 0.18 }}
-                              >
-                                Family
-                              </motion.h3>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                        {expanded.family && (
-                          <motion.div
-                            layoutId="family-price"
-                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
-                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          >
-                              <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE * adultCount + CHILD_PRICE * childCount}`}</span>
-                              <span className={`text-white text-sm font-normal`}>/month</span>
-                          </motion.div>
-                        )}
-                        <motion.div key="family-content"
-                          initial={false}
-                          animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
-                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-                          style={{ overflow: 'hidden' }}
-                          aria-hidden={!expanded.family}
-                          className="relative z-10"
-                        >
-                          <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
-                            <ul className="space-y-3">
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
-                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Up to 4 children</span></li>
-                            </ul>
-                          </div>
-                        </motion.div>
-                        <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
-                          <AnimatedPaymentButton 
-                            text="Choose Plan"
-                            className="bronze"
-                            hoverMessages={[
-                              'GP and specialist consultations',
-                              'Acute and chronic medication',
-                              'Blood tests and x-rays',
-                              'Dentistry and optometry',
-                              'Funeral benefit',
-                              'Up to 4 children',
-                            ]}
-                            hoverIcons={['wallet','card','payment','check']}
-                            showArrow={false}
-                            expanded={expanded.family}
-                            onToggleExpand={() => toggleExpanded('family')}
-                            to={`/plans/hospital?tier=${tierParam}&variant=family&children=${childCount}`}
-                          />
-                          <button
-                            type="button"
-                            aria-label={expanded.family ? 'Collapse Family details' : 'Expand Family details'}
-                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
-                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
-                              ${isDark 
-                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
-                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
-                              ${expanded.family ? 'rotate-180' : ''}`}
-                            onClick={() => toggleExpanded('family')}
-                          >
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-                            </svg>
-                          </button>
-                        </div>
-                        {!expanded.family && (
-                          <div
-                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${
-                              isDark ? 'bg-gray-900/80 border-gray-700' : 'bg-white/90 border-gray-200'
-                            }`}
-                          >
-                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Hospital</div>
-                            <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
-                              <span className="text-sm align-top mr-1">R</span>
-                              <span className="text-2xl font-bold">{ADULT_PRICE * adultCount + CHILD_PRICE * childCount}</span>
-                              <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
-                            </motion.div>
-                          </div>
-                        )}
-                      </motion.div>
-                    </div>
-                  </div>
                 </motion.div>
 
                 {/* Right: Sticky summary / purchase card */}
                 <aside className="col-span-12 lg:col-span-4 xl:col-span-3 -mt-4 sm:-mt-6 lg:mt-0">
                   <div className="lg:sticky lg:top-24">
-                    <motion.div 
+                    <motion.div
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-200'}`}
                       initial={{ opacity: 0, y: 18 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -984,12 +456,9 @@ const HospitalPlanDetailPage: React.FC = () => {
                             onChange={(e) => {
                               const v = e.target.value;
                               setOption(v);
-                              updateUrl(
-                                v,
-                                v === 'family' ? childCount : undefined
-                              );
+                              updateUrl(v);
                             }}
-                            className={`mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none ${isDark ? 'bg-gray-900/70 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                            className={`w-full mt-1 px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-gray-900 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
@@ -997,148 +466,25 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <option value="family">Family</option>
                           </select>
                         </div>
-
-                        {option === 'single' && (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                              </div>
-                              <div className="mt-1 flex items-center gap-2">
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                }`}>
-                                  {adultCount}
-                                </div>
-                              </div>
-                            </div>
-                          </>
+                        {option === 'family' && (
+                          <div>
+                            <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children</label>
+                            <select
+                              value={childCount}
+                              onChange={(e) => {
+                                const c = parseInt(e.target.value, 10);
+                                setChildCount(c);
+                                updateUrl('family', c);
+                              }}
+                              className={`w-full mt-1 px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-gray-900 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                            >
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                            </select>
+                          </div>
                         )}
-                        {option === 'couple' && (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                              </div>
-                              <div className="mt-1 flex items-center gap-2">
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                }`}>
-                                  {adultCount}
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
-                              </div>
-                              <div className="mt-1 flex items-center gap-2">
-                                <button
-                                  type="button"
-                                  aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('couple', Math.max(0, childCount - 1)); }}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
-                                >
-                                  -
-                                </button>
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 0
-                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
-                                }`}>
-                                  {childCount}
-                                </div>
-                                <button
-                                  type="button"
-                                  aria-label="Increase children"
-                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('couple', Math.min(4, childCount + 1)); }}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
-                                >
-                                  +
-                                </button>
-                              </div>
-                            </div>
-                          </>
-                        )}
-                        {option === 'family' ? (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
-                              </div>
-                              <div className="mt-1 flex items-center gap-2">
-                                <button
-                                  type="button"
-                                  aria-label="Decrease adults"
-                                  onClick={() => setAdultCount(Math.max(1, adultCount - 1))}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
-                                >
-                                  -
-                                </button>
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  adultCount === 1
-                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
-                                }`}>
-                                  {adultCount}
-                                </div>
-                                <button
-                                  type="button"
-                                  aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
-                                >
-                                  +
-                                </button>
-                              </div>
-                            </div>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
-                              </div>
-                              <div className="mt-1 flex items-center gap-2">
-                                <button
-                                  type="button"
-                                  aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('family', Math.max(0, childCount - 1)); }}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
-                                >
-                                  -
-                                </button>
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 0
-                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
-                                }`}>
-                                  {childCount}
-                                </div>
-                                <button
-                                  type="button"
-                                  aria-label="Increase children"
-                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('family', Math.min(4, childCount + 1)); }}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
-                                >
-                                  +
-                                </button>
-                              </div>
-                            </div>
-                          </>
-                        ) : null}
                       </div>
 
                       <div className="mt-5">
