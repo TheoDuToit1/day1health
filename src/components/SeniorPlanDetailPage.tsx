@@ -824,13 +824,30 @@ const SeniorPlanDetailPage: React.FC = () => {
                       </div>
 
                       <div className="mt-5">
-                        <AnimatedContactButton
+                        <button
                           type="button"
-                          className="w-full"
-                          labelDefault="Sign Up Now"
-                          labelSent="Sent"
-                          onClick={() => { /* TODO: hook into sign up flow */ }}
-                        />
+                          className="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            const pdfMap: Record<string, string> = {
+                              'comprehensive': '/assets/pdf\'s/Application forms/Senior-Comprehensive.pdf',
+                              'hospital': '/assets/pdf\'s/Application forms/Senior-Hospital.pdf',
+                              'day-to-day': '/assets/pdf\'s/Application forms/Day-to-day.pdf'
+                            };
+                            const fileNameMap: Record<string, string> = {
+                              'comprehensive': 'Senior-Comprehensive.pdf',
+                              'hospital': 'Senior-Hospital.pdf',
+                              'day-to-day': 'Day-to-day.pdf'
+                            };
+                            link.href = pdfMap[categoryDisplay] || pdfMap['day-to-day'];
+                            link.download = fileNameMap[categoryDisplay] || fileNameMap['day-to-day'];
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                        >
+                          Download Application
+                        </button>
                       </div>
 
                     </motion.div>

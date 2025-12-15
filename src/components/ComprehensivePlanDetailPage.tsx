@@ -1239,13 +1239,31 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                       </div>
 
                       <div className="mt-5">
-                        <AnimatedContactButton
+                        <button
                           type="button"
-                          className="w-full"
-                          labelDefault="Sign Up Now"
-                          labelSent="Sent"
-                          onClick={() => { /* TODO: hook into sign up flow */ }}
-                        />
+                          className="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            const pdfMap: Record<string, string> = {
+                              'value': '/assets/pdf\'s/Application forms/comprehensive-ValuePlus.pdf',
+                              'platinum': '/assets/pdf\'s/Application forms/Comprehensive-Platinum.pdf',
+                              'executive': '/assets/pdf\'s/Application forms/comprehensive-executive.pdf'
+                            };
+                            const fileNameMap: Record<string, string> = {
+                              'value': 'comprehensive-ValuePlus.pdf',
+                              'platinum': 'Comprehensive-Platinum.pdf',
+                              'executive': 'comprehensive-executive.pdf'
+                            };
+                            const tier = tierParam || 'value';
+                            link.href = pdfMap[tier] || pdfMap['value'];
+                            link.download = fileNameMap[tier] || fileNameMap['value'];
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                        >
+                          Download Application
+                        </button>
                       </div>
 
                     </motion.div>

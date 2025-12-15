@@ -1383,7 +1383,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       showArrow={false}
                       expanded={expanded.basic}
                       onToggleExpand={() => toggleExpanded('basic')}
-                      to="/plans/comprehensive?variant=single&tier=Platinum"
+                      to="/plans/day-to-day?variant=couple"
                     />
                   </div>
                 </div>
@@ -2628,7 +2628,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/plans/senior-plan?category=Day-to-Day&variant=single"
+                        to="/plans/day-to-day?variant=single"
                       />
                     </div>
                   </div>
@@ -2805,7 +2805,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/senior-plan?category=Hospital&variant=single"
+                        to="/plans/day-to-day?variant=couple"
                       />
                     </div>
                   </div>

@@ -1142,13 +1142,30 @@ const HospitalPlanDetailPage: React.FC = () => {
                       </div>
 
                       <div className="mt-5">
-                        <AnimatedContactButton
+                        <button
                           type="button"
-                          className="w-full"
-                          labelDefault="Sign Up Now"
-                          labelSent="Sent"
-                          onClick={() => { /* TODO: hook into sign up flow */ }}
-                        />
+                          className="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            const pdfMap: Record<string, string> = {
+                              'value': '/assets/pdf\'s/Application forms/Hospital-ValuePlus.pdf',
+                              'platinum': '/assets/pdf\'s/Application forms/hospital-platinum.pdf',
+                              'executive': '/assets/pdf\'s/Application forms/Hospital-Executive.pdf'
+                            };
+                            const fileNameMap: Record<string, string> = {
+                              'value': 'Hospital-ValuePlus.pdf',
+                              'platinum': 'hospital-platinum.pdf',
+                              'executive': 'Hospital-Executive.pdf'
+                            };
+                            link.href = pdfMap[tierKey] || pdfMap['value'];
+                            link.download = fileNameMap[tierKey] || fileNameMap['value'];
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                        >
+                          Download Application
+                        </button>
                       </div>
 
                     </motion.div>
