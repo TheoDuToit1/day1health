@@ -709,7 +709,6 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     <option>Doctor Visits & Day-to-Day Cover</option>
                     <option>Private Hospital Cover</option>
                     <option>Combined Cover (Hospital + Doctor Visits)</option>
-                    <option>Existing Member Support</option>
                     <option>Claims & Benefits Enquiries</option>
                     <option>Employer / Business Group Cover</option>
                     <option>Partnership or Broker Enquiries</option>
