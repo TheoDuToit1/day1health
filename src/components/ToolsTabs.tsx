@@ -185,8 +185,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'comprehensive':
         return (
           <LayoutGroup key={`comprehensive-${activeTab}`}>
-            <motion.div key={`comprehensive-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-5 sm:px-6 md:px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
+            <motion.div key={`comprehensive-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible pb-8">
                 {/* Introduction Column (copied from Day-to-Day) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -1643,7 +1643,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
         return (
           <LayoutGroup key={`hospital-${activeTab}`}>
             <motion.div key={`hospital-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-6 md:gap-5 items-start overflow-visible">
+              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible pb-8">
                 {/* Introduction Column (same as Comprehensive) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -2322,8 +2322,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'senior':
         return (
           <LayoutGroup key={`senior-${activeTab}`}>
-            <motion.div key={`senior-container-${activeTab}`} className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
-              <motion.div className="grid md:grid-cols-2 lg:grid-cols-[1.02fr_repeat(3,1fr)] gap-6 md:gap-5 items-start overflow-visible">
+            <motion.div key={`senior-container-${activeTab}`} className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
+              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible pb-8">
                 {/* Introduction Column (Senior-Plan intro) */}
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${

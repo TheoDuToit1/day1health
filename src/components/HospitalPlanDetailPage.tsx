@@ -43,6 +43,7 @@ const HospitalPlanDetailPage: React.FC = () => {
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
+  const [page, setPage] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
@@ -143,6 +144,16 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
     return base;
   })();
+
+  // Pagination for description list
+  const pageSize = 4;
+  const pageCount = Math.ceil(descriptionItems.length / pageSize);
+  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
+
+  // Reset pagination when switching back to Description tab
+  useEffect(() => {
+    if (activeTab === 'description') setPage(0);
+  }, [activeTab]);
 
   // Hospital plan pricing by tier
   const ADULT_PRICE = tierKey === 'platinum' ? 560 : tierKey === 'executive' ? 640 : 390;
@@ -356,18 +367,16 @@ const HospitalPlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
                         <div className="grid md:grid-cols-2 gap-6">
-                          {descriptionItems.map((item, i) => (
+                          {pagedItems.map((item, i) => (
                             <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
+                              animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
                               className={`rounded-lg border p-4 ${
                                 isDark 
@@ -385,6 +394,38 @@ const HospitalPlanDetailPage: React.FC = () => {
                           ))}
                         </div>
                       </div>
+
+                      {/* Pagination controls */}
+                      {pageCount > 1 && (
+                        <div className="mt-6 flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => setPage(Math.max(0, page - 1))}
+                            disabled={page === 0}
+                            className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
+                              page === 0
+                                ? isDark ? 'bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+                                : isDark ? 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
+                            }`}
+                          >
+                            Previous
+                          </button>
+                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            Page {page + 1} of {pageCount}
+                          </div>
+                          <button
+                            onClick={() => setPage(Math.min(pageCount - 1, page + 1))}
+                            disabled={page === pageCount - 1}
+                            className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
+                              page === pageCount - 1
+                                ? isDark ? 'bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+                                : isDark ? 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
+                            }`}
+                          >
+                            Next
+                          </button>
+                        </div>
+                      )}
+
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
@@ -399,8 +440,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                     <motion.div
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <h3 className={`text-base font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Additional information</h3>
@@ -411,8 +451,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <motion.li
                               key={opt}
                               initial={{ opacity: 0, y: 8 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
+                              animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.35, delay: 0.02 * i }}
                               className={`text-sm rounded-lg border px-3 py-2 ${isDark ? 'bg-gray-900/60 border-gray-700 text-gray-200' : 'bg-gray-50 border-gray-200 text-gray-800'}`}
                             >

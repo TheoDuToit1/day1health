@@ -364,8 +364,8 @@ const PlanDetailPage: React.FC = () => {
               </section>
 
             {/* Main content grid */}
-            <div className={`max-w-[73rem] mx-auto px-4 md:px-6`}>
-              <div className="grid grid-cols-12 gap-6">
+            <div className={`max-w-[73rem] mx-auto px-4 md:px-6 overflow-visible`}>
+              <div className="grid grid-cols-12 gap-6 auto-rows-max lg:auto-rows-auto">
                 {/* Left: Details & Tabs */}
                 <motion.div 
                   className="col-span-12 lg:col-span-8 xl:col-span-9"
@@ -464,8 +464,8 @@ const PlanDetailPage: React.FC = () => {
                 </motion.div>
 
                 {/* Right: Sticky summary / purchase card */}
-                <aside className="col-span-12 lg:col-span-4 xl:col-span-3 -mt-4 sm:-mt-6 lg:mt-0 h-fit">
-                  <div className="sticky top-24">
+                <aside className="col-span-12 lg:col-span-4 xl:col-span-3 -mt-4 sm:-mt-6 lg:mt-0">
+                  <div className="lg:sticky lg:top-24 lg:h-fit">
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-200'}`}
                       initial={{ opacity: 0, y: 18 }}
