@@ -72,7 +72,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                   </div>
                 </div>
                 <p className="text-xs sm:text-sm text-left font-medium mt-2 ml-2 sm:-ml-0.5" style={{ color: '#1a568c' }}>
-                  Providing Health cover benefits since 2003
+                  Providing Health Cover Benefits Since 2003
                 </p>
               </div>
             </div>
