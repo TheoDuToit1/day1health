@@ -41,10 +41,10 @@ const heroSlides: HeroSlide[] = [
     staticText: 'Health Refined\nCare You Trust',
     icon: HeartPulse,
     typewriterWords: [
-      { text: 'Health Assured', icon: ShieldCheck },
-      { text: 'Care, Elevated', icon: Activity },
-      { text: 'Private Care', icon: Heart },
-      { text: 'Priced Right', icon: Star }
+      { text: 'Health Refined', icon: ShieldCheck },
+      { text: 'Care You Trust', icon: Activity },
+      { text: 'Health Assured', icon: Heart },
+      { text: 'Care, Elevated', icon: Star }
     ],
     subheading: 'Private Care, Priced Right',
     bgColor: 'from-white to-white',
