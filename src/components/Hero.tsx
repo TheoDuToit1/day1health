@@ -38,15 +38,13 @@ interface HeroSlide {
 const heroSlides: HeroSlide[] = [
   {
     id: 0,
-    staticText: 'you\'re one smart choice away',
+    staticText: 'Health Refined\nCare You Trust',
     icon: HeartPulse,
     typewriterWords: [
-      { text: 'Protection daily', icon: ShieldCheck },
-      { text: 'Health sorted', icon: Activity },
-      { text: 'Healthcare', icon: Heart },
-      { text: 'Confidence always', icon: Star }
+      { text: 'Health Assured', icon: ShieldCheck },
+      { text: 'Care, Elevated', icon: Activity }
     ],
-    subheading: 'for you and your family',
+    subheading: 'Private Care, Priced Right',
     bgColor: 'from-white to-white',
     textColor: 'text-gray-900',
     buttonBg: 'bg-[#16a34a] hover:bg-[#15803d]',
