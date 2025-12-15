@@ -2922,7 +2922,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                               exit={{ opacity: 0, x: -8 }}
                               transition={{ duration: 0.18 }}
                             >
-                              Compr
+                              <span className="hidden sm:inline">Compr</span>
+                              <span className="sm:hidden">Comprehensive</span>
                             </motion.span>
                           </div>
                           <motion.div

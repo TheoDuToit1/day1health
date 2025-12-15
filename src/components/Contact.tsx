@@ -711,11 +711,8 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     <option>Combined Cover (Hospital + Doctor Visits)</option>
                     <option>Existing Member Support</option>
                     <option>Claims & Benefits Enquiries</option>
-                    <option>Add a Spouse / Child / Family Member</option>
-                    <option>Upgrade or Change My Plan</option>
                     <option>Employer / Business Group Cover</option>
                     <option>Partnership or Broker Enquiries</option>
-                    <option>Technical Support (App Login)</option>
                   </select>
                 </div>
                 <div className="sm:col-span-2">
