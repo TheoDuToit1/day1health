@@ -2628,7 +2628,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/plans/day-to-day?variant=single"
+                        to="/plans/senior-plan?category=Day-to-Day&variant=single"
                       />
                     </div>
                   </div>
@@ -2805,7 +2805,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/day-to-day?variant=couple"
+                        to="/plans/senior-plan?category=Hospital&variant=single"
                       />
                     </div>
                   </div>
