@@ -210,7 +210,7 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                         <img
                           src={provider.profile_picture}
                           alt={provider['DOCTOR SURNAME']}
-                          className="w-8 h-8 rounded-full object-cover"
+                          className="w-8 h-8 rounded object-cover"
                           onError={(e) => {
                             console.error('Image failed to load:', provider.profile_picture);
                             e.currentTarget.style.display = 'none';
@@ -218,7 +218,7 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                         />
                       ) : null}
                       {!provider.profile_picture && (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-xs font-bold">
                           {provider['DOCTOR SURNAME']?.charAt(0) || '?'}
                         </div>
                       )}

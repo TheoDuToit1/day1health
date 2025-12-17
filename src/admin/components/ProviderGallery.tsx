@@ -122,7 +122,7 @@ const ProviderGallery: React.FC<ProviderGalleryProps> = ({
               <img
                 src={provider.profile_picture}
                 alt={provider['DOCTOR SURNAME']}
-                className="w-20 h-20 rounded-full object-cover border-2 border-green-500"
+                className="w-20 h-20 rounded-lg object-cover border-2 border-green-500"
                 onError={(e) => {
                   console.error('Image failed to load:', provider.profile_picture);
                   e.currentTarget.style.display = 'none';
@@ -130,7 +130,7 @@ const ProviderGallery: React.FC<ProviderGalleryProps> = ({
               />
             ) : null}
             {!provider.profile_picture && (
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold text-xl">
+              <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold text-xl">
                 {provider['DOCTOR SURNAME']?.charAt(0) || '?'}
               </div>
             )}

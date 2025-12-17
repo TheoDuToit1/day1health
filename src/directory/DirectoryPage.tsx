@@ -61,6 +61,7 @@ const DirectoryPage: React.FC = () => {
       }
       
       console.log('Fetched all providers:', allData.length);
+      console.log('Sample provider with profile_picture:', allData.find(p => p.profile_picture));
       setAllProviders(allData);
       setDisplayedProviders(allData.slice(0, ITEMS_PER_PAGE));
       setCurrentPage(1);
@@ -180,13 +181,12 @@ const DirectoryPage: React.FC = () => {
                   className="h-32 sm:h-48 lg:h-56 w-auto object-contain flex-shrink-0"
                 />
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
-                  Browse the Full GP and<br />
-                  Dentist Network Here
+                  Our GP & Dentist Network
                 </h1>
               </div>
 
               {/* Search Bar and Filters - Sticky */}
-              <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-lg">
+              <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-lg">
                 {/* Search Bar */}
                 <div className="mb-4 sm:mb-6">
                   <div className="relative rounded-xl shadow-md overflow-hidden bg-white max-w-sm">
@@ -274,10 +274,15 @@ const DirectoryPage: React.FC = () => {
                           <img
                             src={provider.profile_picture}
                             alt={provider['DOCTOR SURNAME']}
-                            className="w-10 sm:w-12 h-10 sm:h-12 rounded-full object-cover border-2 border-white"
+                            className="w-10 sm:w-12 h-10 sm:h-12 rounded object-cover border-2 border-white"
+                            onError={(e) => {
+                              console.error('Failed to load featured image:', provider.profile_picture);
+                              e.currentTarget.style.display = 'none';
+                            }}
                           />
-                        ) : (
-                          <div className={`w-10 sm:w-12 h-10 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600`}>
+                        ) : null}
+                        {!provider.profile_picture && (
+                          <div className={`w-10 sm:w-12 h-10 sm:h-12 rounded flex items-center justify-center text-xs sm:text-sm font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600`}>
                             {getInitials(provider['DOCTOR SURNAME'] || '')}
                           </div>
                         )}
@@ -295,7 +300,7 @@ const DirectoryPage: React.FC = () => {
             </div>
 
           {/* Right Column - Doctor Image */}
-          <div className="hidden lg:flex items-center justify-center lg:col-span-1 relative">
+          <div className="hidden lg:flex items-center justify-center lg:col-span-1 relative pointer-events-none">
             {/* Cloud-like Divider */}
             <svg
               className="absolute left-0 top-0 h-full"
@@ -319,7 +324,7 @@ const DirectoryPage: React.FC = () => {
             <img
               src="/assets/images/doctor.png"
               alt="Healthcare Provider"
-              className="w-full h-full object-contain relative z-10"
+              className="w-full h-full object-contain relative z-0"
               style={{
                 transform: 'scale(1.6) rotate(-8deg) translateY(60px) translateX(-80px)',
                 transformOrigin: 'center',
@@ -483,10 +488,15 @@ const DirectoryPage: React.FC = () => {
                         <img
                           src={provider.profile_picture}
                           alt={provider['DOCTOR SURNAME']}
-                          className="w-14 h-14 rounded-full object-cover shadow-lg border-2 border-white"
+                          className="w-14 h-14 rounded-lg object-cover shadow-lg border-2 border-white"
+                          onError={(e) => {
+                            console.error('Failed to load image:', provider.profile_picture);
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
-                      ) : (
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg`}>
+                      ) : null}
+                      {!provider.profile_picture && (
+                        <div className={`w-14 h-14 rounded-lg flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg`}>
                           {getInitials(provider['DOCTOR SURNAME'] || '')}
                         </div>
                       )}

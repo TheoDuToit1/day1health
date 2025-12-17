@@ -225,7 +225,7 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
             <div className="flex flex-col sm:flex-row gap-6">
               {/* Preview */}
               <div className="flex-shrink-0">
-                <div className={`w-32 h-32 rounded-lg border-2 border-dashed flex items-center justify-center overflow-hidden ${
+                <div className={`w-32 h-32 rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden ${
                   isDark ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-gray-50'
                 }`}>
                   {previewUrl ? (
