@@ -199,10 +199,15 @@ Region: ${provider.REGION || 'N/A'}
               <img
                 src={provider.profile_picture}
                 alt={provider['DOCTOR SURNAME']}
-                className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-green-500 shadow-lg"
+                className="w-24 h-24 rounded-xl object-cover mx-auto mb-4 border-4 border-green-500 shadow-lg"
+                onError={(e) => {
+                  console.error('Failed to load sidebar image:', provider.profile_picture);
+                  e.currentTarget.style.display = 'none';
+                }}
               />
-            ) : (
-              <div className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 mx-auto mb-4`}>
+            ) : null}
+            {!provider.profile_picture && (
+              <div className={`w-24 h-24 rounded-xl flex items-center justify-center text-4xl font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 mx-auto mb-4`}>
                 {getInitials(provider['DOCTOR SURNAME'])}
               </div>
             )}
