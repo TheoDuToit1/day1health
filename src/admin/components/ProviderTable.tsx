@@ -6,33 +6,33 @@ interface ProviderTableProps {
   providers: Provider[];
   isDark: boolean;
   onEdit: (provider: Provider) => void;
-  onDeactivate: (provider: Provider) => void;
+  onDelete: (provider: Provider) => void;
 }
 
-type SortField = 'full_name' | 'profession' | 'city' | 'created_at';
+type SortField = 'DOCTOR SURNAME' | 'PRNO' | 'SUBURB' | 'PROVINCE';
 type SortOrder = 'asc' | 'desc';
 
 const ProviderTable: React.FC<ProviderTableProps> = ({
   providers,
   isDark,
   onEdit,
-  onDeactivate,
+  onDelete,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<SortField>('created_at');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [sortField, setSortField] = useState<SortField>('DOCTOR SURNAME');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
 
   const filteredAndSortedProviders = useMemo(() => {
     let filtered = providers.filter((provider) => {
-      const matchesSearch = provider.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider.phone.includes(searchTerm) ||
-        provider.city?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = 
+        (provider['DOCTOR SURNAME']?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (provider.TEL?.includes(searchTerm)) ||
+        (provider.SUBURB?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (provider.ADDRESS?.toLowerCase().includes(searchTerm.toLowerCase()));
 
-      const matchesStatus =
-        filterStatus === 'all' ||
-        (filterStatus === 'active' && provider.is_active) ||
-        (filterStatus === 'inactive' && !provider.is_active);
+      // All CSV providers are considered active
+      const matchesStatus = filterStatus === 'all' || filterStatus === 'active';
 
       return matchesSearch && matchesStatus;
     });
@@ -131,43 +131,54 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
       <div className={`rounded-lg border overflow-hidden shadow-sm ${
         isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
       }`}>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
           <table className="w-full">
-            <thead>
+            <thead className="sticky top-0 z-30">
               <tr className={`border-b ${
                 isDark ? 'border-gray-700 bg-gray-700/50' : 'border-gray-200 bg-gray-50'
               }`}>
                 <th className="px-6 py-4">
                   <button
-                    onClick={() => handleSort('full_name')}
+                    onClick={() => handleSort('DOCTOR SURNAME')}
                     className={`flex items-center gap-2 text-sm font-semibold hover:text-green-600 transition-colors ${
                       isDark ? 'text-gray-300' : 'text-gray-900'
                     }`}
                   >
-                    Full Name
-                    <SortIcon field="full_name" />
+                    Doctor Name
+                    <SortIcon field="DOCTOR SURNAME" />
                   </button>
                 </th>
                 <th className="px-6 py-4">
                   <button
-                    onClick={() => handleSort('profession')}
+                    onClick={() => handleSort('PRNO')}
                     className={`flex items-center gap-2 text-sm font-semibold hover:text-green-600 transition-colors ${
                       isDark ? 'text-gray-300' : 'text-gray-900'
                     }`}
                   >
-                    Profession
-                    <SortIcon field="profession" />
+                    Provider #
+                    <SortIcon field="PRNO" />
                   </button>
                 </th>
                 <th className="px-6 py-4">
                   <button
-                    onClick={() => handleSort('city')}
+                    onClick={() => handleSort('SUBURB')}
                     className={`flex items-center gap-2 text-sm font-semibold hover:text-green-600 transition-colors ${
                       isDark ? 'text-gray-300' : 'text-gray-900'
                     }`}
                   >
-                    Location
-                    <SortIcon field="city" />
+                    Suburb
+                    <SortIcon field="SUBURB" />
+                  </button>
+                </th>
+                <th className="px-6 py-4">
+                  <button
+                    onClick={() => handleSort('PROVINCE')}
+                    className={`flex items-center gap-2 text-sm font-semibold hover:text-green-600 transition-colors ${
+                      isDark ? 'text-gray-300' : 'text-gray-900'
+                    }`}
+                  >
+                    Province
+                    <SortIcon field="PROVINCE" />
                   </button>
                 </th>
                 <th className={`px-6 py-4 text-left text-sm font-semibold ${
@@ -175,13 +186,7 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                 }`}>Phone</th>
                 <th className={`px-6 py-4 text-left text-sm font-semibold ${
                   isDark ? 'text-gray-300' : 'text-gray-900'
-                }`}>Latitude</th>
-                <th className={`px-6 py-4 text-left text-sm font-semibold ${
-                  isDark ? 'text-gray-300' : 'text-gray-900'
-                }`}>Longitude</th>
-                <th className={`px-6 py-4 text-left text-sm font-semibold ${
-                  isDark ? 'text-gray-300' : 'text-gray-900'
-                }`}>Status</th>
+                }`}>Address</th>
                 <th className={`px-6 py-4 text-left text-sm font-semibold ${
                   isDark ? 'text-gray-300' : 'text-gray-900'
                 }`}>Actions</th>
@@ -190,7 +195,7 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
             <tbody>
               {filteredAndSortedProviders.map((provider, idx) => (
                 <tr
-                  key={provider.id}
+                  key={`${provider.PRNO}-${idx}`}
                   className={`border-b transition-colors ${
                     isDark
                       ? 'border-gray-700 hover:bg-gray-700/50'
@@ -201,87 +206,66 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                     isDark ? 'text-white' : 'text-gray-900'
                   }`}>
                     <div className="flex items-center gap-3">
-                      {provider.profile_image_url ? (
+                      {provider.profile_picture ? (
                         <img
-                          src={provider.profile_image_url}
-                          alt={provider.full_name}
+                          src={provider.profile_picture}
+                          alt={provider['DOCTOR SURNAME']}
                           className="w-8 h-8 rounded-full object-cover"
+                          onError={(e) => {
+                            console.error('Image failed to load:', provider.profile_picture);
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
-                      ) : (
+                      ) : null}
+                      {!provider.profile_picture && (
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-xs font-bold">
-                          {provider.full_name.charAt(0)}
+                          {provider['DOCTOR SURNAME']?.charAt(0) || '?'}
                         </div>
                       )}
-                      {provider.full_name}
+                      {provider['DOCTOR SURNAME'] || '—'}
                     </div>
                   </td>
                   <td className={`px-6 py-4 text-sm ${
                     isDark ? 'text-gray-300' : 'text-gray-600'
                   }`}>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      provider.profession === 'GP'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-purple-100 text-purple-800'
-                    }`}>
-                      {provider.profession}
-                    </span>
+                    {provider.PRNO || '—'}
                   </td>
                   <td className={`px-6 py-4 text-sm ${
                     isDark ? 'text-gray-300' : 'text-gray-600'
                   }`}>
-                    {provider.city && provider.province
-                      ? `${provider.city}, ${provider.province}`
-                      : provider.city || provider.province || '—'}
+                    {provider.SUBURB || '—'}
+                  </td>
+                  <td className={`px-6 py-4 text-sm ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>
+                    {provider.PROVINCE || '—'}
                   </td>
                   <td className={`px-6 py-4 text-sm ${
                     isDark ? 'text-gray-300' : 'text-gray-600'
                   }`}>
                     <a
-                      href={`tel:${provider.phone}`}
+                      href={`tel:${provider.TEL}`}
                       className="text-green-600 hover:underline"
                     >
-                      {provider.phone}
+                      {provider.TEL || '—'}
                     </a>
                   </td>
-                  <td className={`px-6 py-4 text-sm font-mono ${
+                  <td className={`px-6 py-4 text-sm ${
                     isDark ? 'text-gray-300' : 'text-gray-600'
                   }`}>
-                    {provider.latitude ? provider.latitude.toFixed(6) : '—'}
+                    {provider.ADDRESS || '—'}
                   </td>
-                  <td className={`px-6 py-4 text-sm font-mono ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  <td className={`px-6 py-4 text-sm sticky right-20 z-10 ${
+                    isDark ? 'bg-gray-800' : 'bg-white'
                   }`}>
-                    {provider.longitude ? provider.longitude.toFixed(6) : '—'}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium gap-1 ${
-                      provider.is_active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      <span className={`w-2 h-2 rounded-full ${
-                        provider.is_active ? 'bg-green-600' : 'bg-gray-600'
-                      }`} />
-                      {provider.is_active ? 'Active' : 'Inactive'}
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 gap-1">
+                      <span className="w-2 h-2 rounded-full bg-green-600" />
+                      Active
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm">
-                    {provider.verified ? (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 gap-1">
-                        <span>✓</span>
-                        Verified
-                      </span>
-                    ) : (
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        isDark
-                          ? 'bg-gray-700 text-gray-400'
-                          : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        Unverified
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
+                  <td className={`px-6 py-4 text-sm sticky right-0 z-20 ${
+                    isDark ? 'bg-gray-800' : 'bg-white'
+                  }`}>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onEdit(provider)}
@@ -294,19 +278,21 @@ const ProviderTable: React.FC<ProviderTableProps> = ({
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      {provider.is_active && (
-                        <button
-                          onClick={() => onDeactivate(provider)}
-                          className={`p-2 rounded-lg transition-colors ${
-                            isDark
-                              ? 'hover:bg-red-900/30 text-red-400 hover:text-red-300'
-                              : 'hover:bg-red-50 text-red-600 hover:text-red-700'
-                          }`}
-                          title="Deactivate provider"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => {
+                          if (window.confirm(`Delete ${provider['DOCTOR SURNAME']}?`)) {
+                            onDelete(provider);
+                          }
+                        }}
+                        className={`p-2 rounded-lg transition-colors ${
+                          isDark
+                            ? 'hover:bg-red-900/30 text-red-400 hover:text-red-300'
+                            : 'hover:bg-red-50 text-red-600 hover:text-red-700'
+                        }`}
+                        title="Delete provider"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>

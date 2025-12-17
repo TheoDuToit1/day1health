@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, MapPin, Phone, Mail, Globe, CheckCircle, Calendar, FileText, Download, Copy, Check } from 'lucide-react';
+import { X, MapPin, Phone, FileText, Download, Copy, Check } from 'lucide-react';
 import { Provider } from '../../admin/types';
 import ProviderMap from './ProviderMap';
 
@@ -12,12 +12,8 @@ interface ProviderSidebarProps {
 const ProviderSidebar: React.FC<ProviderSidebarProps> = ({ provider, isDark, onClose }) => {
   const [copied, setCopied] = useState(false);
 
-  const getProfessionColor = (profession: string) => {
-    const prof = profession?.toUpperCase();
-    return prof === 'GP' ? 'from-blue-500 to-blue-600' : 'from-purple-500 to-purple-600';
-  };
-
-  const getInitials = (name: string) => {
+  const getInitials = (name: string | undefined) => {
+    if (!name) return 'N/A';
     return name
       .split(' ')
       .map((n) => n[0])
@@ -28,13 +24,12 @@ const ProviderSidebar: React.FC<ProviderSidebarProps> = ({ provider, isDark, onC
 
   const handleCopyInfo = () => {
     const info = `
-Name: ${provider.full_name}
-Profession: ${provider.profession}
-Practice: ${provider.practice_name || 'N/A'}
-Phone: ${provider.phone || 'N/A'}
-Email: ${provider.email || 'N/A'}
-Address: ${provider.address_line_1 || ''} ${provider.suburb || ''} ${provider.city || ''}, ${provider.province || ''} ${provider.postal_code || ''}
-Verified: ${provider.verified ? 'Yes' : 'No'}
+Name: ${provider['DOCTOR SURNAME'] || 'N/A'}
+Provider Number: ${provider.PRNO || 'N/A'}
+Phone: ${provider.TEL || 'N/A'}
+Fax: ${provider.FAX || 'N/A'}
+Address: ${provider.ADDRESS || ''} ${provider.SUBURB || ''}, ${provider.PROVINCE || ''}
+Region: ${provider.REGION || 'N/A'}
     `.trim();
 
     navigator.clipboard.writeText(info);
@@ -69,44 +64,18 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
       // Provider Name Section
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text(String(provider.full_name || ''), 20, yPosition);
+      doc.text(String(provider['DOCTOR SURNAME'] || ''), 20, yPosition);
       yPosition += 8;
       
-      // Profession and Verification
+      // Provider Number
       doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(34, 197, 94);
-      doc.text(String(`${provider.profession || ''}${provider.verified ? ' • Verified' : ''}`), 20, yPosition);
+      doc.text(String(`Provider #${provider.PRNO || ''}`), 20, yPosition);
       yPosition += 12;
       
-      // Section: Practice Information
-      doc.setTextColor(17, 24, 39);
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text('PRACTICE INFORMATION', 20, yPosition);
-      yPosition += 8;
-      
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      if (provider.practice_name) {
-        doc.text(String(`Practice Name: ${provider.practice_name || ''}`), 20, yPosition);
-        yPosition += 6;
-      }
-      if (provider.practice_code) {
-        doc.text(String(`Practice Code: ${provider.practice_code || ''}`), 20, yPosition);
-        yPosition += 6;
-      }
-      if (provider.network_type) {
-        doc.text(String(`Network Type: ${provider.network_type || ''}`), 20, yPosition);
-        yPosition += 6;
-      }
-      if (provider.dispensing_status) {
-        doc.text(String(`Dispensing Status: ${provider.dispensing_status || ''}`), 20, yPosition);
-        yPosition += 6;
-      }
-      yPosition += 6;
-      
       // Section: Contact Information
+      doc.setTextColor(17, 24, 39);
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
       doc.text('CONTACT INFORMATION', 20, yPosition);
@@ -114,12 +83,12 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
       
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
-      if (provider.phone) {
-        doc.text(String(`Phone: ${provider.phone || ''}`), 20, yPosition);
+      if (provider.TEL) {
+        doc.text(String(`Phone: ${provider.TEL}`), 20, yPosition);
         yPosition += 6;
       }
-      if (provider.email) {
-        doc.text(String(`Email: ${provider.email || ''}`), 20, yPosition);
+      if (provider.FAX) {
+        doc.text(String(`Fax: ${provider.FAX}`), 20, yPosition);
         yPosition += 6;
       }
       yPosition += 6;
@@ -133,31 +102,15 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
       const addressLines = [
-        provider.address_line_1 || '',
-        provider.suburb || '',
-        `${provider.city || ''}, ${provider.province || ''} ${provider.postal_code || ''}`,
-        provider.country || 'South Africa'
+        provider.ADDRESS || '',
+        provider.SUBURB || '',
+        `${provider.REGION || ''}, ${provider.PROVINCE || ''}`,
       ].filter((line): line is string => Boolean(line));
       
       addressLines.forEach((line) => {
         doc.text(String(line || ''), 20, yPosition);
         yPosition += 6;
       });
-      yPosition += 6;
-      
-      // Section: Description
-      if (provider.description) {
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text('ABOUT', 20, yPosition);
-        yPosition += 8;
-        
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        const descriptionLines = doc.splitTextToSize(provider.description, pageWidth - 40) as string[];
-        doc.text(descriptionLines, 20, yPosition);
-        yPosition += descriptionLines.length * 6 + 6;
-      }
       
       // Footer
       doc.setFontSize(9);
@@ -169,7 +122,7 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
       );
       
       // Download
-      doc.save(`${provider.full_name.replace(/\s+/g, '_')}_details.pdf`);
+      doc.save(`${(provider['DOCTOR SURNAME'] || 'Provider').replace(/\s+/g, '_')}_details.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
@@ -242,39 +195,36 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
         <div className="p-6 space-y-6">
           {/* Avatar and Name */}
           <div className="text-center">
-            <div className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold text-white bg-gradient-to-br ${getProfessionColor(provider.profession)} mx-auto mb-4`}>
-              {getInitials(provider.full_name)}
-            </div>
+            {provider.profile_picture ? (
+              <img
+                src={provider.profile_picture}
+                alt={provider['DOCTOR SURNAME']}
+                className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-green-500 shadow-lg"
+              />
+            ) : (
+              <div className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 mx-auto mb-4`}>
+                {getInitials(provider['DOCTOR SURNAME'])}
+              </div>
+            )}
             <h3 className={`text-2xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {provider.full_name}
+              {provider['DOCTOR SURNAME']}
             </h3>
             <div className="flex items-center justify-center gap-2 mb-4">
               <p className={`text-lg font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {provider.profession}
+                {provider.PRNO}
               </p>
-              {provider.verified && (
-                <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                  <CheckCircle className="w-4 h-4" />
-                  Verified
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Practice Info */}
-          {provider.practice_name && (
+          {/* Registration Info */}
+          {provider.PRNO && (
             <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
               <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                Practice
+                Registration
               </p>
               <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {provider.practice_name}
+                {provider.PRNO}
               </p>
-              {provider.practice_code && (
-                <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Code: {provider.practice_code}
-                </p>
-              )}
             </div>
           )}
 
@@ -284,9 +234,9 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
               Contact Information
             </p>
 
-            {provider.phone && (
+            {provider.TEL && (
               <a
-                href={`tel:${provider.phone}`}
+                href={`tel:${provider.TEL}`}
                 className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
                   isDark ? 'bg-gray-700/50 hover:bg-gray-700' : 'bg-gray-50 hover:bg-gray-100'
                 }`}
@@ -295,24 +245,24 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
                 <div>
                   <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Phone</p>
                   <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {provider.phone}
+                    {provider.TEL}
                   </p>
                 </div>
               </a>
             )}
 
-            {provider.email && (
+            {provider.FAX && (
               <a
-                href={`mailto:${provider.email}`}
+                href={`tel:${provider.FAX}`}
                 className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
                   isDark ? 'bg-gray-700/50 hover:bg-gray-700' : 'bg-gray-50 hover:bg-gray-100'
                 }`}
               >
-                <Mail className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <Phone className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 <div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Email</p>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Fax</p>
                   <p className={`font-semibold truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {provider.email}
+                    {provider.FAX}
                   </p>
                 </div>
               </a>
@@ -327,24 +277,19 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
             <div className={`flex gap-3 p-3 rounded-lg ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
               <MapPin className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
               <div>
-                {provider.address_line_1 && (
+                {provider.ADDRESS && (
                   <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {provider.address_line_1}
+                    {provider.ADDRESS}
                   </p>
                 )}
-                {provider.suburb && (
+                {provider.SUBURB && (
                   <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {provider.suburb}
+                    {provider.SUBURB}
                   </p>
                 )}
                 <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  {provider.city}, {provider.province} {provider.postal_code}
+                  {provider.REGION}, {provider.PROVINCE}
                 </p>
-                {provider.country && (
-                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {provider.country}
-                  </p>
-                )}
               </div>
             </div>
           </div>
@@ -352,61 +297,16 @@ Verified: ${provider.verified ? 'Yes' : 'No'}
           {/* Map */}
           <ProviderMap provider={provider} isDark={isDark} />
 
-          {/* Professional Details */}
-          <div className="space-y-3">
-            <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              Professional Details
-            </p>
 
-            {provider.network_type && (
-              <div className={`flex items-center gap-3 p-3 rounded-lg ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-                <Globe className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                <div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Network Type</p>
-                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {provider.network_type}
-                  </p>
-                </div>
-              </div>
-            )}
 
-            {provider.dispensing_status && (
-              <div className={`flex items-center gap-3 p-3 rounded-lg ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-                <FileText className="w-5 h-5 text-orange-600 flex-shrink-0" />
-                <div>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Dispensing Status</p>
-                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {provider.dispensing_status}
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Description */}
-          {provider.description && (
-            <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-              <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                About
-              </p>
-              <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                {provider.description}
-              </p>
-            </div>
-          )}
-
-          {/* Member Since */}
-          {provider.created_at && (
+          {/* Dispensing Information */}
+          {provider['DISPENSE/SCRIPT'] && (
             <div className={`flex items-center gap-3 p-3 rounded-lg ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-              <Calendar className="w-5 h-5 text-gray-600 flex-shrink-0" />
+              <FileText className="w-5 h-5 text-orange-600 flex-shrink-0" />
               <div>
-                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Member Since</p>
+                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Dispensing/Script</p>
                 <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {new Date(provider.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  {provider['DISPENSE/SCRIPT']}
                 </p>
               </div>
             </div>

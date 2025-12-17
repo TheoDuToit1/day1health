@@ -1,71 +1,152 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Search, MapPin, Phone, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { Search, MapPin, Phone } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
 import ProviderSidebar from './components/ProviderSidebar';
 
+const ITEMS_PER_PAGE = 30;
+
 const DirectoryPage: React.FC = () => {
   const { isDark } = useTheme();
-  const [providers, setProviders] = useState<Provider[]>([]);
+  const [allProviders, setAllProviders] = useState<Provider[]>([]);
+  const [displayedProviders, setDisplayedProviders] = useState<Provider[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedProvince, setSelectedProvince] = useState('');
+  const [selectedSuburb, setSelectedSuburb] = useState('');
+  const [selectedProfession, setSelectedProfession] = useState('');
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
-  const [professionFilter, setProfessionFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('All');
-  const [showStickyFilter, setShowStickyFilter] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchProviders();
+    fetchAllProviders();
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show sticky filter when scrolled past hero section (approximately 600px)
-      setShowStickyFilter(window.scrollY > 600);
-    };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
-  const fetchProviders = async () => {
+  const fetchAllProviders = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('providers')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+      let allData: Provider[] = [];
+      let offset = 0;
+      const pageSize = 500;
+      let hasMore = true;
 
-      if (error) throw error;
-      setProviders(data || []);
+      while (hasMore) {
+        const { data, error, count } = await supabase
+          .from('providers')
+          .select('*', { count: 'exact' })
+          .range(offset, offset + pageSize - 1);
+
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+
+        if (!data || data.length === 0) {
+          hasMore = false;
+        } else {
+          allData = [...allData, ...data];
+          offset += pageSize;
+          
+          // Stop if we've fetched all records
+          if (count !== null && allData.length >= count) {
+            hasMore = false;
+          }
+        }
+      }
+      
+      console.log('Fetched all providers:', allData.length);
+      setAllProviders(allData);
+      setDisplayedProviders(allData.slice(0, ITEMS_PER_PAGE));
+      setCurrentPage(1);
     } catch (err) {
       console.error('Error fetching providers:', err);
+      setAllProviders([]);
     } finally {
       setLoading(false);
     }
   };
 
   const filteredProviders = useMemo(() => {
-    return providers.filter((provider) => {
-      const matchesSearch = 
-        provider.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        provider.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        provider.practice_name?.toLowerCase().includes(searchQuery.toLowerCase());
+    return allProviders.filter((provider) => {
+      const matchesSearch = !searchQuery.trim() || 
+        provider['DOCTOR SURNAME']?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        provider.SUBURB?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        provider.ADDRESS?.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesProfession = 
-        professionFilter === 'all' || 
-        provider.profession?.toUpperCase() === professionFilter.toUpperCase();
+      const matchesRegion = !selectedRegion || provider.REGION === selectedRegion;
+      const matchesProvince = !selectedProvince || provider.PROVINCE === selectedProvince;
+      const matchesSuburb = !selectedSuburb || provider.SUBURB === selectedSuburb;
+      const matchesProfession = !selectedProfession || provider.profession === selectedProfession;
 
-      return matchesSearch && matchesProfession;
+      return matchesSearch && matchesRegion && matchesProvince && matchesSuburb && matchesProfession;
     });
-  }, [providers, searchQuery, professionFilter]);
+  }, [allProviders, searchQuery, selectedRegion, selectedProvince, selectedSuburb, selectedProfession]);
 
-  const getProfessionColor = (profession: string) => {
-    const prof = profession?.toUpperCase();
-    return prof === 'GP' ? 'from-blue-500 to-blue-600' : 'from-purple-500 to-purple-600';
-  };
+  // Get unique values for filter dropdowns
+  const regions = useMemo(() => {
+    const unique = new Set(allProviders.map(p => p.REGION).filter(Boolean));
+    return Array.from(unique).sort();
+  }, [allProviders]);
+
+  const provinces = useMemo(() => {
+    const unique = new Set(allProviders.map(p => p.PROVINCE).filter(Boolean));
+    return Array.from(unique).sort();
+  }, [allProviders]);
+
+  const suburbs = useMemo(() => {
+    const unique = new Set(allProviders.map(p => p.SUBURB).filter(Boolean));
+    return Array.from(unique).sort();
+  }, [allProviders]);
+
+  const loadMore = useCallback(() => {
+    if (loadingMore) return;
+    
+    setLoadingMore(true);
+    setTimeout(() => {
+      const nextPage = currentPage + 1;
+      const startIdx = 0;
+      const endIdx = nextPage * ITEMS_PER_PAGE;
+      const newItems = filteredProviders.slice(startIdx, endIdx);
+      
+      setDisplayedProviders(newItems);
+      setCurrentPage(nextPage);
+      setLoadingMore(false);
+    }, 300);
+  }, [currentPage, loadingMore, filteredProviders]);
+
+  // Reset pagination when filtered results change
+  useEffect(() => {
+    setCurrentPage(1);
+    setDisplayedProviders(filteredProviders.slice(0, ITEMS_PER_PAGE));
+  }, [filteredProviders]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loadingMore && displayedProviders.length < filteredProviders.length) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [loadMore, loadingMore, displayedProviders.length, filteredProviders.length]);
 
   const getInitials = (name: string) => {
     return name
@@ -92,16 +173,16 @@ const DirectoryPage: React.FC = () => {
           {/* Left Column - White Background */}
           <div className={`lg:col-span-2 p-2 sm:p-4 lg:p-6 flex flex-col justify-start min-h-screen lg:min-h-96 ${isDark ? 'bg-white/95' : 'bg-white'} relative z-10`}>
               {/* Heading with Logo */}
-              <div className="flex items-center justify-between gap-8 sm:gap-12 mb-6 sm:mb-8">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
-                  Discover A New<br />
-                  World Of Doctors with us
-                </h1>
+              <div className="flex items-center justify-start gap-8 sm:gap-12 lg:gap-16 mb-6 sm:mb-8">
                 <img 
                   src="/assets/images/Logo.jpg" 
                   alt="Day1 Health Logo" 
-                  className="h-24 sm:h-32 lg:h-40 w-auto object-contain flex-shrink-0"
+                  className="h-32 sm:h-48 lg:h-56 w-auto object-contain flex-shrink-0"
                 />
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                  Browse the Full GP and<br />
+                  Dentist Network Here
+                </h1>
               </div>
 
               {/* Search Bar and Filters - Sticky */}
@@ -121,88 +202,90 @@ const DirectoryPage: React.FC = () => {
                 </div>
 
                 {/* Filter Options - Horizontal Layout */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-8 w-full">
-                {/* Profession Filter */}
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Profession</p>
-                  <div className="flex flex-col gap-2">
-                    {['all', 'GP', 'Dentist'].map((prof) => (
-                      <button
-                        key={prof}
-                        onClick={() => setProfessionFilter(prof)}
-                        className={`px-2 py-1 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                          professionFilter === prof
-                            ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        {prof === 'all' ? 'All' : prof}
-                      </button>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+                  {/* Region Filter */}
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className={`px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Regions</option>
+                    {regions.map((region) => (
+                      <option key={region} value={region}>
+                        {region}
+                      </option>
                     ))}
-                  </div>
-                </div>
+                  </select>
 
-                {/* Status Filter */}
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Status</p>
-                  <div className="flex flex-col gap-2">
-                    {['All', 'Verified', 'Unverified'].map((status) => (
-                      <button
-                        key={status}
-                        onClick={() => setStatusFilter(status)}
-                        className={`px-2 py-1 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                          statusFilter === status
-                            ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        {status}
-                      </button>
+                  {/* Province Filter */}
+                  <select
+                    value={selectedProvince}
+                    onChange={(e) => setSelectedProvince(e.target.value)}
+                    className={`px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Provinces</option>
+                    {provinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
                     ))}
-                  </div>
-                </div>
+                  </select>
 
-                {/* Location Filter */}
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Cities</p>
-                  <div className="flex flex-col gap-2">
-                    {['Johannesburg', 'Cape Town', 'Durban'].map((city) => (
-                      <button
-                        key={city}
-                        className="px-2 py-1 rounded-lg text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all text-left whitespace-nowrap"
-                      >
-                        {city}
-                      </button>
+                  {/* Suburb Filter */}
+                  <select
+                    value={selectedSuburb}
+                    onChange={(e) => setSelectedSuburb(e.target.value)}
+                    className={`px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Suburbs</option>
+                    {suburbs.map((suburb) => (
+                      <option key={suburb} value={suburb}>
+                        {suburb}
+                      </option>
                     ))}
-                  </div>
+                  </select>
                 </div>
-
-
-              </div>
               </div>
 
               {/* Featured Providers Cards */}
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-3 sm:mb-4">Featured Providers</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                  {filteredProviders.slice(0, 4).map((provider) => (
+                  {filteredProviders.slice(0, 4).map((provider, index) => (
                     <div
-                      key={provider.id}
+                      key={`featured-${index}`}
                       onClick={() => setSelectedProvider(provider)}
                       className="p-2 sm:p-3 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-all border border-gray-200 hover:border-green-300"
                     >
                       <div className="flex flex-col items-center text-center gap-1 sm:gap-2">
-                        <div className={`w-10 sm:w-12 h-10 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-white bg-gradient-to-br ${getProfessionColor(provider.profession)}`}>
-                          {getInitials(provider.full_name)}
-                        </div>
+                        {provider.profile_picture ? (
+                          <img
+                            src={provider.profile_picture}
+                            alt={provider['DOCTOR SURNAME']}
+                            className="w-10 sm:w-12 h-10 sm:h-12 rounded-full object-cover border-2 border-white"
+                          />
+                        ) : (
+                          <div className={`w-10 sm:w-12 h-10 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600`}>
+                            {getInitials(provider['DOCTOR SURNAME'] || '')}
+                          </div>
+                        )}
                         <div className="min-w-0">
                           <div className="flex items-center justify-center gap-0.5 sm:gap-1">
-                            <h3 className="font-semibold text-gray-900 text-xs sm:text-sm truncate">{provider.full_name}</h3>
-                            {provider.verified && (
-                              <CheckCircle className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-green-600 flex-shrink-0" />
-                            )}
+                            <h3 className="font-semibold text-gray-900 text-xs sm:text-sm truncate">{provider['DOCTOR SURNAME']}</h3>
                           </div>
-                          <p className="text-xs text-gray-600 line-clamp-1">{provider.profession} • {provider.city}</p>
+                          <p className="text-xs text-gray-600 line-clamp-1">{provider.SUBURB}</p>
                         </div>
                       </div>
                     </div>
@@ -246,95 +329,9 @@ const DirectoryPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky Filter Sidebar */}
-      {showStickyFilter && (
-        <div 
-          className={`hidden lg:block fixed left-0 top-0 h-screen w-64 ${isDark ? 'bg-gray-800 border-r border-gray-700' : 'bg-white border-r border-gray-200'} shadow-lg overflow-y-auto z-40 pt-6 px-4 transition-all duration-500 ease-out`}
-          style={{
-            animation: 'fadeInSlide 0.6s ease-out forwards',
-          }}
-        >
-          <div className="space-y-6">
-            {/* Search Bar */}
-            <div>
-              <div className="relative rounded-lg shadow-sm overflow-hidden bg-white">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 text-sm border-0 outline-none transition-all bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-            </div>
-
-            {/* Profession Filter */}
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Profession</p>
-              <div className="flex flex-col gap-2">
-                {['all', 'GP', 'Dentist'].map((prof) => (
-                  <button
-                    key={prof}
-                    onClick={() => setProfessionFilter(prof)}
-                    className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                      professionFilter === prof
-                        ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30'
-                        : isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {prof === 'all' ? 'All' : prof}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Status Filter */}
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Status</p>
-              <div className="flex flex-col gap-2">
-                {['All', 'Verified', 'Unverified'].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setStatusFilter(status)}
-                    className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                      statusFilter === status
-                        ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/30'
-                        : isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {status}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Location Filter */}
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Cities</p>
-              <div className="flex flex-col gap-2">
-                {['Johannesburg', 'Cape Town', 'Durban'].map((city) => (
-                  <button
-                    key={city}
-                    className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-left whitespace-nowrap ${
-                      isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {city}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Availability Filter */}
-
-          </div>
-        </div>
-      )}
-
       {/* Results Section */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} py-16 ${showStickyFilter ? 'lg:ml-64' : ''}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} py-16`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-12">
             <h2 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -345,16 +342,133 @@ const DirectoryPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Grid */}
+          {/* Main Content with Sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Left Sidebar - Filters */}
+            <div className="lg:col-span-1">
+              <div className={`rounded-2xl p-6 sticky top-20 ${isDark ? 'bg-gray-700/50' : 'bg-white'}`}>
+                <h3 className={`text-lg font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Filters
+                </h3>
+
+                {/* Region Filter */}
+                <div className="mb-6">
+                  <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Region
+                  </label>
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className={`w-full px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-600 border-gray-500 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Regions</option>
+                    {regions.map((region) => (
+                      <option key={region} value={region}>
+                        {region}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Province Filter */}
+                <div className="mb-6">
+                  <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Province
+                  </label>
+                  <select
+                    value={selectedProvince}
+                    onChange={(e) => setSelectedProvince(e.target.value)}
+                    className={`w-full px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-600 border-gray-500 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Provinces</option>
+                    {provinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Suburb Filter */}
+                <div className="mb-6">
+                  <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Suburb
+                  </label>
+                  <select
+                    value={selectedSuburb}
+                    onChange={(e) => setSelectedSuburb(e.target.value)}
+                    className={`w-full px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-600 border-gray-500 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Suburbs</option>
+                    {suburbs.map((suburb) => (
+                      <option key={suburb} value={suburb}>
+                        {suburb}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Profession Filter */}
+                <div className="mb-6">
+                  <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Profession
+                  </label>
+                  <select
+                    value={selectedProfession}
+                    onChange={(e) => setSelectedProfession(e.target.value)}
+                    className={`w-full px-3 py-2 rounded-lg text-sm border transition-all ${
+                      isDark
+                        ? 'bg-gray-600 border-gray-500 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                  >
+                    <option value="">All Professions</option>
+                    <option value="GP">GP</option>
+                    <option value="Dentist">Dentist</option>
+                  </select>
+                </div>
+
+                {/* Clear Filters Button */}
+                {(selectedRegion || selectedProvince || selectedSuburb || selectedProfession) && (
+                  <button
+                    onClick={() => {
+                      setSelectedRegion('');
+                      setSelectedProvince('');
+                      setSelectedSuburb('');
+                      setSelectedProfession('');
+                    }}
+                    className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-green-600 to-green-500 text-white font-medium text-sm transition-all hover:shadow-lg"
+                  >
+                    Clear Filters
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Right Content - Providers Grid */}
+            <div className="lg:col-span-3">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
             </div>
-          ) : filteredProviders.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProviders.map((provider) => (
+          ) : displayedProviders.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedProviders.map((provider, index) => (
                 <div
-                  key={provider.id}
+                  key={`provider-${index}`}
                   onClick={() => setSelectedProvider(provider)}
                   className={`group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${
                     isDark
@@ -365,23 +479,28 @@ const DirectoryPage: React.FC = () => {
                   {/* Top Section with Avatar and Badge */}
                   <div className={`p-6 pb-4 ${isDark ? 'bg-gradient-to-br from-gray-700 to-gray-700/50' : 'bg-gradient-to-br from-gray-50 to-white'}`}>
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br ${getProfessionColor(provider.profession)} shadow-lg`}>
-                        {getInitials(provider.full_name)}
-                      </div>
-                      {provider.verified && (
-                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                          <CheckCircle className="w-3 h-3" />
-                          Verified
+                      {provider.profile_picture ? (
+                        <img
+                          src={provider.profile_picture}
+                          alt={provider['DOCTOR SURNAME']}
+                          className="w-14 h-14 rounded-full object-cover shadow-lg border-2 border-white"
+                        />
+                      ) : (
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg`}>
+                          {getInitials(provider['DOCTOR SURNAME'] || '')}
                         </div>
                       )}
                     </div>
 
                     {/* Name and Title */}
                     <h3 className={`text-lg font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {provider.full_name}
+                      {provider['DOCTOR SURNAME']}
                     </h3>
-                    <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-green-400' : 'text-green-600'}`}>
-                      {provider.profession}
+                    <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                      {provider.profession || 'GP'}
+                    </p>
+                    <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      {provider.PRNO}
                     </p>
                   </div>
 
@@ -390,14 +509,14 @@ const DirectoryPage: React.FC = () => {
 
                   {/* Details Section */}
                   <div className="p-6 space-y-4">
-                    {/* Practice Name */}
-                    {provider.practice_name && (
+                    {/* PRNO */}
+                    {provider.PRNO && (
                       <div>
                         <p className={`text-xs font-semibold uppercase tracking-wider mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                          Practice
+                          Registration
                         </p>
                         <p className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
-                          {provider.practice_name}
+                          {provider.PRNO}
                         </p>
                       </div>
                     )}
@@ -410,21 +529,21 @@ const DirectoryPage: React.FC = () => {
                           Location
                         </p>
                         <p className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                          {provider.city}, {provider.province}
+                          {provider.SUBURB}, {provider.PROVINCE}
                         </p>
                       </div>
                     </div>
 
                     {/* Phone */}
-                    {provider.phone && (
+                    {provider.TEL && (
                       <div className="flex items-start gap-3">
                         <Phone className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
                         <div>
                           <p className={`text-xs font-semibold uppercase tracking-wider mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                             Contact
                           </p>
-                          <a href={`tel:${provider.phone}`} className={`text-sm font-medium hover:underline ${isDark ? 'text-green-400' : 'text-green-600'}`}>
-                            {provider.phone}
+                          <a href={`tel:${provider.TEL}`} className={`text-sm font-medium hover:underline ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                            {provider.TEL}
                           </a>
                         </div>
                       </div>
@@ -439,7 +558,25 @@ const DirectoryPage: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+
+              {/* Infinite scroll observer target */}
+              <div ref={observerTarget} className="flex justify-center py-8">
+                {loadingMore && (
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                )}
+                {!loadingMore && displayedProviders.length < filteredProviders.length && (
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Scroll to load more...
+                  </p>
+                )}
+                {displayedProviders.length >= filteredProviders.length && filteredProviders.length > 0 && (
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    All {filteredProviders.length} providers loaded
+                  </p>
+                )}
+              </div>
+            </>
           ) : (
             <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-gray-700/30' : 'bg-white'}`}>
               <p className={`text-lg font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -450,6 +587,8 @@ const DirectoryPage: React.FC = () => {
               </p>
             </div>
           )}
+            </div>
+          </div>
         </div>
       </div>
 

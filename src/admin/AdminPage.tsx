@@ -13,30 +13,22 @@ type TabMode = 'analytics' | 'providers';
 const AnalyticsContent: React.FC<{ providers: Provider[]; isDark: boolean }> = ({ providers, isDark }) => {
   const analytics = useMemo(() => {
     const total = providers.length;
-    const active = providers.filter((p) => p.is_active).length;
-    const inactive = providers.filter((p) => !p.is_active).length;
-    const verified = providers.filter((p) => p.verified).length;
-    const unverified = providers.filter((p) => !p.verified).length;
-    
-    // Debug: log unique professions
-    if (providers.length > 0) {
-      const uniqueProfessions = [...new Set(providers.map(p => p.profession?.trim()))];
-      console.log('Unique professions:', uniqueProfessions);
-      console.log('Sample provider:', providers[0]);
-    }
+    const active = total; // All CSV providers are considered active
+    const inactive = 0;
+    const verified = total; // All CSV providers are considered verified
+    const unverified = 0;
     
     const gps = providers.filter((p) => p.profession?.trim().toUpperCase() === 'GP').length;
     const dentists = providers.filter((p) => p.profession?.trim().toUpperCase() === 'DENTIST').length;
-    console.log('GPs:', gps, 'Dentists:', dentists);
     
     const verificationRate = total > 0 ? Math.round((verified / total) * 100) : 0;
     const activeRate = total > 0 ? Math.round((active / total) * 100) : 0;
 
-    const cityCount: Record<string, number> = {};
+    const suburbCount: Record<string, number> = {};
     providers.forEach((p) => {
-      if (p.city) cityCount[p.city] = (cityCount[p.city] || 0) + 1;
+      if (p.SUBURB) suburbCount[p.SUBURB] = (suburbCount[p.SUBURB] || 0) + 1;
     });
-    const topCities = Object.entries(cityCount)
+    const topCities = Object.entries(suburbCount)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5);
 
@@ -232,15 +224,35 @@ const AdminPage: React.FC = () => {
       setLoading(true);
       setError(null);
       console.log('Fetching providers...');
-      const { data, error: fetchError } = await supabase
-        .from('providers')
-        .select('*')
-        .order('created_at', { ascending: false });
+      
+      let allData: Provider[] = [];
+      let offset = 0;
+      const pageSize = 500;
+      let hasMore = true;
 
-      console.log('Fetch response:', { count: data?.length, error: fetchError });
+      while (hasMore) {
+        const { data, error: fetchError, count } = await supabase
+          .from('providers')
+          .select('*', { count: 'exact' })
+          .order('created_at', { ascending: false })
+          .range(offset, offset + pageSize - 1);
 
-      if (fetchError) throw fetchError;
-      setProviders(data || []);
+        if (fetchError) throw fetchError;
+
+        if (!data || data.length === 0) {
+          hasMore = false;
+        } else {
+          allData = [...allData, ...data];
+          offset += pageSize;
+          
+          if (count !== null && allData.length >= count) {
+            hasMore = false;
+          }
+        }
+      }
+
+      console.log('Fetch response:', { count: allData.length });
+      setProviders(allData);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch providers';
       console.error('Error fetching providers:', message, err);
@@ -274,11 +286,11 @@ const AdminPage: React.FC = () => {
 
       if (editingProvider) {
         // Update existing provider
-        console.log('Updating provider with ID:', editingProvider.id);
+        console.log('Updating provider with PRNO:', editingProvider.PRNO);
         const { data, error: updateError } = await supabase
           .from('providers')
           .update(formData)
-          .eq('id', editingProvider.id)
+          .eq('PRNO', editingProvider.PRNO)
           .select();
 
         console.log('Update response:', { data, error: updateError });
@@ -311,25 +323,44 @@ const AdminPage: React.FC = () => {
   };
 
   const handleDeactivateProvider = async (provider: Provider) => {
-    if (!window.confirm(`Deactivate ${provider.full_name}?`)) return;
+    if (!window.confirm(`Deactivate ${provider['DOCTOR SURNAME']}?`)) return;
 
     try {
       setError(null);
-      console.log('Deactivating provider:', provider.id);
+      console.log('Deactivating provider:', provider.PRNO);
       const { data, error: updateError } = await supabase
         .from('providers')
         .update({ is_active: false })
-        .eq('id', provider.id)
+        .eq('PRNO', provider.PRNO)
         .select();
 
       console.log('Deactivate response:', { data, error: updateError });
 
       if (updateError) throw updateError;
-      setSuccess(`${provider.full_name} deactivated`);
+      setSuccess(`${provider['DOCTOR SURNAME']} deactivated`);
       await fetchProviders();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to deactivate provider';
       console.error('Error deactivating provider:', message, err);
+      setError(message);
+    }
+  };
+
+  const handleDeleteProvider = async (provider: Provider) => {
+    try {
+      setError(null);
+      console.log('Deleting provider:', provider.PRNO);
+      const { error: deleteError } = await supabase
+        .from('providers')
+        .delete()
+        .eq('PRNO', provider.PRNO);
+
+      if (deleteError) throw deleteError;
+      setSuccess(`${provider['DOCTOR SURNAME']} deleted successfully`);
+      await fetchProviders();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to delete provider';
+      console.error('Error deleting provider:', message, err);
       setError(message);
     }
   };
@@ -486,14 +517,14 @@ const AdminPage: React.FC = () => {
                 providers={providers}
                 isDark={isDark}
                 onEdit={handleEditProvider}
-                onDeactivate={handleDeactivateProvider}
+                onDelete={handleDeleteProvider}
               />
             ) : (
               <ProviderGallery
                 providers={providers}
                 isDark={isDark}
                 onEdit={handleEditProvider}
-                onDeactivate={handleDeactivateProvider}
+                onDelete={handleDeleteProvider}
               />
             )}
           </div>
