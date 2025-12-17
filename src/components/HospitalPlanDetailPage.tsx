@@ -372,7 +372,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                     >
                       <div className="prose max-w-none">
                         <div className="grid md:grid-cols-2 gap-6">
-                          {pagedItems.map((item, i) => (
+                          {descriptionItems.map((item, i) => (
                             <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
@@ -395,36 +395,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Pagination controls */}
-                      {pageCount > 1 && (
-                        <div className="mt-6 flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => setPage(Math.max(0, page - 1))}
-                            disabled={page === 0}
-                            className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
-                              page === 0
-                                ? isDark ? 'bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                                : isDark ? 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
-                            }`}
-                          >
-                            Previous
-                          </button>
-                          <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                            Page {page + 1} of {pageCount}
-                          </div>
-                          <button
-                            onClick={() => setPage(Math.min(pageCount - 1, page + 1))}
-                            disabled={page === pageCount - 1}
-                            className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
-                              page === pageCount - 1
-                                ? isDark ? 'bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                                : isDark ? 'bg-gray-800 border-gray-700 text-white hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
-                            }`}
-                          >
-                            Next
-                          </button>
-                        </div>
-                      )}
+
 
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">

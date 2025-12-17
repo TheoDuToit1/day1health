@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Loader } from 'lucide-react';
+import { X, Loader, Upload, Trash2 } from 'lucide-react';
 import { Provider, FormData } from '../types';
-import { generateSlug, validateEmail, validatePhone } from '../utils';
+import { validatePhone } from '../utils';
+import { supabase } from '../supabaseClient';
 
 interface ProviderFormProps {
   isDark: boolean;
@@ -19,32 +20,28 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
   loading,
 }) => {
   const [formData, setFormData] = useState<FormData>({
-    full_name: '',
-    slug: '',
-    profile_image_url: '',
-    profession: 'GP',
-    network_type: '',
-    dispensing_status: 'Non-Dispensing',
-    practice_name: '',
-    practice_code: '',
-    description: '',
-    phone: '',
-    email: '',
-    address_line_1: '',
-    suburb: '',
-    city: '',
-    province: '',
-    postal_code: '',
-    country: 'South Africa',
-    is_active: true,
-    verified: false,
+    REGION: '',
+    SUBURB: '',
+    ADDRESS: '',
+    'DOCTOR SURNAME': '',
+    PRNO: '',
+    TEL: '',
+    FAX: '',
+    'DISPENSE/SCRIPT': '',
+    PROVINCE: '',
+    profile_picture: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   useEffect(() => {
     if (provider) {
       setFormData(provider);
+      if (provider.profile_picture) {
+        setPreviewUrl(provider.profile_picture);
+      }
     }
   }, [provider]);
 
@@ -56,12 +53,6 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
 
     setFormData((prev) => {
       const updated = { ...prev, [name]: newValue };
-
-      // Auto-generate slug from full_name if not editing
-      if (name === 'full_name' && !provider) {
-        updated.slug = generateSlug(value);
-      }
-
       return updated;
     });
 
@@ -75,22 +66,109 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
     }
   };
 
+  const handleProfilePictureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (1MB max)
+    if (file.size > 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        profile_picture: 'File size must be less than 1MB',
+      }));
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setErrors((prev) => ({
+        ...prev,
+        profile_picture: 'Please upload an image file',
+      }));
+      return;
+    }
+
+    try {
+      setUploading(true);
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.profile_picture;
+        return newErrors;
+      });
+
+      // Create a unique filename
+      const timestamp = Date.now();
+      const filename = `${formData.PRNO || 'provider'}-${timestamp}-${file.name}`;
+
+      // Upload to Supabase bucket
+      const { data, error: uploadError } = await supabase.storage
+        .from('provider_profile_picture')
+        .upload(filename, file);
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful:', data);
+
+      // Get public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('provider_profile_picture')
+        .getPublicUrl(filename);
+
+      const publicUrl = publicUrlData.publicUrl;
+      console.log('Public URL:', publicUrl);
+
+      // Update form data with the URL
+      setFormData((prev) => {
+        const updated = {
+          ...prev,
+          profile_picture: publicUrl,
+        };
+        console.log('Updated formData:', updated);
+        return updated;
+      });
+
+      // Set preview
+      setPreviewUrl(publicUrl);
+      console.log('Preview URL set:', publicUrl);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to upload image';
+      console.error('Error uploading profile picture:', message, err);
+      setErrors((prev) => ({
+        ...prev,
+        profile_picture: message,
+      }));
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveProfilePicture = () => {
+    setFormData((prev) => ({
+      ...prev,
+      profile_picture: '',
+    }));
+    setPreviewUrl('');
+  };
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.full_name.trim()) {
-      newErrors.full_name = 'Full name is required';
+    if (!formData['DOCTOR SURNAME']?.trim()) {
+      newErrors['DOCTOR SURNAME'] = 'Doctor surname is required';
     }
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone is required';
-    } else if (!validatePhone(formData.phone)) {
-      newErrors.phone = 'Invalid phone number';
+    if (!formData.TEL?.trim()) {
+      newErrors.TEL = 'Phone is required';
+    } else if (!validatePhone(formData.TEL)) {
+      newErrors.TEL = 'Invalid phone number';
     }
-    if (formData.email && !validateEmail(formData.email)) {
-      newErrors.email = 'Invalid email address';
+    if (!formData.SUBURB?.trim()) {
+      newErrors.SUBURB = 'Suburb is required';
     }
-    if (!formData.slug.trim()) {
-      newErrors.slug = 'Slug is required';
+    if (!formData.ADDRESS?.trim()) {
+      newErrors.ADDRESS = 'Address is required';
     }
 
     setErrors(newErrors);
@@ -104,6 +182,15 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
     // Remove id, created_at, updated_at from formData before sending
     const { id, created_at, updated_at, ...dataToSave } = formData as any;
     await onSave(dataToSave as FormData);
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleProfilePictureUpload(e);
+      // Reset the input so the same file can be selected again
+      e.target.value = '';
+    }
   };
 
   const bgClass = isDark ? 'bg-gray-800' : 'bg-white';
@@ -130,144 +217,142 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
             {provider ? 'Edit Provider' : 'Add Provider'}
           </h2>
 
-          {/* Identity Section */}
+          {/* Profile Picture Section */}
           <div className="mb-8">
             <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Identity
+              Profile Picture
+            </h3>
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* Preview */}
+              <div className="flex-shrink-0">
+                <div className={`w-32 h-32 rounded-lg border-2 border-dashed flex items-center justify-center overflow-hidden ${
+                  isDark ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-gray-50'
+                }`}>
+                  {previewUrl ? (
+                    <img src={previewUrl} alt="Profile preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-center">
+                      <Upload className={`w-8 h-8 mx-auto mb-2 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+                      <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>No image</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Upload Controls */}
+              <div className="flex-1">
+                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
+                  Upload Image (Max 1MB)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileInputChange}
+                  disabled={uploading}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent cursor-pointer ${inputClass}`}
+                />
+                {errors.profile_picture && <p className={errorClass}>{errors.profile_picture}</p>}
+                
+                {previewUrl && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveProfilePicture}
+                    disabled={uploading}
+                    className={`mt-3 flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      isDark
+                        ? 'bg-red-900/30 text-red-400 hover:bg-red-900/50 disabled:opacity-50'
+                        : 'bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50'
+                    }`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Remove Image
+                  </button>
+                )}
+                
+                {uploading && (
+                  <div className="mt-3 flex items-center gap-2 text-sm">
+                    <Loader className="w-4 h-4 animate-spin text-green-600" />
+                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>Uploading...</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Doctor Info Section */}
+          <div className="mb-8">
+            <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Doctor Information
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Full Name *
+                  Doctor Surname *
                 </label>
                 <input
                   type="text"
-                  name="full_name"
-                  value={formData.full_name}
+                  name="DOCTOR SURNAME"
+                  value={formData['DOCTOR SURNAME'] || ''}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
-                {errors.full_name && <p className={errorClass}>{errors.full_name}</p>}
+                {errors['DOCTOR SURNAME'] && <p className={errorClass}>{errors['DOCTOR SURNAME']}</p>}
               </div>
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Slug
+                  PRNO
                 </label>
                 <input
                   type="text"
-                  name="slug"
-                  value={formData.slug}
+                  name="PRNO"
+                  value={formData.PRNO || ''}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-                {errors.slug && <p className={errorClass}>{errors.slug}</p>}
-              </div>
-              <div className="sm:col-span-2">
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Profile Image URL
-                </label>
-                <input
-                  type="url"
-                  name="profile_image_url"
-                  value={formData.profile_image_url || ''}
-                  onChange={handleChange}
+                  placeholder="Practice Registration Number"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
               </div>
             </div>
           </div>
 
-          {/* Classification Section */}
+          {/* Services Section */}
           <div className="mb-8">
             <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Classification
+              Services
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Profession *
-                </label>
-                <select
-                  name="profession"
-                  value={formData.profession}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                >
-                  <option value="GP">GP</option>
-                  <option value="Dentist">Dentist</option>
-                </select>
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Network Type
+                  Dispense/Script
                 </label>
                 <input
                   type="text"
-                  name="network_type"
-                  value={formData.network_type || ''}
+                  name="DISPENSE/SCRIPT"
+                  value={formData['DISPENSE/SCRIPT'] || ''}
                   onChange={handleChange}
-                  placeholder="e.g., GP Network"
+                  placeholder="e.g., Dispensing, Non-Dispensing"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Dispensing Status
-                </label>
-                <select
-                  name="dispensing_status"
-                  value={formData.dispensing_status || ''}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                >
-                  <option value="Dispensing">Dispensing</option>
-                  <option value="Non-Dispensing">Non-Dispensing</option>
-                </select>
               </div>
             </div>
           </div>
 
-          {/* Practice Info Section */}
+          {/* Region Section */}
           <div className="mb-8">
             <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Practice Info
+              Region
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Practice Name
+                  Region
                 </label>
                 <input
                   type="text"
-                  name="practice_name"
-                  value={formData.practice_name || ''}
+                  name="REGION"
+                  value={formData.REGION || ''}
                   onChange={handleChange}
+                  placeholder="e.g., Gauteng, Western Cape"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Practice Code
-                </label>
-                <input
-                  type="text"
-                  name="practice_code"
-                  value={formData.practice_code || ''}
-                  onChange={handleChange}
-                  placeholder="e.g., PR0537314"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description || ''}
-                  onChange={handleChange}
-                  rows={3}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none ${inputClass}`}
                 />
               </div>
             </div>
@@ -281,29 +366,28 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Phone *
+                  Telephone *
                 </label>
                 <input
                   type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  name="TEL"
+                  value={formData.TEL || ''}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
-                {errors.phone && <p className={errorClass}>{errors.phone}</p>}
+                {errors.TEL && <p className={errorClass}>{errors.TEL}</p>}
               </div>
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Email
+                  Fax
                 </label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email || ''}
+                  type="tel"
+                  name="FAX"
+                  value={formData.FAX || ''}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
-                {errors.email && <p className={errorClass}>{errors.email}</p>}
               </div>
             </div>
           </div>
@@ -316,39 +400,29 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Address Line 1
+                  Address *
                 </label>
                 <input
                   type="text"
-                  name="address_line_1"
-                  value={formData.address_line_1 || ''}
+                  name="ADDRESS"
+                  value={formData.ADDRESS || ''}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
+                {errors.ADDRESS && <p className={errorClass}>{errors.ADDRESS}</p>}
               </div>
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Suburb
+                  Suburb *
                 </label>
                 <input
                   type="text"
-                  name="suburb"
-                  value={formData.suburb || ''}
+                  name="SUBURB"
+                  value={formData.SUBURB || ''}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  City
-                </label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city || ''}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
+                {errors.SUBURB && <p className={errorClass}>{errors.SUBURB}</p>}
               </div>
               <div>
                 <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
@@ -356,93 +430,12 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
                 </label>
                 <input
                   type="text"
-                  name="province"
-                  value={formData.province || ''}
+                  name="PROVINCE"
+                  value={formData.PROVINCE || ''}
                   onChange={handleChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
                 />
               </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Postal Code
-                </label>
-                <input
-                  type="text"
-                  name="postal_code"
-                  value={formData.postal_code || ''}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Country
-                </label>
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Latitude
-                </label>
-                <input
-                  type="number"
-                  name="latitude"
-                  value={formData.latitude || ''}
-                  onChange={handleChange}
-                  step="0.000001"
-                  placeholder="e.g., -33.9249"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${labelClass}`}>
-                  Longitude
-                </label>
-                <input
-                  type="number"
-                  name="longitude"
-                  value={formData.longitude || ''}
-                  onChange={handleChange}
-                  step="0.000001"
-                  placeholder="e.g., 18.4241"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${inputClass}`}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Admin Flags Section */}
-          <div className="mb-8">
-            <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Admin Flags
-            </h3>
-            <div className="space-y-3">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="is_active"
-                  checked={formData.is_active}
-                  onChange={handleChange}
-                  className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                />
-                <span className={labelClass}>Active</span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="verified"
-                  checked={formData.verified}
-                  onChange={handleChange}
-                  className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                />
-                <span className={labelClass}>Verified</span>
-              </label>
             </div>
           </div>
 
