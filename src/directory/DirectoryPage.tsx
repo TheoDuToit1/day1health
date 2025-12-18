@@ -167,10 +167,10 @@ const DirectoryPage: React.FC = () => {
         provider.SUBURB?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         provider.ADDRESS?.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesRegion = !selectedRegion || provider.REGION?.trim() === selectedRegion;
-      const matchesProvince = !selectedProvince || provider.PROVINCE?.trim() === selectedProvince;
-      const matchesSuburb = !selectedSuburb || provider.SUBURB?.trim() === selectedSuburb;
-      const matchesProfession = !selectedProfession || provider.profession?.trim() === selectedProfession;
+      const matchesRegion = !selectedRegion || normalizeText(provider.REGION || '') === normalizeText(selectedRegion);
+      const matchesProvince = !selectedProvince || normalizeText(provider.PROVINCE || '') === normalizeText(selectedProvince);
+      const matchesSuburb = !selectedSuburb || normalizeText(provider.SUBURB || '') === normalizeText(selectedSuburb);
+      const matchesProfession = !selectedProfession || normalizeText(provider.profession || '') === normalizeText(selectedProfession);
 
       return matchesSearch && matchesRegion && matchesProvince && matchesSuburb && matchesProfession;
     });
@@ -190,32 +190,52 @@ const DirectoryPage: React.FC = () => {
     return filtered;
   }, [allProviders, searchQuery, selectedRegion, selectedProvince, selectedSuburb, selectedProfession, sortBy]);
 
-  // Get unique values for filter dropdowns
+  // Normalize text: lowercase, trim, and remove ALL spaces
+  const normalizeText = (text: string): string => {
+    return text.toLowerCase().trim().replace(/\s+/g, '');
+  };
+
+  // Get unique values for filter dropdowns (case-insensitive deduplication with space normalization)
   const regions = useMemo(() => {
-    const unique = new Set(
-      allProviders
-        .map(p => p.REGION?.trim())
-        .filter(Boolean)
-    );
-    return Array.from(unique).sort();
+    const seen = new Map<string, string>();
+    allProviders.forEach(p => {
+      const value = p.REGION?.trim();
+      if (value) {
+        const normalizedKey = normalizeText(value);
+        if (!seen.has(normalizedKey)) {
+          seen.set(normalizedKey, value);
+        }
+      }
+    });
+    return Array.from(seen.values()).sort();
   }, [allProviders]);
 
   const provinces = useMemo(() => {
-    const unique = new Set(
-      allProviders
-        .map(p => p.PROVINCE?.trim())
-        .filter(Boolean)
-    );
-    return Array.from(unique).sort();
+    const seen = new Map<string, string>();
+    allProviders.forEach(p => {
+      const value = p.PROVINCE?.trim();
+      if (value) {
+        const normalizedKey = normalizeText(value);
+        if (!seen.has(normalizedKey)) {
+          seen.set(normalizedKey, value);
+        }
+      }
+    });
+    return Array.from(seen.values()).sort();
   }, [allProviders]);
 
   const suburbs = useMemo(() => {
-    const unique = new Set(
-      allProviders
-        .map(p => p.SUBURB?.trim())
-        .filter(Boolean)
-    );
-    return Array.from(unique).sort();
+    const seen = new Map<string, string>();
+    allProviders.forEach(p => {
+      const value = p.SUBURB?.trim();
+      if (value) {
+        const normalizedKey = normalizeText(value);
+        if (!seen.has(normalizedKey)) {
+          seen.set(normalizedKey, value);
+        }
+      }
+    });
+    return Array.from(seen.values()).sort();
   }, [allProviders]);
 
   const loadMore = useCallback(() => {
@@ -404,7 +424,7 @@ const DirectoryPage: React.FC = () => {
 
                 {/* Filter Options - Horizontal Layout */}
                 <div className="grid grid-cols-3 gap-3 w-full">
-                  {/* Region Filter */}
+                  {/* City/Town Filter */}
                   <select
                     value={selectedRegion}
                     onChange={(e) => setSelectedRegion(e.target.value)}
@@ -414,7 +434,7 @@ const DirectoryPage: React.FC = () => {
                         : 'bg-white border-gray-300 text-gray-900'
                     }`}
                   >
-                    <option value="">All Regions</option>
+                    <option value="">All Cities/Towns</option>
                     {regions.map((region) => (
                       <option key={region} value={region}>
                         {region}
@@ -641,10 +661,10 @@ const DirectoryPage: React.FC = () => {
                   Filters
                 </h3>
 
-                {/* Region Filter */}
+                {/* City/Town Filter */}
                 <div className="mb-6">
                   <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Region
+                    City/Town
                   </label>
                   <select
                     value={selectedRegion}
@@ -655,7 +675,7 @@ const DirectoryPage: React.FC = () => {
                         : 'bg-white border-gray-300 text-gray-900'
                     }`}
                   >
-                    <option value="">All Regions</option>
+                    <option value="">All Cities/Towns</option>
                     {regions.map((region) => (
                       <option key={region} value={region}>
                         {region}
@@ -1052,10 +1072,10 @@ const DirectoryPage: React.FC = () => {
 
             {/* Filters Grid - Side by side on mobile */}
             <div className="grid grid-cols-2 gap-3 mb-6">
-              {/* Region Filter */}
+              {/* City/Town Filter */}
               <div>
                 <label className={`block text-xs font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Region
+                  City/Town
                 </label>
                 <select
                   value={selectedRegion}
@@ -1066,7 +1086,7 @@ const DirectoryPage: React.FC = () => {
                       : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
-                  <option value="">All Regions</option>
+                  <option value="">All Cities/Towns</option>
                   {regions.map((region) => (
                     <option key={region} value={region}>
                       {region}
