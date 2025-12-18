@@ -24,8 +24,11 @@ const DirectoryPage: React.FC = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc'>('name-asc');
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
   const observerTarget = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchAllProviders();
@@ -43,6 +46,29 @@ const DirectoryPage: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Handle swipe for mobile slider
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setTouchEnd(e.changedTouches[0].clientX);
+    handleSwipe();
+  };
+
+  const handleSwipe = () => {
+    if (!sliderRef.current) return;
+    const isLeftSwipe = touchStart - touchEnd > 50;
+    const isRightSwipe = touchEnd - touchStart > 50;
+
+    if (isLeftSwipe) {
+      sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+    if (isRightSwipe) {
+      sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
 
 
 
@@ -214,17 +240,17 @@ const DirectoryPage: React.FC = () => {
           backgroundAttachment: 'fixed',
         }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch relative min-h-screen lg:min-h-auto z-0">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch relative min-h-auto z-0">
           {/* Left Column - White Background */}
-          <div className={`lg:col-span-2 p-2 sm:p-4 lg:p-6 flex flex-col justify-start min-h-screen lg:min-h-96 ${isDark ? 'bg-white/95' : 'bg-white'}`}>
+          <div className={`lg:col-span-2 p-2 sm:p-4 lg:p-6 flex flex-col justify-start min-h-auto sm:min-h-screen lg:min-h-96 ${isDark ? 'bg-white/95' : 'bg-white'}`}>
               {/* Heading with Logo */}
-              <div className="flex items-center justify-start gap-8 sm:gap-12 lg:gap-16 mb-6 sm:mb-8">
+              <div className="flex items-center justify-start sm:justify-start gap-4 sm:gap-12 lg:gap-16 mb-4 sm:mb-8 ml-4 sm:ml-0">
                 <img 
                   src="/assets/images/Logo.jpg" 
                   alt="Day1 Health Logo" 
-                  className="h-32 sm:h-48 lg:h-56 w-auto object-contain flex-shrink-0"
+                  className="h-20 sm:h-48 lg:h-56 w-auto object-contain flex-shrink-0"
                 />
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                <h1 className="text-lg sm:text-3xl lg:text-4xl font-bold text-gray-900">
                   Our GP & Dentist Network
                 </h1>
               </div>
@@ -341,8 +367,8 @@ const DirectoryPage: React.FC = () => {
               </div>
 
               {/* Featured Providers Cards */}
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-3 sm:mb-4">Featured Providers</p>
+              <div className="mb-4 sm:mb-6">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2 sm:mb-3">Featured Providers</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                   {filteredProviders.slice(0, 4).map((provider, index) => (
                     <div
@@ -385,7 +411,7 @@ const DirectoryPage: React.FC = () => {
             {/* Cloudy Divider */}
             <svg
               className="absolute left-0 top-0 h-full z-10"
-              style={{ width: '80px', marginLeft: '-40px' }}
+              style={{ width: '80px', marginLeft: '-20px' }}
               viewBox="0 0 80 400"
               preserveAspectRatio="none"
             >
@@ -500,10 +526,10 @@ const DirectoryPage: React.FC = () => {
       )}
 
       {/* Results Section */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} py-16`} ref={resultsRef}>
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-50'} py-8 sm:py-16`} ref={resultsRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="mb-12">
+          <div className="mb-6 sm:mb-12">
             <h2 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
               Available Providers
             </h2>
@@ -514,8 +540,8 @@ const DirectoryPage: React.FC = () => {
 
           {/* Main Content with Sidebar */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Left Sidebar - Filters */}
-            <div className="lg:col-span-1">
+            {/* Left Sidebar - Filters (Hidden on mobile) */}
+            <div className="hidden lg:block lg:col-span-1">
               <div className={`rounded-2xl p-6 sticky top-20 ${isDark ? 'bg-gray-700/50' : 'bg-white'}`}>
                 <h3 className={`text-lg font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   Filters
@@ -650,24 +676,116 @@ const DirectoryPage: React.FC = () => {
             </div>
 
             {/* Right Content - Providers Grid */}
-            <div className="lg:col-span-3">
+            <div className="col-span-1 lg:col-span-3">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
             </div>
           ) : displayedProviders.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Mobile Horizontal Slider */}
+              <div 
+                ref={sliderRef}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                className="lg:hidden flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scroll-smooth px-4"
+                style={{ scrollBehavior: 'smooth' }}
+              >
                 {displayedProviders.map((provider, index) => (
-                <div
-                  key={`provider-${index}`}
-                  onClick={() => setSelectedProvider(provider)}
-                  className={`group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${
-                    isDark
-                      ? 'bg-gray-700/50 border border-gray-600 hover:bg-gray-700'
-                      : 'bg-white border border-gray-100 hover:border-green-200'
-                  }`}
-                >
+                  <div
+                    key={`mobile-provider-${index}`}
+                    onClick={() => setSelectedProvider(provider)}
+                    className={`flex-shrink-0 w-full sm:w-96 group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 snap-center ${
+                      isDark
+                        ? 'bg-gray-700/50 border border-gray-600 hover:bg-gray-700'
+                        : 'bg-white border border-gray-100 hover:border-green-200'
+                    }`}
+                  >
+                    {/* Top Section with Avatar and Badge */}
+                    <div className={`p-6 pb-4 ${isDark ? 'bg-gradient-to-br from-gray-700 to-gray-700/50' : 'bg-gradient-to-br from-gray-50 to-white'}`}>
+                      <div className="flex items-start justify-between mb-4">
+                        {provider.profile_picture ? (
+                          <img
+                            src={provider.profile_picture}
+                            alt={provider['DOCTOR SURNAME']}
+                            className="w-14 h-14 rounded-lg object-cover shadow-lg border-2 border-white"
+                          />
+                        ) : null}
+                        {!provider.profile_picture && (
+                          <div className={`w-14 h-14 rounded-lg flex items-center justify-center text-lg font-bold text-white bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg`}>
+                            {getInitials(provider['DOCTOR SURNAME'] || '')}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Name and Title */}
+                      <h3 className={`text-lg font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {provider['DOCTOR SURNAME']}
+                      </h3>
+                      <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                        {provider.profession || 'GP'}
+                      </p>
+                      <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {provider.PRNO}
+                      </p>
+                    </div>
+
+                    {/* Divider */}
+                    <div className={`h-px ${isDark ? 'bg-gray-600' : 'bg-gray-100'}`} />
+
+                    {/* Details Section */}
+                    <div className="p-6 space-y-4">
+                      {/* Location */}
+                      <div className="flex items-start gap-3">
+                        <MapPin className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+                        <div>
+                          <p className={`text-xs font-semibold uppercase tracking-wider mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            Location
+                          </p>
+                          <p className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                            {provider.SUBURB}, {provider.PROVINCE}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Phone */}
+                      {provider.TEL && (
+                        <div className="flex items-start gap-3">
+                          <Phone className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+                          <div>
+                            <p className={`text-xs font-semibold uppercase tracking-wider mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              Contact
+                            </p>
+                            <a href={`tel:${provider.TEL}`} className={`text-sm font-medium hover:underline ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                              {provider.TEL}
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action Button */}
+                    <div className="px-6 pb-6">
+                      <button className="w-full px-4 py-2.5 rounded-lg bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-green-500/30 hover:scale-105">
+                        View Full Profile
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Grid */}
+              <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedProviders.map((provider, index) => (
+                  <div
+                    key={`provider-${index}`}
+                    onClick={() => setSelectedProvider(provider)}
+                    className={`group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${
+                      isDark
+                        ? 'bg-gray-700/50 border border-gray-600 hover:bg-gray-700'
+                        : 'bg-white border border-gray-100 hover:border-green-200'
+                    }`}
+                  >
                   {/* Top Section with Avatar and Badge */}
                   <div className={`p-6 pb-4 ${isDark ? 'bg-gradient-to-br from-gray-700 to-gray-700/50' : 'bg-gradient-to-br from-gray-50 to-white'}`}>
                     <div className="flex items-start justify-between mb-4">
@@ -757,8 +875,8 @@ const DirectoryPage: React.FC = () => {
               ))}
               </div>
 
-              {/* Infinite scroll observer target */}
-              <div ref={observerTarget} className="flex justify-center py-8">
+              {/* Infinite scroll observer target - Hidden on mobile */}
+              <div ref={observerTarget} className="hidden lg:flex justify-center py-8">
                 {loadingMore && (
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
                 )}
