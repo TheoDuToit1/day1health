@@ -729,3 +729,60 @@ textarea:focus {
 .mobile-filter-overlay {
   animation: fadeInOverlay 0.3s ease-out forwards;
 }
+
+/* Mobile horizontal slider scrollbar */
+.mobile-slider-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #16a34a #f3f4f6;
+}
+
+.mobile-slider-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.mobile-slider-scrollbar::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.mobile-slider-scrollbar::-webkit-scrollbar-thumb {
+  background: #16a34a;
+  border-radius: 10px;
+}
+
+.mobile-slider-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #15803d;
+}
+
+/* Dark mode mobile slider scrollbar */
+.dark .mobile-slider-scrollbar {
+  scrollbar-color: #4b5563 #1f2937;
+}
+
+.dark .mobile-slider-scrollbar::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark .mobile-slider-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.dark .mobile-slider-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Mobile filter bar slide down animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out forwards;
+}

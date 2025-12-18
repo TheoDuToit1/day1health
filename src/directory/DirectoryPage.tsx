@@ -25,7 +25,6 @@ const DirectoryPage: React.FC = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc'>('name-asc');
   const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
   const observerTarget = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -39,7 +38,8 @@ const DirectoryPage: React.FC = () => {
     const handleScroll = () => {
       if (resultsRef.current) {
         const resultsTop = resultsRef.current.getBoundingClientRect().top;
-        setShowMobileFilterBar(resultsTop < 100);
+        // Show filter bar when results section is scrolled past (top is negative or very small)
+        setShowMobileFilterBar(resultsTop < 50);
       }
     };
 
@@ -47,26 +47,26 @@ const DirectoryPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle swipe for mobile slider
+  // Handle swipe for mobile slider - Optimized for smooth scrolling
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    setTouchEnd(e.changedTouches[0].clientX);
-    handleSwipe();
+    handleSwipe(e.changedTouches[0].clientX);
   };
 
-  const handleSwipe = () => {
+  const handleSwipe = (endX: number) => {
     if (!sliderRef.current) return;
-    const isLeftSwipe = touchStart - touchEnd > 50;
-    const isRightSwipe = touchEnd - touchStart > 50;
+    const diff = touchStart - endX;
+    const isLeftSwipe = diff > 30;
+    const isRightSwipe = diff < -30;
 
     if (isLeftSwipe) {
-      sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      sliderRef.current.scrollBy({ left: sliderRef.current.clientWidth, behavior: 'smooth' });
     }
     if (isRightSwipe) {
-      sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      sliderRef.current.scrollBy({ left: -sliderRef.current.clientWidth, behavior: 'smooth' });
     }
   };
 
@@ -258,58 +258,109 @@ const DirectoryPage: React.FC = () => {
               {/* Search Bar and Filters - Sticky */}
               <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-lg">
                 {/* Search Bar and Service Filter */}
-                <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-                  <div className="relative rounded-xl shadow-md overflow-hidden bg-white flex-1 max-w-sm">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
+                <div className="mb-4 sm:mb-6">
+                  {/* Mobile: Search bar with toggle buttons inside */}
+                  <div className="sm:hidden relative rounded-xl shadow-md overflow-hidden bg-white">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
                       type="text"
                       placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 text-sm sm:text-base border-0 outline-none transition-all bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500"
+                      className="w-full pl-10 pr-24 py-2 text-sm border-0 outline-none transition-all bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500"
                     />
+                    {/* Service Radio Buttons - Inside search bar on mobile */}
+                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-1">
+                      <label className="flex items-center gap-0.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="service"
+                          value=""
+                          checked={selectedProfession === ''}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-3 h-3 cursor-pointer accent-green-600"
+                        />
+                        <span className="text-xs font-medium text-gray-700">All</span>
+                      </label>
+                      <label className="flex items-center gap-0.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="service"
+                          value="GP"
+                          checked={selectedProfession === 'GP'}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-3 h-3 cursor-pointer accent-green-600"
+                        />
+                        <span className="text-xs font-medium text-gray-700">GP</span>
+                      </label>
+                      <label className="flex items-center gap-0.5 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="service"
+                          value="Dentist"
+                          checked={selectedProfession === 'Dentist'}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-3 h-3 cursor-pointer accent-green-600"
+                        />
+                        <span className="text-xs font-medium text-gray-700">Dentist</span>
+                      </label>
+                    </div>
                   </div>
-                  
-                  {/* Service Radio Buttons */}
-                  <div className="flex gap-4 items-center">
-                    <label className="flex items-center gap-2 cursor-pointer">
+
+                  {/* Desktop: Search bar with separate toggle buttons below */}
+                  <div className="hidden sm:block">
+                    <div className="relative rounded-xl shadow-md overflow-hidden bg-white mb-3">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                       <input
-                        type="radio"
-                        name="service"
-                        value=""
-                        checked={selectedProfession === ''}
-                        onChange={(e) => setSelectedProfession(e.target.value)}
-                        className="w-4 h-4 cursor-pointer accent-green-600"
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 text-sm sm:text-base border-0 outline-none transition-all bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500"
                       />
-                      <span className="text-sm font-medium text-gray-700">All</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="service"
-                        value="GP"
-                        checked={selectedProfession === 'GP'}
-                        onChange={(e) => setSelectedProfession(e.target.value)}
-                        className="w-4 h-4 cursor-pointer accent-green-600"
-                      />
-                      <span className="text-sm font-medium text-gray-700">GP</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="service"
-                        value="Dentist"
-                        checked={selectedProfession === 'Dentist'}
-                        onChange={(e) => setSelectedProfession(e.target.value)}
-                        className="w-4 h-4 cursor-pointer accent-green-600"
-                      />
-                      <span className="text-sm font-medium text-gray-700">Dentist</span>
-                    </label>
+                    </div>
+
+                    {/* Service Radio Buttons - Desktop */}
+                    <div className="flex gap-4 items-center">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="service"
+                          value=""
+                          checked={selectedProfession === ''}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-4 h-4 cursor-pointer accent-green-600"
+                        />
+                        <span className="text-sm font-medium text-gray-700">All</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="service"
+                          value="GP"
+                          checked={selectedProfession === 'GP'}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-4 h-4 cursor-pointer accent-green-600"
+                        />
+                        <span className="text-sm font-medium text-gray-700">GP</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="service"
+                          value="Dentist"
+                          checked={selectedProfession === 'Dentist'}
+                          onChange={(e) => setSelectedProfession(e.target.value)}
+                          className="w-4 h-4 cursor-pointer accent-green-600"
+                        />
+                        <span className="text-sm font-medium text-gray-700">Dentist</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
 
                 {/* Filter Options - Horizontal Layout */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+                <div className="grid grid-cols-3 gap-3 w-full">
                   {/* Region Filter */}
                   <select
                     value={selectedRegion}
@@ -444,7 +495,7 @@ const DirectoryPage: React.FC = () => {
 
       {/* Mobile Filter Bar - Sticky on scroll */}
       {showMobileFilterBar && (
-        <div className={`lg:hidden fixed top-0 left-0 right-0 z-40 border-b transition-all ${
+        <div className={`lg:hidden fixed top-0 left-0 right-0 z-40 border-b transition-all duration-300 animate-slideDown ${
           isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
         }`}>
           <div className="flex items-center justify-between px-4 py-3 gap-2">
@@ -688,7 +739,7 @@ const DirectoryPage: React.FC = () => {
                 ref={sliderRef}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
-                className="lg:hidden flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scroll-smooth px-4"
+                className="lg:hidden flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scroll-smooth px-4 mobile-slider-scrollbar"
                 style={{ scrollBehavior: 'smooth' }}
               >
                 {displayedProviders.map((provider, index) => (
@@ -923,53 +974,56 @@ const DirectoryPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Region Filter */}
-            <div className="mb-6">
-              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                Region
-              </label>
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-                className={`w-full px-3 py-2 rounded-lg text-sm border transition-all ${
-                  isDark
-                    ? 'bg-gray-700 border-gray-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
-              >
-                <option value="">All Regions</option>
-                {regions.map((region) => (
-                  <option key={region} value={region}>
-                    {region}
-                  </option>
-                ))}
-              </select>
+            {/* Filters Grid - Side by side on mobile */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {/* Region Filter */}
+              <div>
+                <label className={`block text-xs font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Region
+                </label>
+                <select
+                  value={selectedRegion}
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  className={`w-full px-2 py-2 rounded-lg text-xs border transition-all ${
+                    isDark
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  <option value="">All Regions</option>
+                  {regions.map((region) => (
+                    <option key={region} value={region}>
+                      {region}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Province Filter */}
+              <div>
+                <label className={`block text-xs font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Province
+                </label>
+                <select
+                  value={selectedProvince}
+                  onChange={(e) => setSelectedProvince(e.target.value)}
+                  className={`w-full px-2 py-2 rounded-lg text-xs border transition-all ${
+                    isDark
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  <option value="">All Provinces</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            {/* Province Filter */}
-            <div className="mb-6">
-              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                Province
-              </label>
-              <select
-                value={selectedProvince}
-                onChange={(e) => setSelectedProvince(e.target.value)}
-                className={`w-full px-3 py-2 rounded-lg text-sm border transition-all ${
-                  isDark
-                    ? 'bg-gray-700 border-gray-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
-              >
-                <option value="">All Provinces</option>
-                {provinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Suburb Filter */}
+            {/* Suburb Filter - Full width */}
             <div className="mb-6">
               <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                 Suburb
