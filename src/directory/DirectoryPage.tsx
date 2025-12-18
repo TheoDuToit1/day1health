@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { Search, MapPin, Phone, Filter, ArrowUpDown } from 'lucide-react';
+import { Search, MapPin, Phone, Filter, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
@@ -25,6 +25,8 @@ const DirectoryPage: React.FC = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc'>('name-asc');
   const [touchStart, setTouchStart] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
   const observerTarget = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -69,6 +71,47 @@ const DirectoryPage: React.FC = () => {
       sliderRef.current.scrollBy({ left: -sliderRef.current.clientWidth, behavior: 'smooth' });
     }
   };
+
+  // Check scroll position for arrow visibility
+  const checkScrollPosition = useCallback(() => {
+    if (!sliderRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+    const canLeft = scrollLeft > 0;
+    const canRight = scrollLeft < scrollWidth - clientWidth - 10;
+    
+    setCanScrollLeft(canLeft);
+    setCanScrollRight(canRight);
+  }, []);
+
+  // Handle arrow button clicks
+  const handleScrollLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -sliderRef.current.clientWidth, behavior: 'smooth' });
+      setTimeout(checkScrollPosition, 100);
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: sliderRef.current.clientWidth, behavior: 'smooth' });
+      setTimeout(checkScrollPosition, 100);
+    }
+  };
+
+  // Monitor scroll position
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    checkScrollPosition();
+    slider.addEventListener('scroll', checkScrollPosition);
+    window.addEventListener('resize', checkScrollPosition);
+
+    return () => {
+      slider.removeEventListener('scroll', checkScrollPosition);
+      window.removeEventListener('resize', checkScrollPosition);
+    };
+  }, [checkScrollPosition]);
 
 
 
@@ -734,19 +777,51 @@ const DirectoryPage: React.FC = () => {
             </div>
           ) : displayedProviders.length > 0 ? (
             <>
-              {/* Mobile Horizontal Slider */}
-              <div 
-                ref={sliderRef}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                className="lg:hidden flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scroll-smooth px-4 mobile-slider-scrollbar"
-                style={{ scrollBehavior: 'smooth' }}
-              >
+              {/* Mobile Horizontal Slider with Navigation */}
+              <div className="lg:hidden w-full relative">
+                {/* Left Arrow - Outside Slider */}
+                {canScrollLeft && (
+                  <button
+                    onClick={handleScrollLeft}
+                    className={`absolute -left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full transition-all ${
+                      isDark
+                        ? 'bg-gray-800/90 hover:bg-gray-700 text-white'
+                        : 'bg-white/90 hover:bg-white text-gray-900'
+                    } shadow-lg hover:shadow-xl`}
+                    aria-label="Scroll left"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                )}
+
+                {/* Right Arrow - Outside Slider */}
+                {canScrollRight && (
+                  <button
+                    onClick={handleScrollRight}
+                    className={`absolute -right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full transition-all ${
+                      isDark
+                        ? 'bg-gray-800/90 hover:bg-gray-700 text-white'
+                        : 'bg-white/90 hover:bg-white text-gray-900'
+                    } shadow-lg hover:shadow-xl`}
+                    aria-label="Scroll right"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                )}
+
+                {/* Slider */}
+                <div 
+                  ref={sliderRef}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scroll-smooth px-4 mobile-slider-scrollbar"
+                  style={{ scrollBehavior: 'smooth' }}
+                >
                 {displayedProviders.map((provider, index) => (
                   <div
                     key={`mobile-provider-${index}`}
                     onClick={() => setSelectedProvider(provider)}
-                    className={`flex-shrink-0 w-full sm:w-96 group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 snap-center ${
+                    className={`flex-shrink-0 w-full sm:w-full group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 snap-center ${
                       isDark
                         ? 'bg-gray-700/50 border border-gray-600 hover:bg-gray-700'
                         : 'bg-white border border-gray-100 hover:border-green-200'
@@ -823,10 +898,11 @@ const DirectoryPage: React.FC = () => {
                     </div>
                   </div>
                 ))}
+                </div>
               </div>
 
               {/* Desktop Grid */}
-              <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 {displayedProviders.map((provider, index) => (
                   <div
                     key={`provider-${index}`}
