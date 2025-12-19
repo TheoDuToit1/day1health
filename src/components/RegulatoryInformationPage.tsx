@@ -23,8 +23,7 @@ function RegulatoryInformationPage() {
   const [isFooterInView, setIsFooterInView] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
-    // Store the target and navigate to home, where AppWrapper will handle scrolling
-    sessionStorage.setItem('navigatingToSection', sectionId);
+    // Navigate to home
     navigate('/');
   };
 
@@ -65,7 +64,6 @@ function RegulatoryInformationPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      sessionStorage.setItem('navigatingToSection', 'hero');
                       navigate('/');
                       window.scrollTo(0, 0);
                     }}

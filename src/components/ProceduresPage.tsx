@@ -13,7 +13,6 @@ function ProceduresPage() {
   const [isFooterInView, setIsFooterInView] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
-    sessionStorage.setItem('navigatingToSection', sectionId);
     navigate('/');
   };
 
@@ -78,7 +77,6 @@ function ProceduresPage() {
             <button
               type="button"
               onClick={() => {
-                sessionStorage.setItem('navigatingToSection', 'plans');
                 navigate('/');
                 window.scrollTo(0, 0);
               }}
@@ -212,7 +210,6 @@ function ProceduresPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      sessionStorage.setItem('navigatingToSection', 'hero');
                       navigate('/');
                       window.scrollTo(0, 0);
                     }}

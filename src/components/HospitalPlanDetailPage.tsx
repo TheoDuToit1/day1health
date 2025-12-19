@@ -182,7 +182,6 @@ const HospitalPlanDetailPage: React.FC = () => {
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
-    sessionStorage.setItem('navigatingToSection', targetSection);
     window.location.href = `/#${targetSection}`;
     window.scrollTo(0, 0);
   };
