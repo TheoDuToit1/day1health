@@ -21,7 +21,6 @@ interface AppContentProps {
   setIsSidebarCollapsed: (collapsed: boolean) => void;
   isFooterInView: boolean;
   scrollToSection: (sectionId: string) => void;
-  specificSlide?: number | null;
 }
 
 const AppContent: React.FC<AppContentProps> = ({
@@ -29,8 +28,7 @@ const AppContent: React.FC<AppContentProps> = ({
   isSidebarCollapsed,
   setIsSidebarCollapsed,
   isFooterInView,
-  scrollToSection,
-  specificSlide
+  scrollToSection
 }) => {
   const { isDark } = useTheme();
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -61,7 +59,7 @@ const AppContent: React.FC<AppContentProps> = ({
         
         <div className="flex-1 w-0">
           <main className="w-full">
-            <Hero isSidebarCollapsed={isSidebarCollapsed} specificSlide={specificSlide} />
+            <Hero isSidebarCollapsed={isSidebarCollapsed} />
             <ToolsTabs isSidebarCollapsed={isSidebarCollapsed} />
             <HowItWorks isSidebarCollapsed={isSidebarCollapsed} />
             <Feedback isSidebarCollapsed={isSidebarCollapsed} />
