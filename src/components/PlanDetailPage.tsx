@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
-import { AnimatedPaymentButton } from './ui/animated-payment-button';
-import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
@@ -36,9 +34,9 @@ const additionalInfoOptions: string[] = [
 
 const descriptionItems: { title: string; text: string }[] = [
   {
-    title: 'Unlimited Managed Doctor Visits',
+    title: 'Doctor Visits',
     text:
-      'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+      'Consultations available via a registered Day1 Health Network Provider. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
   },
   {
     title: 'Specialist Benefit',
@@ -46,9 +44,9 @@ const descriptionItems: { title: string; text: string }[] = [
       'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
   },
   {
-    title: 'Acute & Chronic Medication',
+    title: 'Chronic Medication',
     text:
-      'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network GP or obtained on script from a Network Pharmacy. Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.) A 1 month waiting period applies.',
+      'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
   },
   {
     title: 'Radiology',
@@ -104,28 +102,11 @@ const PlanDetailPage: React.FC = () => {
   // All Day-to-Day plan variants download the same PDF
   const dayToDayPdfFile = 'Application forms/Day-to-day.pdf';
   const pdfPath = `/assets/pdf's/${dayToDayPdfFile}`;
-  // Expanded state for Related products cards
-  type CardKey = 'single' | 'couple' | 'family';
-  const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
-    single: false,
-    couple: false,
-    family: false,
-  });
-  const toggleExpanded = (key: CardKey) =>
-    setExpanded((prev) => {
-      const willOpen = !prev[key];
-      return {
-        single: false,
-        couple: false,
-        family: false,
-        [key]: willOpen,
-      } as Record<CardKey, boolean>;
-    });
+
   // Pagination for description list
   const pageSize = 4;
   const [page, setPage] = useState(0);
-  const pageCount = Math.ceil(descriptionItems.length / pageSize);
-  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
+
   // Reset pagination when switching back to Description tab
   useEffect(() => {
     if (activeTab === 'description') setPage(0);

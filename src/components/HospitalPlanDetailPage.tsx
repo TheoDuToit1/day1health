@@ -110,7 +110,7 @@ const HospitalPlanDetailPage: React.FC = () => {
       { title: 'Every subsequent day thereafter', text: 'R1 500.00' },
       { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
       { title: 'Accident/Trauma Benefit', text: 'Up to R 150,000 per single member per incident and up to R 300,000 per family incident. Immediate cover.' },
-      { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals.' },
+      { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide.' },
       { title: 'Maternity Benefit', text: 'Covers up to R20,000 for the birth of a child in hospital. 12 month waiting period applies. Benefit only available to plan members (16 years and older).' },
       {
         title: 'Family Funeral Benefit',
@@ -137,7 +137,7 @@ const HospitalPlanDetailPage: React.FC = () => {
         { title: 'Accident/Trauma Benefit', text: 'Up to R250,000 per single member per incident and up to R500,000 per family per incident. Immediate cover.' },
         { title: 'Critical Illness Benefit', text: '1 Incident per family per annum. Critical Illness up to R250,000, however the benefit is limited to R50,000 unless the insured person accedes to a short medical examination (at their own cost) to be arranged by Day1 Health. The underwriter’s decision is final. A 3 month waiting period applies.' },
         { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
-        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
         { title: 'Maternity Benefit', text: 'Covers up to R20,000 for the birth of a child in hospital. 12 month waiting period applies. Benefit only available to plan members (16 years and older).' },
         { title: 'Family Funeral Benefit', text: 'Principal member & Spouse – R 30,000. Child > 14 years – R 10,000. Child > 6 years  – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
       ];
