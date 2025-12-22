@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
-import { AnimatedPaymentButton } from './ui/animated-payment-button';
-import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
@@ -48,29 +46,13 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
-  const [page, setPage] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const tierParam = (searchParams.get('tier') || 'value').toLowerCase();
   const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : 'Value Plus';
   const pageTitle = `Comprehensive - ${tierDisplay} - ${variantDisplay}`;
-  type CardKey = 'single' | 'couple' | 'family';
-  const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
-    single: false,
-    couple: false,
-    family: false,
-  });
-  const toggleExpanded = (key: CardKey) =>
-    setExpanded((prev) => {
-      const willOpen = !prev[key];
-      return {
-        single: false,
-        couple: false,
-        family: false,
-        [key]: willOpen,
-      } as Record<CardKey, boolean>;
-    });
+
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
   // Map tier to the correct Comprehensive plan PDF
@@ -128,9 +110,9 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   const descriptionItems: { title: string; text: string }[] = (() => {
     const base: { title: string; text: string }[] = [
       {
-        title: 'Unlimited Managed Doctor Visits',
+        title: 'Doctor Visits',
         text:
-          'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+          'Consultations available via a registered Day1 Health Network Provider. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.',
       },
       {
         title: 'Pathology',
@@ -150,7 +132,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
       {
         title: 'Acute & Chronic Medication',
         text:
-          'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
+          'Both acute and chronic medication are covered according to the Day1 Health formulary. A 1 month waiting period applies to acute medication. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
       },
       {
         title: 'Optometry (Iso Leso Optics)',
@@ -219,16 +201,6 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     }
     return base;
   })();
-
-  // Pagination for description list
-  const pageSize = 4;
-  const pageCount = Math.ceil(descriptionItems.length / pageSize);
-  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
-
-  // Reset pagination when switching back to Description tab
-  useEffect(() => {
-    if (activeTab === 'description') setPage(0);
-  }, [activeTab]);
 
   // Normalize tierParam to handle 'value', 'value plus', etc.
   const tierKey = tierParam === 'platinum' ? 'platinum' : tierParam === 'executive' ? 'executive' : 'value';

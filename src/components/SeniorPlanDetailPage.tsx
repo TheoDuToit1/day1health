@@ -101,16 +101,16 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
         { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per event. Limited to two events per annum. A 1 month waiting period applies. (Excludes Sport Injuries)' },
         { title: 'FUNERAL BENEFIT', text: 'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
       ];
     }
     if (categoryDisplay === 'comprehensive') {
       return [
-        { title: 'Unlimited Managed Doctor Visits', text: 'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.' },
+        { title: 'Doctor Visits', text: 'Consultations available via a registered Day1 Health Network Provider. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.' },
         { title: 'Pathology', text: 'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.' },
         { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.' },
         { title: 'Basic Dentistry', text: 'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.' },
-        { title: 'Chronic Medication', text: 'Chronic medication is covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. (All chronic medication is subject to preauthorisation. An additional administration fee may be levied on all approved chronic medication).' },
+        { title: 'Chronic Medication', text: 'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.' },
         { title: 'Optometry (Iso Leso Optics)', text: 'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.' },
         { title: 'Radiology', text: 'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.' },
         { title: 'Out-of-Area Visits', text: 'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.' },
@@ -128,9 +128,9 @@ const SeniorPlanDetailPage: React.FC = () => {
     // Default to Day-to-Day content
     return [
       {
-        title: 'Unlimited Managed Doctor Visits',
+        title: 'Doctor Visits',
         text:
-          'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+          'Consultations available via a registered Day1 Health Network Provider. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
       },
       {
         title: 'Basic Dentistry',
@@ -150,7 +150,7 @@ const SeniorPlanDetailPage: React.FC = () => {
       {
         title: 'Chronic Medication',
         text:
-          'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
+          'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
       },
       {
         title: 'Out-of-Area Visits',
