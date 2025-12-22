@@ -46,6 +46,11 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Chronic Medication',
     text:
+      'Acute medication covered according to the Day1 Health formulary. Linked to the doctor consultation dispensed by the Day1 Health Network GP or obtained on script from a Network Pharmacy. A 1 month waiting period applies.',
+  },
+    {
+    title: 'ACUTE MEDICATION',
+    text:
       'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
   },
   {
@@ -99,8 +104,13 @@ const PlanDetailPage: React.FC = () => {
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const pageTitle = `Day-to-Day - ${variantDisplay}`;
   
-  // All Day-to-Day plan variants download the same PDF
-  const dayToDayPdfFile = 'Application forms/Day-to-day.pdf';
+  // Map variant to the correct Day-to-Day plan detail PDF
+  const dayToDayPdfMap: Record<string, string> = {
+    'single': 'Day-To-Day Single Plan.pdf',
+    'couple': 'Day-To-Day Couple Plan.pdf',
+    'family': 'Day-To-Day Family Plan.pdf',
+  };
+  const dayToDayPdfFile = dayToDayPdfMap[variantParam] || dayToDayPdfMap['single'];
   const pdfPath = `/assets/pdf's/${dayToDayPdfFile}`;
 
   // Pagination for description list
