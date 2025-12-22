@@ -243,7 +243,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
         { title: 'Every subsequent day thereafter', text: 'R2 000.00' },
         { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 66 000.00' },
         { title: 'Illness Top-up', text: 'Up to R25,000 per insured person per year subject to an overall limit of 2 events per family policy per annum. A 3 month waiting period applies' },
-        base[14],
+        { title: 'Accident/Trauma Benefit', text: 'Up to R250,000 per single member per incident and up to R300,000 per family per incident. Immediate cover.' },
         base[15],
         base[16],
         base[17],
