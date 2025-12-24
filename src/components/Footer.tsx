@@ -240,7 +240,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             <div className={`text-sm ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              &copy; 2025 Day1Health. All rights reserved.
+              &copy; 2026 Day1Health. All rights reserved. Powered by <a href="https://wabi-sabi.click" target="_blank" rel="noopener noreferrer" className={`font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'}`}>Wabi-sabi Systems</a>
             </div>
           </div>
 
