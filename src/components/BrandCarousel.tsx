@@ -155,3 +155,5 @@ const BrandCarousel: React.FC<BrandCarouselProps> = ({ isSidebarCollapsed }) => 
 };
 
 export default BrandCarousel;
+
+

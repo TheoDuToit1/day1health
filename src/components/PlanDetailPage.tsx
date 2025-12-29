@@ -36,17 +36,17 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Doctor Visits',
     text:
-      'Consultations available via a registered Day1 Health Network Provider. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+      'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
   },
   {
     title: 'Specialist Benefit',
     text:
-      'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
+      'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network Partner. A 3 month waiting period applies.',
   },
   {
     title: 'Chronic Medication',
     text:
-      'Acute medication covered according to the Day1 Health formulary. Linked to the doctor consultation dispensed by the Day1 Health Network GP or obtained on script from a Network Pharmacy. A 1 month waiting period applies.',
+      'Acute medication covered according to the Day1 Health formulary. Linked to the doctor consultation dispensed by the Day1 Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.',
   },
     {
     title: 'ACUTE MEDICATION',
@@ -56,17 +56,17 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Radiology',
     text:
-      'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+      'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health Network Partner. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
   },
   {
     title: 'Pathology',
     text:
-      'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+      'Basic diagnostic blood tests on referral by a 1Doctor Health Network Partner and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
   },
   {
     title: 'Basic Dentistry',
     text:
-      'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+      'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Partner. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
   },
 
   {
@@ -78,7 +78,7 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Out-of-Area Visits',
     text:
-      'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+      'In the event that you cannot see your Network Partner, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network Partner or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
   },
   {
     title: 'Family Funeral Benefit',
@@ -669,3 +669,6 @@ const PlanDetailPage: React.FC = () => {
 };
 
 export default PlanDetailPage;
+
+
+

@@ -135,3 +135,5 @@ function RegulatoryInformationPage() {
 }
 
 export default RegulatoryInformationPage;
+
+

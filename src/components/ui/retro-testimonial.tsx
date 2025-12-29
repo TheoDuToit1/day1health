@@ -372,3 +372,5 @@ const ProfileImage = ({ src: _src, alt, className, ...rest }: { src: string; alt
 
 // Export the components
 export {Carousel, TestimonialCard, ProfileImage};
+
+

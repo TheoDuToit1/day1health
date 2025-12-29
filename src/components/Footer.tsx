@@ -123,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Network Search</div>
                 <ul className="mt-2 ml-3 space-y-2 list-disc">
                   <li>
-                    <a href="https://day1health.co.za/medical-directory/" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                    <a href="/directory" className={`transition-colors ${
                       isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                     }`}>
                       GP & Dental Directory
@@ -262,3 +262,4 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
 };
 
 export default Footer;
+

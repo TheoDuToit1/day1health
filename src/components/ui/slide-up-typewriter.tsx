@@ -105,3 +105,5 @@ export const SlideUpTypewriter: React.FC<SlideUpTypewriterProps> = ({
     </div>
   );
 };
+
+
