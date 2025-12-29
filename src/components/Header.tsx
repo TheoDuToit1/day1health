@@ -621,3 +621,4 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
 };
 
 export default Header;
+

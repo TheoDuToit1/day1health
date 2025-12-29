@@ -108,7 +108,7 @@ function ProceduresPage() {
         title: 'CHRONIC MEDICATION',
         content: (
           <div className="space-y-3">
-            {p('If you are diagnosed with a chronic condition, however, you need to register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP in order to receive your chronic medication. Chronic medication may be collected from any Clicks, Dischem or Medirite pharmacy nationwide and is subject to pre-authorisation. (An additional administration fee may be levied on all approved chronic medication.)')}
+            {p('If you are diagnosed with a chronic condition, however, you need to register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network Partner in order to receive your chronic medication. Chronic medication may be collected from any Clicks, Dischem or Medirite pharmacy nationwide and is subject to pre-authorisation. (An additional administration fee may be levied on all approved chronic medication.)')}
             {p('You may download the Chronic Application Form by clicking on the button below or you may contact us on 0876 100 600 and request that the application form be emailed to you.')}
             {btn("/assets/pdf's/procedures/Chronic-Medication-Application-Form.pdf", 'Download Chronic Application Form (PDF)')}
           </div>
@@ -313,3 +313,6 @@ function ProceduresPage() {
 }
 
 export default ProceduresPage;
+
+
+

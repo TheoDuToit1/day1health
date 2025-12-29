@@ -744,3 +744,4 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 };
 
 export default Contact;
+

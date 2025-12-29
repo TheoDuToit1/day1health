@@ -153,3 +153,4 @@ const Hero: React.FC<HeroProps> = ({ isSidebarCollapsed }: HeroProps) => {
 };
 
 export default Hero;
+

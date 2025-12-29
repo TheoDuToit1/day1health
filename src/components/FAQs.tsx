@@ -22,15 +22,15 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     },
     {
       question: "What is the procedure if I'm diagnosed with a chronic condition?",
-      answer: "Register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP to receive chronic medication. Collect at Clicks, Dischem or Medirite nationwide. Subject to pre-authorisation."
+      answer: "Register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network Partner to receive chronic medication. Collect at Clicks, Dischem or Medirite nationwide. Subject to pre-authorisation."
     },
     {
       question: "Can I buy my medication over the counter?",
-      answer: "No. Your Day1 Network GP must prescribe in line with our formulary. Both acute and chronic medication are covered according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
+      answer: "No. Your Day1 Network Partner must prescribe in line with our formulary. Both acute and chronic medication are covered according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
     },
     {
       question: "When I see a GP/Dentist, do I have to pay cash?",
-      answer: "No. By paying your monthly contribution in advance, your consultation is covered. Accredited providers claim directly from Day1 Health."
+      answer: "No. By paying your monthly contribution in advance, your consultation is covered. Accredited partners claim directly from Day1 Health."
     },
     {
       question: "What happens if there isn’t a Network doctor in my area?",
@@ -38,7 +38,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     },
     {
       question: "What happens if I am ill and out of town?",
-      answer: "Your Day-to-Day benefits allow 3 out-of-area visits per policy per year to an alternative Network GP or GP of your choice. For non-network GP visits, submit a Reimbursement Form and receipt to be reimbursed the agreed tariff (e.g. R340)."
+      answer: "Your Day-to-Day benefits allow 3 out-of-area visits per policy per year to an alternative Network Partner or GP of your choice. For non-Network Partner visits, submit a Reimbursement Form and receipt to be reimbursed the agreed tariff (e.g. R340)."
     },
     {
       question: "Are pre-existing conditions covered?",
@@ -247,3 +247,5 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
 };
 
 export default FAQs;
+
+

@@ -9,8 +9,8 @@ const ITEMS_PER_PAGE = 30;
 
 const DirectoryPage: React.FC = () => {
   const { isDark } = useTheme();
-  const [allProviders, setAllProviders] = useState<Provider[]>([]);
-  const [displayedProviders, setDisplayedProviders] = useState<Provider[]>([]);
+  const [allpartners, setAllpartners] = useState<Provider[]>([]);
+  const [displayedpartners, setDisplayedpartners] = useState<Provider[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,7 +32,7 @@ const DirectoryPage: React.FC = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchAllProviders();
+    fetchAllpartners();
   }, []);
 
   // Handle scroll to show/hide mobile filter bar
@@ -115,7 +115,7 @@ const DirectoryPage: React.FC = () => {
 
 
 
-  const fetchAllProviders = async () => {
+  const fetchAllpartners = async () => {
     try {
       setLoading(true);
       let allData: Provider[] = [];
@@ -147,21 +147,21 @@ const DirectoryPage: React.FC = () => {
         }
       }
       
-      console.log('Fetched all providers:', allData.length);
+      console.log('Fetched all partners:', allData.length);
       console.log('Sample provider with profile_picture:', allData.find(p => p.profile_picture));
-      setAllProviders(allData);
-      setDisplayedProviders(allData.slice(0, ITEMS_PER_PAGE));
+      setAllpartners(allData);
+      setDisplayedpartners(allData.slice(0, ITEMS_PER_PAGE));
       setCurrentPage(1);
     } catch (err) {
-      console.error('Error fetching providers:', err);
-      setAllProviders([]);
+      console.error('Error fetching partners:', err);
+      setAllpartners([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredProviders = useMemo(() => {
-    let filtered = allProviders.filter((provider) => {
+  const filteredpartners = useMemo(() => {
+    let filtered = allpartners.filter((provider) => {
       const matchesSearch = !searchQuery.trim() || 
         provider['DOCTOR SURNAME']?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         provider.SUBURB?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -188,7 +188,7 @@ const DirectoryPage: React.FC = () => {
     });
 
     return filtered;
-  }, [allProviders, searchQuery, selectedRegion, selectedProvince, selectedSuburb, selectedProfession, sortBy]);
+  }, [allpartners, searchQuery, selectedRegion, selectedProvince, selectedSuburb, selectedProfession, sortBy]);
 
   // Normalize text: lowercase, trim, and remove ALL spaces
   const normalizeText = (text: string): string => {
@@ -198,7 +198,7 @@ const DirectoryPage: React.FC = () => {
   // Get unique values for filter dropdowns (case-insensitive deduplication with space normalization)
   const regions = useMemo(() => {
     const seen = new Map<string, string>();
-    allProviders.forEach(p => {
+    allpartners.forEach(p => {
       const value = p.REGION?.trim();
       if (value) {
         const normalizedKey = normalizeText(value);
@@ -208,11 +208,11 @@ const DirectoryPage: React.FC = () => {
       }
     });
     return Array.from(seen.values()).sort();
-  }, [allProviders]);
+  }, [allpartners]);
 
   const provinces = useMemo(() => {
     const seen = new Map<string, string>();
-    allProviders.forEach(p => {
+    allpartners.forEach(p => {
       const value = p.PROVINCE?.trim();
       if (value) {
         const normalizedKey = normalizeText(value);
@@ -222,11 +222,11 @@ const DirectoryPage: React.FC = () => {
       }
     });
     return Array.from(seen.values()).sort();
-  }, [allProviders]);
+  }, [allpartners]);
 
   const suburbs = useMemo(() => {
     const seen = new Map<string, string>();
-    allProviders.forEach(p => {
+    allpartners.forEach(p => {
       const value = p.SUBURB?.trim();
       if (value) {
         const normalizedKey = normalizeText(value);
@@ -236,7 +236,7 @@ const DirectoryPage: React.FC = () => {
       }
     });
     return Array.from(seen.values()).sort();
-  }, [allProviders]);
+  }, [allpartners]);
 
   const loadMore = useCallback(() => {
     if (loadingMore) return;
@@ -246,25 +246,25 @@ const DirectoryPage: React.FC = () => {
       const nextPage = currentPage + 1;
       const startIdx = 0;
       const endIdx = nextPage * ITEMS_PER_PAGE;
-      const newItems = filteredProviders.slice(startIdx, endIdx);
+      const newItems = filteredpartners.slice(startIdx, endIdx);
       
-      setDisplayedProviders(newItems);
+      setDisplayedpartners(newItems);
       setCurrentPage(nextPage);
       setLoadingMore(false);
     }, 300);
-  }, [currentPage, loadingMore, filteredProviders]);
+  }, [currentPage, loadingMore, filteredpartners]);
 
   // Reset pagination when filtered results change
   useEffect(() => {
     setCurrentPage(1);
-    setDisplayedProviders(filteredProviders.slice(0, ITEMS_PER_PAGE));
-  }, [filteredProviders]);
+    setDisplayedpartners(filteredpartners.slice(0, ITEMS_PER_PAGE));
+  }, [filteredpartners]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loadingMore && displayedProviders.length < filteredProviders.length) {
+        if (entries[0].isIntersecting && !loadingMore && displayedpartners.length < filteredpartners.length) {
           loadMore();
         }
       },
@@ -280,7 +280,7 @@ const DirectoryPage: React.FC = () => {
         observer.unobserve(observerTarget.current);
       }
     };
-  }, [loadMore, loadingMore, displayedProviders.length, filteredProviders.length]);
+  }, [loadMore, loadingMore, displayedpartners.length, filteredpartners.length]);
 
   const getInitials = (name: string) => {
     return name
@@ -480,11 +480,11 @@ const DirectoryPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Featured Providers Cards */}
+              {/* Featured partners Cards */}
               <div className="mb-4 sm:mb-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2 sm:mb-3">Featured Providers</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2 sm:mb-3">Featured partners</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                  {filteredProviders.slice(0, 4).map((provider, index) => (
+                  {filteredpartners.slice(0, 4).map((provider, index) => (
                     <div
                       key={`featured-${index}`}
                       onClick={() => setSelectedProvider(provider)}
@@ -645,10 +645,10 @@ const DirectoryPage: React.FC = () => {
           {/* Header */}
           <div className="mb-6 sm:mb-12">
             <h2 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Available Providers
+              Available partners
             </h2>
             <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              {filteredProviders.length} provider{filteredProviders.length !== 1 ? 's' : ''} found
+              {filteredpartners.length} provider{filteredpartners.length !== 1 ? 's' : ''} found
             </p>
           </div>
 
@@ -789,13 +789,13 @@ const DirectoryPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Content - Providers Grid */}
+            {/* Right Content - partners Grid */}
             <div className="col-span-1 lg:col-span-3">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
             </div>
-          ) : displayedProviders.length > 0 ? (
+          ) : displayedpartners.length > 0 ? (
             <>
               {/* Mobile Horizontal Slider with Navigation */}
               <div className="lg:hidden w-full relative">
@@ -837,7 +837,7 @@ const DirectoryPage: React.FC = () => {
                   className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scroll-smooth px-4 mobile-slider-scrollbar"
                   style={{ scrollBehavior: 'smooth' }}
                 >
-                {displayedProviders.map((provider, index) => (
+                {displayedpartners.map((provider, index) => (
                   <div
                     key={`mobile-provider-${index}`}
                     onClick={() => setSelectedProvider(provider)}
@@ -923,7 +923,7 @@ const DirectoryPage: React.FC = () => {
 
               {/* Desktop Grid */}
               <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                {displayedProviders.map((provider, index) => (
+                {displayedpartners.map((provider, index) => (
                   <div
                     key={`provider-${index}`}
                     onClick={() => setSelectedProvider(provider)}
@@ -1027,14 +1027,14 @@ const DirectoryPage: React.FC = () => {
                 {loadingMore && (
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
                 )}
-                {!loadingMore && displayedProviders.length < filteredProviders.length && (
+                {!loadingMore && displayedpartners.length < filteredpartners.length && (
                   <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     Scroll to load more...
                   </p>
                 )}
-                {displayedProviders.length >= filteredProviders.length && filteredProviders.length > 0 && (
+                {displayedpartners.length >= filteredpartners.length && filteredpartners.length > 0 && (
                   <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    All {filteredProviders.length} providers loaded
+                    All {filteredpartners.length} partners loaded
                   </p>
                 )}
               </div>
@@ -1042,7 +1042,7 @@ const DirectoryPage: React.FC = () => {
           ) : (
             <div className={`text-center py-16 rounded-2xl ${isDark ? 'bg-gray-700/30' : 'bg-white'}`}>
               <p className={`text-lg font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                No providers found
+                No partners found
               </p>
               <p className={`text-sm mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                 Try adjusting your search or filters
@@ -1186,3 +1186,4 @@ const DirectoryPage: React.FC = () => {
 };
 
 export default DirectoryPage;
+

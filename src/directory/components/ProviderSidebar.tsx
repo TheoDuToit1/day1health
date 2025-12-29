@@ -221,11 +221,11 @@ Region: ${provider.REGION || 'N/A'}
             </div>
           </div>
 
-          {/* Registration Info */}
+          {/* Partner ID Info */}
           {provider.PRNO && (
             <div className={`rounded-lg p-4 ${isDark ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
               <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                Registration
+                Partner ID
               </p>
               <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {provider.PRNO}

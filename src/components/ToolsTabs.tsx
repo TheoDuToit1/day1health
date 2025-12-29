@@ -3198,3 +3198,4 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 };
 
 export default ToolsTabs;
+
