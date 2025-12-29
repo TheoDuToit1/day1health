@@ -160,6 +160,11 @@ const DirectoryPage: React.FC = () => {
     }
   };
 
+  // Normalize text: lowercase, trim, and remove ALL spaces
+  const normalizeText = (text: string): string => {
+    return text.toLowerCase().trim().replace(/\s+/g, '');
+  };
+
   const filteredpartners = useMemo(() => {
     let filtered = allpartners.filter((provider) => {
       const matchesSearch = !searchQuery.trim() || 
@@ -189,11 +194,6 @@ const DirectoryPage: React.FC = () => {
 
     return filtered;
   }, [allpartners, searchQuery, selectedRegion, selectedProvince, selectedSuburb, selectedProfession, sortBy]);
-
-  // Normalize text: lowercase, trim, and remove ALL spaces
-  const normalizeText = (text: string): string => {
-    return text.toLowerCase().trim().replace(/\s+/g, '');
-  };
 
   // Get unique values for filter dropdowns (case-insensitive deduplication with space normalization)
   const regions = useMemo(() => {
