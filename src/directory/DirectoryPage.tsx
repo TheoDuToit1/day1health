@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { Search, MapPin, Phone, Filter, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Phone, Filter, ArrowUpDown, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
@@ -306,6 +306,18 @@ const DirectoryPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 items-stretch relative min-h-auto z-0">
           {/* Left Column - White Background */}
           <div className={`lg:col-span-2 p-2 sm:p-4 lg:p-6 flex flex-col justify-start min-h-auto sm:min-h-screen lg:min-h-96 ${isDark ? 'bg-white/95' : 'bg-white'}`}>
+              {/* Back Button - Mobile: above the logo */}
+              <div className="block lg:hidden mb-4 ml-4">
+                <button 
+                  onClick={() => window.history.back()}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                  style={{ borderRadius: '9px' }}
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span className="text-sm font-medium">Back to Home page</span>
+                </button>
+              </div>
+
               {/* Heading with Logo */}
               <div className="flex items-center justify-start sm:justify-start gap-4 sm:gap-12 lg:gap-16 mb-4 sm:mb-8 ml-4 sm:ml-0">
                 <img 
@@ -313,9 +325,22 @@ const DirectoryPage: React.FC = () => {
                   alt="Day1 Health Logo" 
                   className="h-20 sm:h-48 lg:h-56 w-auto object-contain flex-shrink-0"
                 />
-                <h1 className="text-lg sm:text-3xl lg:text-4xl font-bold text-gray-900">
-                  Our GP & Dentist Network
-                </h1>
+                <div className="flex flex-col relative">
+                  {/* Back Button - Desktop: above "Network" */}
+                  <div className="hidden lg:block absolute -top-12 -right-4">
+                    <button 
+                      onClick={() => window.history.back()}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                      style={{ borderRadius: '9px' }}
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      <span className="text-sm font-medium">Back to Home page</span>
+                    </button>
+                  </div>
+                  <h1 className="text-lg sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                    Our GP & Dentist Network
+                  </h1>
+                </div>
               </div>
 
               {/* Search Bar and Filters - Sticky */}
