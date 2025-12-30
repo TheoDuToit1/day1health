@@ -217,7 +217,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       />
                       <ul className="space-y-1">
                         {[
-                          { label: 'GP & Dental Directory', href: 'https://day1health.co.za/medical-directory/' },
+                          { label: 'GP & Dental Directory', href: '/directory', isInternal: true },
                           { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
                           { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
                           { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },
@@ -227,7 +227,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                           <li key={item.label}>
                             <a
                               href={item.href}
-                              target="_blank"
+                              target={item.isInternal ? undefined : "_blank"}
                               rel="noopener noreferrer"
                               role="menuitem"
                               className={`flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg outline-none transition-all focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
@@ -510,7 +510,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                           }`}>
                             <div className="space-y-1">
                               {[
-                                { label: 'GP & Dental Directory', href: 'https://day1health.co.za/medical-directory/' },
+                                { label: 'GP & Dental Directory', href: '/directory', isInternal: true },
                                 { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
                                 { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
                                 { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },
@@ -520,7 +520,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                                 <a
                                   key={subItem.label}
                                   href={subItem.href}
-                                  target="_blank"
+                                  target={subItem.isInternal ? undefined : "_blank"}
                                   rel="noopener noreferrer"
                                   className={`block px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
                                     isDark
