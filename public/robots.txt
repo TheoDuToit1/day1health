@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api
 
-Sitemap: https://day1health.vercel.app/sitemap.xml
+# Sitemaps
+Sitemap: https://day1health.co.za/sitemap.xml
+Sitemap: https://day1health.co.za/api/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
