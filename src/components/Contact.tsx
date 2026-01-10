@@ -243,7 +243,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
@@ -253,7 +253,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
           <h2 id="contact" className={`text-4xl lg:text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
-            Get in Touch
+            Get In Touch
           </h2>
           <p className={`text-xl max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'

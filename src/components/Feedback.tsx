@@ -72,7 +72,7 @@ const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
     }}>
       <div className="mx-auto px-4" style={{ maxWidth: '90rem' }}>
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'

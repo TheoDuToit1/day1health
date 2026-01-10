@@ -191,8 +191,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
                     isDark 
-                      ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
-                      : 'bg-white border-emerald-200 hover:border-emerald-400'
+                      ? 'bg-gray-900 border-emerald-700 hover:border-emerald-500' 
+                      : 'bg-gray-100 border-emerald-200 hover:border-emerald-400'
                   } ${expanded.intro ? 'min-h-[420px] md:min-h-[460px] lg:min-h-[500px]' : 'min-h-[140px]'} `}
                   layout="position"
                   transition={{ 
@@ -306,11 +306,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Acute and chronic medication options</span>
+                        <span className={`text-white`}>Acute And Chronic Medication Options</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                        <span className={`text-white`}>Dental, Optical And Basic Diagnostics</span>
                       </li>
                     </ul>
                     {/* Intro helper */}
@@ -877,8 +877,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
               <motion.div 
                 className={`min-w-0 relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
                   isDark 
-                    ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
-                    : 'bg-white border-emerald-200 hover:border-emerald-400'
+                    ? 'bg-gray-900 border-emerald-700 hover:border-emerald-500' 
+                    : 'bg-gray-100 border-emerald-200 hover:border-emerald-400'
                 } ${expanded.intro ? 'min-h-[420px] md:min-h-[460px] lg:min-h-[500px]' : 'min-h-[140px]'} `}
                 layout="position"
                 transition={{ 
@@ -992,11 +992,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                      <span className={`text-white`}>Acute and chronic medication options</span>
+                      <span className={`text-white`}>Acute And Chronic Medication Options</span>
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                      <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                      <span className={`text-white`}>Dental, Optical And Basic Diagnostics</span>
                     </li>
                   </ul>
                   {/* Intro helper */}
@@ -1648,8 +1648,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
                     isDark 
-                      ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
-                      : 'bg-white border-emerald-200 hover:border-emerald-400'
+                      ? 'bg-gray-900 border-emerald-700 hover:border-emerald-500' 
+                      : 'bg-gray-100 border-emerald-200 hover:border-emerald-400'
                   } ${expanded.intro ? 'min-h-[420px]' : 'min-h-[140px]'} `}
                   layout="position"
                   transition={{ 
@@ -1763,11 +1763,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Acute and chronic medication options</span>
+                        <span className={`text-white`}>Acute And Chronic Medication Options</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                        <span className={`text-white`}>Dental, Optical And Basic Diagnostics</span>
                       </li>
                     </ul>
                     {/* Intro helper */}
@@ -2328,8 +2328,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 <motion.div 
                   className={`relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
                     isDark 
-                      ? 'bg-gray-800 border-emerald-700 hover:border-emerald-500' 
-                      : 'bg-white border-emerald-200 hover:border-emerald-400'
+                      ? 'bg-gray-900 border-emerald-700 hover:border-emerald-500' 
+                      : 'bg-gray-100 border-emerald-200 hover:border-emerald-400'
                   } ${expanded.intro ? 'min-h-[420px]' : 'min-h-[140px]'} `}
                   layout="position"
                   transition={{ 
@@ -2443,11 +2443,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Acute and chronic medication options</span>
+                        <span className={`text-white`}>Acute And Chronic Medication Options</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                        <span className={`text-white`}>Dental, Optical And Basic Diagnostics</span>
                       </li>
                     </ul>
                     {/* Intro helper */}

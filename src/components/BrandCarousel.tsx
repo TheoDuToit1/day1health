@@ -52,7 +52,7 @@ const BrandCarousel: React.FC<BrandCarouselProps> = ({ isSidebarCollapsed }) => 
               isDark ? 'text-white' : 'text-gray-900'
             }`}
           >
-            Trusted by Leading Brands
+            Trusted By Leading Brands
           </h2>
           <p
             className={`mt-4 text-lg ${
