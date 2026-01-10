@@ -117,7 +117,7 @@ const HospitalPlanDetailPage: React.FC = () => {
         text:
           'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3 month waiting period applies. (Benefit only available to plan members.)',
       },
-      { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide.' },
+      { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide.' },
     ];
     
     const valueBase: { title: string; text: string }[] = [
@@ -137,7 +137,7 @@ const HospitalPlanDetailPage: React.FC = () => {
         text:
           'Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 years – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3 month waiting period applies. (Benefit only available to plan members.)',
       },
-      { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide.' },
+      { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide.' },
     ];
     if (tierKey === 'platinum') {
       return [
@@ -163,7 +163,7 @@ const HospitalPlanDetailPage: React.FC = () => {
         { title: 'Critical Illness Benefit', text: '1 Incident per family per annum. Critical Illness up to R250,000, however the benefit is limited to R50,000 unless the insured person accedes to a short medical examination (at their own cost) to be arranged by Day1 Health. The underwriter\'s decision is final. A 3 month waiting period applies.' },
         { title: 'Accidental Permanent Disability Benefit', text: 'R 250 000 for the Principal Member only. Single event only. Immediate cover.' },
         { title: 'Family Funeral Benefit', text: 'Principal member & Spouse – R 30,000. Child > 14 years – R 10,000. Child > 6 years  – R 5,000. Child > 0 years – R 2,500. Child > 28 weeks – R1,250. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
+        { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
       ];
     }
     return valueBase;

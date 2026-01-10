@@ -54,7 +54,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
       
       <div className="container mx-auto px-4 relative z-10 pt-16">
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
@@ -64,7 +64,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
           <h2 id="how-it-works" className={`text-4xl lg:text-5xl font-bold ${
             isDark ? 'text-white' : 'text-gray-900'
           } mb-1`}>
-            Getting Covered is Simple
+            Getting Covered Is Simple
           </h2>
           <p className={`text-xl text-center mb-16 max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'

@@ -100,8 +100,8 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: 'Every subsequent day thereafter', text: 'R 1 500.00' },
         { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
         { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per event. Limited to two events per annum. A 1 month waiting period applies. (Excludes Sport Injuries)' },
-        { title: 'FUNERAL BENEFIT', text: 'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 HOUR EMERGENCY SERVICES AMBULANCE & PRE-AUTHORISATION', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
+        { title: 'Funeral Benefit', text: 'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+        { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
       ];
     }
     if (categoryDisplay === 'comprehensive') {
@@ -122,7 +122,7 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R57 000.00' },
         { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per single member and up to R 150,000 per family incident. Immediate cover. (limited to two events per annum)' },
         { title: 'Funeral Benefits', text: 'Principal Member and spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
       ];
     }
     // Default to Day-to-Day content

@@ -49,7 +49,7 @@ const descriptionItems: { title: string; text: string }[] = [
       'Acute medication covered according to the Day1 Health formulary. Linked to the doctor consultation dispensed by the Day1 Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.',
   },
     {
-    title: 'ACUTE MEDICATION',
+    title: 'Acute Medication',
     text:
       'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
   },

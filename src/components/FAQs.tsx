@@ -77,7 +77,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className={`inline-block mt-2.5 px-4 py-1.5 text-base font-medium rounded-full mb-4 ${
+          <span className={`inline-block mt-2.5 px-4 py-1.5 text-base font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
