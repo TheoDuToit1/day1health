@@ -107,7 +107,7 @@ const SeniorPlanDetailPage: React.FC = () => {
     if (categoryDisplay === 'comprehensive') {
       return [
         { title: 'Doctor Visits', text: 'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.' },
-        { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.' },
+        { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.' },
         { title: 'Chronic Medication', text: 'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.' },
         { title: 'Radiology', text: 'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health Network Partner. Black and white diagnostic x-rays only. A 1 month waiting period applies.' },
         { title: 'Pathology', text: 'Basic diagnostic blood tests on referral by a 1Doctor Health Network Partner and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.' },

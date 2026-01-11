@@ -3,12 +3,28 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- 
+    NOTE: This is a static fallback sitemap. The primary sitemap is dynamically generated at:
+    https://day1health.co.za/api/sitemap.xml
+    
+    The dynamic sitemap includes all provider pages and is automatically updated.
+    Submit the dynamic sitemap to Google Search Console for best results.
+  -->
+
   <!-- Homepage -->
   <url>
     <loc>https://day1health.co.za/</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+
+  <!-- Directory -->
+  <url>
+    <loc>https://day1health.co.za/directory</loc>
+    <lastmod>2025-01-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 
   <!-- Plans -->
@@ -56,4 +72,11 @@
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
+
+  <!-- 
+    Provider pages are dynamically generated and included in the primary sitemap at:
+    https://day1health.co.za/api/sitemap.xml
+    
+    Each provider gets a page at: https://day1health.co.za/provider/{id}
+  -->
 </urlset>

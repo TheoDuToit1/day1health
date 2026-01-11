@@ -4,6 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
 import ProviderSidebar from './components/ProviderSidebar';
+import { generateDirectorySEO, setMetaTags } from '../utils/seoHelpers';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -34,6 +35,13 @@ const DirectoryPage: React.FC = () => {
   useEffect(() => {
     fetchAllpartners();
   }, []);
+
+  // Set SEO meta tags for directory page
+  useEffect(() => {
+    const baseUrl = window.location.origin;
+    const seo = generateDirectorySEO(baseUrl, allpartners.length);
+    setMetaTags(seo);
+  }, [allpartners.length]);
 
   // Handle scroll to show/hide mobile filter bar
   useEffect(() => {
