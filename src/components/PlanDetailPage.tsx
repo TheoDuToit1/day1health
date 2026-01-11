@@ -44,12 +44,12 @@ const descriptionItems: { title: string; text: string }[] = [
       'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network Partner. A 3 month waiting period applies.',
   },
   {
-    title: 'Chronic Medication',
+    title: 'Acute Medication',
     text:
       'Acute medication covered according to the Day1 Health formulary. Linked to the doctor consultation dispensed by the Day1 Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.',
   },
     {
-    title: 'Acute Medication',
+    title: 'Chronic Medication',
     text:
       'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
   },
