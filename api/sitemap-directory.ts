@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+// Vercel serverless functions use different env var names
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
 const baseUrl = process.env.VITE_BASE_URL || 'https://day1health.co.za';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -136,12 +137,31 @@ export async function generateDirectorySitemap(): Promise<string> {
 // For Vercel serverless function
 export default async function handler(req: any, res: any) {
   try {
+    // Debug: Log available env vars (remove after fixing)
+    console.log('Environment check:', {
+      hasViteUrl: !!process.env.VITE_SUPABASE_URL,
+      hasUrl: !!process.env.SUPABASE_URL,
+      url: supabaseUrl ? 'configured' : 'missing',
+      key: supabaseKey ? 'configured' : 'missing'
+    });
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Missing Supabase configuration');
+      return res.status(500).json({ 
+        error: 'Failed to generate directory sitemap',
+        details: 'Missing Supabase environment variables. Please configure SUPABASE_URL and SUPABASE_ANON_KEY in Vercel dashboard.'
+      });
+    }
+
     const sitemap = await generateDirectorySitemap();
     res.setHeader('Content-Type', 'application/xml');
     res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
     res.status(200).send(sitemap);
   } catch (error) {
     console.error('Directory sitemap generation error:', error);
-    res.status(500).json({ error: 'Failed to generate directory sitemap' });
+    res.status(500).json({ 
+      error: 'Failed to generate directory sitemap',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 }
