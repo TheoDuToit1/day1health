@@ -11,43 +11,54 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  * Generate a URL-safe slug from provider data
  */
 function generateProviderSlug(provider: any): string {
-  const name = provider['DOCTOR SURNAME'] || '';
-  const suburb = provider.SUBURB || '';
-  
-  const cleanName = name
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-  
-  const cleanSuburb = suburb
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-  
-  const slug = cleanSuburb 
-    ? `dr-${cleanName}-${cleanSuburb}`
-    : `dr-${cleanName}`;
-  
-  return slug;
+  try {
+    const name = provider['DOCTOR SURNAME'] || provider.DOCTOR_SURNAME || '';
+    const suburb = provider.SUBURB || '';
+    
+    const cleanName = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+    
+    const cleanSuburb = suburb
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+    
+    const slug = cleanSuburb 
+      ? `dr-${cleanName}-${cleanSuburb}`
+      : `dr-${cleanName}`;
+    
+    return slug || 'dr-unknown';
+  } catch (error) {
+    console.error('Error generating slug:', error, provider);
+    return 'dr-unknown';
+  }
 }
 
 /**
  * Evaluate provider quality for sitemap inclusion
  */
 function isQualityProvider(provider: any): boolean {
-  const hasName = !!(provider['DOCTOR SURNAME'] && provider['DOCTOR SURNAME'].trim().length > 0);
-  const hasSpecialty = !!(provider.profession && provider.profession.trim().length > 0);
-  const hasLocation = !!(
-    (provider.SUBURB && provider.SUBURB.trim().length > 0) ||
-    (provider.PROVINCE && provider.PROVINCE.trim().length > 0)
-  );
-  
-  // Must have name, specialty, and location to be included
-  return hasName && hasSpecialty && hasLocation;
+  try {
+    const doctorSurname = provider['DOCTOR SURNAME'] || provider.DOCTOR_SURNAME || '';
+    const hasName = !!(doctorSurname && doctorSurname.trim().length > 0);
+    const hasSpecialty = !!(provider.profession && provider.profession.trim().length > 0);
+    const hasLocation = !!(
+      (provider.SUBURB && provider.SUBURB.trim().length > 0) ||
+      (provider.PROVINCE && provider.PROVINCE.trim().length > 0)
+    );
+    
+    // Must have name, specialty, and location to be included
+    return hasName && hasSpecialty && hasLocation;
+  } catch (error) {
+    console.error('Error checking provider quality:', error, provider);
+    return false;
+  }
 }
 
 /**
@@ -55,33 +66,30 @@ function isQualityProvider(provider: any): boolean {
  */
 export async function generateDirectorySitemap(): Promise<string> {
   try {
-    // Fetch all providers with full data for quality filtering
-    let allProviders = [];
-    let offset = 0;
-    const pageSize = 500;
-    let hasMore = true;
+    // Fetch providers with a reasonable limit to avoid timeout
+    const { data: allProviders, error } = await supabase
+      .from('providers')
+      .select('id, updated_at, "DOCTOR SURNAME", SUBURB, PROVINCE, profession')
+      .limit(1000); // Limit to prevent timeout
 
-    while (hasMore) {
-      const { data, error, count } = await supabase
-        .from('providers')
-        .select('id, updated_at, "DOCTOR SURNAME", SUBURB, PROVINCE, profession, TEL, ADDRESS', { count: 'exact' })
-        .range(offset, offset + pageSize - 1);
+    if (error) {
+      console.error('Supabase error:', error);
+      throw new Error(`Database error: ${error.message}`);
+    }
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      if (!data || data.length === 0) {
-        hasMore = false;
-      } else {
-        allProviders = [...allProviders, ...data];
-        offset += pageSize;
-
-        if (count !== null && allProviders.length >= count) {
-          hasMore = false;
-        }
-      }
+    if (!allProviders || allProviders.length === 0) {
+      console.log('No providers found');
+      // Return empty sitemap with just directory landing page
+      const today = new Date().toISOString().split('T')[0];
+      return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/directory</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>`;
     }
 
     // Filter for quality providers only
@@ -137,31 +145,42 @@ export async function generateDirectorySitemap(): Promise<string> {
 // For Vercel serverless function
 export default async function handler(req: any, res: any) {
   try {
-    // Debug: Log available env vars (remove after fixing)
-    console.log('Environment check:', {
-      hasViteUrl: !!process.env.VITE_SUPABASE_URL,
-      hasUrl: !!process.env.SUPABASE_URL,
-      url: supabaseUrl ? 'configured' : 'missing',
-      key: supabaseKey ? 'configured' : 'missing'
-    });
+    // Set timeout header
+    res.setHeader('X-Vercel-Timeout', '10');
+    
+    // Debug: Log environment
+    console.log('Starting sitemap generation...');
+    console.log('Supabase URL configured:', !!supabaseUrl);
+    console.log('Supabase Key configured:', !!supabaseKey);
 
     if (!supabaseUrl || !supabaseKey) {
       console.error('Missing Supabase configuration');
       return res.status(500).json({ 
         error: 'Failed to generate directory sitemap',
-        details: 'Missing Supabase environment variables. Please configure SUPABASE_URL and SUPABASE_ANON_KEY in Vercel dashboard.'
+        details: 'Missing Supabase environment variables'
       });
     }
 
     const sitemap = await generateDirectorySitemap();
+    
+    console.log('Sitemap generated successfully, length:', sitemap.length);
+    
     res.setHeader('Content-Type', 'application/xml');
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    res.setHeader('Cache-Control', 'public, max-age=3600');
     res.status(200).send(sitemap);
   } catch (error) {
     console.error('Directory sitemap generation error:', error);
+    
+    // More detailed error response
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
+    
+    console.error('Error details:', { message: errorMessage, stack: errorStack });
+    
     res.status(500).json({ 
       error: 'Failed to generate directory sitemap',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: errorMessage,
+      timestamp: new Date().toISOString()
     });
   }
 }
