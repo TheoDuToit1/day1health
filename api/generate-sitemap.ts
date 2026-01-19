@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { generateSitemapEntry } from '../src/utils/seoHelpers';
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+// Vercel serverless functions use different env var names
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
 const baseUrl = process.env.VITE_BASE_URL || 'https://day1health.co.za';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -146,12 +147,24 @@ export async function generateSitemap(): Promise<string> {
 // For Vercel serverless function
 export default async function handler(req: any, res: any) {
   try {
+    // Log environment check (remove in production)
+    if (!process.env.VITE_SUPABASE_URL && !process.env.SUPABASE_URL) {
+      console.error('Missing Supabase URL environment variable');
+      return res.status(500).json({ 
+        error: 'Failed to generate sitemap',
+        details: 'Missing Supabase configuration'
+      });
+    }
+
     const sitemap = await generateSitemap();
     res.setHeader('Content-Type', 'application/xml');
     res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
     res.status(200).send(sitemap);
   } catch (error) {
     console.error('Sitemap generation error:', error);
-    res.status(500).json({ error: 'Failed to generate sitemap' });
+    res.status(500).json({ 
+      error: 'Failed to generate sitemap',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 }
