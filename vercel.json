@@ -71,6 +71,16 @@
       "source": "/home",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/medical-directory",
+      "destination": "/directory",
+      "permanent": true
+    },
+    {
+      "source": "/medical-directory/:slug",
+      "destination": "/directory/:slug",
+      "permanent": true
     }
   ],
   "trailingSlash": false,

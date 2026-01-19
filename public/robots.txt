@@ -1,11 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /admin
-Disallow: /api
+Disallow: /api/send-email
 
-# Sitemaps
-Sitemap: https://day1health.co.za/sitemap.xml
-Sitemap: https://day1health.co.za/api/sitemap.xml
+# Sitemaps (using sitemap index for better organization)
+Sitemap: https://day1health.co.za/api/sitemap-index
 
 # Crawl delay
 Crawl-delay: 1

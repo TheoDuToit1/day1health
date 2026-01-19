@@ -1,15 +1,20 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Search, MapPin, Phone, Filter, ArrowUpDown, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
 import ProviderSidebar from './components/ProviderSidebar';
 import { generateDirectorySEO, setMetaTags } from '../utils/seoHelpers';
+import { findProviderBySlug, getProviderPath } from './utils/slugHelpers';
+import { generateProviderProfileSEO } from './utils/providerSEO';
 
 const ITEMS_PER_PAGE = 30;
 
 const DirectoryPage: React.FC = () => {
   const { isDark } = useTheme();
+  const { slug } = useParams<{ slug?: string }>();
+  const navigate = useNavigate();
   const [allpartners, setAllpartners] = useState<Provider[]>([]);
   const [displayedpartners, setDisplayedpartners] = useState<Provider[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,6 +33,7 @@ const DirectoryPage: React.FC = () => {
   const [touchStart, setTouchStart] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const observerTarget = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -39,9 +45,37 @@ const DirectoryPage: React.FC = () => {
   // Set SEO meta tags for directory page
   useEffect(() => {
     const baseUrl = window.location.origin;
-    const seo = generateDirectorySEO(baseUrl, allpartners.length);
-    setMetaTags(seo);
-  }, [allpartners.length]);
+    
+    // If slug is provided and provider is selected, set provider SEO
+    if (slug && selectedProvider) {
+      const seo = generateProviderProfileSEO(selectedProvider, baseUrl, slug);
+      setMetaTags(seo);
+    } else {
+      // Default directory SEO
+      const seo = generateDirectorySEO(baseUrl, allpartners.length);
+      setMetaTags(seo);
+    }
+  }, [slug, selectedProvider, allpartners.length]);
+
+  // Handle slug-based routing - load provider from URL
+  useEffect(() => {
+    if (slug && allpartners.length > 0 && !selectedProvider) {
+      const provider = findProviderBySlug(allpartners, slug);
+      
+      if (provider) {
+        setSelectedProvider(provider);
+        setNotFound(false);
+      } else {
+        // Provider not found - set 404 state
+        setNotFound(true);
+        setSelectedProvider(null);
+      }
+    } else if (!slug && selectedProvider) {
+      // Clear selection if no slug in URL
+      setSelectedProvider(null);
+      setNotFound(false);
+    }
+  }, [slug, allpartners, selectedProvider]);
 
   // Handle scroll to show/hide mobile filter bar
   useEffect(() => {
@@ -290,6 +324,17 @@ const DirectoryPage: React.FC = () => {
     };
   }, [loadMore, loadingMore, displayedpartners.length, filteredpartners.length]);
 
+  // Handle provider selection - navigate to slug URL
+  const handleProviderClick = (provider: Provider) => {
+    const path = getProviderPath(provider);
+    navigate(path, { replace: false });
+  };
+
+  // Handle closing sidebar - navigate back to directory
+  const handleCloseSidebar = () => {
+    navigate('/directory', { replace: false });
+  };
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -298,6 +343,28 @@ const DirectoryPage: React.FC = () => {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  // Show 404 if provider not found
+  if (notFound) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="text-center max-w-md px-4">
+          <h1 className={`text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            404 - Provider Not Found
+          </h1>
+          <p className={`text-lg mb-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            The healthcare provider you're looking for could not be found.
+          </p>
+          <button
+            onClick={() => navigate('/directory')}
+            className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Browse All Providers
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -520,7 +587,7 @@ const DirectoryPage: React.FC = () => {
                   {filteredpartners.slice(0, 4).map((provider, index) => (
                     <div
                       key={`featured-${index}`}
-                      onClick={() => setSelectedProvider(provider)}
+                      onClick={() => handleProviderClick(provider)}
                       className="p-2 sm:p-3 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-all border border-gray-200 hover:border-green-300"
                     >
                       <div className="flex flex-col items-center text-center gap-1 sm:gap-2">
@@ -873,7 +940,7 @@ const DirectoryPage: React.FC = () => {
                 {displayedpartners.map((provider, index) => (
                   <div
                     key={`mobile-provider-${index}`}
-                    onClick={() => setSelectedProvider(provider)}
+                    onClick={() => handleProviderClick(provider)}
                     className={`flex-shrink-0 w-full sm:w-full group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 snap-center ${
                       isDark
                         ? 'bg-gray-700/50 border border-gray-600 hover:bg-gray-700'
@@ -959,7 +1026,7 @@ const DirectoryPage: React.FC = () => {
                 {displayedpartners.map((provider, index) => (
                   <div
                     key={`provider-${index}`}
-                    onClick={() => setSelectedProvider(provider)}
+                    onClick={() => handleProviderClick(provider)}
                     className={`group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${
                       isDark
                         ? 'bg-gray-700/50 border border-gray-600 hover:bg-gray-700'
@@ -1198,7 +1265,7 @@ const DirectoryPage: React.FC = () => {
         <ProviderSidebar
           provider={selectedProvider}
           isDark={isDark}
-          onClose={() => setSelectedProvider(null)}
+          onClose={handleCloseSidebar}
         />
       )}
 

@@ -1,82 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- 
-    NOTE: This is a static fallback sitemap. The primary sitemap is dynamically generated at:
-    https://day1health.co.za/api/sitemap.xml
+    SITEMAP INDEX - References all sub-sitemaps
     
-    The dynamic sitemap includes all provider pages and is automatically updated.
-    Submit the dynamic sitemap to Google Search Console for best results.
-  -->
-
-  <!-- Homepage -->
-  <url>
-    <loc>https://day1health.co.za/</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <!-- Directory -->
-  <url>
-    <loc>https://day1health.co.za/directory</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Plans -->
-  <url>
-    <loc>https://day1health.co.za/plans/day-to-day</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://day1health.co.za/plans/hospital</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://day1health.co.za/plans/comprehensive</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://day1health.co.za/plans/senior-plan</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://day1health.co.za/plans/junior-executive</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Static pages -->
-  <url>
-    <loc>https://day1health.co.za/procedures</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://day1health.co.za/regulatory-information</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- 
-    Provider pages are dynamically generated and included in the primary sitemap at:
-    https://day1health.co.za/api/sitemap.xml
+    This is the primary sitemap to submit to Google Search Console.
+    It references two dynamic sitemaps that are automatically updated:
     
-    Each provider gets a page at: https://day1health.co.za/provider/{id}
+    1. Main Sitemap - Static pages (homepage, plans, etc.)
+    2. Directory Sitemap - Provider profiles (quality-filtered)
+    
+    Submit this URL to Google Search Console:
+    https://day1health.co.za/sitemap.xml
+    
+    The directory sitemap only includes complete provider profiles with:
+    - Doctor name
+    - Specialty/profession
+    - Location (suburb or province)
+    
+    This quality filtering prevents Google penalties for thin content.
   -->
-</urlset>
+  
+  <!-- Main sitemap: Static pages -->
+  <sitemap>
+    <loc>https://day1health.co.za/api/generate-sitemap</loc>
+    <lastmod>2026-01-19</lastmod>
+  </sitemap>
+  
+  <!-- Directory sitemap: Provider profiles (quality-filtered) -->
+  <sitemap>
+    <loc>https://day1health.co.za/api/sitemap-directory</loc>
+    <lastmod>2026-01-19</lastmod>
+  </sitemap>
+</sitemapindex>

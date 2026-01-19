@@ -249,6 +249,11 @@ function App() {
             <DirectoryPage />
           </Suspense>
         } />
+        <Route path="/directory/:slug" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <DirectoryPage />
+          </Suspense>
+        } />
         <Route path="/provider/:id" element={
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <ProviderDetailPage />

@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { generateSitemapEntry } from '../src/utils/seoHelpers';
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
@@ -50,7 +49,10 @@ function isQualityProvider(provider: any): boolean {
   return hasName && hasSpecialty && hasLocation;
 }
 
-export async function generateSitemap(): Promise<string> {
+/**
+ * Generate directory-specific sitemap
+ */
+export async function generateDirectorySitemap(): Promise<string> {
   try {
     // Fetch all providers with full data for quality filtering
     let allProviders = [];
@@ -84,7 +86,7 @@ export async function generateSitemap(): Promise<string> {
     // Filter for quality providers only
     const qualityProviders = allProviders.filter(isQualityProvider);
     
-    console.log(`Sitemap: ${qualityProviders.length} quality providers out of ${allProviders.length} total`);
+    console.log(`Directory Sitemap: ${qualityProviders.length} quality providers out of ${allProviders.length} total`);
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -96,29 +98,16 @@ export async function generateSitemap(): Promise<string> {
                             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 `;
 
-    // Static pages
-    const staticPages = [
-      { loc: '/', changefreq: 'daily', priority: 1.0 },
-      { loc: '/plans/day-to-day', changefreq: 'monthly', priority: 0.8 },
-      { loc: '/plans/hospital', changefreq: 'monthly', priority: 0.8 },
-      { loc: '/plans/comprehensive', changefreq: 'monthly', priority: 0.8 },
-      { loc: '/plans/senior-plan', changefreq: 'monthly', priority: 0.8 },
-      { loc: '/plans/junior-executive', changefreq: 'monthly', priority: 0.8 },
-      { loc: '/procedures', changefreq: 'yearly', priority: 0.6 },
-      { loc: '/regulatory-information', changefreq: 'yearly', priority: 0.6 },
-      { loc: '/directory', changefreq: 'weekly', priority: 0.9 },
-    ];
+    // Main directory page
+    sitemapXml += `  <url>
+    <loc>${baseUrl}/directory</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+`;
 
-    staticPages.forEach((page) => {
-      sitemapXml += generateSitemapEntry(
-        `${baseUrl}${page.loc}`,
-        today,
-        page.changefreq as any,
-        page.priority
-      ) + '\n';
-    });
-
-    // Provider pages - use slug-based URLs (quality filtered)
+    // Provider pages - quality filtered, slug-based URLs
     qualityProviders.forEach((provider) => {
       const lastmod = provider.updated_at
         ? new Date(provider.updated_at).toISOString().split('T')[0]
@@ -126,19 +115,20 @@ export async function generateSitemap(): Promise<string> {
 
       const slug = generateProviderSlug(provider);
       
-      sitemapXml += generateSitemapEntry(
-        `${baseUrl}/directory/${slug}`,
-        lastmod,
-        'monthly',
-        0.7
-      ) + '\n';
+      sitemapXml += `  <url>
+    <loc>${baseUrl}/directory/${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
     });
 
     sitemapXml += '</urlset>';
 
     return sitemapXml;
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    console.error('Error generating directory sitemap:', error);
     throw error;
   }
 }
@@ -146,12 +136,12 @@ export async function generateSitemap(): Promise<string> {
 // For Vercel serverless function
 export default async function handler(req: any, res: any) {
   try {
-    const sitemap = await generateSitemap();
+    const sitemap = await generateDirectorySitemap();
     res.setHeader('Content-Type', 'application/xml');
     res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
     res.status(200).send(sitemap);
   } catch (error) {
-    console.error('Sitemap generation error:', error);
-    res.status(500).json({ error: 'Failed to generate sitemap' });
+    console.error('Directory sitemap generation error:', error);
+    res.status(500).json({ error: 'Failed to generate directory sitemap' });
   }
 }
