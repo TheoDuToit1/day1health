@@ -66,10 +66,10 @@ function isQualityProvider(provider: any): boolean {
  */
 export async function generateDirectorySitemap(): Promise<string> {
   try {
-    // Fetch providers with a reasonable limit to avoid timeout
+    // Fetch providers - use * to get all columns (table doesn't have 'id' column)
     const { data: allProviders, error } = await supabase
       .from('providers')
-      .select('id, updated_at, "DOCTOR SURNAME", SUBURB, PROVINCE, profession')
+      .select('*')
       .limit(1000); // Limit to prevent timeout
 
     if (error) {
@@ -118,10 +118,8 @@ export async function generateDirectorySitemap(): Promise<string> {
 
     // Provider pages - quality filtered, slug-based URLs
     qualityProviders.forEach((provider) => {
-      const lastmod = provider.updated_at
-        ? new Date(provider.updated_at).toISOString().split('T')[0]
-        : today;
-
+      // Use today's date since we don't have updated_at
+      const lastmod = today;
       const slug = generateProviderSlug(provider);
       
       sitemapXml += `  <url>

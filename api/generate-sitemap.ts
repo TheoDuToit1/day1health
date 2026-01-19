@@ -53,39 +53,22 @@ function isQualityProvider(provider: any): boolean {
 
 export async function generateSitemap(): Promise<string> {
   try {
-    // Fetch all providers with full data for quality filtering
-    let allProviders = [];
-    let offset = 0;
-    const pageSize = 500;
-    let hasMore = true;
+    // Fetch providers - simplified to avoid timeout and column issues
+    const { data: allProviders, error } = await supabase
+      .from('providers')
+      .select('*')
+      .limit(1000);
 
-    while (hasMore) {
-      const { data, error, count } = await supabase
-        .from('providers')
-        .select('id, updated_at, "DOCTOR SURNAME", SUBURB, PROVINCE, profession, TEL, ADDRESS', { count: 'exact' })
-        .range(offset, offset + pageSize - 1);
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      if (!data || data.length === 0) {
-        hasMore = false;
-      } else {
-        allProviders = [...allProviders, ...data];
-        offset += pageSize;
-
-        if (count !== null && allProviders.length >= count) {
-          hasMore = false;
-        }
-      }
+    if (error) {
+      console.error('Supabase error:', error);
+      // Continue without providers if there's an error
+      console.log('Continuing with static pages only');
     }
 
     // Filter for quality providers only
-    const qualityProviders = allProviders.filter(isQualityProvider);
+    const qualityProviders = allProviders ? allProviders.filter(isQualityProvider) : [];
     
-    console.log(`Sitemap: ${qualityProviders.length} quality providers out of ${allProviders.length} total`);
+    console.log(`Sitemap: ${qualityProviders.length} quality providers out of ${allProviders?.length || 0} total`);
 
     const today = new Date().toISOString().split('T')[0];
 
