@@ -3,8 +3,8 @@ Allow: /
 Disallow: /admin
 Disallow: /api/send-email
 
-# Sitemaps (using sitemap index for better organization)
-Sitemap: https://day1health.co.za/api/sitemap-index
+# Sitemap
+Sitemap: https://day1health.co.za/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1
