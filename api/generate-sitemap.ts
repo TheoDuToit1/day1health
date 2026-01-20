@@ -104,15 +104,11 @@ export async function generateSitemap(): Promise<string> {
 
     // Provider pages - use slug-based URLs (quality filtered)
     qualityProviders.forEach((provider) => {
-      const lastmod = provider.updated_at
-        ? new Date(provider.updated_at).toISOString().split('T')[0]
-        : today;
-
       const slug = generateProviderSlug(provider);
       
       sitemapXml += generateSitemapEntry(
         `${baseUrl}/directory/${slug}`,
-        lastmod,
+        today,
         'monthly',
         0.7
       ) + '\n';

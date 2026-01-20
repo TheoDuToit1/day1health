@@ -42,15 +42,46 @@ const DirectoryPage: React.FC = () => {
     fetchAllpartners();
   }, []);
 
-  // Set SEO meta tags for directory page
+  // Set SEO meta tags IMMEDIATELY from slug (before data loads)
   useEffect(() => {
     const baseUrl = window.location.origin;
     
-    // If slug is provided and provider is selected, set provider SEO
+    if (slug) {
+      // Parse slug to get basic info for IMMEDIATE meta tag update
+      const parts = slug.replace('dr-', '').split('-');
+      const name = parts.slice(0, -1).join(' ').toUpperCase() || 'Healthcare Provider';
+      const location = parts[parts.length - 1].toUpperCase() || 'South Africa';
+      
+      // Set placeholder meta tags IMMEDIATELY (before provider data loads)
+      const placeholderSeo = {
+        title: `${name} - Healthcare Provider in ${location} | Day1Health`,
+        description: `Find ${name}, a healthcare provider in ${location}. Part of Day1Health's network of trusted medical professionals.`,
+        keywords: ['healthcare', 'medical', name, location, 'Day1Health'],
+        ogTitle: `${name} - Healthcare Provider | Day1Health`,
+        ogDescription: `Find ${name} in ${location}`,
+        ogImage: 'https://day1health.co.za/assets/images/Logo.jpg',
+        ogUrl: `${baseUrl}/directory/${slug}`,
+        canonicalUrl: `${baseUrl}/directory/${slug}`,
+        structuredData: {
+          '@context': 'https://schema.org',
+          '@type': 'MedicalBusiness',
+          name: name,
+          url: `${baseUrl}/directory/${slug}`,
+        }
+      };
+      setMetaTags(placeholderSeo);
+    }
+  }, [slug]); // Run immediately when slug changes
+
+  // Update meta tags with FULL data once provider is loaded
+  useEffect(() => {
+    const baseUrl = window.location.origin;
+    
+    // If slug is provided and provider is selected, set provider SEO with full data
     if (slug && selectedProvider) {
       const seo = generateProviderProfileSEO(selectedProvider, baseUrl, slug);
       setMetaTags(seo);
-    } else {
+    } else if (!slug) {
       // Default directory SEO
       const seo = generateDirectorySEO(baseUrl, allpartners.length);
       setMetaTags(seo);
