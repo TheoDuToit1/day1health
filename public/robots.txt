@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/send-email
+
+# Sitemap
+Sitemap: https://day1health.co.za/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1

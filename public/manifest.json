@@ -1,0 +1,13 @@
+{
+  "name": "Day1Health - Health Insurance Solutions",
+  "short_name": "Day1Health",
+  "description": "Affordable and comprehensive medical insurance solutions for your health and wellbeing",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "categories": ["health", "medical", "insurance"],
+  "icons": []
+}

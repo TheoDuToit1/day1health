@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 
+    SITEMAP INDEX - References all sub-sitemaps
+    
+    This is the primary sitemap to submit to Google Search Console.
+    It references two dynamic sitemaps that are automatically updated:
+    
+    1. Main Sitemap - Static pages (homepage, plans, etc.)
+    2. Directory Sitemap - Provider profiles (quality-filtered)
+    
+    Submit this URL to Google Search Console:
+    https://day1health.co.za/sitemap.xml
+    
+    The directory sitemap only includes complete provider profiles with:
+    - Doctor name
+    - Specialty/profession
+    - Location (suburb or province)
+    
+    This quality filtering prevents Google penalties for thin content.
+  -->
+  
+  <!-- Main sitemap: Static pages -->
+  <sitemap>
+    <loc>https://day1health.co.za/api/generate-sitemap</loc>
+    <lastmod>2026-01-19</lastmod>
+  </sitemap>
+  
+  <!-- Directory sitemap: Provider profiles (quality-filtered) -->
+  <sitemap>
+    <loc>https://day1health.co.za/api/sitemap-directory</loc>
+    <lastmod>2026-01-19</lastmod>
+  </sitemap>
+</sitemapindex>
