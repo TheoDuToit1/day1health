@@ -495,25 +495,148 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <option value="family">Family</option>
                           </select>
                         </div>
-                        {option === 'family' && (
-                          <div>
-                            <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children</label>
-                            <select
-                              value={childCount}
-                              onChange={(e) => {
-                                const c = parseInt(e.target.value, 10);
-                                setChildCount(c);
-                                updateUrl('family', c);
-                              }}
-                              className={`w-full mt-1 px-3 py-2 rounded-lg border text-sm ${isDark ? 'bg-gray-900 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
-                            >
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                            </select>
-                          </div>
+
+                        {option === 'single' && (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                }`}>
+                                  1
+                                </div>
+                              </div>
+                            </div>
+                          </>
                         )}
+                        {option === 'couple' && (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                }`}>
+                                  2
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease children"
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('couple', Math.max(0, childCount - 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  childCount === 0
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {childCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase children"
+                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('couple', Math.min(4, childCount + 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        {option === 'family' ? (
+                          <>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease adults"
+                                  onClick={() => setAdultCount(Math.max(1, adultCount - 1))}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  adultCount === 1
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {adultCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase adults"
+                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                              </div>
+                              <div className="mt-1 flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Decrease children"
+                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('family', Math.max(0, childCount - 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  -
+                                </button>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
+                                  childCount === 0
+                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
+                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
+                                }`}>
+                                  {childCount}
+                                </div>
+                                <button
+                                  type="button"
+                                  aria-label="Increase children"
+                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('family', Math.min(4, childCount + 1)); }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
+                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                                  }`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        ) : null}
                       </div>
 
                       <div className="mt-5">
