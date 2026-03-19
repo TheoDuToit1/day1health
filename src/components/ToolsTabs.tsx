@@ -200,9 +200,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent: animated Single/Couple/Family */}
                   <IntroCarousel
                     images={[
-                      '/assets/images/single (1).jpg',
-                      '/assets/images/couple (1).jpg',
-                      '/assets/images/family (1).jpg',
+                      '/assets/images/single.jpg',
+                      '/assets/images/couple.jpg',
+                      '/assets/images/family.jpg',
                     ]}
                   />
                   <div
@@ -366,7 +366,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.student && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="/assets/images/single (1).jpg"
+                        src="/assets/images/single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -540,7 +540,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.family && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="/assets/images/family (1).jpg"
+                        src="/assets/images/family.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -702,7 +702,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {expanded.basic && (
                     <div className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0">
                       <img
-                        src="/assets/images/couple (1).jpg"
+                        src="/assets/images/couple.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -886,9 +886,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                 {/* Background accent: animated Single/Couple/Family */}
                 <IntroCarousel
                   images={[
-                    '/assets/images/single (1).jpg',
-                    '/assets/images/couple (1).jpg',
-                    '/assets/images/family (1).jpg',
+                    '/assets/images/single.jpg',
+                    '/assets/images/couple.jpg',
+                    '/assets/images/family.jpg',
                   ]}
                 />
                 <div
@@ -1063,7 +1063,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="/assets/images/family (1).jpg"
+                      src="/assets/images/family.jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1163,24 +1163,6 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Up to 4 children</span></li>
                     </ul>
                   </div>
-                  {/* Family children stepper */}
-                  <div className="mb-0 flex items-center justify-between gap-3">
-                    <label className={`${isDark ? 'text-gray-200' : 'text-gray-800'} text-sm`}>Children</label>
-                    <div className="inline-flex items-center gap-2">
-                      <div className={`${isDark ? 'text-white' : 'text-gray-900'} min-w-[2ch] text-center font-semibold`}>
-                        {familyChildren}
-                      </div>
-                      <button
-                        type="button"
-                        aria-label="increase children"
-                        className={`w-8 h-8 rounded-md border text-sm font-semibold ${isDark ? 'bg-gray-900/70 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} disabled:opacity-50`}
-                        onClick={() => setFamilyChildren((c) => Math.min(4, c + 1))}
-                        disabled={familyChildren >= 4}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
                 </motion.div>
                 <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                   <div className="relative">
@@ -1265,7 +1247,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="/assets/images/couple (1).jpg"
+                      src="/assets/images/couple.jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1445,7 +1427,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                   >
                     <img
-                      src="/assets/images/single (1).jpg"
+                      src="/assets/images/single.jpg"
                       alt=""
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -1627,9 +1609,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent: animated Single/Couple/Family */}
                   <IntroCarousel
                     images={[
-                      '/assets/images/single (1).jpg',
-                      '/assets/images/couple (1).jpg',
-                      '/assets/images/family (1).jpg',
+                      '/assets/images/single.jpg',
+                      '/assets/images/couple.jpg',
+                      '/assets/images/family.jpg',
                     ]}
                   />
                   <div
@@ -1801,7 +1783,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/single (1).jpg"
+                        src="/assets/images/single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -1977,7 +1959,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/family (1).jpg"
+                        src="/assets/images/family.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2143,7 +2125,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/couple (1).jpg"
+                        src="/assets/images/couple.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2307,9 +2289,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   {/* Background accent: animated Single/Couple/Family */}
                   <IntroCarousel
                     images={[
-                      '/assets/images/single (1).jpg',
-                      '/assets/images/couple (1).jpg',
-                      '/assets/images/family (1).jpg',
+                      '/assets/images/single.jpg',
+                      '/assets/images/couple.jpg',
+                      '/assets/images/family.jpg',
                     ]}
                   />
                   <div
@@ -2480,7 +2462,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="/assets/images/single (1).jpg"
+                        src="/assets/images/single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2659,7 +2641,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -2837,7 +2819,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                     >
                       <img
-                        src="https://placehold.co/1200x800/111/fff?text=Demo"
+                        src="/assets/images/single.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -3127,3 +3109,4 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
 };
 
 export default ToolsTabs;
+

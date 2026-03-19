@@ -431,7 +431,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/single (1).jpg"
+                              src="/assets/images/single.jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -599,7 +599,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/couple (1).jpg"
+                              src="/assets/images/couple.jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -767,7 +767,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/family (1).jpg"
+                              src="/assets/images/family.jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"

@@ -11,7 +11,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
 
 const coverItems = [
-  'Unlimited Doctor Visits',
+  'Private Managed Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
 ];
@@ -31,7 +31,7 @@ const additionalInfoOptions: string[] = [
 
 const descriptionItems: { title: string; text: string }[] = [
   {
-    title: 'Unlimited Managed Doctor Visits',
+    title: 'Private Managed Doctor Visits',
     text:
       'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
   },
@@ -441,7 +441,7 @@ const PlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/single (1).jpg"
+                              src="/assets/images/single.jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -610,7 +610,7 @@ const PlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/couple (1).jpg"
+                              src="/assets/images/couple.jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
@@ -779,7 +779,7 @@ const PlanDetailPage: React.FC = () => {
                             transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
                           >
                             <img
-                              src="/assets/images/family (1).jpg"
+                              src="/assets/images/family.jpg"
                               alt=""
                               className="w-full h-full object-cover"
                               loading="lazy"
