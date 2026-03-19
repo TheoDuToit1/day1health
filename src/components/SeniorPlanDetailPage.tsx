@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -28,6 +28,7 @@ const SeniorPlanDetailPage: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [option, setOption] = useState('');
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
+  const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Only Single or Couple for Senior
@@ -92,7 +93,7 @@ const SeniorPlanDetailPage: React.FC = () => {
     }
     if (categoryDisplay === 'comprehensive') {
       return [
-        { title: 'Private Managed Doctor Visits', text: 'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.' },
+        { title: 'Private Managed Doctor Visits', text: 'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.' },
         { title: 'Pathology', text: 'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.' },
         { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.' },
         { title: 'Basic Dentistry', text: 'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.' },
@@ -116,7 +117,7 @@ const SeniorPlanDetailPage: React.FC = () => {
       {
         title: 'Private Managed Doctor Visits',
         text:
-          'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+          'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
       },
       {
         title: 'Pathology',
@@ -298,7 +299,49 @@ const SeniorPlanDetailPage: React.FC = () => {
                   viewport={{ once: true, amount: 0.4 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
-                  <div className="flex flex-wrap items-center gap-2">
+                  {/* Mobile: Carousel */}
+                  <div className="md:hidden">
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                      <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {coverCarouselIndex + 1} / {displayCoverItems.length}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setCoverCarouselIndex((prev) => prev === 0 ? displayCoverItems.length - 1 : prev - 1)}
+                        className={`p-2 rounded-lg ${isDark ? 'text-emerald-300 hover:bg-emerald-500/10' : 'text-emerald-700 hover:bg-emerald-50'}`}
+                        aria-label="Previous"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <div className="flex-1">
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={coverCarouselIndex}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.2 }}
+                            className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm border w-full ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
+                          >
+                            <Check className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">{displayCoverItems[coverCarouselIndex]}</span>
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                      <button
+                        onClick={() => setCoverCarouselIndex((prev) => prev === displayCoverItems.length - 1 ? 0 : prev + 1)}
+                        className={`p-2 rounded-lg ${isDark ? 'text-emerald-300 hover:bg-emerald-500/10' : 'text-emerald-700 hover:bg-emerald-50'}`}
+                        aria-label="Next"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Desktop: Flex wrap */}
+                  <div className="hidden md:flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
                     {displayCoverItems.map((c: string, i: number) => (
                       <motion.span
