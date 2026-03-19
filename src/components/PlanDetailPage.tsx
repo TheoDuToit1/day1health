@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AnimatedPaymentButton } from './ui/animated-payment-button';
+import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
 import Footer from './Footer';
@@ -9,14 +11,9 @@ import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
 
 const coverItems = [
-  'Unlimited Managed Doctor Visits',
+  'Private Managed Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
-  'Specialist',
-  'Radiology',
-  'Pathology',
-  'Out-of-Area Visits',
-  'Funeral Benefit',
 ];
 
 const additionalInfoOptions: string[] = [
@@ -34,51 +31,49 @@ const additionalInfoOptions: string[] = [
 
 const descriptionItems: { title: string; text: string }[] = [
   {
-    title: 'Doctor Visits',
+    title: 'Private Managed Doctor Visits',
     text:
-      'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
-  },
-  {
-    title: 'Specialist Benefit',
-    text:
-      'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network Partner. A 3 month waiting period applies.',
-  },
-  {
-    title: 'Acute Medication',
-    text:
-      'Acute medication covered according to the Day1 Health formulary. Linked to the doctor consultation dispensed by the Day1 Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.',
-  },
-    {
-    title: 'Chronic Medication',
-    text:
-      'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
-  },
-  {
-    title: 'Radiology',
-    text:
-      'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health Network Partner. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+      'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
   },
   {
     title: 'Pathology',
     text:
-      'Basic diagnostic blood tests on referral by a 1Doctor Health Network Partner and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+      'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+  },
+  {
+    title: 'Specialist Benefit',
+    text:
+      'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
   },
   {
     title: 'Basic Dentistry',
     text:
-      'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Partner. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+      'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
   },
-
+  {
+    title: 'Acute Medication',
+    text:
+      'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network GP or obtained on script from a Network Pharmacy. A 1 month waiting period applies.',
+  },
   {
     title: 'Optometry (Iso Leso Optics)',
     text:
       'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
   },
-
+  {
+    title: 'Chronic Medication',
+    text:
+      'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
+  },
   {
     title: 'Out-of-Area Visits',
     text:
-      'In the event that you cannot see your Network Partner, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network Partner or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+      'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+  },
+  {
+    title: 'Radiology',
+    text:
+      'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
   },
   {
     title: 'Family Funeral Benefit',
@@ -98,29 +93,32 @@ const PlanDetailPage: React.FC = () => {
   const [childCount, setChildCount] = useState(0);
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
-  const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
   const pageTitle = `Day-to-Day - ${variantDisplay}`;
-  
-  // Map variant to the correct Day-to-Day plan detail PDF
-  const dayToDayPdfMap: Record<string, string> = {
-    'single': 'Day-To-Day Single Plan.pdf',
-    'couple': 'Day-To-Day Couple Plan.pdf',
-    'family': 'Day-To-Day Family Plan.pdf',
-  };
-  const dayToDayPdfFile = dayToDayPdfMap[variantParam] || dayToDayPdfMap['single'];
-  const pdfPath = `/assets/pdf's/${dayToDayPdfFile}`;
-  
-  // Application form path (same for all Day-to-Day variants)
-  const applicationFormPath = `/assets/pdf's/Application forms/Day-to-day.pdf`;
-  const applicationFormFile = 'Day-To-Day - Application Form.pdf';
-
+  // Expanded state for Related products cards
+  type CardKey = 'single' | 'couple' | 'family';
+  const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
+    single: false,
+    couple: false,
+    family: false,
+  });
+  const toggleExpanded = (key: CardKey) =>
+    setExpanded((prev) => {
+      const willOpen = !prev[key];
+      return {
+        single: false,
+        couple: false,
+        family: false,
+        [key]: willOpen,
+      } as Record<CardKey, boolean>;
+    });
   // Pagination for description list
   const pageSize = 4;
   const [page, setPage] = useState(0);
-
+  const pageCount = Math.ceil(descriptionItems.length / pageSize);
+  const pagedItems = descriptionItems.slice(page * pageSize, page * pageSize + pageSize);
   // Reset pagination when switching back to Description tab
   useEffect(() => {
     if (activeTab === 'description') setPage(0);
@@ -131,9 +129,11 @@ const PlanDetailPage: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Handle sidebar navigation
+  // Handle sidebar navigation (mirror BlogPage behavior)
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
+    // Persist target for main app to pick up and scroll
+    sessionStorage.setItem('navigatingToSection', targetSection);
     // Redirect to main site with hash
     window.location.href = `/#${targetSection}`;
     // Ensure top scroll during transition
@@ -250,7 +250,7 @@ const PlanDetailPage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
-                  <ol className="flex items-center gap-1 text-[16px]">
+                  <ol className="flex items-center gap-1 text-[13px]">
                     <li>
                       <Link
                         to="/"
@@ -279,10 +279,6 @@ const PlanDetailPage: React.FC = () => {
                     </div>
                     <div>
                       <h1 className={`text-2xl md:text-3xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
-                      <div className="mt-1">
-                        <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Day-to-Day Plan</div>
-                        <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R385.00 - R1,155.00</div>
-                      </div>
                     </div>
                   </div>
                   {/* Right side price block removed per request; title now reflects selected plan name */}
@@ -291,18 +287,19 @@ const PlanDetailPage: React.FC = () => {
                 <motion.div
                   className={`mt-4 rounded-xl border p-4 ${isDark ? 'bg-gray-800/60 border-gray-700' : 'bg-white/70 backdrop-blur-md border-gray-200'}`}
                   initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
-                  {/* Desktop: Grid layout */}
-                  <div className="hidden sm:flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
                     {coverItems.map((c, i) => (
                       <motion.span
                         key={c}
                         className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
                         initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.4, delay: 0.05 * i }}
                         whileHover={{ scale: 1.03 }}
                       >
@@ -310,57 +307,19 @@ const PlanDetailPage: React.FC = () => {
                       </motion.span>
                     ))}
                   </div>
-
-                  {/* Mobile: Carousel */}
-                  <div className="sm:hidden">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{coverCarouselIndex + 1} / {coverItems.length}</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setCoverCarouselIndex((prev) => (prev === 0 ? coverItems.length - 1 : prev - 1))}
-                        className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-                        aria-label="Previous cover item"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                      </button>
-                      <motion.div
-                        key={coverCarouselIndex}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex-1"
-                      >
-                        <motion.span
-                          className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border w-full justify-center ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
-                          whileHover={{ scale: 1.03 }}
-                        >
-                          <Check className="w-3.5 h-3.5" /> {coverItems[coverCarouselIndex]}
-                        </motion.span>
-                      </motion.div>
-                      <button
-                        onClick={() => setCoverCarouselIndex((prev) => (prev === coverItems.length - 1 ? 0 : prev + 1))}
-                        className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-                        aria-label="Next cover item"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
                 </motion.div>
               </motion.div>
               </section>
 
             {/* Main content grid */}
-            <div className={`max-w-[73rem] mx-auto px-4 md:px-6 overflow-visible`}>
-              <div className="grid grid-cols-12 gap-6 auto-rows-max lg:auto-rows-auto">
+            <div className={`max-w-[73rem] mx-auto px-4 md:px-6`}>
+              <div className="grid grid-cols-12 gap-6">
                 {/* Left: Details & Tabs */}
                 <motion.div 
                   className="col-span-12 lg:col-span-8 xl:col-span-9"
                   initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
                   {/* Tabs */}
@@ -388,7 +347,8 @@ const PlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
@@ -397,7 +357,8 @@ const PlanDetailPage: React.FC = () => {
                             <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
                               className={`rounded-lg border p-4 ${
                                 isDark 
@@ -418,7 +379,7 @@ const PlanDetailPage: React.FC = () => {
                       <div className="mt-6 text-xs opacity-80 whitespace-pre-line">{legalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
-                          href={pdfPath}
+                          href="/assets/pdf's/Day1 Health Day to Day Plan 2025.pdf"
                           className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
                           sentText="Downloaded info Plan"
                         />
@@ -428,7 +389,8 @@ const PlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <h3 className={`text-base font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Additional information</h3>
@@ -451,11 +413,526 @@ const PlanDetailPage: React.FC = () => {
                       </div>
                     </motion.div>
                   )}
+
+                  {/* Related products */}
+                  <div className="mt-8">
+                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Other related products</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 items-start">
+                      {/* Single - replicate full expand behavior */}
+                      <motion.div 
+                        className={`relative self-start group rounded-2xl shadow-lg py-6 px-4 lg:py-7 lg:px-5 border-2 transition-all overflow-visible transform-gpu w-full ${
+                          isDark 
+                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                            : 'bg-white border-green-200 hover:border-green-400'
+                        } min-h-[160px]`}
+                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: '-50px' }}
+                      >
+                        {expanded.single && (
+                          <motion.div
+                            key="single-bg"
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <img
+                              src="/assets/images/single.jpg"
+                              alt=""
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                          </motion.div>
+                        )}
+                        <div className="mb-[17px]">
+                          <AnimatePresence mode="wait" initial={false}>
+                            {expanded.single ? (
+                              <motion.div
+                                key="hdr-expanded-single"
+                                className={`relative z-20 flex items-center justify-between`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: -8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  <motion.span
+                                    className="inline-flex"
+                                    initial="hidden"
+                                    animate="show"
+                                    variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                                  >
+                                    {'Day-to-Day'.split('')?.map((ch, i) => (
+                                      <motion.span
+                                        key={i}
+                                        className="inline-block"
+                                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                        transition={{ duration: 0.18 }}
+                                      >
+                                        {ch === ' ' ? '\u00A0' : ch}
+                                      </motion.span>
+                                    ))}
+                                  </motion.span>
+                                </motion.span>
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: 8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Single
+                                </motion.span>
+                              </motion.div>
+                            ) : (
+                              <motion.h3
+                                key="hdr-collapsed-single"
+                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                Single
+                              </motion.h3>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        {expanded.single && (
+                          <motion.div
+                            layoutId="student-price"
+                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R385</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        )}
+                        <motion.div key="single-content"
+                          initial={false}
+                          animate={{ height: expanded.single ? 'auto' : 0, opacity: expanded.single ? 1 : 0 }}
+                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          style={{ overflow: 'hidden' }}
+                          aria-hidden={!expanded.single}
+                          className="relative z-10"
+                        >
+                           <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                            <ul className="space-y-3">
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
+                            </ul>
+                          </div>
+                        </motion.div>
+                        <div className={(expanded.single ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
+                          <AnimatedPaymentButton 
+                            text="Choose Plan"
+                            className="bronze"
+                            hoverMessages={[
+                              'GP and specialist consultations',
+                              'Acute and chronic medication',
+                              'Blood tests and x-rays',
+                              'Dentistry and optometry',
+                              'Funeral benefit',
+                            ]}
+                            hoverIcons={['wallet','card','payment','check']}
+                            showArrow={false}
+                            expanded={expanded.single}
+                            onToggleExpand={() => toggleExpanded('single')}
+                            to={`/plans/day-to-day?variant=single`}
+                          />
+                          <button
+                            type="button"
+                            aria-label={expanded.single ? 'Collapse Single details' : 'Expand Single details'}
+                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                              ${isDark 
+                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                              ${expanded.single ? 'rotate-180' : ''}`}
+                            onClick={() => toggleExpanded('single')}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                            </svg>
+                          </button>
+                        </div>
+                        {/* Hover Badge (collapsed only) */}
+                        {!expanded.single && (
+                          <div
+                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                              isDark ? 'bg-white/10 border-white/15' : 'bg-white/30 border-white/40'
+                            }`}
+                          >
+                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Day-to-Day</div>
+                            <motion.div layoutId="student-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                              <span className="text-sm align-top mr-1">R</span>
+                              <span className="text-2xl font-bold">385</span>
+                              <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                            </motion.div>
+                          </div>
+                        )}
+                      </motion.div>
+
+                      {/* Couple - replicate full expand behavior */}
+                      <motion.div 
+                        className={`relative self-start group rounded-2xl shadow-lg py-6 px-[19px] lg:py-7 lg:px-[23px] border-2 transition-all overflow-visible transform-gpu ${
+                          isDark 
+                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                            : 'bg-white border-green-200 hover:border-green-400'
+                        } min-h-[180px]`}
+                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: '-50px' }}
+                      >
+                        {expanded.couple && (
+                          <motion.div
+                            key="couple-bg"
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <img
+                              src="/assets/images/couple.jpg"
+                              alt=""
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                          </motion.div>
+                        )}
+                        <div className="mb-[17px]">
+                          <AnimatePresence mode="wait" initial={false}>
+                            {expanded.couple ? (
+                              <motion.div
+                                key="hdr-expanded-couple"
+                                className={`relative z-20 flex items-center justify-between`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: -8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  <motion.span
+                                    className="inline-flex"
+                                    initial="hidden"
+                                    animate="show"
+                                    variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                                  >
+                                    {'Day-to-Day'.split('')?.map((ch, i) => (
+                                      <motion.span
+                                        key={i}
+                                        className="inline-block"
+                                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                        transition={{ duration: 0.18 }}
+                                      >
+                                        {ch === ' ' ? '\u00A0' : ch}
+                                      </motion.span>
+                                    ))}
+                                  </motion.span>
+                                </motion.span>
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: 8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Couple
+                                </motion.span>
+                              </motion.div>
+                            ) : (
+                              <motion.h3
+                                key="hdr-collapsed-couple"
+                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                Couple
+                              </motion.h3>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        {expanded.couple && (
+                          <motion.div
+                            layoutId="basic-price"
+                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R674</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        )}
+                        <motion.div key="couple-content"
+                          initial={false}
+                          animate={{ height: expanded.couple ? 'auto' : 0, opacity: expanded.couple ? 1 : 0 }}
+                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          style={{ overflow: 'hidden' }}
+                          aria-hidden={!expanded.couple}
+                          className="relative z-10"
+                        >
+                          <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                            <ul className="space-y-3">
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
+                            </ul>
+                          </div>
+                        </motion.div>
+                        <div className={(expanded.couple ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
+                          <AnimatedPaymentButton 
+                            text="Choose Plan"
+                            className="silver"
+                            hoverMessages={[
+                              'GP and specialist consultations',
+                              'Acute and chronic medication',
+                              'Blood tests and x-rays',
+                              'Dentistry and optometry',
+                              'Funeral benefit',
+                            ]}
+                            hoverIcons={['wallet','card','payment','check']}
+                            showArrow={false}
+                            expanded={expanded.couple}
+                            onToggleExpand={() => toggleExpanded('couple')}
+                            to={`/plans/day-to-day?variant=couple`}
+                          />
+                          <button
+                            type="button"
+                            aria-label={expanded.couple ? 'Collapse Couple details' : 'Expand Couple details'}
+                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                              ${isDark 
+                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                              ${expanded.couple ? 'rotate-180' : ''}`}
+                            onClick={() => toggleExpanded('couple')}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                            </svg>
+                          </button>
+                        </div>
+                        {/* Hover Badge (collapsed only) */}
+                        {!expanded.couple && (
+                          <div
+                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                              isDark ? 'bg-white/10 border-white/15' : 'bg-white/30 border-white/40'
+                            }`}
+                          >
+                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Day-to-Day</div>
+                            <motion.div layoutId="basic-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                              <span className="text-sm align-top mr-1">R</span>
+                              <span className="text-2xl font-bold">674</span>
+                              <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                            </motion.div>
+                          </div>
+                        )}
+                      </motion.div>
+
+                      {/* Family - replicate full expand behavior */}
+                      <motion.div 
+                        className={`relative self-start group rounded-2xl shadow-lg py-6 px-4 lg:py-7 lg:px-5 border-2 transition-all overflow-visible transform-gpu w-full ${
+                          isDark 
+                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                            : 'bg-white border-green-200 hover:border-green-400'
+                        } min-h-[160px]`}
+                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.45, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: '-50px' }}
+                      >
+                        {expanded.family && (
+                          <motion.div
+                            key="family-bg"
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <img
+                              src="/assets/images/family.jpg"
+                              alt=""
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                          </motion.div>
+                        )}
+                        <div className="mb-[17px]">
+                          <AnimatePresence mode="wait" initial={false}>
+                            {expanded.family ? (
+                              <motion.div
+                                key="hdr-expanded-family"
+                                className={`relative z-20 flex items-center justify-between`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: -8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  <motion.span
+                                    className="inline-flex"
+                                    initial="hidden"
+                                    animate="show"
+                                    variants={{ show: { transition: { staggerChildren: 0.035 } } }}
+                                  >
+                                    {'Day-to-Day'.split('')?.map((ch, i) => (
+                                      <motion.span
+                                        key={i}
+                                        className="inline-block"
+                                        variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                                        transition={{ duration: 0.18 }}
+                                      >
+                                        {ch === ' ' ? '\u00A0' : ch}
+                                      </motion.span>
+                                    ))}
+                                  </motion.span>
+                                </motion.span>
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: 8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Family
+                                </motion.span>
+                              </motion.div>
+                            ) : (
+                              <motion.h3
+                                key="hdr-collapsed-family"
+                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                Family
+                              </motion.h3>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        {expanded.family && (
+                          <motion.div
+                            layoutId="family-price"
+                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">R193</span>
+                            <span className={`text-white text-sm font-normal`}>/child</span>
+                          </motion.div>
+                        )}
+                        <motion.div key="family-content"
+                          initial={false}
+                          animate={{ height: expanded.family ? 'auto' : 0, opacity: expanded.family ? 1 : 0 }}
+                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          style={{ overflow: 'hidden' }}
+                          aria-hidden={!expanded.family}
+                          className="relative z-10"
+                        >
+                          <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                            <ul className="space-y-3">
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Up to 4 children</span></li>
+                            </ul>
+                          </div>
+                        </motion.div>
+                        <div className={(expanded.family ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
+                          <AnimatedPaymentButton 
+                            text="Choose Plan"
+                            className="bronze"
+                            hoverMessages={[
+                              'GP and specialist consultations',
+                              'Acute and chronic medication',
+                              'Blood tests and x-rays',
+                              'Dentistry and optometry',
+                              'Funeral benefit',
+                              'Up to 4 children',
+                            ]}
+                            hoverIcons={['wallet','card','payment','check']}
+                            showArrow={false}
+                            expanded={expanded.family}
+                            onToggleExpand={() => toggleExpanded('family')}
+                            to={`/plans/day-to-day?variant=family&children=${childCount}`}
+                          />
+                          <button
+                            type="button"
+                            aria-label={expanded.family ? 'Collapse Family details' : 'Expand Family details'}
+                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                              ${isDark 
+                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                              ${expanded.family ? 'rotate-180' : ''}`}
+                            onClick={() => toggleExpanded('family')}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                            </svg>
+                          </button>
+                        </div>
+                        {/* Hover Badge (collapsed only) */}
+                        {!expanded.family && (
+                          <div
+                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${
+                              isDark ? 'bg-gray-900/80 border-gray-700' : 'bg-white/90 border-gray-200'
+                            }`}
+                          >
+                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Day-to-Day</div>
+                            <motion.div layoutId="family-price" className={`leading-none text-green-600`}>
+                              <span className="text-sm align-top mr-1">R</span>
+                              <span className="text-2xl font-bold">193</span>
+                              <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/child</span>
+                            </motion.div>
+                          </div>
+                        )}
+                      </motion.div>
+                    </div>
+                  </div>
                 </motion.div>
 
                 {/* Right: Sticky summary / purchase card */}
                 <aside className="col-span-12 lg:col-span-4 xl:col-span-3 -mt-4 sm:-mt-6 lg:mt-0">
-                  <div className="lg:sticky lg:top-24 lg:h-fit">
+                  <div className="lg:sticky lg:top-24">
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-200'}`}
                       initial={{ opacity: 0, y: 18 }}
@@ -530,7 +1007,7 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
@@ -570,7 +1047,7 @@ const PlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
@@ -593,7 +1070,7 @@ const PlanDetailPage: React.FC = () => {
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
+                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -604,14 +1081,14 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('family', Math.max(0, childCount - 1)); }}
+                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
                                   className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
@@ -619,7 +1096,7 @@ const PlanDetailPage: React.FC = () => {
                                   -
                                 </button>
                                 <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 0
+                                  childCount === 1
                                     ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
                                     : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
                                 }`}>
@@ -642,22 +1119,19 @@ const PlanDetailPage: React.FC = () => {
                       </div>
 
                       <div className="mt-5">
-                        <button
+                        <AnimatedContactButton
                           type="button"
-                          className="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            link.href = applicationFormPath;
-                            link.download = applicationFormFile;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                          }}
-                        >
-                          Download Application
-                        </button>
+                          className="w-full"
+                          labelDefault="Sign Up Now"
+                          labelSent="Sent"
+                          onClick={() => { /* TODO: hook into sign up flow */ }}
+                        />
                       </div>
 
+                      <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <div>SKU: N/A</div>
+                        <div>Category: Normal</div>
+                      </div>
                     </motion.div>
                   </div>
                 </aside>
@@ -673,6 +1147,3 @@ const PlanDetailPage: React.FC = () => {
 };
 
 export default PlanDetailPage;
-
-
-

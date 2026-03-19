@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Check, ShieldCheck, ChevronRight } from 'lucide-react';
 import { AnimatedPaymentButton } from './ui/animated-payment-button';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
@@ -11,12 +11,9 @@ import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
 
 const coverItems = [
-  'Unlimited Doctor Visits',
+  'Private Managed Doctor Visits',
   'Acute/Chronic Medication',
   'Dentistry / Optometry',
-  'Radiology',
-  'Pathology',
-  'Out-of-Area Visits',
   'Funeral Cover',
 ];
 
@@ -31,7 +28,6 @@ const SeniorPlanDetailPage: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [option, setOption] = useState('');
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
-  const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Only Single or Couple for Senior
@@ -42,11 +38,7 @@ const SeniorPlanDetailPage: React.FC = () => {
   const rawCategory = (searchParams.get('category') || 'day-to-day').toLowerCase();
   const allowedSeniorCategories = new Set(['day-to-day', 'comprehensive', 'hospital']);
   const categoryDisplay = allowedSeniorCategories.has(rawCategory) ? rawCategory : 'day-to-day';
-  // Create display-friendly version for page title
-  const categoryDisplayTitle = categoryDisplay === 'day-to-day' ? 'Day-to-Day' : 
-                               categoryDisplay === 'comprehensive' ? 'Comprehensive' : 
-                               categoryDisplay === 'hospital' ? 'Hospital' : 'Day-to-Day';
-  const pageTitle = ['Senior-Plan', categoryDisplayTitle, variantDisplay].filter(Boolean).join(' / ');
+  const pageTitle = ['Senior-Plan', categoryDisplay, variantDisplay].filter(Boolean).join(' / ');
 
   type CardKey = 'single' | 'couple';
   const [expanded, setExpanded] = useState<Record<CardKey, boolean>>({
@@ -61,25 +53,19 @@ const SeniorPlanDetailPage: React.FC = () => {
     if (categoryDisplay === 'hospital') {
       return [
         'Private Hospital Benefits',
-        'Illness / Accident Benefit / Ambulance',
+        'Illness',
+        'Accident Benefit',
+        'Ambulance',
         'Funeral Cover',
       ];
     }
     if (categoryDisplay === 'comprehensive') {
-      const dayToDayItems = coverItems;
-      const extraItems = [
+      return [
         'Unlimited Doctor Visits etc.',
         'Private Hospital Benefits',
         'Illness / Accident / Ambulance',
         'Funeral Cover',
       ];
-      const combined: string[] = [...dayToDayItems];
-      extraItems.forEach((item) => {
-        if (!combined.includes(item)) {
-          combined.push(item);
-        }
-      });
-      return combined;
     }
     // day-to-day uses default with Funeral Cover already included
     return coverItems;
@@ -100,20 +86,20 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: 'Every subsequent day thereafter', text: 'R 1 500.00' },
         { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R 57 000.00' },
         { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per event. Limited to two events per annum. A 1 month waiting period applies. (Excludes Sport Injuries)' },
-        { title: 'Funeral Benefit', text: 'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation', text: '24 Hour emergency services and pre-authorisation provided by Africa-Assist, including 24 hour medical advice and access to unlimited Pay-as-you-Go Virtual Doctor Consultations. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals nationwide' },
+        { title: 'FUNERAL BENEFIT', text: 'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
       ];
     }
     if (categoryDisplay === 'comprehensive') {
       return [
-        { title: 'Doctor Visits', text: 'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.' },
-        { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.' },
-        { title: 'Chronic Medication', text: 'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.' },
-        { title: 'Radiology', text: 'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health Network Partner. Black and white diagnostic x-rays only. A 1 month waiting period applies.' },
-        { title: 'Pathology', text: 'Basic diagnostic blood tests on referral by a 1Doctor Health Network Partner and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.' },
-        { title: 'Basic Dentistry', text: 'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Partner. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.' },
+        { title: 'Private Managed Doctor Visits', text: 'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.' },
+        { title: 'Pathology', text: 'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.' },
+        { title: 'Acute Medication', text: 'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.' },
+        { title: 'Basic Dentistry', text: 'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.' },
+        { title: 'Chronic Medication', text: 'Chronic medication is covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. (All chronic medication is subject to preauthorisation. An additional administration fee may be levied on all approved chronic medication).' },
         { title: 'Optometry (Iso Leso Optics)', text: 'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.' },
-        { title: 'Out-of-Area Visits', text: 'In the event that you cannot see your Network Partner, the Plan will allow 3 "out of area" visits per family per annum to an alternative Network Partner or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.' },
+        { title: 'Radiology', text: 'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.' },
+        { title: 'Out-of-Area Visits', text: 'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.' },
         { title: 'In-hospital Illness Benefit', text: 'Covers up to R10,000 after the first 24 Hours in hospital, up to R10,000 for the second day in hospital, up to R10,000 for the third day in hospital. Thereafter R1,500 per day up to a maximum of 21 days. A 3 month waiting period applies and a 12 month pre-existing conditions exclusion applies.' },
         { title: '1st Day in Hospital', text: 'Not less than 24 hours from time of admission to time of discharge — Up to R10 000.00' },
         { title: '2nd Day in Hospital', text: 'Payable in units of R2 500.00 for every quarter day (6 hours) — Up to R10 000.00 payable in units of R2 500.00' },
@@ -121,41 +107,31 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: 'Every subsequent day thereafter', text: 'R1 500.00' },
         { title: 'Maximum Benefit payable for 21 day period', text: 'Up To R57 000.00' },
         { title: 'Accident/Trauma Benefit', text: 'Up to R 75,000 per single member and up to R 150,000 per family incident. Immediate cover. (limited to two events per annum)' },
-        { title: 'Funeral Benefits', text: 'Principal Member and spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
-        { title: '24 Hour Emergency Services Ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
+        { title: 'FUNERAL BENEFIT', text: 'Principal Member and spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
       ];
     }
     // Default to Day-to-Day content
     return [
       {
-        title: 'Doctor Visits',
+        title: 'Private Managed Doctor Visits',
         text:
-          'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
-      },
-      {
-        title: 'Acute Medication',
-        text:
-          'Acute medication covered according to the 1Doctor Health formulary. Linked to the 1Doctor consultation dispensed by the 1Doctor Health Network Partner or obtained on script from a Network Partner Pharmacy. A 1 month waiting period applies.',
-      },
-      {
-        title: 'Chronic Medication',
-        text:
-          'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
-      },
-      {
-        title: 'Radiology',
-        text:
-          'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health Network Partner. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+          'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
       },
       {
         title: 'Pathology',
         text:
-          'Basic diagnostic blood tests on referral by a 1Doctor Health Network Partner and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+          'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
       },
       {
         title: 'Basic Dentistry',
         text:
-          'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Partner. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+          'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+      },
+      {
+        title: 'Acute Medication',
+        text:
+          'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.',
       },
       {
         title: 'Optometry (Iso Leso Optics)',
@@ -163,12 +139,22 @@ const SeniorPlanDetailPage: React.FC = () => {
           'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
       },
       {
-        title: 'Out-of-Area Visits',
+        title: 'Chronic Medication',
         text:
-          'In the event that you cannot see your Network Partner, the Plan will allow 3 "out of area" visits per family per annum to an alternative Network Partner or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+          'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
       },
       {
-        title: 'Funeral Benefit',
+        title: 'Out-of-Area Visits',
+        text:
+          'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Radiology',
+        text:
+          'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+      },
+      {
+        title: 'FUNERAL BENEFIT',
         text:
           'Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)',
       },
@@ -183,15 +169,16 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   // Map Senior category to the correct PDF
   const seniorPdfMap: Record<string, string> = {
-    'day-to-day': 'Senior Day-To-Day Plan.pdf',
-    'comprehensive': 'Senior Comprehensive Plan.pdf',
-    'hospital': 'Senior Hospital Plan.pdf',
+    'day-to-day': 'Day1 Health Senior Day to Day Plan 2025.pdf',
+    'comprehensive': 'Day1 Health Senior Comprehensive Plan 2025.pdf',
+    'hospital': 'Day1 Health Value Plus Senior Hospital Plan 2025.pdf',
   };
-  const seniorPdfFile = seniorPdfMap[categoryDisplay] || seniorPdfMap['day-to-day'];
+  const seniorPdfFile = seniorPdfMap[categoryDisplay] || 'Day 1 Comparative guide 2025_v2.pdf';
   const seniorPdfPath = `/assets/pdf's/${seniorPdfFile}`;
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
+    sessionStorage.setItem('navigatingToSection', targetSection);
     window.location.href = `/#${targetSection}`;
     window.scrollTo(0, 0);
   };
@@ -203,18 +190,8 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   // Quantity is fixed to 1 for Senior (Single/Couple only); no qty handling
 
-  // Category-aware pricing: Different prices per category
-  const ADULT_PRICE = (() => {
-    switch (categoryDisplay) {
-      case 'comprehensive':
-        return 875;
-      case 'hospital':
-        return 580;
-      case 'day-to-day':
-      default:
-        return 425;
-    }
-  })();
+  // All Senior plans: R425 per adult
+  const ADULT_PRICE = 425;
   const currentPrice = ((): number => {
     const adultCount = (option === 'couple') ? 2 : 1;
     return ADULT_PRICE * adultCount;
@@ -260,7 +237,7 @@ const SeniorPlanDetailPage: React.FC = () => {
               >
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
-                  <ol className="flex items-center gap-1 text-[16px]">
+                  <ol className="flex items-center gap-1 text-[13px]">
                     <li>
                       <Link
                         to="/"
@@ -292,19 +269,22 @@ const SeniorPlanDetailPage: React.FC = () => {
                       {categoryDisplay === 'day-to-day' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Day to Day Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R425.00 - R850.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R425.00 through R850.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'comprehensive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Comprehensive Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R875.00 - R1,750.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R875.00 through R1,750.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'hospital' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan | Senior</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R580.00 - R1,160.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R580.00 through R1,160.00</div>
+                          <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                     </div>
@@ -314,63 +294,25 @@ const SeniorPlanDetailPage: React.FC = () => {
                 <motion.div
                   className={`mt-4 rounded-xl border p-4 ${isDark ? 'bg-emerald-900/10 border-emerald-800' : 'bg-white/70 backdrop-blur-md border-gray-200'}`}
                   initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
-                  {/* Desktop: Grid layout */}
-                  <div className="hidden sm:flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
                     {displayCoverItems.map((c: string, i: number) => (
                       <motion.span
                         key={c}
                         className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
                         initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.4, delay: 0.05 * i }}
                         whileHover={{ scale: 1.03 }}
                       >
                         <Check className="w-3.5 h-3.5" /> {c}
                       </motion.span>
                     ))}
-                  </div>
-
-                  {/* Mobile: Carousel */}
-                  <div className="sm:hidden">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
-                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{coverCarouselIndex + 1} / {displayCoverItems.length}</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setCoverCarouselIndex((prev) => (prev === 0 ? displayCoverItems.length - 1 : prev - 1))}
-                        className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-                        aria-label="Previous cover item"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                      </button>
-                      <motion.div
-                        key={coverCarouselIndex}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex-1"
-                      >
-                        <motion.span
-                          className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border w-full justify-center ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
-                          whileHover={{ scale: 1.03 }}
-                        >
-                          <Check className="w-3.5 h-3.5" /> {displayCoverItems[coverCarouselIndex]}
-                        </motion.span>
-                      </motion.div>
-                      <button
-                        onClick={() => setCoverCarouselIndex((prev) => (prev === displayCoverItems.length - 1 ? 0 : prev + 1))}
-                        className={`p-2 rounded-lg transition-colors ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-                        aria-label="Next cover item"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
                   </div>
                 </motion.div>
               </motion.div>
@@ -383,7 +325,8 @@ const SeniorPlanDetailPage: React.FC = () => {
                 <motion.div 
                   className="col-span-12 lg:col-span-8 xl:col-span-9"
                   initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
                   {/* Tabs */}
@@ -411,7 +354,8 @@ const SeniorPlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
@@ -420,7 +364,8 @@ const SeniorPlanDetailPage: React.FC = () => {
                             <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
                               className={`rounded-lg border p-4 ${
                                 isDark 
@@ -451,7 +396,8 @@ const SeniorPlanDetailPage: React.FC = () => {
                     <motion.div 
                       className={`rounded-xl border p-5 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <h3 className={`text-base font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Additional information</h3>
@@ -474,6 +420,314 @@ const SeniorPlanDetailPage: React.FC = () => {
                       </div>
                     </motion.div>
                   )}
+
+                  {/* Related products */}
+                  <div className="mt-8">
+                    <h2 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Other related products</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-7 items-start">
+                      {/* Single */}
+                      <motion.div 
+                        className={`relative self-start group rounded-2xl shadow-lg p-6 lg:p-7 border-2 transition-all overflow-visible transform-gpu ${
+                          isDark 
+                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                            : 'bg-white border-green-200 hover:border-green-400'
+                        } min-h-[180px]`}
+                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: '-50px' }}
+                      >
+                        {expanded.single && (
+                          <motion.div
+                            key="single-bg"
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <img
+                              src="/assets/images/single.jpg"
+                              alt=""
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                          </motion.div>
+                        )}
+                        <div className="mb-[17px]">
+                          <AnimatePresence mode="wait" initial={false}>
+                            {expanded.single ? (
+                              <motion.div
+                                key="hdr-expanded-single"
+                                className={`relative z-20 flex items-center justify-between`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: -8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Senior-Plan
+                                </motion.span>
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: 8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Single
+                                </motion.span>
+                              </motion.div>
+                            ) : (
+                              <motion.h3
+                                key="hdr-collapsed-single"
+                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                Single
+                              </motion.h3>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        {expanded.single && (
+                          <motion.div
+                            layoutId="senior-single-price"
+                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE}`}</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        )}
+                        <motion.div key="single-content"
+                          initial={false}
+                          animate={{ height: expanded.single ? 'auto' : 0, opacity: expanded.single ? 1 : 0 }}
+                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          style={{ overflow: 'hidden' }}
+                          aria-hidden={!expanded.single}
+                          className="relative z-10"
+                        >
+                           <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                            <ul className="space-y-3">
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
+                            </ul>
+                          </div>
+                        </motion.div>
+                        <div className={(expanded.single ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
+                          <AnimatedPaymentButton 
+                            text="Choose Plan"
+                            className="bronze"
+                            hoverMessages={[
+                              'GP and specialist consultations',
+                              'Acute and chronic medication',
+                              'Blood tests and x-rays',
+                              'Dentistry and optometry',
+                              'Funeral benefit',
+                            ]}
+                            hoverIcons={['wallet','card','payment','check']}
+                            showArrow={false}
+                            expanded={expanded.single}
+                            onToggleExpand={() => toggleExpanded('single')}
+                            to={`/plans/senior-plan?category=${categoryDisplay}&variant=single`}
+                          />
+                          <button
+                            type="button"
+                            aria-label={expanded.single ? 'Collapse Single details' : 'Expand Single details'}
+                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                              ${isDark 
+                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                              ${expanded.single ? 'rotate-180' : ''}`}
+                            onClick={() => toggleExpanded('single')}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                            </svg>
+                          </button>
+                        </div>
+                        {!expanded.single && (
+                          <div
+                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10 backdrop-blur-sm ${
+                              isDark ? 'bg-white/10 border-white/15' : 'bg-white/30 border-white/40'
+                            }`}
+                          >
+                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Senior-Plan</div>
+                            <motion.div layoutId="senior-single-price" className={`leading-none text-emerald-400`} transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}>
+                              <span className="text-sm align-top mr-1">R</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE}</span>
+                              <span className={`${isDark ? 'text-gray-300' : 'text-gray-600'} text-[10px] ml-1`}>/mo</span>
+                            </motion.div>
+                          </div>
+                        )}
+                      </motion.div>
+
+                      {/* Couple */}
+                      <motion.div 
+                        className={`relative self-start group rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ${
+                          isDark 
+                            ? 'bg-gray-800 border-green-700 hover:border-green-500' 
+                            : 'bg-white border-green-200 hover:border-green-400'
+                        } min-h-[140px]`}
+                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.45, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: '-50px' }}
+                      >
+                        {expanded.couple && (
+                          <motion.div
+                            key="couple-bg"
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 rounded-2xl overflow-hidden z-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <img
+                              src="/assets/images/couple.jpg"
+                              alt=""
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className={`${isDark ? 'bg-black/30' : 'bg-black/20'} absolute inset-0`} />
+                          </motion.div>
+                        )}
+                        <div className="mb-[17px]">
+                          <AnimatePresence mode="wait" initial={false}>
+                            {expanded.couple ? (
+                              <motion.div
+                                key="hdr-expanded-couple"
+                                className={`relative z-20 flex items-center justify-between`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: -8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Senior-Plan
+                                </motion.span>
+                                <motion.span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 border backdrop-blur-sm ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} text-lg font-bold text-emerald-400`}
+                                  initial={{ opacity: 0, x: 8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: 8 }}
+                                  transition={{ duration: 0.18 }}
+                                >
+                                  Couples
+                                </motion.span>
+                              </motion.div>
+                            ) : (
+                              <motion.h3
+                                key="hdr-collapsed-couple"
+                                className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 6 }}
+                                transition={{ duration: 0.18 }}
+                              >
+                                Couples
+                              </motion.h3>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        {expanded.couple && (
+                          <motion.div
+                            layoutId="senior-couple-price"
+                            className={`relative z-10 mb-4 inline-flex items-baseline gap-2 rounded-xl border backdrop-blur-sm px-3 py-1 ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}
+                            transition={{ type: 'tween', duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          >
+                            <span className="text-2xl font-bold text-emerald-400">{`R${ADULT_PRICE * 2}`}</span>
+                            <span className={`text-white text-sm font-normal`}>/month</span>
+                          </motion.div>
+                        )}
+                        <motion.div key="couple-content"
+                          initial={false}
+                          animate={{ height: expanded.couple ? 'auto' : 0, opacity: expanded.couple ? 1 : 0 }}
+                          transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
+                          style={{ overflow: 'hidden' }}
+                          aria-hidden={!expanded.couple}
+                          className="relative z-10"
+                        >
+                          <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
+                            <ul className="space-y-3">
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
+                              <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                            </ul>
+                          </div>
+                        </motion.div>
+                        <div className={(expanded.couple ? 'mt-[-3px] ' : 'mt-6 ') + 'relative z-10'}>
+                          <AnimatedPaymentButton 
+                            text="Choose Plan"
+                            className="silver"
+                            hoverMessages={[
+                              'GP and specialist consultations',
+                              'Acute and chronic medication',
+                              'Blood tests and x-rays',
+                              'Dentistry and optometry',
+                            ]}
+                            hoverIcons={['wallet','card','payment','check']}
+                            showArrow={false}
+                            expanded={expanded.couple}
+                            onToggleExpand={() => toggleExpanded('couple')}
+                            to={`/plans/senior-plan?category=${categoryDisplay}&variant=couple`}
+                          />
+                          <button
+                            type="button"
+                            aria-label={expanded.couple ? 'Collapse Couples details' : 'Expand Couples details'}
+                            className={`absolute left-1/2 -translate-x-1/2 bottom-[-36px] inline-flex items-center justify-center w-8 h-8 rounded-full border backdrop-blur-sm z-[999]
+                              transition-transform duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 focus:outline-none
+                              ${isDark 
+                                ? 'bg-gray-900/60 border-white/15 text-white ring-1 ring-white/10'
+                                : 'bg-white/80 border-gray-200 text-gray-800 ring-1 ring-black/5'}
+                              ${expanded.couple ? 'rotate-180' : ''}`}
+                            onClick={() => toggleExpanded('couple')}
+                          >
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+                            </svg>
+                          </button>
+                        </div>
+                        {!expanded.couple && (
+                          <div
+                            className={`pointer-events-none absolute top-3 right-3 rounded-xl px-3 py-2 shadow-sm border text-right opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${
+                              isDark ? 'bg-gray-900/80 border-gray-700' : 'bg-white/90 border-gray-200'
+                            }`}
+                          >
+                            <div className={`text-[10px] uppercase tracking-wider ${isDark ? 'text-green-300' : 'text-green-700'}`}>Senior-Plan</div>
+                            <motion.div layoutId="senior-couple-price" className={`leading-none text-green-600`}>
+                              <span className="text-sm align-top mr-1">R</span>
+                              <span className="text-2xl font-bold">{ADULT_PRICE * 2}</span>
+                              <span className={`ml-1 text-[10px] ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>/mo</span>
+                            </motion.div>
+                          </div>
+                        )}
+                      </motion.div>
+                    </div>
+                  </div>
                 </motion.div>
 
                 {/* Right: Sticky summary / purchase card */}
@@ -513,39 +767,26 @@ const SeniorPlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couple</option>
+                            <option value="couple">Couples</option>
                           </select>
                         </div>
                         
                       </div>
 
                       <div className="mt-5">
-                        <button
+                        <AnimatedContactButton
                           type="button"
-                          className="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            const pdfMap: Record<string, string> = {
-                              'comprehensive': '/assets/pdf\'s/Application forms/Senior-Comprehensive.pdf',
-                              'hospital': '/assets/pdf\'s/Application forms/Senior-Hospital.pdf',
-                              'day-to-day': '/assets/pdf\'s/Application forms/Senior-Day-To-Day.pdf'
-                            };
-                            const fileNameMap: Record<string, string> = {
-                              'comprehensive': 'Senior Comprehensive - Application Form.pdf',
-                              'hospital': 'Senior Hospital - Application Form.pdf',
-                              'day-to-day': 'Senior Day-To-Day - Application Form.pdf'
-                            };
-                            link.href = pdfMap[categoryDisplay] || pdfMap['day-to-day'];
-                            link.download = fileNameMap[categoryDisplay] || fileNameMap['day-to-day'];
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                          }}
-                        >
-                          Download Application
-                        </button>
+                          className="w-full"
+                          labelDefault="Sign Up Now"
+                          labelSent="Sent"
+                          onClick={() => { /* TODO: hook into sign up flow */ }}
+                        />
                       </div>
 
+                      <div className={`mt-4 text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <div>SKU: N/A</div>
+                        <div>Category: Senior-Plan</div>
+                      </div>
                     </motion.div>
                   </div>
                 </aside>
@@ -561,7 +802,3 @@ const SeniorPlanDetailPage: React.FC = () => {
 };
 
 export default SeniorPlanDetailPage;
-
-
-
-
