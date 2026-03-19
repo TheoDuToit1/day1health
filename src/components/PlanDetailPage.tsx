@@ -33,7 +33,7 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Private Managed Doctor Visits',
     text:
-      'Via a registered Day1 Health Network Provider. An upfront co-payment of R300.00 will apply for all additional visits after the 5th visit per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
+      'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. Pre-authorisation is required. A 1 month waiting period applies.',
   },
   {
     title: 'Pathology',
@@ -93,6 +93,7 @@ const PlanDetailPage: React.FC = () => {
   const [childCount, setChildCount] = useState(0);
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
+  const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
   const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
@@ -291,7 +292,49 @@ const PlanDetailPage: React.FC = () => {
                   viewport={{ once: true, amount: 0.4 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
-                  <div className="flex flex-wrap items-center gap-2">
+                  {/* Mobile: Carousel */}
+                  <div className="md:hidden">
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                      <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
+                      <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {coverCarouselIndex + 1} / {coverItems.length}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setCoverCarouselIndex((prev) => prev === 0 ? coverItems.length - 1 : prev - 1)}
+                        className={`p-2 rounded-lg ${isDark ? 'text-emerald-300 hover:bg-emerald-500/10' : 'text-emerald-700 hover:bg-emerald-50'}`}
+                        aria-label="Previous"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <div className="flex-1">
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={coverCarouselIndex}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.2 }}
+                            className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm border w-full ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
+                          >
+                            <Check className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">{coverItems[coverCarouselIndex]}</span>
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                      <button
+                        onClick={() => setCoverCarouselIndex((prev) => prev === coverItems.length - 1 ? 0 : prev + 1)}
+                        className={`p-2 rounded-lg ${isDark ? 'text-emerald-300 hover:bg-emerald-500/10' : 'text-emerald-700 hover:bg-emerald-50'}`}
+                        aria-label="Next"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Desktop: Flex wrap */}
+                  <div className="hidden md:flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
                     {coverItems.map((c, i) => (
                       <motion.span

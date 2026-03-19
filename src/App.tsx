@@ -1,5 +1,6 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import AppContent from './components/AppContent';
 import { ThemeProvider } from './contexts/ThemeContext';
 
@@ -262,6 +263,7 @@ function App() {
         {/* Catch-all: render the SPA for any other route */}
         <Route path="*" element={<AppWrapper />} />
       </Routes>
+      <Analytics />
     </ThemeProvider>
   );
 }
