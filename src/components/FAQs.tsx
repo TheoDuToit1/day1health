@@ -18,19 +18,19 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
   const faqs = [
     {
       question: "Can I go to any private hospital?",
-      answer: "Day1 Health has formal contracts with Life Healthcare, Mediclinic, Africa Health Care and Clinix hospitals nationwide. All hospital admissions must be pre-authorised via Africa Assist (0861 144 144)."
+      answer: "Day1 Health has formal contracts with Life Healthcare, Mediclinic, Africa Health Care and Clinix hospitals. Admission into net care hospital is at their discretion nationwide. All hospital admissions must be pre-authorised via Africa Assist (0861 144 144)."
     },
     {
       question: "What is the procedure if I'm diagnosed with a chronic condition?",
-      answer: "Register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network GP to receive chronic medication. Collect at Clicks, Dischem or Medirite nationwide. Subject to pre-authorisation."
+      answer: "Register on the Day1 Health Chronic Disease Management Programme via your Day1 Health Network Partner to receive chronic medication. Collect at Clicks, Dischem or Medirite nationwide. Subject to pre-authorisation."
     },
     {
       question: "Can I buy my medication over the counter?",
-      answer: "No. Your Day1 Network GP must prescribe in line with our formulary. Both acute and chronic medication are covered (unlimited) according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
+      answer: "No. Your Day1 Network Partner must prescribe in line with our formulary. Both acute and chronic medication are covered according to the formulary. If your GP scripts (does not dispense), collect at Clicks, Dischem or Medirite."
     },
     {
       question: "When I see a GP/Dentist, do I have to pay cash?",
-      answer: "No. By paying your monthly contribution in advance, your consultation is covered. Accredited providers claim directly from Day1 Health."
+      answer: "No. By paying your monthly contribution in advance, your consultation is covered. Accredited partners claim directly from Day1 Health."
     },
     {
       question: "What happens if there isn’t a Network doctor in my area?",
@@ -38,15 +38,15 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     },
     {
       question: "What happens if I am ill and out of town?",
-      answer: "Your Day-to-Day benefits allow 3 out-of-area visits per policy per year to an alternative Network GP or GP of your choice. For non-network GP visits, submit a Reimbursement Form and receipt to be reimbursed the agreed tariff (e.g. R340)."
+      answer: "Your Day-to-Day benefits allow 3 out-of-area visits per policy per year to an alternative Network Partner or GP of your choice. For non-Network Partner visits, submit a Reimbursement Form and receipt to be reimbursed the agreed tariff (e.g. R340)."
     },
     {
       question: "Are pre-existing conditions covered?",
-      answer: "Yes, after a 12-month waiting period. Accidents and emergencies remain covered from Day 1."
+      answer: "Yes, after a 12-month waiting period."
     },
     {
       question: "What are the waiting periods for day-to-day benefits?",
-      answer: "Typical waiting periods: General day-to-day and Acute/Pathology/Radiology – 1 month; Specialists – 3 months; Dentistry – 3 months; Optometry – 12 months; Chronic (unknown) – 3 months; Chronic (pre-existing) – 12 months."
+      answer: "• GP/Acute/Pathology/Radiology/Out-of-Area: 1 month\n• Specialists/Dentistry: 3 months\n• Chronic (new): 3 months\n• Chronic (pre-existing): 12 months\n• Optometry: 12 months",
     }
   ];
 
@@ -77,7 +77,7 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className={`inline-block mt-2.5 px-4 py-1.5 text-base font-medium rounded-full mb-4 ${
+          <span className={`inline-block mt-2.5 px-4 py-1.5 text-base font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
@@ -247,3 +247,5 @@ const FAQs: React.FC<FAQsProps> = ({ isSidebarCollapsed }) => {
 };
 
 export default FAQs;
+
+

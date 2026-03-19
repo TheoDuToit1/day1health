@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Phone, Mail, Clock, X, HelpCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import CEOHotlineCTA from './CEOHotlineCTA';
+import EmailDirectory from './EmailDirectory';
 
 interface ContactProps {
   isSidebarCollapsed: boolean;
@@ -150,28 +150,73 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
     setScheduleData(prev => ({ ...prev, [name]: value }));
   };
 
-  const submitExisting = (e: React.FormEvent) => {
+  const submitExisting = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Existing Member form submitted:', existingMemberData);
-    setIsExistingMemberOpen(false);
-    setExistingMemberData({ firstName: '', lastName: '', phone: '', email: '', enquiry: '', message: '' });
-    alert("Thanks! We'll assist you shortly.");
+    try {
+      const apiUrl = import.meta.env.PROD ? '/api/send-email' : 'http://localhost:3001/api/send-email';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'existing', data: existingMemberData })
+      });
+      
+      if (response.ok) {
+        setIsExistingMemberOpen(false);
+        setExistingMemberData({ firstName: '', lastName: '', phone: '', email: '', enquiry: '', message: '' });
+        alert("Thanks! We'll assist you shortly.");
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
-  const submitProspective = (e: React.FormEvent) => {
+  const submitProspective = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Prospective Client form submitted:', prospectiveData);
-    setIsProspectiveOpen(false);
-    setProspectiveData({ firstName: '', lastName: '', phone: '', email: '', infoAbout: '', heardFrom: '', message: '' });
-    alert("Thanks! We'll be in touch soon.");
+    try {
+      const apiUrl = import.meta.env.PROD ? '/api/send-email' : 'http://localhost:3001/api/send-email';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'prospective', data: prospectiveData })
+      });
+      
+      if (response.ok) {
+        setIsProspectiveOpen(false);
+        setProspectiveData({ firstName: '', lastName: '', phone: '', email: '', infoAbout: '', heardFrom: '', message: '' });
+        alert("Thanks! We'll be in touch soon.");
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
-  const submitQuote = (e: React.FormEvent) => {
+  const submitQuote = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Quote me form submitted:', quoteData);
-    setIsQuoteOpen(false);
-    setQuoteData({ firstName: '', lastName: '', phone: '', email: '', planCategory: '', seniorCategory: '', tier: '', subCategory: '', message: '', children: [] });
-    alert('Thanks! We\'ll prepare a quote and contact you shortly.');
+    try {
+      const apiUrl = import.meta.env.PROD ? '/api/send-email' : 'http://localhost:3001/api/send-email';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formType: 'quote', data: quoteData })
+      });
+      
+      if (response.ok) {
+        setIsQuoteOpen(false);
+        setQuoteData({ firstName: '', lastName: '', phone: '', email: '', planCategory: '', seniorCategory: '', tier: '', subCategory: '', message: '', children: [] });
+        alert('Thanks! We\'ll prepare a quote and contact you shortly.');
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   const submitSchedule = (e: React.FormEvent) => {
@@ -198,7 +243,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
@@ -208,12 +253,12 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
           <h2 id="contact" className={`text-4xl lg:text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
-            Get in Touch
+            Get In Touch
           </h2>
           <p className={`text-xl max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            Ready to get covered or have questions? Our team is here to help you find the perfect healthcare solution.
+            Ready to get covered or have any questions? Our team is here to help you find the perfect healthcare solution.
           </p>
         </div>
 
@@ -281,7 +326,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   }`}>0876 100 600</p>
                   <p className={`text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`}>Mon - Fri: 8AM - 6PM | Sat: 8AM - 1PM</p>
+                  }`}>Mon–Fri 8:00–16:30, Sat 8:00–13:00</p>
                 </div>
               </div>
 
@@ -365,9 +410,9 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                 <HelpCircle className="w-6 h-6 text-green-600" />
                 How can we help?
               </h3>
-              {/* Executive Hotline moved from sidebar */}
+              {/* Email Directory */}
               <div className="mb-6">
-                <CEOHotlineCTA href="/ceo-hotline" variant="emerald" />
+                <EmailDirectory />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
@@ -504,7 +549,7 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                     <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Tier</label>
                     <select name="tier" value={quoteData.tier} onChange={handleQuoteChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                       <option value="">Select a tier</option>
-                      <option value="value">Value</option>
+                      <option value="value">Value Plus</option>
                       <option value="platinum">Platinum</option>
                       <option value="executive">Executive</option>
                     </select>
@@ -660,7 +705,13 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
                   <select name="infoAbout" value={prospectiveData.infoAbout} onChange={handleProspectiveChange} required className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
                     <option value="">Select an option</option>
                     <option>How to Sign Up</option>
-                    <option>General Information</option>
+                    <option>Plan Benefits & Pricing</option>
+                    <option>Doctor Visits & Day-to-Day Cover</option>
+                    <option>Private Hospital Cover</option>
+                    <option>Combined Cover (Hospital + Doctor Visits)</option>
+                    <option>Claims & Benefits Enquiries</option>
+                    <option>Employer / Business Group Cover</option>
+                    <option>Partnership or Broker Enquiries</option>
                   </select>
                 </div>
                 <div className="sm:col-span-2">
@@ -693,3 +744,4 @@ const Contact: React.FC<ContactProps> = ({ isSidebarCollapsed }) => {
 };
 
 export default Contact;
+

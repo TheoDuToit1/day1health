@@ -47,3 +47,5 @@ const JuniorExecutivePlanDetailPage: React.FC = () => {
 };
 
 export default JuniorExecutivePlanDetailPage;
+
+

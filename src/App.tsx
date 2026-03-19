@@ -1,40 +1,72 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { useState, useEffect, Suspense, lazy } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import AppContent from './components/AppContent';
-import PlanDetailPage from './components/PlanDetailPage';
-import HospitalPlanDetailPage from './components/HospitalPlanDetailPage';
-import ComprehensivePlanDetailPage from './components/ComprehensivePlanDetailPage';
-import SeniorPlanDetailPage from './components/SeniorPlanDetailPage';
-import RegulatoryInformationPage from './components/RegulatoryInformationPage';
-import JuniorExecutivePlanDetailPage from './components/JuniorExecutivePlanDetailPage';
-import ProceduresPage from './components/ProceduresPage';
 import { ThemeProvider } from './contexts/ThemeContext';
+
+// Lazy load route components for code splitting
+const PlanDetailPage = lazy(() => import('./components/PlanDetailPage'));
+const HospitalPlanDetailPage = lazy(() => import('./components/HospitalPlanDetailPage'));
+const ComprehensivePlanDetailPage = lazy(() => import('./components/ComprehensivePlanDetailPage'));
+const SeniorPlanDetailPage = lazy(() => import('./components/SeniorPlanDetailPage'));
+const RegulatoryInformationPage = lazy(() => import('./components/RegulatoryInformationPage'));
+const JuniorExecutivePlanDetailPage = lazy(() => import('./components/JuniorExecutivePlanDetailPage'));
+const ProceduresPage = lazy(() => import('./components/ProceduresPage'));
+const ProtectedAdminPage = lazy(() => import('./admin/ProtectedAdminPage'));
+const DirectoryPage = lazy(() => import('./directory/DirectoryPage'));
+const ProviderDetailPage = lazy(() => import('./directory/ProviderDetailPage'));
+
+// Smooth scroll enhancement hook
+const useSmoothScrollEnhancement = () => {
+  useEffect(() => {
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+      return; // Don't enhance scrolling for users who prefer reduced motion
+    }
+
+    // Enhanced smooth scrolling for mouse wheel (optional enhancement)
+    // This is disabled by default as native smooth scrolling is usually sufficient
+    // Uncomment if you want custom wheel smoothing:
+    /*
+    let isScrolling = false;
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (isScrolling) return;
+      
+      e.preventDefault();
+      isScrolling = true;
+      
+      const scrollAmount = e.deltaY * 0.8; // Adjust multiplier for sensitivity
+      
+      window.scrollBy({
+        top: scrollAmount,
+        behavior: 'smooth'
+      });
+      
+      setTimeout(() => {
+        isScrolling = false;
+      }, 50);
+    };
+    
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+    */
+  }, []);
+};
 
 function AppWrapper() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFooterInView, setIsFooterInView] = useState(false);
-  const location = useLocation();
+  
+  // Enable smooth scrolling enhancements
+  useSmoothScrollEnhancement();
 
-  // Get slide number from route
-  const getSlideFromRoute = () => {
-    const path = location.pathname;
-    // Handle explicit slide paths
-    if (path === '/slide-1') return 0;
-    if (path === '/slide-2') return 1;
-    if (path === '/slide-3') return 2;
-    if (path === '/slide-4') return 3;
-    // Handle dynamic /slide-:num pattern
-    const match = path.match(/^\/slide-(\d+)$/);
-    if (match) {
-      const n = parseInt(match[1], 10);
-      // Map slide-1..4 to indexes 0..3
-      if (n >= 1 && n <= 4) return n - 1;
-    }
-    return null; // Main route
-  };
 
-  const specificSlide = getSlideFromRoute();
 
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
@@ -67,10 +99,10 @@ function AppWrapper() {
     }
   };
 
-  // Handle hash navigation when coming from blog
+  // Handle hash navigation
   useEffect(() => {
     const handleNavigation = () => {
-      // First check URL hash
+      // Check URL hash
       const hash = window.location.hash.substring(1);
       if (hash) {
         if (hash === 'footer') {
@@ -89,22 +121,6 @@ function AppWrapper() {
             return;
           }
         }
-      }
-
-      // Then check session storage for navigation from blog
-      const storedSection = sessionStorage.getItem('navigatingToSection');
-      if (storedSection) {
-        // Clear the stored section
-        sessionStorage.removeItem('navigatingToSection');
-        // Scroll to the section after a short delay to ensure the page is loaded
-        setTimeout(() => {
-          const element = document.getElementById(storedSection);
-          if (element) {
-            const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-            const offset = 60; // keep header clearance
-            window.scrollTo({ top: elementTop - offset, behavior: 'smooth' });
-          }
-        }, 300);
       }
     };
 
@@ -179,7 +195,6 @@ function AppWrapper() {
       setIsSidebarCollapsed={setIsSidebarCollapsed}
       isFooterInView={isFooterInView}
       scrollToSection={scrollToSection}
-      specificSlide={specificSlide}
     />
   );
 }
@@ -189,19 +204,61 @@ function App() {
     <ThemeProvider>
       <Routes>
         <Route path="/" element={<AppWrapper />} />
-        <Route path="/slide-1" element={<AppWrapper />} />
-        <Route path="/slide-2" element={<AppWrapper />} />
-        <Route path="/slide-3" element={<AppWrapper />} />
-        <Route path="/slide-4" element={<AppWrapper />} />
-        {/* Dynamic slide route to catch /slide-:num */}
-        <Route path="/slide-:num" element={<AppWrapper />} />
-        <Route path="/plans/day-to-day" element={<PlanDetailPage />} />
-        <Route path="/plans/hospital" element={<HospitalPlanDetailPage />} />
-        <Route path="/plans/comprehensive" element={<ComprehensivePlanDetailPage />} />
-        <Route path="/plans/senior-plan" element={<SeniorPlanDetailPage />} />
-        <Route path="/plans/junior-executive" element={<JuniorExecutivePlanDetailPage />} />
-        <Route path="/regulatory-information" element={<RegulatoryInformationPage />} />
-        <Route path="/procedures" element={<ProceduresPage />} />
+        <Route path="/plans/day-to-day" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <PlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/hospital" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <HospitalPlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/comprehensive" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ComprehensivePlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/senior-plan" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <SeniorPlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/plans/junior-executive" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <JuniorExecutivePlanDetailPage />
+          </Suspense>
+        } />
+        <Route path="/regulatory-information" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <RegulatoryInformationPage />
+          </Suspense>
+        } />
+        <Route path="/procedures" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ProceduresPage />
+          </Suspense>
+        } />
+        <Route path="/admin" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ProtectedAdminPage />
+          </Suspense>
+        } />
+        <Route path="/directory" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <DirectoryPage />
+          </Suspense>
+        } />
+        <Route path="/directory/:slug" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <DirectoryPage />
+          </Suspense>
+        } />
+        <Route path="/provider/:id" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <ProviderDetailPage />
+          </Suspense>
+        } />
         {/* Catch-all: render the SPA for any other route */}
         <Route path="*" element={<AppWrapper />} />
       </Routes>

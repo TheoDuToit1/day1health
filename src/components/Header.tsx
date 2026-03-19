@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Menu, X, Phone, Mail, ChevronLeft, ChevronRight, Home, Settings, HelpCircle, MessageSquare, Users, Search } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 // Simple medical-style plus icon (circle with cross)
 const MedicalPlusIcon: React.FC<{ className?: string }> = ({ className = '' }) => (
@@ -30,6 +32,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCollapsed, setIsSidebarCollapsed, isFooterInView: _isFooterInView }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNetworkSearchOpen, setIsNetworkSearchOpen] = useState(false);
   const { isDark } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -81,15 +84,26 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-xl lg:z-40 lg:flex lg:flex-col transition-all duration-700 ease-in-out ${
-        isSidebarCollapsed ? 'w-24' : 'w-64'
-      } ${isDark ? 'bg-gray-900' : 'bg-white'}`}
-      style={{
-        transition: 'width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease'
-      }}>
+      <motion.aside 
+        className={`hidden lg:fixed lg:left-0 lg:top-0 lg:h-full lg:shadow-xl lg:z-40 lg:flex lg:flex-col transition-all duration-700 ease-in-out ${
+          isSidebarCollapsed ? 'w-24' : 'w-64'
+        } ${isDark ? 'bg-gray-900' : 'bg-white'}`}
+        initial={{ x: -300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ 
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 1,
+          duration: 0.8
+        }}
+        style={{
+          transition: 'width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease'
+        }}>
         {/* Sidebar Toggle Button */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           className={`absolute -right-4 top-8 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shadow-lg hover:shadow-xl transform hover:scale-110 ${
             isDark 
               ? 'bg-gray-800 border border-gray-600 hover:bg-gray-700' 
@@ -117,13 +131,17 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }}>
           <div 
-          className="flex items-center justify-center h-16 w-full"
+          className="flex items-center justify-center h-16 w-full -mt-1"
           style={{
             transition: 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}>
             <a
               href="#hero"
-              onClick={(e) => { e.preventDefault(); onNavigate('hero'); }}
+              onClick={(e) => { 
+                e.preventDefault(); 
+                smoothScrollTo('hero');
+                onNavigate('hero'); 
+              }}
               aria-label="Go to Home"
               className="relative w-48 h-16 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-lg cursor-pointer"
             >
@@ -133,6 +151,8 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     src="/assets/images/Logo.jpg" 
                     alt="Day 1 Health Logo" 
                     className="w-full h-full object-contain"
+                    width="192"
+                    height="64"
                   />
                 </div>
               </div>
@@ -140,12 +160,12 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
           </div>
         </div>
         
-        <nav className="p-6 pb-2">
-          <ul className="space-y-1">
+        <nav className="px-6 pt-3 pb-2">
+          <ul className="space-y-0.5">
             {navItems.map((item) => {
               const isActive = _isFooterInView ? (item.id === 'procedures') : (activeSection === item.id);
               const baseClasses = `w-full flex items-center rounded-lg transition-all duration-500 ease-in-out group relative transform ${
-                isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-4 py-3 justify-start space-x-3'
+                isSidebarCollapsed ? 'px-3 py-3 justify-center' : 'px-2 py-3 justify-start space-x-3'
               } ${
                 isActive
                   ? 'bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white shadow-xl scale-105 shadow-green-500/25'
@@ -160,6 +180,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       href={`#${item.id}`}
                       onClick={(e) => {
                         e.preventDefault();
+                        smoothScrollTo(item.id);
                         onNavigate(item.id);
                       }}
                       className={baseClasses}
@@ -178,7 +199,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     </a>
                     {/* Hover submenu (improved) */}
                     <div
-                      className={`absolute top-0 left-full ml-2 z-50 w-72 rounded-xl border shadow-2xl p-3 opacity-0 invisible translate-y-1 scale-95 origin-left
+                      className={`absolute -top-20 left-full ml-2 z-50 w-72 rounded-xl border shadow-2xl p-3 opacity-0 invisible translate-y-1 scale-95 origin-left
                         group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-100
                         group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100
                         transition-all duration-200 ${
@@ -189,14 +210,14 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     >
                       {/* Pointer arrow */}
                       <div
-                        className={`absolute -left-1 top-3 w-3 h-3 rotate-45 ${
+                        className={`absolute -left-1 top-24 w-3 h-3 rotate-45 ${
                           isDark ? 'bg-gray-900 border-l border-t border-gray-700' : 'bg-white border-l border-t border-gray-200'
                         }`}
                         aria-hidden="true"
                       />
                       <ul className="space-y-1">
                         {[
-                          { label: 'Doctor Directory', href: 'https://day1health.co.za/medical-directory/' },
+                          { label: 'GP & Dental Directory', href: '/directory', isInternal: true },
                           { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
                           { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
                           { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },
@@ -206,7 +227,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                           <li key={item.label}>
                             <a
                               href={item.href}
-                              target="_blank"
+                              target={item.isInternal ? undefined : "_blank"}
                               rel="noopener noreferrer"
                               role="menuitem"
                               className={`flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg outline-none transition-all focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
@@ -232,6 +253,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                       href="#footer"
                       onClick={(e) => {
                         e.preventDefault();
+                        smoothScrollTo('footer');
                         onNavigate('footer');
                       }}
                       className={baseClasses}
@@ -257,6 +279,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
                     href={`#${item.id}`}
                     onClick={(e) => {
                       e.preventDefault();
+                      smoothScrollTo(item.id);
                       onNavigate(item.id);
                     }}
                     className={baseClasses}
@@ -282,7 +305,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         {/* Sidebar Quick Actions */}
         <div className={`${isSidebarCollapsed ? 'px-0' : 'px-6'} pt-1 pb-2 transition-all duration-700 ease-in-out`}>
           {!isSidebarCollapsed && (
-            <h4 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <h4 className={`font-semibold mb-0 ${isDark ? 'text-white' : 'text-gray-900'}`}>
               Quick Actions
             </h4>
           )}
@@ -331,13 +354,13 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
         </div>
 
         {/* Contact Information - Always visible */}
-        <div className={`p-6 mt-auto transition-all duration-300 ${
+        <div className={`px-6 pt-3 pb-6 mt-auto transition-all duration-300 ${
           isDark 
             ? 'border-t border-gray-700 bg-gradient-to-b from-gray-800 to-gray-900' 
             : 'border-t border-gray-200 bg-gradient-to-b from-gray-50 to-gray-100'
         }`}>
           {!isSidebarCollapsed && (
-            <h4 className={`font-medium mb-4 text-sm uppercase tracking-wide ${
+            <h4 className={`font-medium mb-2 text-sm uppercase tracking-wide ${
               isDark ? 'text-gray-400' : 'text-gray-500'
             }`}>Contact Info</h4>
           )}
@@ -388,7 +411,7 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
             </div>
           </div>
         </div>
-      </aside>
+      </motion.aside>
 
       {/* Mobile Header */}
       <header className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
@@ -449,13 +472,82 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
               <div className="space-y-2">
                 {navItems.map((item, index) => {
                   const isItemActive = _isFooterInView ? (item.id === 'procedures') : (activeSection === item.id);
+                  
+                  if (item.id === 'network-search') {
+                    return (
+                      <div key={item.id} className="relative">
+                        <button
+                          onClick={() => setIsNetworkSearchOpen(!isNetworkSearchOpen)}
+                          className={`w-full text-left px-6 py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center space-x-4 group ${
+                            isItemActive
+                              ? isDark 
+                                ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg shadow-green-500/25'
+                                : 'bg-gradient-to-r from-green-50 to-green-100 text-green-700 border-2 border-green-200 shadow-lg shadow-green-500/10'
+                              : isDark 
+                                ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                          }`}
+                          style={{
+                            animationDelay: `${index * 50}ms`,
+                            animation: isMenuOpen ? 'slideInFromRight 0.4s ease-out forwards' : 'none'
+                          }}
+                        >
+                          <item.icon className={`w-5 h-5 transition-all duration-300 ${
+                            isItemActive 
+                              ? 'text-current scale-110' 
+                              : 'group-hover:scale-105'
+                          }`} />
+                          <span className="font-medium text-base">{item.label}</span>
+                          <ChevronRight className={`ml-auto w-5 h-5 transition-transform duration-300 ${
+                            isNetworkSearchOpen ? 'rotate-90' : ''
+                          }`} />
+                        </button>
+                        
+                        {/* Dropdown submenu - positioned above */}
+                        {isNetworkSearchOpen && (
+                          <div className={`absolute left-0 right-0 bottom-full mb-2 mx-4 rounded-xl border shadow-2xl p-3 z-50 ${
+                            isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+                          }`}>
+                            <div className="space-y-1">
+                              {[
+                                { label: 'GP & Dental Directory', href: '/directory', isInternal: true },
+                                { label: 'Life Healthcare Hospitals', href: 'https://www.lifehealthcare.co.za/hospitals/' },
+                                { label: 'Mediclinic Hospitals', href: 'https://www.mediclinic.co.za/en/corporate/hospitals.html' },
+                                { label: 'Africa Health Care', href: 'https://www.africahealthcare.co.za/' },
+                                { label: 'Iso Leso Optics', href: 'https://search.mymembership.co.za/Search/?Id=dff1cb34-a717-47e0-a58d-8e5d15744e77' },
+                                { label: 'Clinix Health Group', href: 'https://clinix.co.za/hospitals/' },
+                              ].map((subItem) => (
+                                <a
+                                  key={subItem.label}
+                                  href={subItem.href}
+                                  target={subItem.isInternal ? undefined : "_blank"}
+                                  rel="noopener noreferrer"
+                                  className={`block px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
+                                    isDark
+                                      ? 'text-gray-300 hover:text-white hover:bg-gray-800'
+                                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                                  }`}
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  {subItem.label}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  
                   return (
                     <button
                       key={item.id}
                       onClick={() => {
                         if (item.id === 'procedures') {
+                          smoothScrollTo('footer');
                           onNavigate('footer');
                         } else {
+                          smoothScrollTo(item.id);
                           onNavigate(item.id);
                         }
                         setIsMenuOpen(false);
@@ -529,3 +621,4 @@ const Header: React.FC<HeaderProps> = ({ activeSection, onNavigate, isSidebarCol
 };
 
 export default Header;
+

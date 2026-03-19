@@ -14,7 +14,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     {
       icon: Search,
       title: "Choose a Plan",
-      description: "Browse our transparent plans and select the one that fits your needs and budget. No hidden fees, just clear pricing.",
+      description: "Browse our transparent plans and select the one that fits your needs and budget. Clear pricing, no hidden costs.",
       color: "bg-blue-500"
     },
     {
@@ -25,14 +25,14 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
     },
     {
       icon: Stethoscope,
-      title: "Visit Any Network Provider",
-      description: "Use your cover at thousands of healthcare providers across South Africa. Present your membership card and you're covered.",
+      title: "Visit Our Network Providers",
+      description: "Use your cover at thousands of healthcare providers across South Africa. Present your membership card and you're covered.\n\n*Terms & Conditions Apply*",
       color: "bg-blue-500"
     },
     {
       icon: Shield,
       title: "Start Your Cover from Day 1",
-      description: "No waiting periods for accidents and emergencies. Your cover starts immediately after approval and payment.",
+      description: "No waiting periods for accidents and emergency ambulance services. Your cover starts immediately after approval and payment.\n\n*Terms & Conditions Apply*",
       color: "bg-green-500"
     }
   ];
@@ -54,7 +54,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
       
       <div className="container mx-auto px-4 relative z-10 pt-16">
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
@@ -64,7 +64,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
           <h2 id="how-it-works" className={`text-4xl lg:text-5xl font-bold ${
             isDark ? 'text-white' : 'text-gray-900'
           } mb-1`}>
-            Getting Covered is Simple
+            Getting Covered Is Simple
           </h2>
           <p className={`text-xl text-center mb-16 max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'
@@ -217,7 +217,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
                       {step.title}
                     </h3>
                     
-                    <p className={`text-sm ${
+                    <p className={`text-sm whitespace-pre-line ${
                       isDark ? '!text-gray-300' : '!text-gray-600'
                     }`}>
                       {step.description}
@@ -273,7 +273,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ isSidebarCollapsed }) => {
               transition={{ delay: 0.6, duration: 0.6 }}
               viewport={{ once: true }}
             >
-              Join thousands of South Africans who trust Day1Health for their healthcare needs.
+              Join thousands of South African residence who trust Day1Health for their healthcare needs.
             </motion.p>
             <motion.div 
               className="flex flex-row flex-wrap items-center justify-center gap-3"

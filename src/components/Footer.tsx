@@ -54,21 +54,26 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
               </div>
               <div className="flex items-center space-x-3">
                 <Shield className="w-5 h-5 text-green-600" />
-                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP11319</span>
+                <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>FSP 11319 • CMS Ref. DM 1074</span>
               </div>
               {/* Logo moved here, ensure it's clearly lower to align with theme toggle */}
-              <div className="pt-[70px]">
-                <div className="relative w-64 h-[111px] flex items-center justify-center">
+              <div className="pt-[70px] ml-0.5">
+                <div className="relative w-64 h-[111px] flex flex-col items-center justify-center">
                   <div className={`absolute inset-0 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${isDark ? 'bg-gray-900 border-2 border-gray-700' : 'bg-white border-2 border-green-500'}`}>
                     <div className="absolute inset-0 flex items-center justify-center p-1.5">
                       <img 
                         src="/assets/images/Logo.jpg" 
                         alt="Day 1 Health Logo" 
                         className="w-full h-full object-contain"
+                        width="256"
+                        height="111"
                       />
                     </div>
                   </div>
                 </div>
+                <p className="text-xs sm:text-sm text-left font-medium mt-2 ml-2 sm:-ml-0.5" style={{ color: '#1a568c' }}>
+                  Providing Health Cover Benefits Since 2003
+                </p>
               </div>
             </div>
           </div>
@@ -97,7 +102,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 <a href="#why-choose" className={`transition-colors ${
                   isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                 }`}>
-                  Why Choose Us
+                  About Us
                 </a>
               </li>
               <li>
@@ -118,10 +123,10 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 <div className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Network Search</div>
                 <ul className="mt-2 ml-3 space-y-2 list-disc">
                   <li>
-                    <a href="https://day1health.co.za/medical-directory/" target="_blank" rel="noopener noreferrer" className={`transition-colors ${
+                    <a href="/directory" className={`transition-colors ${
                       isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                     }`}>
-                      Doctor Directory
+                      GP & Dental Directory
                     </a>
                   </li>
                   <li>
@@ -182,15 +187,6 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 <Mail className="w-5 h-5 text-green-400" />
                 <a href="mailto:sales@day1.co.za" className={isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>sales@day1.co.za</a>
               </div>
-              <div className="flex items-start space-x-3">
-                <Shield className="w-5 h-5 text-green-400 mt-0.5" />
-                <div>
-                  <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>Underwritten by</div>
-                  <div className={`font-medium ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>African Unity Life Ltd</div>
-                </div>
-              </div>
             </div>
 
             <div className={`mt-6 p-4 rounded-lg ${
@@ -244,7 +240,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
             <div className={`text-sm ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              &copy; 2025 Day1Health. All rights reserved.
+              &copy; 2026 Day1Health. All rights reserved. Powered by <a href="https://wabi-sabi.click" target="_blank" rel="noopener noreferrer" className={`font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'}`}>Wabi-sabi Systems</a>
             </div>
           </div>
 
@@ -266,3 +262,4 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
 };
 
 export default Footer;
+

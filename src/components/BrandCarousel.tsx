@@ -8,20 +8,28 @@ interface BrandCarouselProps {
 const BrandCarousel: React.FC<BrandCarouselProps> = ({ isSidebarCollapsed }) => {
   const { isDark } = useTheme();
 
-  // Demo brand names
+  // Healthcare company brands
   const brands = [
-    'Coca-Cola',
-    'Microsoft',
-    'Amazon',
-    'Google',
-    'Apple',
-    'Samsung',
-    'Nike',
-    'Adidas',
-    'BMW',
-    'Mercedes',
-    'Toyota',
-    'Tesla'
+    {
+      name: 'African Assist',
+      logo: '/assets/images/Trusted By/african-assist.jpg'
+    },
+    {
+      name: 'African Health Care',
+      logo: '/assets/images/Trusted By/african-health-care.png'
+    },
+    {
+      name: 'Clinix',
+      logo: '/assets/images/Trusted By/clinix.png'
+    },
+    {
+      name: 'Life Healthcare',
+      logo: '/assets/images/Trusted By/life-healthcare.png'
+    },
+    {
+      name: 'Mediclinic',
+      logo: '/assets/images/Trusted By/mediclinic.png'
+    }
   ];
 
   // Duplicate brands for seamless loop
@@ -44,19 +52,28 @@ const BrandCarousel: React.FC<BrandCarouselProps> = ({ isSidebarCollapsed }) => 
               isDark ? 'text-white' : 'text-gray-900'
             }`}
           >
-            Trusted by Leading Brands
+            Trusted By Leading Brands
           </h2>
           <p
             className={`mt-4 text-lg ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
-            Join the companies that trust us with their healthcare
+            Our partners in the healthcare sector nationwide
           </p>
         </div>
 
         {/* Carousel Container */}
-        <div className="relative overflow-hidden">
+        <div 
+          className="relative overflow-hidden"
+          onWheel={(e) => {
+            e.preventDefault();
+            const container = e.currentTarget.querySelector('.scrollable-track') as HTMLElement;
+            if (container) {
+              container.scrollLeft += e.deltaY;
+            }
+          }}
+        >
           {/* Gradient Overlays */}
           <div
             className={`absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none ${
@@ -74,35 +91,25 @@ const BrandCarousel: React.FC<BrandCarouselProps> = ({ isSidebarCollapsed }) => 
           />
 
           {/* Scrolling Track */}
-          <div className="flex animate-scroll">
+          <div className="flex animate-scroll scrollable-track overflow-x-auto scrollbar-hide" style={{ scrollBehavior: 'smooth' }}>
             {duplicatedBrands.map((brand, index) => (
               <div
                 key={index}
-                className={`flex-shrink-0 mx-8 flex items-center justify-center w-48 h-32 rounded-xl border ${
+                className={`flex-shrink-0 mx-8 flex flex-col items-center justify-center w-64 h-48 rounded-xl border ${
                   isDark
                     ? 'bg-gray-800 border-gray-700'
                     : 'bg-white border-gray-200'
-                } shadow-lg hover:shadow-xl transition-shadow duration-300`}
+                } shadow-lg hover:shadow-xl transition-shadow duration-300 p-4`}
               >
-                {/* SVG Logo Placeholder */}
-                <svg
-                  className={`w-24 h-24 ${
-                    isDark ? 'text-gray-600' : 'text-gray-400'
+                {/* Company Logo */}
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className={`object-contain ${
+                    brand.name === 'Life Healthcare' ? 'w-40 h-40' : 'w-36 h-36'
                   }`}
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
-                </svg>
-                {/* Brand Name */}
-                <span
-                  className={`absolute bottom-4 text-sm font-semibold ${
-                    isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}
-                >
-                  {brand}
-                </span>
+                  loading="lazy"
+                />
               </div>
             ))}
           </div>
@@ -127,9 +134,26 @@ const BrandCarousel: React.FC<BrandCarouselProps> = ({ isSidebarCollapsed }) => 
         .animate-scroll:hover {
           animation-play-state: paused;
         }
+
+        /* Hide scrollbar */
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* Pause animation when user is scrolling */
+        .scrollable-track:hover {
+          animation-play-state: paused;
+        }
       `}</style>
     </section>
   );
 };
 
 export default BrandCarousel;
+
+

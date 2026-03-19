@@ -19,12 +19,12 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
     {
       img: '/icons/duration-alt.png',
       title: "No Waiting Periods",
-      description: "Coverage starts from Day 1 for accidents and emergencies. No waiting around when you need care most.",
+      description: "Coverage starts from Day 1 for accidents and emergency ambulance services. No waiting around when you need care most.\n\n*Terms & Conditions Apply*",
     },
     {
       img: '/icons/features-alt.png',
       title: "Underwritten by African Unity",
-      description: "Backed by a trusted South African insurer with decades of experience and financial stability.",
+      description: "Underwritten by African Unity Life LTD — with decades of experience in the South African medical insurance market.",
     },
     {
       img: '/icons/population-globe.png',
@@ -34,12 +34,12 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
     {
       img: '/icons/users-loyalty.png',
       title: "Inclusive & Accessible",
-      description: "Designed for all South Africans with affordable options and support in multiple languages.",
+      description: "Inclusive and accessible design for all South Africans and foreign residents.",
     },
     {
       img: '/icons/skill.png',
       title: "24/7 Support",
-      description: "Round-the-clock emergency assistance and member support. We're here when you need us most.",
+      description: "24/7 emergency assistance via Africa Assist (0861-144-144). Call-centre support during office hours (0876 100 600). We're here when you need us most.",
     }
   ];
 
@@ -58,22 +58,22 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full mb-4 ${
+          <span className={`inline-block px-3 py-1 text-sm font-medium rounded-[9px] mb-4 ${
             isDark 
               ? 'bg-green-900/50 text-green-400' 
               : 'bg-green-100 text-green-800'
           }`}>
-            Why Choose Day1Health
+            About Us
           </span>
           <h2 id="why-choose" className={`text-4xl lg:text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
-            Healthcare That Works for You
+            Healthcare That Works For You
           </h2>
           <p className={`text-xl max-w-3xl mx-auto ${
             isDark ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            We believe every South African deserves access to quality healthcare. Here's what makes us different.
+            We believe every South African resident deserves access to quality healthcare. Here's what makes us different.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ const WhyChoose: React.FC<WhyChooseProps> = ({ isSidebarCollapsed }) => {
                 isDark ? 'bg-blue-900/30' : 'bg-blue-100'
               } ring-1 ring-blue-500/20`}>
                 {('img' in feature && feature.img) ? (
-                  <img src={feature.img} alt={feature.title} className={`${(feature as any).size ?? 'w-8 h-8'} object-contain`} />
+                  <img src={feature.img} alt={feature.title} width="32" height="32" className={`${(feature as any).size ?? 'w-8 h-8'} object-contain`} />
                 ) : (
                   // Fallback to Lucide if needed
                   <Shield className="w-8 h-8 text-green-600" />
