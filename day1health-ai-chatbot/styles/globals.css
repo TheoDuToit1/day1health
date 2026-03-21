@@ -74,3 +74,152 @@ body {
 .animate-bounce.delay-200 {
   animation-delay: 0.2s;
 }
+
+/* Styles for HTML content in chat messages */
+.prose {
+  color: #374151;
+  max-width: 100%;
+}
+
+.prose p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose strong,
+.prose b {
+  font-weight: 600;
+  color: #111827;
+}
+
+.prose em,
+.prose i {
+  font-style: italic;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.prose li:last-child {
+  margin-bottom: 0;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.prose h1 { font-size: 1.5rem; }
+.prose h2 { font-size: 1.375rem; }
+.prose h3 { font-size: 1.25rem; }
+.prose h4 { font-size: 1.125rem; }
+.prose h5 { font-size: 1rem; }
+.prose h6 { font-size: 0.875rem; }
+
+.prose h1:first-child,
+.prose h2:first-child,
+.prose h3:first-child,
+.prose h4:first-child,
+.prose h5:first-child,
+.prose h6:first-child {
+  margin-top: 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.875rem;
+}
+
+.prose th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.prose td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 1rem 0;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #1d4ed8;
+}
+
+.prose code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: 'Courier New', monospace;
+}
+
+.prose blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Ensure spacing utilities work in prose */
+.prose .space-y-1 > * + * { margin-top: 0.25rem; }
+.prose .space-y-2 > * + * { margin-top: 0.5rem; }
+.prose .space-y-3 > * + * { margin-top: 0.75rem; }
+.prose .space-y-4 > * + * { margin-top: 1rem; }
+
+/* Make sure Tailwind utility classes work inside prose */
+.prose [class*="text-"],
+.prose [class*="bg-"],
+.prose [class*="border-"],
+.prose [class*="rounded"],
+.prose [class*="p-"],
+.prose [class*="m-"] {
+  /* Allow Tailwind utilities to override prose defaults */
+}
