@@ -498,7 +498,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 0-21</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
@@ -572,7 +572,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 0-21</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
