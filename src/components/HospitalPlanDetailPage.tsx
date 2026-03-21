@@ -156,12 +156,28 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  // All Hospital plans: R390 per adult + R156 per child
-  const ADULT_PRICE = 390;
-  const CHILD_PRICE = 156;
-  const currentPrice = ((): number => {
-    return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;
-  })();
+  // Hospital plan pricing per tier
+  // Value Plus: R351 per adult + R156 per child
+  // Platinum: R560 single, R1008 couple (R504 per adult for couple) + R224 per child
+  // Executive: R640 single, R1152 couple (R576 per adult for couple) + R256 per child
+  const getPricing = () => {
+    if (tierKey === 'platinum') {
+      if (adultCount === 1) return 560 + (CHILD_PRICE_PLATINUM * childCount);
+      return 1008 + (CHILD_PRICE_PLATINUM * childCount);
+    }
+    if (tierKey === 'executive') {
+      if (adultCount === 1) return 640 + (CHILD_PRICE_EXECUTIVE * childCount);
+      return 1152 + (CHILD_PRICE_EXECUTIVE * childCount);
+    }
+    // Value Plus
+    return (ADULT_PRICE_VALUE * adultCount) + (CHILD_PRICE_VALUE * childCount);
+  };
+  
+  const ADULT_PRICE_VALUE = 351;
+  const CHILD_PRICE_VALUE = 156;
+  const CHILD_PRICE_PLATINUM = 224;
+  const CHILD_PRICE_EXECUTIVE = 256;
+  const currentPrice = getPricing();
 
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
     const params = new URLSearchParams(searchParams);
@@ -235,7 +251,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                       {tierKey === 'value' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R390.00 through R1,326.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R351.00 through R1,326.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}

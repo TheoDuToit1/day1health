@@ -483,7 +483,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.student}
                         onToggleExpand={() => toggleExpanded('student')}
-                        to="/plans/comprehensive?variant=single&category=Value"
+                        to="/plans/comprehensive?variant=single&tier=value"
                       />
                     </div>
                     <button
@@ -643,7 +643,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.family}
                         onToggleExpand={() => toggleExpanded('family')}
-                        to="/plans/comprehensive?variant=family&category=Executive"
+                        to="/plans/comprehensive?variant=family&tier=executive"
                       />
                     </div>
                     <button
@@ -819,7 +819,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         showArrow={false}
                         expanded={expanded.basic}
                         onToggleExpand={() => toggleExpanded('basic')}
-                        to="/plans/comprehensive?variant=couple&category=Platinum"
+                        to="/plans/comprehensive?variant=couple&tier=platinum"
                       />
                     </div>
                     <button

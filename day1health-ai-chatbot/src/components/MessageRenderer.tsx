@@ -29,6 +29,17 @@ export default function MessageRenderer({
 }: MessageRendererProps) {
   // Handle legacy text-only messages
   if (typeof message === 'string') {
+    const hasHTML = /<[^>]+>/.test(message);
+    
+    if (hasHTML) {
+      return (
+        <div 
+          className="text-sm prose prose-sm max-w-none"
+          dangerouslySetInnerHTML={{ __html: message }}
+        />
+      );
+    }
+    
     return <div className="text-sm whitespace-pre-wrap">{message}</div>;
   }
 
@@ -61,9 +72,25 @@ export default function MessageRenderer({
         
       case 'text':
         const textContent = message.content as TextContent;
+        const text = textContent.text || 'No content';
+        
+        // Check if content contains HTML tags
+        const hasHTML = /<[^>]+>/.test(text);
+        
+        if (hasHTML) {
+          // Render HTML content safely
+          return (
+            <div 
+              className="text-sm prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: text }}
+            />
+          );
+        }
+        
+        // Plain text fallback
         return (
           <div className="text-sm whitespace-pre-wrap">
-            {textContent.text || 'No content'}
+            {text}
           </div>
         );
         

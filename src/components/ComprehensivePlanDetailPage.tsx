@@ -226,12 +226,28 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     }
   }, [variantParam, searchParams]);
 
-  // All Comprehensive plans: R665 per adult + R266 per child
-  const ADULT_PRICE = 665;
-  const CHILD_PRICE = 266;
-  const currentPrice = ((): number => {
-    return ADULT_PRICE * adultCount + CHILD_PRICE * childCount;
-  })();
+  // Comprehensive plan pricing per tier
+  // Value Plus: R665 single, R1151 couple + R266 per child
+  // Platinum: R896 single, R1611 couple + R358 per child
+  // Executive: R985 single, R1724 couple + R394 per child
+  const getPricing = () => {
+    if (tierParam === 'platinum') {
+      if (adultCount === 1) return 896 + (CHILD_PRICE_PLATINUM * childCount);
+      return 1611 + (CHILD_PRICE_PLATINUM * childCount);
+    }
+    if (tierParam === 'executive') {
+      if (adultCount === 1) return 985 + (CHILD_PRICE_EXECUTIVE * childCount);
+      return 1724 + (CHILD_PRICE_EXECUTIVE * childCount);
+    }
+    // Value Plus
+    if (adultCount === 1) return 665 + (CHILD_PRICE_VALUE * childCount);
+    return 1151 + (CHILD_PRICE_VALUE * childCount);
+  };
+  
+  const CHILD_PRICE_VALUE = 266;
+  const CHILD_PRICE_PLATINUM = 358;
+  const CHILD_PRICE_EXECUTIVE = 394;
+  const currentPrice = getPricing();
 
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
     const params = new URLSearchParams(searchParams);
@@ -317,7 +333,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                       {tierParam === 'platinum' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R895.00 through R3,043.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R896.00 through R3,043.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
