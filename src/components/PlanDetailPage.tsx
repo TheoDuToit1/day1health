@@ -252,6 +252,8 @@ const PlanDetailPage: React.FC = () => {
                     </div>
                     <div>
                       <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
+                      <p className={`mt-2 text-base md:text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>Day-to-Day Plan</p>
+                      <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Price range: R385.00 - R1,155.00</p>
                     </div>
                   </div>
                   {/* Right side price block removed per request; title now reflects selected plan name */}
@@ -499,7 +501,7 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
                                 <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
@@ -573,7 +575,7 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                             <div>
                               <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 2-11</label>
+                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 0-21</label>
                                 <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
                               </div>
                               <div className="mt-2 flex items-center gap-2">
