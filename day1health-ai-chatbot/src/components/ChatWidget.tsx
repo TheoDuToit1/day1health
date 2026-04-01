@@ -15,6 +15,7 @@ interface ChatWidgetProps {
   position?: 'bottom-right' | 'bottom-left';
   theme?: 'light' | 'dark';
   welcomeMessage?: string;
+  size?: 'compact' | 'large';
 }
 
 export default function ChatWidget({
@@ -22,6 +23,7 @@ export default function ChatWidget({
   position = 'bottom-right',
   theme = 'light',
   welcomeMessage = "Hi! I'm here to help you find the perfect health plan. What can I help you with today?",
+  size = 'compact',
 }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -88,6 +90,9 @@ export default function ChatWidget({
 
       const data = await response.json();
 
+      // Log the response for debugging
+      console.log('API Response:', data);
+
       const assistantMessage: Message = {
         id: uuidv4(),
         role: 'assistant',
@@ -152,17 +157,29 @@ export default function ChatWidget({
     ? 'bg-gray-800 text-white'
     : 'bg-white text-gray-900';
 
+  const sizeClasses = size === 'large'
+    ? 'w-[500px] h-[700px]'
+    : 'w-96 h-[600px]';
+
+  const buttonSizeClasses = size === 'large'
+    ? 'p-5 text-lg'
+    : 'p-4';
+
+  const iconSizeClasses = size === 'large'
+    ? 'w-7 h-7'
+    : 'w-6 h-6';
+
   return (
     <div className={`fixed ${positionClasses} z-50`}>
       {/* Chat Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 flex items-center gap-2"
+          className={`bg-blue-600 hover:bg-blue-700 text-white rounded-full ${buttonSizeClasses} shadow-lg transition-all duration-200 flex items-center gap-2`}
           aria-label="Open chat"
         >
           <svg
-            className="w-6 h-6"
+            className={iconSizeClasses}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -174,20 +191,20 @@ export default function ChatWidget({
               d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
             />
           </svg>
-          <span className="font-medium">Chat with us</span>
+          <span className={`font-medium ${size === 'large' ? 'text-lg' : ''}`}>Chat with us</span>
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
         <div
-          className={`${themeClasses} rounded-lg shadow-2xl w-96 h-[600px] flex flex-col`}
+          className={`${themeClasses} ${sizeClasses} rounded-lg shadow-2xl flex flex-col`}
         >
           {/* Header */}
-          <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+          <div className={`bg-blue-600 text-white ${size === 'large' ? 'p-5' : 'p-4'} rounded-t-lg flex justify-between items-center`}>
             <div>
-              <h3 className="font-bold text-lg">Day1Health Assistant</h3>
-              <p className="text-sm text-blue-100">We're here to help!</p>
+              <h3 className={`font-bold ${size === 'large' ? 'text-xl' : 'text-lg'}`}>Day1Health Assistant</h3>
+              <p className={`${size === 'large' ? 'text-base' : 'text-sm'} text-blue-100`}>We're here to help!</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -195,7 +212,7 @@ export default function ChatWidget({
               aria-label="Close chat"
             >
               <svg
-                className="w-6 h-6"
+                className={iconSizeClasses}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -211,7 +228,7 @@ export default function ChatWidget({
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className={`flex-1 overflow-y-auto ${size === 'large' ? 'p-5 space-y-5' : 'p-4 space-y-4'}`}>
             {messages.map(message => (
               <div
                 key={message.id}
@@ -228,7 +245,7 @@ export default function ChatWidget({
                 >
                   {message.role === 'user' ? (
                     <>
-                      <p className="text-sm whitespace-pre-wrap">{message.content as string}</p>
+                      <p className={`${size === 'large' ? 'text-base' : 'text-sm'} whitespace-pre-wrap`}>{message.content as string}</p>
                       <p className="text-xs mt-1 opacity-70">
                         {message.timestamp.toLocaleTimeString([], {
                           hour: '2-digit',
@@ -237,7 +254,7 @@ export default function ChatWidget({
                       </p>
                     </>
                   ) : (
-                    <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}>
+                    <div className={`rounded-lg ${size === 'large' ? 'p-4' : 'p-3'} ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}>
                       <MessageRenderer 
                         message={message.content}
                         onQuickReply={handleQuickReply}
@@ -269,7 +286,7 @@ export default function ChatWidget({
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200">
+          <div className={`${size === 'large' ? 'p-5' : 'p-4'} border-t border-gray-200`}>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -277,7 +294,7 @@ export default function ChatWidget({
                 onChange={e => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className={`flex-1 rounded-lg px-4 py-2 border ${
+                className={`flex-1 rounded-lg ${size === 'large' ? 'px-5 py-3 text-base' : 'px-4 py-2'} border ${
                   theme === 'dark'
                     ? 'bg-gray-700 border-gray-600 text-white'
                     : 'bg-white border-gray-300 text-gray-900'
@@ -287,11 +304,11 @@ export default function ChatWidget({
               <button
                 onClick={() => sendMessage()}
                 disabled={isLoading || !inputValue.trim()}
-                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg px-4 py-2 transition-colors"
+                className={`bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg ${size === 'large' ? 'px-5 py-3' : 'px-4 py-2'} transition-colors`}
                 aria-label="Send message"
               >
                 <svg
-                  className="w-5 h-5"
+                  className={size === 'large' ? 'w-6 h-6' : 'w-5 h-5'}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

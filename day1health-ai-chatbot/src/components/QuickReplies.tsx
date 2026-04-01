@@ -12,9 +12,21 @@ export default function QuickReplies({ data, onReply }: QuickRepliesProps) {
     return null;
   }
 
+  // Check if text contains HTML
+  const hasHTML = /<[^>]+>/.test(data.text);
+
   return (
     <div className="space-y-3">
-      {data.text && <p className="text-sm">{data.text}</p>}
+      {data.text && (
+        hasHTML ? (
+          <div 
+            className="text-sm prose prose-sm max-w-none"
+            dangerouslySetInnerHTML={{ __html: data.text }}
+          />
+        ) : (
+          <p className="text-sm">{data.text}</p>
+        )
+      )}
       <div className="flex flex-wrap gap-2">
         {data.quickReplies.map((reply, idx) => (
           <button

@@ -21,6 +21,8 @@ export default function IconList({ data }: IconListProps) {
     }
   };
 
+  const hasHTML = (text: string) => /<[^>]+>/.test(text);
+
   return (
     <div className="space-y-3">
       {data.title && (
@@ -38,7 +40,14 @@ export default function IconList({ data }: IconListProps) {
                   {item.label}:{' '}
                 </span>
               )}
-              <span className="text-sm">{item.text}</span>
+              {hasHTML(item.text) ? (
+                <span 
+                  className="text-sm prose prose-sm max-w-none inline"
+                  dangerouslySetInnerHTML={{ __html: item.text }}
+                />
+              ) : (
+                <span className="text-sm">{item.text}</span>
+              )}
             </div>
           </li>
         ))}
