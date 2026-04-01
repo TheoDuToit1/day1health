@@ -129,13 +129,24 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Chat Widget */}
+      {/* Chat Widget - Default compact size */}
       <ChatWidget 
         apiUrl="/api/chat"
         position="bottom-right"
         theme="light"
+        size="compact"
         welcomeMessage="Hi! I'm here to help you find the perfect health plan. What can I help you with today?"
       />
+      
+      {/* Uncomment below to use large size instead:
+      <ChatWidget 
+        apiUrl="/api/chat"
+        position="bottom-right"
+        theme="light"
+        size="large"
+        welcomeMessage="Hi! I'm here to help you find the perfect health plan. What can I help you with today?"
+      />
+      */}
     </div>
   );
 }

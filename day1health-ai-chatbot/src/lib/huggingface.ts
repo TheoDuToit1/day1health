@@ -38,7 +38,7 @@ export async function sendToHuggingFace(
     const response = await hf.chatCompletion({
       model: 'Qwen/Qwen2.5-72B-Instruct',
       messages: chatMessages,
-      max_tokens: 500,
+      max_tokens: 2000, // Increased for complex HTML responses
       temperature: 0.7,
     });
 
@@ -80,7 +80,7 @@ export async function streamFromHuggingFace(
     const stream = hf.chatCompletionStream({
       model: 'Qwen/Qwen2.5-72B-Instruct',
       messages: chatMessages,
-      max_tokens: 500,
+      max_tokens: 2000, // Increased for complex HTML responses
       temperature: 0.7,
     });
 

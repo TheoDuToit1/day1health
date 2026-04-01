@@ -7,7 +7,8 @@ export type MessageType =
   | 'text' 
   | 'quick_replies' 
   | 'list' 
-  | 'progress';
+  | 'progress'
+  | 'form_input';
 
 export interface CarouselItem {
   planName: string;
@@ -95,6 +96,14 @@ export interface TextContent {
   text: string;
 }
 
+export interface FormInputContent {
+  text: string;
+  inputType: 'text' | 'email' | 'tel' | 'number';
+  placeholder: string;
+  fieldName: string;
+  validation?: string;
+}
+
 export interface StructuredMessage {
   messageType: MessageType;
   content: 
@@ -104,5 +113,6 @@ export interface StructuredMessage {
     | QuickRepliesContent 
     | ListContent 
     | ProgressContent 
-    | TextContent;
+    | TextContent
+    | FormInputContent;
 }

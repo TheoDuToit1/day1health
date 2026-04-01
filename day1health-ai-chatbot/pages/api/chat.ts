@@ -51,12 +51,22 @@ export default async function handler(
       // Try to extract JSON from response (handle markdown code blocks)
       let jsonContent = hfResponse.content.trim();
       
+      console.log('Raw AI response:', jsonContent); // Debug log
+      
       // Remove markdown code blocks if present
       if (jsonContent.startsWith('```json')) {
-        jsonContent = jsonContent.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+        jsonContent = jsonContent.replace(/```json\n?/g, '').replace(/```\n?$/g, '');
       } else if (jsonContent.startsWith('```')) {
         jsonContent = jsonContent.replace(/```\n?/g, '');
       }
+      
+      // Try to find JSON in the response
+      const jsonMatch = jsonContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        jsonContent = jsonMatch[0];
+      }
+      
+      console.log('Cleaned JSON:', jsonContent); // Debug log
       
       structuredResponse = JSON.parse(jsonContent);
       
@@ -64,8 +74,12 @@ export default async function handler(
       if (!structuredResponse.messageType || !structuredResponse.content) {
         throw new Error('Invalid message structure');
       }
+      
+      console.log('Parsed structured response:', structuredResponse); // Debug log
     } catch (parseError) {
-      console.warn('Failed to parse structured response, falling back to text:', parseError);
+      console.warn('Failed to parse structured response:', parseError);
+      console.warn('Original content:', hfResponse.content);
+      
       // Fallback to plain text format
       structuredResponse = {
         messageType: 'text',

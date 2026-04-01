@@ -20,6 +20,8 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
     )
   );
 
+  const hasHTML = (text: string) => /<[^>]+>/.test(text);
+
   return (
     <div className="w-full overflow-x-auto">
       {data.title && (
@@ -47,14 +49,24 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
               <td className="border border-gray-300 p-2 font-medium capitalize">
                 {key.replace(/([A-Z])/g, ' $1').trim()}
               </td>
-              {data.plans.map((plan, planIdx) => (
-                <td 
-                  key={planIdx} 
-                  className="border border-gray-300 p-2 text-center"
-                >
-                  {plan[key] || '-'}
-                </td>
-              ))}
+              {data.plans.map((plan, planIdx) => {
+                const value = plan[key] || '-';
+                return (
+                  <td 
+                    key={planIdx} 
+                    className="border border-gray-300 p-2 text-center"
+                  >
+                    {hasHTML(value) ? (
+                      <div 
+                        className="prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: value }}
+                      />
+                    ) : (
+                      value
+                    )}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

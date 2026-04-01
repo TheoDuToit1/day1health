@@ -12,6 +12,8 @@ export default function PlanCarousel({ data, onAction }: PlanCarouselProps) {
     return null;
   }
 
+  const hasHTML = (text: string) => /<[^>]+>/.test(text);
+
   return (
     <div className="space-y-3">
       {data.title && (
@@ -40,7 +42,14 @@ export default function PlanCarousel({ data, onAction }: PlanCarouselProps) {
               {plan.highlights.map((highlight, hIdx) => (
                 <li key={hIdx} className="flex items-start gap-2 text-sm">
                   <span className="text-green-500 mt-0.5 flex-shrink-0">✓</span>
-                  <span>{highlight}</span>
+                  {hasHTML(highlight) ? (
+                    <span 
+                      className="prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: highlight }}
+                    />
+                  ) : (
+                    <span>{highlight}</span>
+                  )}
                 </li>
               ))}
             </ul>

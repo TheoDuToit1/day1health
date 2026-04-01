@@ -15,6 +15,7 @@ import PlanCard from './PlanCard';
 import QuickReplies from './QuickReplies';
 import IconList from './IconList';
 import ProgressStepper from './ProgressStepper';
+import { formatHTML, hasHTML } from '../utils/htmlFormatter';
 
 interface MessageRendererProps {
   message: StructuredMessage | string;
@@ -29,13 +30,14 @@ export default function MessageRenderer({
 }: MessageRendererProps) {
   // Handle legacy text-only messages
   if (typeof message === 'string') {
-    const hasHTML = /<[^>]+>/.test(message);
+    const hasHTMLContent = hasHTML(message);
     
-    if (hasHTML) {
+    if (hasHTMLContent) {
+      const formattedHTML = formatHTML(message);
       return (
         <div 
-          className="text-sm prose prose-sm max-w-none"
-          dangerouslySetInnerHTML={{ __html: message }}
+          className="text-sm prose prose-sm max-w-none html-content"
+          dangerouslySetInnerHTML={{ __html: formattedHTML }}
         />
       );
     }
@@ -46,7 +48,12 @@ export default function MessageRenderer({
   // Safety check for structured messages
   if (!message || !message.messageType || !message.content) {
     console.warn('Invalid message structure:', message);
-    return <div className="text-sm text-red-500">Unable to display message</div>;
+    return (
+      <div className="text-sm text-red-500 bg-red-50 p-3 rounded">
+        <p className="font-semibold">Unable to display message</p>
+        <p className="text-xs mt-1">Message structure: {JSON.stringify(message)}</p>
+      </div>
+    );
   }
 
   // Handle structured messages with proper type narrowing
@@ -75,14 +82,15 @@ export default function MessageRenderer({
         const text = textContent.text || 'No content';
         
         // Check if content contains HTML tags
-        const hasHTML = /<[^>]+>/.test(text);
+        const hasHTMLContent = hasHTML(text);
         
-        if (hasHTML) {
-          // Render HTML content safely
+        if (hasHTMLContent) {
+          // Format and render HTML content safely
+          const formattedHTML = formatHTML(text);
           return (
             <div 
-              className="text-sm prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: text }}
+              className="text-sm prose prose-sm max-w-none html-content"
+              dangerouslySetInnerHTML={{ __html: formattedHTML }}
             />
           );
         }

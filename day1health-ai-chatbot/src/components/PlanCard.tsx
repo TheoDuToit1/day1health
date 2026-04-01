@@ -146,6 +146,25 @@ export default function PlanCard({ data, onAction }: PlanCardProps) {
         {data.text && data.text.length > 0 && (
           <div className="space-y-3 mb-4">
             {data.text.map((paragraph, idx) => {
+              // Skip empty paragraphs
+              if (!paragraph.trim()) {
+                return null;
+              }
+              
+              // Check if paragraph contains HTML tags
+              const hasHTML = /<[^>]+>/.test(paragraph);
+              
+              if (hasHTML) {
+                // Render HTML content
+                return (
+                  <div 
+                    key={idx} 
+                    className="text-sm leading-relaxed prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  />
+                );
+              }
+              
               // Check if paragraph contains markdown-style bold
               if (paragraph.includes('**')) {
                 // Parse markdown bold (**text**)
