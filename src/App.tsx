@@ -10,7 +10,6 @@ const HospitalPlanDetailPage = lazy(() => import('./components/HospitalPlanDetai
 const ComprehensivePlanDetailPage = lazy(() => import('./components/ComprehensivePlanDetailPage'));
 const SeniorPlanDetailPage = lazy(() => import('./components/SeniorPlanDetailPage'));
 const RegulatoryInformationPage = lazy(() => import('./components/RegulatoryInformationPage'));
-const JuniorExecutivePlanDetailPage = lazy(() => import('./components/JuniorExecutivePlanDetailPage'));
 const ProceduresPage = lazy(() => import('./components/ProceduresPage'));
 const ProtectedAdminPage = lazy(() => import('./admin/ProtectedAdminPage'));
 const DirectoryPage = lazy(() => import('./directory/DirectoryPage'));
@@ -223,11 +222,6 @@ function App() {
         <Route path="/plans/senior-plan" element={
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <SeniorPlanDetailPage />
-          </Suspense>
-        } />
-        <Route path="/plans/junior-executive" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <JuniorExecutivePlanDetailPage />
           </Suspense>
         } />
         <Route path="/regulatory-information" element={
