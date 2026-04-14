@@ -502,7 +502,13 @@ const SeniorPlanDetailPage: React.FC = () => {
 
                       <div className="mt-5">
                         <a
-                          href={`/assets/pdf's/Application forms/${categoryDisplay === 'comprehensive' ? 'Senior-Comprehensive' : 'Senior-Day-To-Day'}.pdf`}
+                          href={`/assets/pdf's/Application forms/${
+                            categoryDisplay === 'comprehensive' 
+                              ? 'Senior-Comprehensive' 
+                              : categoryDisplay === 'hospital'
+                              ? 'Senior-Hospital'
+                              : 'Senior-Day-To-Day'
+                          }.pdf`}
                           download
                           className="block w-full"
                         >
