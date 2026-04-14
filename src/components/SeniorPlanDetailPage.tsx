@@ -64,8 +64,9 @@ const SeniorPlanDetailPage: React.FC = () => {
     return coverItems;
   })();
 
-  // Category-aware description list
+  // Category-aware description items - separated by category for easier maintenance
   const descriptionItems: { title: string; text: string }[] = (() => {
+    // Senior Hospital information cards
     if (categoryDisplay === 'hospital') {
       return [
         {
@@ -83,6 +84,7 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: '24 Hour Emergency Services ambulance & Pre-Authorisation (0861 144 144)', text: '24 Hour Emergency Services, Medical Assistance and Pre-Authorisation provided by Africa Assist. Immediate Cover. Guaranteed private hospital admission with preference to all Life Healthcare and Mediclinic hospitals' },
       ];
     }
+    // Senior Comprehensive information cards
     if (categoryDisplay === 'comprehensive') {
       return [
         { title: 'Private Managed Doctor Visits', text: 'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.' },
@@ -104,7 +106,7 @@ const SeniorPlanDetailPage: React.FC = () => {
         { title: 'FUNERAL BENEFIT', text: 'Principal Member and spouse – R 5,000. A 3-month waiting period applies. (Benefit only available to plan members.)' },
       ];
     }
-    // Default to Day-to-Day content
+    // Senior Day-to-Day information cards (default)
     return [
       {
         title: 'Private Managed Doctor Visits',
