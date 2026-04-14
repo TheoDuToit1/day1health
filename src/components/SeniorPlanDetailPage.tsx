@@ -181,11 +181,20 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   // Quantity is fixed to 1 for Senior (Single/Couple only); no qty handling
 
-  // All Senior plans: R425 per adult
-  const ADULT_PRICE = 425;
+  // Senior plan pricing by category
   const currentPrice = ((): number => {
     const adultCount = (option === 'couple') ? 2 : 1;
-    return ADULT_PRICE * adultCount;
+    
+    if (categoryDisplay === 'comprehensive') {
+      // Senior Comprehensive: R875 single, R1750 couple
+      return adultCount === 2 ? 1750 : 875;
+    }
+    if (categoryDisplay === 'hospital') {
+      // Senior Hospital: R580 single, R1160 couple
+      return adultCount === 2 ? 1160 : 580;
+    }
+    // Senior Day-to-Day: R425 single, R850 couple
+    return adultCount === 2 ? 850 : 425;
   })();
 
   const updateUrl = (nextVariant: 'single' | 'couple') => {
@@ -485,7 +494,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couples</option>
+                            <option value="couple">Couple</option>
                           </select>
                         </div>
                         

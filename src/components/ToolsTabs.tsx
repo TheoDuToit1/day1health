@@ -3049,12 +3049,12 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       <div className={`w-full mx-auto px-2 sm:px-4`}>
         {/* Floating Tabs */}
         <div className="flex justify-center mb-8 sm:mb-12">
-          <div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-2 sm:py-3 backdrop-blur-sm transition-colors duration-300 ${
+          <div className={`w-auto mx-auto rounded-2xl shimmer-border shadow-lg px-4 py-2 sm:py-3 backdrop-blur-sm transition-colors duration-300 ${
             isDark 
               ? 'bg-gray-800/95 border border-gray-700' 
               : 'bg-white/95 border border-gray-100'
           }`}>
-            <div className="flex flex-wrap justify-center gap-12 sm:gap-16 px-1 sm:px-2">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 px-0">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}

@@ -651,7 +651,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                           >
                             <option value="">Choose an option</option>
                             <option value="single">Single</option>
-                            <option value="couple">Couples</option>
+                            <option value="couple">Couple</option>
                             <option value="family">Family</option>
                           </select>
                         </div>
