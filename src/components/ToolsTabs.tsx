@@ -866,8 +866,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
       case 'daytoday':
         return (
           <LayoutGroup>
-            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-4 md:px-2`}>
-              <motion.div className="grid md:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
+            <motion.div className={`w-full max-w-[85vw] ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto px-5 sm:px-6 md:px-2`}>
+              <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 items-start overflow-visible">
               {/* Introduction Column */}
               <motion.div 
                 className={`min-w-0 relative rounded-2xl shadow-lg p-5 border-2 transition-all overflow-visible transform-gpu ring-1 ring-emerald-400/20 shadow-[0_0_40px_rgba(16,185,129,0.15)] ${
@@ -3046,20 +3046,20 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
     }`} style={{
       transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
     }}>
-      <div className={`w-full mx-auto px-4`}>
+      <div className={`w-full mx-auto px-2 sm:px-4`}>
         {/* Floating Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-3 backdrop-blur-sm transition-colors duration-300 ${
+        <div className="flex justify-center mb-8 sm:mb-12">
+          <div className={`w-full max-w-full ${isSidebarCollapsed ? 'md:max-w-[74rem]' : 'md:max-w-[min(74rem,calc(100vw-14rem-0.5rem))]'} mx-auto rounded-2xl shimmer-border shadow-lg px-2 py-2 sm:py-3 backdrop-blur-sm transition-colors duration-300 ${
             isDark 
               ? 'bg-gray-800/95 border border-gray-700' 
               : 'bg-white/95 border border-gray-100'
           }`}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-4 px-3 md:px-0">
+            <div className="flex flex-wrap justify-center gap-12 sm:gap-16 px-1 sm:px-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}
-                  className={`flex flex-col sm:flex-row items-center w-full px-4 py-3 sm:px-5 sm:py-3 text-xs sm:text-sm font-medium rounded-xl transition-all justify-center gap-2 sm:gap-3 ${
+                  className={`flex-shrink-0 flex flex-row items-center px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium rounded-xl transition-all justify-center gap-2 whitespace-nowrap ${
                     activeTab === tab.id
                       ? isDark 
                         ? 'bg-green-900/50 text-green-300 shadow-sm border border-green-800'
@@ -3069,7 +3069,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         : 'bg-blue-50 text-green-700 border border-blue-100 hover:bg-green-50 hover:text-green-700 hover:border-green-200'
                   }`}
                 >
-                  <span className={`inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:mr-3 transition-colors ${
+                  <span className={`inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-lg transition-colors flex-shrink-0 ${
                     activeTab === tab.id
                       ? isDark
                         ? 'bg-green-900/50 hover:bg-green-900/70'
@@ -3078,7 +3078,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                         ? 'bg-blue-900/30 hover:bg-green-900/50'
                         : 'bg-blue-100 hover:bg-green-200'
                   }`}>
-                  <tab.icon className={`w-4 h-4 ${
+                  <tab.icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
                     activeTab === tab.id 
                       ? isDark 
                           ? 'text-green-300' 
@@ -3088,7 +3088,7 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                           : 'text-green-600'
                   }`} />
                   </span>
-                  <span className="text-center sm:text-left leading-tight sm:leading-normal sm:whitespace-nowrap">{tab.label}</span>
+                  <span className="text-center sm:text-left leading-tight sm:leading-normal">{tab.label}</span>
                 </button>
               ))}
             </div>

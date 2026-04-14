@@ -62,7 +62,7 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Chronic Medication',
     text:
-      'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
+      'Chronic medication covered according to the Day1 Health formulary. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and a 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
   },
   {
     title: 'Out-of-Area Visits',
@@ -75,7 +75,7 @@ const descriptionItems: { title: string; text: string }[] = [
       'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
   },
   {
-    title: 'Family Funeral Benefit',
+    title: 'Funeral Benefit',
     text:
       'Principal, Spouse & Child > 14 years R10,000. Child > 6 years R5,000. Child > 0 years > R2,500. Stillborn > 28 weeks R1,250. A 3 month waiting period applies.',
   },
