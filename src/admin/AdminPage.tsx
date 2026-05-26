@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Plus, X, AlertCircle, CheckCircle, Loader, Grid3x3, LayoutGrid, BarChart3, Users, TrendingUp, MapPin } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { supabase } from './supabaseClient';
+import { hasSupabaseEnv, supabase, supabaseConfigError } from './supabaseClient';
 import { Provider, FormData } from './types';
 import ProviderTable from './components/ProviderTable';
 import ProviderGallery from './components/ProviderGallery';
@@ -220,6 +220,13 @@ const AdminPage: React.FC = () => {
   }, []);
 
   const fetchProviders = async () => {
+    if (!hasSupabaseEnv) {
+      setProviders([]);
+      setError(supabaseConfigError ?? 'Supabase is not configured.');
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -278,6 +285,11 @@ const AdminPage: React.FC = () => {
   };
 
   const handleSaveProvider = async (formData: FormData) => {
+    if (!hasSupabaseEnv) {
+      setError(supabaseConfigError ?? 'Supabase is not configured.');
+      return;
+    }
+
     try {
       setFormLoading(true);
       setError(null);
@@ -324,6 +336,10 @@ const AdminPage: React.FC = () => {
 
   const handleDeactivateProvider = async (provider: Provider) => {
     if (!window.confirm(`Deactivate ${provider['DOCTOR SURNAME']}?`)) return;
+    if (!hasSupabaseEnv) {
+      setError(supabaseConfigError ?? 'Supabase is not configured.');
+      return;
+    }
 
     try {
       setError(null);
@@ -347,6 +363,11 @@ const AdminPage: React.FC = () => {
   };
 
   const handleDeleteProvider = async (provider: Provider) => {
+    if (!hasSupabaseEnv) {
+      setError(supabaseConfigError ?? 'Supabase is not configured.');
+      return;
+    }
+
     try {
       setError(null);
       console.log('Deleting provider:', provider.PRNO);

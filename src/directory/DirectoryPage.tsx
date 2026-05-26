@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { Search, MapPin, Phone, Filter, ArrowUpDown, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../admin/supabaseClient';
+import { hasSupabaseEnv, supabase, supabaseConfigError } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
 import ProviderSidebar from './components/ProviderSidebar';
 import { generateDirectorySEO, setMetaTags } from '../utils/seoHelpers';
@@ -34,6 +34,7 @@ const DirectoryPage: React.FC = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const observerTarget = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -189,8 +190,17 @@ const DirectoryPage: React.FC = () => {
 
 
   const fetchAllpartners = async () => {
+    if (!hasSupabaseEnv) {
+      setAllpartners([]);
+      setDisplayedpartners([]);
+      setErrorMessage(supabaseConfigError ?? 'Provider directory is unavailable right now.');
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
+      setErrorMessage(null);
       let allData: Provider[] = [];
       let offset = 0;
       const pageSize = 500;
@@ -228,6 +238,8 @@ const DirectoryPage: React.FC = () => {
     } catch (err) {
       console.error('Error fetching partners:', err);
       setAllpartners([]);
+      setDisplayedpartners([]);
+      setErrorMessage('We could not load the provider directory right now.');
     } finally {
       setLoading(false);
     }
@@ -366,6 +378,10 @@ const DirectoryPage: React.FC = () => {
     navigate('/directory', { replace: false });
   };
 
+  const handleBackToLandingPage = () => {
+    navigate('/', { replace: false });
+  };
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -415,7 +431,7 @@ const DirectoryPage: React.FC = () => {
               {/* Back Button - Mobile: above the logo */}
               <div className="block lg:hidden mb-4 ml-4">
                 <button 
-                  onClick={() => window.history.back()}
+                  onClick={handleBackToLandingPage}
                   className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg"
                   style={{ borderRadius: '9px' }}
                 >
@@ -435,7 +451,7 @@ const DirectoryPage: React.FC = () => {
                   {/* Back Button - Desktop: above "Network" */}
                   <div className="hidden lg:block absolute -top-12 -right-4">
                     <button 
-                      onClick={() => window.history.back()}
+                      onClick={handleBackToLandingPage}
                       className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg"
                       style={{ borderRadius: '9px' }}
                     >
@@ -925,6 +941,17 @@ const DirectoryPage: React.FC = () => {
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+            </div>
+          ) : errorMessage ? (
+            <div className={`rounded-2xl border px-6 py-8 text-center ${
+              isDark
+                ? 'border-amber-700/60 bg-amber-950/30 text-amber-100'
+                : 'border-amber-200 bg-amber-50 text-amber-900'
+            }`}>
+              <h2 className="text-xl font-semibold mb-2">Directory unavailable</h2>
+              <p className={isDark ? 'text-amber-100/80' : 'text-amber-800'}>
+                {errorMessage}
+              </p>
             </div>
           ) : displayedpartners.length > 0 ? (
             <>

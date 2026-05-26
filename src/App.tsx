@@ -14,6 +14,7 @@ const ProceduresPage = lazy(() => import('./components/ProceduresPage'));
 const ProtectedAdminPage = lazy(() => import('./admin/ProtectedAdminPage'));
 const DirectoryPage = lazy(() => import('./directory/DirectoryPage'));
 const ProviderDetailPage = lazy(() => import('./directory/ProviderDetailPage'));
+const Day1HealthAiChatbotPage = lazy(() => import('./components/Day1HealthAiChatbotPage'));
 
 // Smooth scroll enhancement hook
 const useSmoothScrollEnhancement = () => {
@@ -232,6 +233,11 @@ function App() {
         <Route path="/procedures" element={
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <ProceduresPage />
+          </Suspense>
+        } />
+        <Route path="/day1health-ai-chatbot" element={
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Day1HealthAiChatbotPage />
           </Suspense>
         } />
         <Route path="/admin" element={

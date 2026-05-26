@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useId, useRef, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
-import {ArrowLeft, ArrowRight, Quote, X} from "lucide-react";
+import {ArrowLeft, ArrowRight, Quote, Star, X} from "lucide-react";
 import {cn} from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -10,6 +10,7 @@ export interface iTestimonial {
 	designation: string;
 	description: string;
 	profileImage: string;
+	rating: number;
 }
 
 interface iCarouselProps {
@@ -162,6 +163,124 @@ const Carousel = ({items, initialScroll = 0}: iCarouselProps) => {
 };
 
 const MAX_PREVIEW_LENGTH = 80; // Maximum characters to show in preview
+const MAX_RATING = 5;
+
+const StarRating = ({
+	rating,
+	layout = false,
+	size = "sm",
+}: {
+	rating: number;
+	layout?: boolean;
+	size?: "sm" | "md";
+}) => {
+	const { isDark } = useTheme();
+	const clipPathId = useId();
+	const containerClasses = size === "md" ? "gap-2" : "gap-1.5";
+	const starSizeClasses = size === "md" ? "h-5 w-5" : "h-4 w-4";
+	const labelClasses = size === "md" ? "text-sm" : "text-xs";
+	const baseDelay = layout ? 0.1 : 0;
+
+	const wrapperVariants = {
+		hidden: { opacity: 0, y: 10, scale: 0.96 },
+		visible: {
+			opacity: 1,
+			y: 0,
+			scale: 1,
+			transition: {
+				duration: 0.45,
+				delay: baseDelay,
+				ease: "easeOut",
+			},
+		},
+	};
+
+	const starVariants = {
+		hidden: { opacity: 0 },
+		visible: (index: number) => ({
+			opacity: 1,
+			transition: {
+				duration: 0.2,
+				delay: baseDelay + 0.12 + index * 0.1,
+				ease: "easeOut",
+			},
+		}),
+	};
+
+	const labelVariants = {
+		hidden: { opacity: 0, x: -6 },
+		visible: {
+			opacity: 1,
+			x: 0,
+			transition: {
+				duration: 0.3,
+				delay: baseDelay + 0.56,
+			},
+		},
+	};
+
+	return (
+		<motion.div
+			initial="hidden"
+			whileInView="visible"
+			viewport={{ once: true, amount: 0.6 }}
+			variants={wrapperVariants}
+			className={cn(
+				"inline-flex items-center border px-3 py-1.5 shadow-sm backdrop-blur-sm",
+				isDark
+					? "border-amber-400/20 bg-amber-300/10 text-amber-100"
+					: "border-amber-200 bg-amber-50 text-amber-700",
+			)}
+			style={{ borderRadius: "9px" }}
+		>
+			<div className={cn("flex items-center", containerClasses)}>
+				{Array.from({ length: MAX_RATING }, (_, index) => {
+					const fillWidth = Math.max(0, Math.min(1, rating - index)) * 100;
+
+					return (
+						<motion.div
+							key={index}
+							custom={index}
+							variants={starVariants}
+							className="relative"
+						>
+							<Star
+								className={cn(
+									starSizeClasses,
+									isDark ? "text-white/15" : "text-gray-300",
+								)}
+							/>
+							<svg
+								className={cn("absolute inset-0", starSizeClasses)}
+								viewBox="0 0 24 24"
+								fill="none"
+								aria-hidden="true"
+							>
+								<defs>
+									<clipPath id={`${clipPathId}-${index}`}>
+										<rect x="0" y="0" width={`${fillWidth}%`} height="100%" />
+									</clipPath>
+								</defs>
+								<Star
+									className="h-full w-full text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.45)]"
+									fill="currentColor"
+									strokeWidth={1.75}
+									style={{ clipPath: `url(#${clipPathId}-${index})` }}
+								/>
+							</svg>
+						</motion.div>
+					);
+				})}
+			</div>
+			<motion.span
+				variants={labelVariants}
+				className={cn("ml-2 font-semibold tracking-[0.18em] uppercase", labelClasses)}
+			>
+				{rating.toFixed(1)}/{MAX_RATING}
+			</motion.span>
+		</motion.div>
+	);
+};
 
 const TestimonialCard = ({
 	testimonial,
@@ -266,6 +385,9 @@ const TestimonialCard = ({
 											<p className="text-green-100 text-sm">{testimonial.designation}</p>
 										</div>
 									</div>
+									<div className="mr-3 hidden sm:block">
+										<StarRating rating={testimonial.rating} layout size="md" />
+									</div>
 									<button
 										onClick={handleCollapse}
 										className="h-8 w-8 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/30 transition-colors"
@@ -276,6 +398,9 @@ const TestimonialCard = ({
 							</div>
 							<div className="p-6 overflow-y-auto flex-grow">
 								<div className={`relative ${isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-green-100'} p-6 rounded-lg border`}>
+									<div className="mb-5 sm:hidden">
+										<StarRating rating={testimonial.rating} layout size="md" />
+									</div>
 									
 									{/* Testimonial Text */}
 									<div className="relative">
@@ -303,6 +428,9 @@ const TestimonialCard = ({
 					className={`${index % 2 === 0 ? "rotate-0" : "-rotate-1"} rounded-3xl ${isDark ? 'bg-gradient-to-b from-gray-800 to-gray-700' : 'bg-gradient-to-b from-white to-green-50'} h-[440px] md:h-[480px] w-[85vw] sm:w-64 md:w-72 overflow-hidden flex flex-col items-center justify-start py-6 relative z-10 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-green-500`}
 				>
 					<ProfileImage src={testimonial.profileImage} alt={testimonial.name} />
+					<div className="mt-4">
+						<StarRating rating={testimonial.rating} />
+					</div>
 					<div className="px-4 mt-4 text-center">
 						<motion.p
 							layoutId={layout ? `title-${testimonial.name}` : undefined}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { supabase } from './supabaseClient';
+import { hasSupabaseEnv, supabase, supabaseConfigError } from './supabaseClient';
 import AdminPage from './AdminPage';
 import { Loader, LogOut } from 'lucide-react';
 
@@ -17,6 +17,12 @@ const ProtectedAdminPage: React.FC = () => {
 
   // Check if user is already logged in
   useEffect(() => {
+    if (!hasSupabaseEnv) {
+      setLoading(false);
+      setLoginError(supabaseConfigError ?? 'Supabase is not configured.');
+      return;
+    }
+
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -49,6 +55,10 @@ const ProtectedAdminPage: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!hasSupabaseEnv) {
+      setLoginError(supabaseConfigError ?? 'Supabase is not configured.');
+      return;
+    }
     setLoginError('');
     setIsLoggingIn(true);
 
@@ -85,6 +95,8 @@ const ProtectedAdminPage: React.FC = () => {
   };
 
   const handleLogout = async () => {
+    if (!hasSupabaseEnv) return;
+
     try {
       await supabase.auth.signOut();
       setUser(null);

@@ -1,127 +1,31 @@
 import React from 'react';
 import ChatWidget from '../src/components/ChatWidget';
+import ManualUiLab from '../src/components/ManualUiLab';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Day1Health AI Assistant
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.12),_transparent_28%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)]">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 rounded-[32px] border border-white/70 bg-white/80 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)] backdrop-blur sm:p-8">
+            <span className="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              Manual prototype
+            </span>
+            <h1 className="mt-4 text-4xl font-bold text-slate-900 sm:text-5xl">
+              Day1Health AI Chatbot UI Lab
             </h1>
-            <p className="text-lg text-gray-600">
-              Get instant help finding the perfect health insurance plan
+            <p className="mt-3 max-w-3xl text-lg leading-8 text-slate-600">
+              Manual trigger page for testing chatbot visual responses before AI integration.
             </p>
           </div>
 
-          {/* Info Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="text-blue-600 text-3xl mb-2">💬</div>
-              <h3 className="font-bold text-lg mb-2">Ask Questions</h3>
-              <p className="text-gray-600 text-sm">
-                Get instant answers about plans, coverage, and pricing
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="text-blue-600 text-3xl mb-2">🎯</div>
-              <h3 className="font-bold text-lg mb-2">Get Recommendations</h3>
-              <p className="text-gray-600 text-sm">
-                Find the best plan based on your needs and budget
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="text-blue-600 text-3xl mb-2">📋</div>
-              <h3 className="font-bold text-lg mb-2">Compare Plans</h3>
-              <p className="text-gray-600 text-sm">
-                Understand differences between plans in simple terms
-              </p>
-            </div>
-          </div>
+          <ManualUiLab />
 
-          {/* Demo Section */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-4">Try It Now</h2>
-            <p className="text-gray-600 mb-4">
-              Click the chat button in the bottom-right corner to start a conversation!
-            </p>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="font-semibold text-blue-900 mb-2">Try asking:</p>
-              <ul className="space-y-2 text-sm text-blue-800">
-                <li>• "I need health insurance for my family"</li>
-                <li>• "What's the difference between hospital and comprehensive plans?"</li>
-                <li>• "How much does it cost for 2 adults and 1 child?"</li>
-                <li>• "How do I apply for coverage?"</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Features */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-6">What I Can Help With</h2>
-            
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">
-                  1
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Plan Explanations</h3>
-                  <p className="text-gray-600 text-sm">
-                    I break down complex insurance terms into simple language you can understand
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">
-                  2
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Personalized Recommendations</h3>
-                  <p className="text-gray-600 text-sm">
-                    Tell me your needs and budget, and I'll recommend the best plans for you
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Application Guidance</h3>
-                  <p className="text-gray-600 text-sm">
-                    I'll guide you through the application process and answer any questions
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">
-                  4
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Claims & Coverage Info</h3>
-                  <p className="text-gray-600 text-sm">
-                    Learn about claims processes, network providers, and what's covered
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center mt-8 text-gray-600 text-sm">
-            <p>Powered by Day1Health AI • Available 24/7</p>
+          <div className="mt-8 text-center text-sm text-slate-500">
+            <p>Manual UI lab only. No AI, claims, authorisations, or member data are connected.</p>
             <p className="mt-2">
               For urgent matters, call{' '}
-              <a href="tel:0876100600" className="text-blue-600 hover:underline">
+              <a href="tel:0876100600" className="text-emerald-700 hover:underline">
                 0876 100 600
               </a>
             </p>
@@ -129,24 +33,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Chat Widget - Default compact size */}
-      <ChatWidget 
+      <ChatWidget
         apiUrl="/api/chat"
         position="bottom-right"
         theme="light"
         size="compact"
         welcomeMessage="Hi! I'm here to help you find the perfect health plan. What can I help you with today?"
       />
-      
-      {/* Uncomment below to use large size instead:
-      <ChatWidget 
-        apiUrl="/api/chat"
-        position="bottom-right"
-        theme="light"
-        size="large"
-        welcomeMessage="Hi! I'm here to help you find the perfect health plan. What can I help you with today?"
-      />
-      */}
     </div>
   );
 }

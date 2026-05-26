@@ -23,6 +23,9 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
+  const isLocalDevHost = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+
+  if (isLocalDevHost) return;
 
   // Only handle GET over http/https to avoid chrome-extension and other schemes
   if (request.method !== 'GET') return;

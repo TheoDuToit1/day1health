@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Loader, Upload, Trash2 } from 'lucide-react';
 import { Provider, FormData } from '../types';
 import { validatePhone } from '../utils';
-import { supabase } from '../supabaseClient';
+import { hasSupabaseEnv, supabase, supabaseConfigError } from '../supabaseClient';
 
 interface ProviderFormProps {
   isDark: boolean;
@@ -67,6 +67,14 @@ const ProviderForm: React.FC<ProviderFormProps> = ({
   };
 
   const handleProfilePictureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!hasSupabaseEnv) {
+      setErrors((prev) => ({
+        ...prev,
+        profile_picture: supabaseConfigError ?? 'Supabase is not configured.',
+      }));
+      return;
+    }
+
     const file = e.target.files?.[0];
     if (!file) return;
 

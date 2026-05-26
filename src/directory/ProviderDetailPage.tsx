@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Phone, MapPin, Mail } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { supabase } from '../admin/supabaseClient';
+import { hasSupabaseEnv, supabase, supabaseConfigError } from '../admin/supabaseClient';
 import { Provider } from '../admin/types';
 import { generateProviderSEO, setMetaTags } from '../utils/seoHelpers';
 
@@ -16,6 +16,12 @@ const ProviderDetailPage: React.FC = () => {
 
   useEffect(() => {
     const fetchProvider = async () => {
+      if (!hasSupabaseEnv) {
+        setError(supabaseConfigError ?? 'Provider directory is unavailable right now.');
+        setLoading(false);
+        return;
+      }
+
       if (!id) {
         setError('Provider ID not found');
         setLoading(false);
