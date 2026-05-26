@@ -108,10 +108,49 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script>
+      (function () {
+        const isLocalDevHost = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+
+        if (!isLocalDevHost || !('serviceWorker' in navigator)) {
+          return;
+        }
+
+        window.__DAY1HEALTH_DISABLE_SW__ = true;
+
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.getRegistrations()
+            .then(async (registrations) => {
+              if (registrations.length === 0) {
+                sessionStorage.removeItem('day1health-sw-dev-reset');
+                return;
+              }
+
+              await Promise.all(registrations.map((registration) => registration.unregister()));
+
+              if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
+              }
+
+              if (!sessionStorage.getItem('day1health-sw-dev-reset')) {
+                sessionStorage.setItem('day1health-sw-dev-reset', '1');
+                window.location.reload();
+                return;
+              }
+
+              sessionStorage.removeItem('day1health-sw-dev-reset');
+            })
+            .catch((err) => {
+              console.warn('ServiceWorker cleanup failed in local dev:', err);
+            });
+        });
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
     <script>
       // Register service worker for PWA
-      if ('serviceWorker' in navigator) {
+      if ('serviceWorker' in navigator && !window.__DAY1HEALTH_DISABLE_SW__) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
             .then(registration => {
