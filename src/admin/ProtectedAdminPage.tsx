@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { hasSupabaseEnv, supabase, supabaseConfigError } from './supabaseClient';
 import AdminPage from './AdminPage';
-import { Loader, LogOut } from 'lucide-react';
+import { Loader, LogOut, AlertCircle } from 'lucide-react';
+
+interface RateLimitData {
+  attempts: number;
+  firstAttempt: number;
+  locked: boolean;
+  lockedUntil?: number;
+}
 
 const ProtectedAdminPage: React.FC = () => {
   const { isDark } = useTheme();
@@ -13,7 +20,85 @@ const ProtectedAdminPage: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [remainingAttempts, setRemainingAttempts] = useState(5);
+  const [isLocked, setIsLocked] = useState(false);
+  const [lockoutTimeRemaining, setLockoutTimeRemaining] = useState(0);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  // Get client IP (for rate limiting key)
+  const getClientIdentifier = (): string => {
+    if (typeof window !== 'undefined') {
+      // Use a combination of user agent and screen resolution as a pseudo-IP identifier
+      const ua = navigator.userAgent;
+      const screen = `${window.screen.width}x${window.screen.height}`;
+      return `${ua}-${screen}`.substring(0, 50);
+    }
+    return 'unknown';
+  };
+
+  // Get rate limit data from localStorage
+  const getRateLimitData = (): RateLimitData | null => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const key = `rate_limit_${getClientIdentifier()}`;
+      const data = localStorage.getItem(key);
+      return data ? JSON.parse(data) : null;
+    } catch (err) {
+      console.error('Error reading rate limit data:', err);
+      return null;
+    }
+  };
+
+  // Save rate limit data to localStorage
+  const saveRateLimitData = (data: RateLimitData): void => {
+    if (typeof window === 'undefined') return;
+    try {
+      const key = `rate_limit_${getClientIdentifier()}`;
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (err) {
+      console.error('Error saving rate limit data:', err);
+    }
+  };
+
+  // Check and update rate limit status
+  const checkRateLimit = (): void => {
+    const rateLimitData = getRateLimitData();
+    if (!rateLimitData) {
+      setRemainingAttempts(5);
+      setIsLocked(false);
+      return;
+    }
+
+    const now = Date.now();
+    const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+
+    // Check if outside the time window
+    if (now - rateLimitData.firstAttempt > RATE_LIMIT_WINDOW) {
+      localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
+      setRemainingAttempts(5);
+      setIsLocked(false);
+      return;
+    }
+
+    // Check if locked
+    if (rateLimitData.locked && rateLimitData.lockedUntil) {
+      if (now < rateLimitData.lockedUntil) {
+        setIsLocked(true);
+        const remaining = Math.ceil((rateLimitData.lockedUntil - now) / 1000);
+        setLockoutTimeRemaining(remaining);
+        setRemainingAttempts(0);
+      } else {
+        // Lockout expired
+        localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
+        setIsLocked(false);
+        setRemainingAttempts(5);
+      }
+    } else {
+      const remaining = Math.max(0, 5 - rateLimitData.attempts);
+      setRemainingAttempts(remaining);
+      setIsLocked(false);
+    }
+  };
 
   // Check if user is already logged in
   useEffect(() => {
@@ -30,6 +115,9 @@ const ProtectedAdminPage: React.FC = () => {
           setUser(session.user);
           setIsAuthenticated(true);
         }
+
+        // Check rate limit status
+        checkRateLimit();
       } catch (err) {
         console.error('Auth check error:', err);
       } finally {
@@ -59,25 +147,82 @@ const ProtectedAdminPage: React.FC = () => {
       setLoginError(supabaseConfigError ?? 'Supabase is not configured.');
       return;
     }
+
+    // Check if IP is locked
+    if (isLocked) {
+      setLoginError(`Your device has been temporarily blocked. Try again in ${lockoutTimeRemaining} seconds.`);
+      return;
+    }
+
     setLoginError('');
     setIsLoggingIn(true);
 
     try {
+      // Attempt to authenticate with Supabase directly
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) {
-        setLoginError(error.message);
+      if (error || !data.user) {
+        // Record failed attempt
+        const rateLimitData = getRateLimitData() || {
+          attempts: 0,
+          firstAttempt: Date.now(),
+          locked: false,
+        };
+
+        rateLimitData.attempts += 1;
+
+        // Lock after 5 attempts for 30 minutes
+        if (rateLimitData.attempts >= 5) {
+          rateLimitData.locked = true;
+          rateLimitData.lockedUntil = Date.now() + 30 * 60 * 1000; // 30 minutes
+          saveRateLimitData(rateLimitData);
+          setIsLocked(true);
+          setLockoutTimeRemaining(1800);
+          setLoginError('Too many failed login attempts. Your device has been temporarily blocked for 30 minutes.');
+
+          // Start countdown timer
+          const interval = setInterval(() => {
+            setLockoutTimeRemaining((prev) => {
+              if (prev <= 1) {
+                clearInterval(interval);
+                setIsLocked(false);
+                setRemainingAttempts(5);
+                localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+        } else {
+          saveRateLimitData(rateLimitData);
+          const remaining = 5 - rateLimitData.attempts;
+          setRemainingAttempts(remaining);
+          setLoginError(`Invalid credentials. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`);
+        }
         setIsLoggingIn(false);
       } else if (data.user) {
+        // Check if user has admin role
+        const userMetadata = data.user.user_metadata || {};
+        const isAdmin = userMetadata.role === 'admin' || data.user.email?.endsWith('@day1.co.za');
+
+        if (!isAdmin) {
+          setLoginError('You do not have permission to access the admin panel');
+          setIsLoggingIn(false);
+          return;
+        }
+
         // Trigger button animation by focusing it
         setTimeout(() => {
           if (buttonRef.current) {
             buttonRef.current.focus();
           }
         }, 100);
+
+        // Clear rate limit on successful login
+        localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
 
         // Delay navigation by 3 seconds to show animation
         setTimeout(() => {
@@ -86,9 +231,11 @@ const ProtectedAdminPage: React.FC = () => {
           setEmail('');
           setPassword('');
           setIsLoggingIn(false);
+          setRemainingAttempts(5); // Reset attempts on successful login
         }, 3000);
       }
     } catch (err) {
+      console.error('Login error:', err);
       setLoginError('An error occurred. Please try again.');
       setIsLoggingIn(false);
     }
@@ -182,14 +329,25 @@ const ProtectedAdminPage: React.FC = () => {
 
             {loginError && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-700">{loginError}</p>
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-red-700 font-medium">{loginError}</p>
+                    {isLocked && (
+                      <p className="text-xs text-red-600 mt-1">
+                        Your IP address has been temporarily blocked due to too many failed login attempts.
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 
             <button
               ref={buttonRef}
               type="submit"
-              className="send-message-button"
+              disabled={isLocked || isLoggingIn}
+              className={`send-message-button ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <div className="outline"></div>
               <div className="state state--default">

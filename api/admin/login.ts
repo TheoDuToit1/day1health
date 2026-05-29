@@ -1,27 +1,21 @@
-import express from 'express';
-import cors from 'cors';
+import { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
-const app = express();
-const PORT = 3001;
+// Rate limiting storage (in-memory for now)
+const rateLimitStore = new Map<string, { attempts: number; firstAttempt: number; lockedUntil?: number }>();
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Rate limiting storage
-const rateLimitStore = new Map();
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
 
-function getClientIp(req) {
-  return req.headers['x-forwarded-for']?.split(',')[0].trim() || 
-         req.headers['x-real-ip'] || 
-         req.socket.remoteAddress || 
-         'unknown';
+function getClientIp(req: VercelRequest): string {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string') {
+    return forwarded.split(',')[0].trim();
+  }
+  return 'unknown';
 }
 
-function checkRateLimit(ip) {
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number; retryAfter?: number } {
   const now = Date.now();
   const entry = rateLimitStore.get(ip);
 
@@ -45,7 +39,7 @@ function checkRateLimit(ip) {
   return { allowed: remaining > 0, remaining };
 }
 
-function recordFailedAttempt(ip) {
+function recordFailedAttempt(ip: string): void {
   const now = Date.now();
   const entry = rateLimitStore.get(ip);
 
@@ -59,35 +53,28 @@ function recordFailedAttempt(ip) {
   }
 }
 
-function resetRateLimit(ip) {
+function resetRateLimit(ip: string): void {
   rateLimitStore.delete(ip);
 }
 
-// Check rate limit endpoint
-app.get('/api/admin/check-rate-limit', (req, res) => {
-  try {
-    const clientIp = getClientIp(req);
-    const rateLimit = checkRateLimit(clientIp);
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-    res.json({
-      allowed: rateLimit.allowed,
-      remaining: rateLimit.remaining,
-      retryAfter: rateLimit.retryAfter || null,
-      isLocked: !rateLimit.allowed,
-    });
-  } catch (error) {
-    console.error('Rate limit check error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
-});
 
-// Login endpoint
-app.post('/api/admin/login', async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     const { email, password } = req.body;
     const clientIp = getClientIp(req);
-
-    console.log(`Login attempt from IP: ${clientIp}, Email: ${email}`);
 
     // Validate input
     if (!email || !password) {
@@ -97,7 +84,6 @@ app.post('/api/admin/login', async (req, res) => {
     // Check rate limiting
     const rateLimit = checkRateLimit(clientIp);
     if (!rateLimit.allowed) {
-      console.log(`IP ${clientIp} is rate limited`);
       return res.status(429).json({
         error: 'Too many login attempts from this IP address',
         retryAfter: rateLimit.retryAfter,
@@ -111,7 +97,6 @@ app.post('/api/admin/login', async (req, res) => {
     const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      console.error('Supabase configuration missing');
       return res.status(500).json({ error: 'Supabase configuration missing' });
     }
 
@@ -124,8 +109,6 @@ app.post('/api/admin/login', async (req, res) => {
     });
 
     if (error || !data.user) {
-      console.log(`Failed login attempt from IP ${clientIp}: ${error?.message}`);
-      
       // Record failed attempt
       recordFailedAttempt(clientIp);
       const updatedRateLimit = checkRateLimit(clientIp);
@@ -142,7 +125,6 @@ app.post('/api/admin/login', async (req, res) => {
     const isAdmin = userMetadata.role === 'admin' || data.user.email?.endsWith('@day1.co.za');
 
     if (!isAdmin) {
-      console.log(`Non-admin user attempted login: ${data.user.email}`);
       return res.status(403).json({
         error: 'You do not have permission to access the admin panel',
       });
@@ -150,9 +132,8 @@ app.post('/api/admin/login', async (req, res) => {
 
     // Reset rate limit on successful login
     resetRateLimit(clientIp);
-    console.log(`Successful login from IP ${clientIp}, Email: ${data.user.email}`);
 
-    res.json({
+    return res.status(200).json({
       success: true,
       message: 'Login successful',
       user: {
@@ -164,22 +145,9 @@ app.post('/api/admin/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       error: 'Internal server error',
-      message: error.message,
+      message: error instanceof Error ? error.message : 'Unknown error',
     });
   }
-});
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Admin API server is running' });
-});
-
-app.listen(PORT, () => {
-  console.log(`\n🔒 Admin API server running on http://localhost:${PORT}`);
-  console.log(`📍 Endpoints:`);
-  console.log(`   - GET  http://localhost:${PORT}/api/health`);
-  console.log(`   - GET  http://localhost:${PORT}/api/admin/check-rate-limit`);
-  console.log(`   - POST http://localhost:${PORT}/api/admin/login\n`);
-});
+}
