@@ -8,7 +8,7 @@
 
 The Platinum Comprehensive Plan includes all Value Plus benefits plus Critical Illness and Accidental Permanent Disability cover.
 
-**Price range:** R896.00 – R3,043.00/month
+**Price range:** R980.00 – R3,332.00/month
 
 **Cover includes:**
 - Private Managed Doctor Visits
@@ -90,18 +90,18 @@ R 250 000 for the Principal Member only. Single event only. Immediate cover.
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R896 |
-| Single + 1 Child | R1,254 |
-| Single + 2 Children | R1,612 |
-| Single + 3 Children | R1,970 |
-| Single + 4 Children | R2,328 |
-| Couple | R1,611 |
-| Couple + 1 Child | R1,969 |
-| Couple + 2 Children | R2,327 |
-| Couple + 3 Children | R2,685 |
-| Couple + 4 Children | R3,043 |
+| Single | R980 |
+| Single + 1 Child | R1,372 |
+| Single + 2 Children | R1,764 |
+| Single + 3 Children | R2,156 |
+| Single + 4 Children | R2,548 |
+| Couple | R1,764 |
+| Couple + 1 Child | R2,156 |
+| Couple + 2 Children | R2,548 |
+| Couple + 3 Children | R2,940 |
+| Couple + 4 Children | R3,332 |
 
-> Single base: R896 | Couple base: R1,611 | Per child: R358
+> Single base: R980 | Couple base: R1,764 | Per child: R392
 
 ---
 

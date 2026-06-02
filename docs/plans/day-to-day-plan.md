@@ -1,14 +1,14 @@
 # Day-to-Day Plan
 
 **Category:** Medical Insurance
-**Provider:** Day1 Health (Pty) Ltd – FSP Number 11319
-**Underwriter:** African Unity Life Ltd – FSP No: FSP 8447
+**Provider:** Day1 Health (Pty) Ltd â€“ FSP Number 11319
+**Underwriter:** African Unity Life Ltd â€“ FSP No: FSP 8447
 
 ## Overview
 
 The Day-to-Day Plan provides practical, everyday medical cover including private managed doctor visits, medication, dentistry, optometry, and funeral benefits. Available for Single, Couple, and Family options.
 
-**Price range:** R385.00 – R1,542.00/month
+**Price range:** R440.00 â€“ R1,674.00/month
 
 **Cover includes:**
 - Private Managed Doctor Visits
@@ -55,31 +55,31 @@ Principal, Spouse & Child > 14 years R10,000. Child > 6 years R5,000. Child > 0 
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R385 |
-| Single + 1 Child | R578 |
-| Single + 2 Children | R771 |
-| Single + 3 Children | R964 |
-| Single + 4 Children | R1,157 |
-| Couple | R674 |
-| Couple + 1 Child | R867 |
-| Couple + 2 Children | R1,060 |
-| Couple + 3 Children | R1,253 |
-| Couple + 4 Children | R1,446 |
-| Family 1 Adult + 1 Child | R578 |
-| Family 1 Adult + 2 Children | R771 |
-| Family 1 Adult + 3 Children | R964 |
-| Family 1 Adult + 4 Children | R1,157 |
-| Family 2 Adults + 1 Child | R963 |
-| Family 2 Adults + 2 Children | R1,156 |
-| Family 2 Adults + 3 Children | R1,349 |
-| Family 2 Adults + 4 Children | R1,542 |
+| Single | R440 |
+| Single + 1 Child | R661 |
+| Single + 2 Children | R881 |
+| Single + 3 Children | R1,102 |
+| Single + 4 Children | R1,322 |
+| Couple | R792 |
+| Couple + 1 Child | R1,013 |
+| Couple + 2 Children | R1,233 |
+| Couple + 3 Children | R1,454 |
+| Couple + 4 Children | R1,674 |
+| Family 1 Adult + 1 Child | R661 |
+| Family 1 Adult + 2 Children | R881 |
+| Family 1 Adult + 3 Children | R1,102 |
+| Family 1 Adult + 4 Children | R1,322 |
+| Family 2 Adults + 1 Child | R1,013 |
+| Family 2 Adults + 2 Children | R1,233 |
+| Family 2 Adults + 3 Children | R1,454 |
+| Family 2 Adults + 4 Children | R1,674 |
 
-> Per adult: R385 | Per child: R193
+> Per adult: R440 | Per child: R221
 
 ---
 
 ## Legal
 
-Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
+Practical Medical Insurance â€“ Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider â€“ FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes â€“ CMS Ref: 1074. Powered by Day1 Health â€“ Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
 
 Day1 Health complies with the principles of open enrollment, community rating and cross-subsidisation and does not discriminate or refuse membership on the basis of race, age, gender, marital status, ethnic or social origin, sexual orientation, pregnancy, disability, state of health, geographical location or any other means of discrimination.

@@ -8,7 +8,7 @@
 
 The Value Plus Comprehensive Plan combines full day-to-day benefits with private hospital cover, providing complete medical insurance in one plan.
 
-**Price range:** R665.00 – R2,215.00/month
+**Price range:** R750.00 – R2,700.00/month
 
 **Cover includes:**
 - Private Managed Doctor Visits
@@ -83,18 +83,18 @@ Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R665 |
-| Single + 1 Child | R931 |
-| Single + 2 Children | R1,197 |
-| Single + 3 Children | R1,463 |
-| Single + 4 Children | R1,729 |
-| Couple | R1,151 |
-| Couple + 1 Child | R1,417 |
-| Couple + 2 Children | R1,683 |
-| Couple + 3 Children | R1,949 |
-| Couple + 4 Children | R2,215 |
+| Single | R750 |
+| Single + 1 Child | R1,088 |
+| Single + 2 Children | R1,425 |
+| Single + 3 Children | R1,763 |
+| Single + 4 Children | R2,100 |
+| Couple | R1,350 |
+| Couple + 1 Child | R1,688 |
+| Couple + 2 Children | R2,025 |
+| Couple + 3 Children | R2,363 |
+| Couple + 4 Children | R2,700 |
 
-> Single base: R665 | Couple base: R1,151 | Per child: R266
+> Single base: R750 | Couple base: R1,350 | Effective child uplift: ~R337/R338
 
 ---
 

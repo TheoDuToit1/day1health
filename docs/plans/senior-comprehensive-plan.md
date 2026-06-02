@@ -8,7 +8,7 @@
 
 The Senior Comprehensive Plan combines day-to-day and hospital benefits for senior members, providing complete medical cover in one plan.
 
-**Price range:** R875.00 – R1,750.00/month
+**Price range:** R970.00 – R1,940.00/month
 
 **Cover includes:**
 - Unlimited Doctor Visits etc.
@@ -77,10 +77,10 @@ Principal Member and spouse – R 5,000. A 3-month waiting period applies. (Bene
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R875 |
-| Couple | R1,750 |
+| Single | R970 |
+| Couple | R1,940 |
 
-> Per adult: R875 (no child cover on Senior plans)
+> Per adult: R970 (no child cover on Senior plans)
 
 ---
 

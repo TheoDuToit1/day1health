@@ -8,7 +8,7 @@
 
 The Executive Hospital Plan is the highest tier of hospital cover, featuring enhanced daily benefits, Illness Top-Up, Critical Illness, and Accidental Permanent Disability cover.
 
-**Price range:** R640.00 – R2,176.00/month
+**Price range:** R670.00 – R2,278.00/month
 
 **Cover includes:**
 - Private Hospital Benefits
@@ -67,26 +67,26 @@ Principal member & Spouse – R 30,000. Child > 14 years – R 10,000. Child > 6
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R640 |
-| Single + 1 Child | R896 |
-| Single + 2 Children | R1,152 |
-| Single + 3 Children | R1,408 |
-| Single + 4 Children | R1,664 |
-| Couple | R1,152 |
-| Couple + 1 Child | R1,408 |
-| Couple + 2 Children | R1,664 |
-| Couple + 3 Children | R1,920 |
-| Couple + 4 Children | R2,176 |
-| Family 1 Adult + 1 Child | R896 |
-| Family 1 Adult + 2 Children | R1,152 |
-| Family 1 Adult + 3 Children | R1,408 |
-| Family 1 Adult + 4 Children | R1,664 |
-| Family 2 Adults + 1 Child | R1,408 |
-| Family 2 Adults + 2 Children | R1,664 |
-| Family 2 Adults + 3 Children | R1,920 |
-| Family 2 Adults + 4 Children | R2,176 |
+| Single | R670 |
+| Single + 1 Child | R938 |
+| Single + 2 Children | R1,206 |
+| Single + 3 Children | R1,474 |
+| Single + 4 Children | R1,742 |
+| Couple | R1,206 |
+| Couple + 1 Child | R1,474 |
+| Couple + 2 Children | R1,742 |
+| Couple + 3 Children | R2,010 |
+| Couple + 4 Children | R2,278 |
+| Family 1 Adult + 1 Child | R938 |
+| Family 1 Adult + 2 Children | R1,206 |
+| Family 1 Adult + 3 Children | R1,474 |
+| Family 1 Adult + 4 Children | R1,742 |
+| Family 2 Adults + 1 Child | R1,474 |
+| Family 2 Adults + 2 Children | R1,742 |
+| Family 2 Adults + 3 Children | R2,010 |
+| Family 2 Adults + 4 Children | R2,278 |
 
-> Per adult: R640 | Per child: R256
+> Per adult: R670 | Per child: R268
 
 ---
 

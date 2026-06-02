@@ -122,48 +122,63 @@ const PlanDetailPage: React.FC = () => {
     setOption(initial);
   }, [variantParam]);
 
-  // Initialize adult and child counts based on variant
+  // Initialize adult count when the variant changes
+  useEffect(() => {
+    if (variantParam === 'family') {
+      setAdultCount((prev) => (prev >= 1 && prev <= 2 ? prev : 1));
+    } else if (variantParam === 'single') {
+      setAdultCount(1);
+    } else if (variantParam === 'couple' || variantParam === 'couples') {
+      setAdultCount(2);
+    } else {
+      setAdultCount(1);
+    }
+  }, [variantParam]);
+
+  // Initialize child count based on variant and URL children value
   useEffect(() => {
     const raw = searchParams.get('children');
     const parsed = raw ? parseInt(raw, 10) : NaN;
     if (variantParam === 'family') {
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
-      setAdultCount(1); // Family starts with 1 adult
     } else if (variantParam === 'single') {
       setChildCount(0); // Single always has 0 children
-      setAdultCount(1); // Single is 1 adult
     } else if (variantParam === 'couple' || variantParam === 'couples') {
       const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
       setChildCount(clamped);
-      setAdultCount(2); // Couple is 2 adults
     } else {
       setChildCount(0);
-      setAdultCount(1);
     }
   }, [variantParam, searchParams]);
 
   // Quantity is fixed at 1 for non-family variants; no qty URL handling
 
   // Pricing rules
-  const SINGLE_PRICE = 385;
-  const COUPLE_PRICE = 674;
-  const FAMILY_CHILD_PRICE = 193;
-  const ADULT_PRICE = 385;
+  const SINGLE_PRICES = [440, 661, 881, 1102, 1322];
+  const COUPLE_PRICES = [792, 1013, 1233, 1454, 1674];
+  const ADULT_PRICE = 440;
+  const CHILD_PRICE = 221;
+  const getPriceForVariant = (variant: 'single' | 'couple' | 'family', adults: number, children: number) => {
+    const safeChildren = Math.max(0, Math.min(4, children));
+    if (variant === 'couple') {
+      return COUPLE_PRICES[safeChildren];
+    }
+    if (variant === 'family') {
+      if (adults === 1) return SINGLE_PRICES[safeChildren];
+      if (adults === 2) return COUPLE_PRICES[safeChildren];
+      return adults * ADULT_PRICE + safeChildren * CHILD_PRICE;
+    }
+    return SINGLE_PRICES[safeChildren];
+  };
   const [currentPrice, setCurrentPrice] = useState(() => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
-    if (v === 'family') return ADULT_PRICE * adultCount + FAMILY_CHILD_PRICE * childCount;
-    if (v === 'couple') return COUPLE_PRICE + FAMILY_CHILD_PRICE * childCount;
-    // single: base + per-child
-    return SINGLE_PRICE + FAMILY_CHILD_PRICE * childCount;
+    return getPriceForVariant(v, adultCount, childCount);
   });
 
   useEffect(() => {
     const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
-    let next = SINGLE_PRICE + FAMILY_CHILD_PRICE * childCount;
-    if (v === 'family') next = ADULT_PRICE * adultCount + FAMILY_CHILD_PRICE * childCount;
-    else if (v === 'couple') next = COUPLE_PRICE + FAMILY_CHILD_PRICE * childCount;
-    setCurrentPrice(next);
+    setCurrentPrice(getPriceForVariant(v, adultCount, childCount));
   }, [childCount, adultCount, option, variantParam]);
 
   // Helper to keep URL in sync with selections
@@ -253,7 +268,9 @@ const PlanDetailPage: React.FC = () => {
                     <div>
                       <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
                       <p className={`mt-2 text-base md:text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>Day-to-Day Plan</p>
-                      <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Price range: R385.00 - R1,155.00</p>
+                      <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        Price range: {variantDisplay === 'Couple' ? 'R792.00 - R1,674.00' : variantDisplay === 'Family' ? 'R440.00 - R1,674.00' : 'R440.00 - R1,322.00'}
+                      </p>
                     </div>
                   </div>
                   {/* Right side price block removed per request; title now reflects selected plan name */}
@@ -541,7 +558,7 @@ const PlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Adults 18+</label>
-                                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
                               </div>
                               <div className="mt-2 flex items-center gap-2">
                                 <button
@@ -564,7 +581,7 @@ const PlanDetailPage: React.FC = () => {
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
                                   className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}

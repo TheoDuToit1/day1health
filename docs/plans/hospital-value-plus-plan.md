@@ -8,7 +8,7 @@
 
 The Value Plus Hospital Plan provides private hospital cover including illness, accident, ambulance, maternity, and funeral benefits. Available for Single, Couple, and Family options.
 
-**Price range:** R390.00 – R1,326.00/month
+**Price range:** R420.00 – R1,428.00/month
 
 **Cover includes:**
 - Private Hospital Benefits
@@ -53,26 +53,26 @@ Principal member – R20,000. Spouse & Child > 14 years – R 10,000. Child > 6 
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R390 |
-| Single + 1 Child | R546 |
-| Single + 2 Children | R702 |
-| Single + 3 Children | R858 |
-| Single + 4 Children | R1,014 |
-| Couple | R702 |
-| Couple + 1 Child | R858 |
-| Couple + 2 Children | R1,014 |
-| Couple + 3 Children | R1,170 |
-| Couple + 4 Children | R1,326 |
-| Family 1 Adult + 1 Child | R546 |
-| Family 1 Adult + 2 Children | R702 |
-| Family 1 Adult + 3 Children | R858 |
-| Family 1 Adult + 4 Children | R1,014 |
-| Family 2 Adults + 1 Child | R858 |
-| Family 2 Adults + 2 Children | R1,014 |
-| Family 2 Adults + 3 Children | R1,170 |
-| Family 2 Adults + 4 Children | R1,326 |
+| Single | R420 |
+| Single + 1 Child | R588 |
+| Single + 2 Children | R756 |
+| Single + 3 Children | R924 |
+| Single + 4 Children | R1,092 |
+| Couple | R756 |
+| Couple + 1 Child | R924 |
+| Couple + 2 Children | R1,092 |
+| Couple + 3 Children | R1,260 |
+| Couple + 4 Children | R1,428 |
+| Family 1 Adult + 1 Child | R588 |
+| Family 1 Adult + 2 Children | R756 |
+| Family 1 Adult + 3 Children | R924 |
+| Family 1 Adult + 4 Children | R1,092 |
+| Family 2 Adults + 1 Child | R924 |
+| Family 2 Adults + 2 Children | R1,092 |
+| Family 2 Adults + 3 Children | R1,260 |
+| Family 2 Adults + 4 Children | R1,428 |
 
-> Per adult: R390 | Per child: R156
+> Per adult: R420 | Per child: R168
 
 ---
 

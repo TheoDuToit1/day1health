@@ -8,7 +8,7 @@
 
 The Platinum Hospital Plan includes all Value Plus benefits plus Critical Illness and Accidental Permanent Disability cover.
 
-**Price range:** R560.00 – R1,904.00/month
+**Price range:** R590.00 – R2,006.00/month
 
 **Cover includes:**
 - Private Hospital Benefits
@@ -63,26 +63,26 @@ R 250 000 for the Principal Member only. Single event only. Immediate cover.
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R560 |
-| Single + 1 Child | R784 |
-| Single + 2 Children | R1,008 |
-| Single + 3 Children | R1,232 |
-| Single + 4 Children | R1,456 |
-| Couple | R1,008 |
-| Couple + 1 Child | R1,232 |
-| Couple + 2 Children | R1,456 |
-| Couple + 3 Children | R1,680 |
-| Couple + 4 Children | R1,904 |
-| Family 1 Adult + 1 Child | R784 |
-| Family 1 Adult + 2 Children | R1,008 |
-| Family 1 Adult + 3 Children | R1,232 |
-| Family 1 Adult + 4 Children | R1,456 |
-| Family 2 Adults + 1 Child | R1,232 |
-| Family 2 Adults + 2 Children | R1,456 |
-| Family 2 Adults + 3 Children | R1,680 |
-| Family 2 Adults + 4 Children | R1,904 |
+| Single | R590 |
+| Single + 1 Child | R826 |
+| Single + 2 Children | R1,062 |
+| Single + 3 Children | R1,298 |
+| Single + 4 Children | R1,534 |
+| Couple | R1,062 |
+| Couple + 1 Child | R1,298 |
+| Couple + 2 Children | R1,534 |
+| Couple + 3 Children | R1,770 |
+| Couple + 4 Children | R2,006 |
+| Family 1 Adult + 1 Child | R826 |
+| Family 1 Adult + 2 Children | R1,062 |
+| Family 1 Adult + 3 Children | R1,298 |
+| Family 1 Adult + 4 Children | R1,534 |
+| Family 2 Adults + 1 Child | R1,298 |
+| Family 2 Adults + 2 Children | R1,534 |
+| Family 2 Adults + 3 Children | R1,770 |
+| Family 2 Adults + 4 Children | R2,006 |
 
-> Per adult: R560 | Per child: R224
+> Per adult: R590 | Per child: R236
 
 ---
 

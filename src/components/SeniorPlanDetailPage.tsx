@@ -186,15 +186,15 @@ const SeniorPlanDetailPage: React.FC = () => {
     const adultCount = (option === 'couple') ? 2 : 1;
     
     if (categoryDisplay === 'comprehensive') {
-      // Senior Comprehensive: R875 single, R1750 couple
-      return adultCount === 2 ? 1750 : 875;
+      // Senior Comprehensive: R970 single, R1940 couple
+      return adultCount === 2 ? 1940 : 970;
     }
     if (categoryDisplay === 'hospital') {
-      // Senior Hospital: R580 single, R1160 couple
-      return adultCount === 2 ? 1160 : 580;
+      // Senior Hospital: R600 single, R1200 couple
+      return adultCount === 2 ? 1200 : 600;
     }
-    // Senior Day-to-Day: R425 single, R850 couple
-    return adultCount === 2 ? 850 : 425;
+    // Senior Day-to-Day: R480 single, R960 couple
+    return adultCount === 2 ? 960 : 480;
   })();
 
   const updateUrl = (nextVariant: 'single' | 'couple') => {
@@ -268,21 +268,21 @@ const SeniorPlanDetailPage: React.FC = () => {
                       {categoryDisplay === 'day-to-day' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Day to Day Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R425.00 through R850.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R480.00 through R960.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'comprehensive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Comprehensive Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R875.00 through R1,750.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R970.00 through R1,940.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'hospital' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan | Senior</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R580.00 through R1,160.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R600.00 through R1,200.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
