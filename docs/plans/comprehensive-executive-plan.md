@@ -8,7 +8,7 @@
 
 The Executive Comprehensive Plan is the highest tier, combining full day-to-day benefits with enhanced hospital cover, Illness Top-Up, Critical Illness, and Accidental Permanent Disability.
 
-**Price range:** R985.00 – R3,300.00/month
+**Price range:** R1,050.00 – R3,570.00/month
 
 **Cover includes:**
 - Private Managed Doctor Visits
@@ -91,18 +91,18 @@ Principal member & Spouse – R 30,000. Child > 14 years – R 10,000. Child > 6
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R985 |
-| Single + 1 Child | R1,379 |
-| Single + 2 Children | R1,773 |
-| Single + 3 Children | R2,167 |
-| Single + 4 Children | R2,561 |
-| Couple | R1,724 |
-| Couple + 1 Child | R2,118 |
-| Couple + 2 Children | R2,512 |
-| Couple + 3 Children | R2,906 |
-| Couple + 4 Children | R3,300 |
+| Single | R1,050 |
+| Single + 1 Child | R1,470 |
+| Single + 2 Children | R1,890 |
+| Single + 3 Children | R2,310 |
+| Single + 4 Children | R2,730 |
+| Couple | R1,890 |
+| Couple + 1 Child | R2,310 |
+| Couple + 2 Children | R2,730 |
+| Couple + 3 Children | R3,160 |
+| Couple + 4 Children | R3,570 |
 
-> Single base: R985 | Couple base: R1,724 | Per child: R394
+> Single base: R1,050 | Couple base: R1,890 | Per child: R420
 
 ---
 

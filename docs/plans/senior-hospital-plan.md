@@ -8,7 +8,7 @@
 
 The Senior Hospital Plan provides private hospital cover for senior members including illness, accident, ambulance, and funeral benefits.
 
-**Price range:** R580.00 – R1,160.00/month
+**Price range:** R600.00 – R1,200.00/month
 
 **Cover includes:**
 - Private Hospital Benefits
@@ -54,15 +54,13 @@ Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Bene
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R580 |
-| Couple | R1,160 |
+| Single | R600 |
+| Couple | R1,200 |
 
-> Per adult: R580 (no child cover on Senior plans)
+> Per adult: R600 (no child cover on Senior plans)
 
 ---
 
 ## Legal
 
 Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
-
-Day1 Health complies with the principles of open enrollment, community rating and cross-subsidisation and does not discriminate or refuse membership on the basis of race, age, gender, marital status, ethnic or social origin, sexual orientation, pregnancy, disability, state of health, geographical location or any other means of discrimination.

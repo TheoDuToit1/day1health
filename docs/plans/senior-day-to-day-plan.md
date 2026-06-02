@@ -8,7 +8,7 @@
 
 The Senior Day-to-Day Plan provides everyday medical cover tailored for senior members, including doctor visits, medication, dentistry, optometry, and funeral benefits.
 
-**Price range:** R425.00 – R850.00/month
+**Price range:** R480.00 – R960.00/month
 
 **Cover includes:**
 - Private Managed Doctor Visits
@@ -53,10 +53,10 @@ Principal Member and Spouse – R 5,000. A 3-month waiting period applies. (Bene
 
 | Option | Monthly Price |
 |--------|---------------|
-| Single | R425 |
-| Couple | R850 |
+| Single | R480 |
+| Couple | R960 |
 
-> Per adult: R425 (no child cover on Senior plans)
+> Per adult: R480 (no child cover on Senior plans)
 
 ---
 

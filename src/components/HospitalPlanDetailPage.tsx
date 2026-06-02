@@ -145,46 +145,54 @@ const HospitalPlanDetailPage: React.FC = () => {
   }, [variantParam]);
 
   useEffect(() => {
+    if (variantParam === 'family') {
+      setAdultCount((prev) => (prev >= 1 && prev <= 2 ? prev : 1));
+    } else if (variantParam === 'single') {
+      setAdultCount(1);
+    } else if (variantParam === 'couple' || variantParam === 'couples') {
+      setAdultCount(2);
+    } else {
+      setAdultCount(1);
+    }
+  }, [variantParam]);
+
+  useEffect(() => {
     const raw = searchParams.get('children');
     const parsed = raw ? parseInt(raw, 10) : NaN;
     if (variantParam === 'family') {
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
-      setAdultCount(1); // Family starts with 1 adult
     } else if (variantParam === 'single') {
       setChildCount(0); // Single always has 0 children
-      setAdultCount(1); // Single is 1 adult
     } else if (variantParam === 'couple' || variantParam === 'couples') {
       const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
       setChildCount(clamped);
-      setAdultCount(2); // Couple is 2 adults
     } else {
       setChildCount(0);
-      setAdultCount(1);
     }
   }, [variantParam, searchParams]);
 
   // Hospital plan pricing per tier
-  // Value Plus: R390 single, R702 couple + R156 per child
-  // Platinum: R560 single, R1008 couple + R224 per child
-  // Executive: R640 single, R1152 couple + R256 per child
+  // Value Plus: R420 single, R756 couple + R168 per child
+  // Platinum: R590 single, R1062 couple + R236 per child
+  // Executive: R670 single, R1206 couple + R268 per child
   const getPricing = () => {
     if (tierKey === 'platinum') {
-      if (adultCount === 1) return 560 + (CHILD_PRICE_PLATINUM * childCount);
-      return 1008 + (CHILD_PRICE_PLATINUM * childCount);
+      if (adultCount === 1) return 590 + (CHILD_PRICE_PLATINUM * childCount);
+      return 1062 + (CHILD_PRICE_PLATINUM * childCount);
     }
     if (tierKey === 'executive') {
-      if (adultCount === 1) return 640 + (CHILD_PRICE_EXECUTIVE * childCount);
-      return 1152 + (CHILD_PRICE_EXECUTIVE * childCount);
+      if (adultCount === 1) return 670 + (CHILD_PRICE_EXECUTIVE * childCount);
+      return 1206 + (CHILD_PRICE_EXECUTIVE * childCount);
     }
     // Value Plus
-    if (adultCount === 1) return 390 + (CHILD_PRICE_VALUE * childCount);
-    return 702 + (CHILD_PRICE_VALUE * childCount);
+    if (adultCount === 1) return 420 + (CHILD_PRICE_VALUE * childCount);
+    return 756 + (CHILD_PRICE_VALUE * childCount);
   };
   
-  const CHILD_PRICE_VALUE = 156;
-  const CHILD_PRICE_PLATINUM = 224;
-  const CHILD_PRICE_EXECUTIVE = 256;
+  const CHILD_PRICE_VALUE = 168;
+  const CHILD_PRICE_PLATINUM = 236;
+  const CHILD_PRICE_EXECUTIVE = 268;
   const currentPrice = getPricing();
 
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
@@ -259,21 +267,21 @@ const HospitalPlanDetailPage: React.FC = () => {
                       {tierKey === 'value' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R390.00 through R1,326.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R420.00 through R1,428.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierKey === 'platinum' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R560.00 through R1,904.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R590.00 through R2,006.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierKey === 'executive' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Executive Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R640.00 through R2,176.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R670.00 through R2,278.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
@@ -562,7 +570,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Adults 18+</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
@@ -585,7 +593,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
-                                  onClick={() => setAdultCount(Math.min(4, adultCount + 1))}
+                                  onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
                                   className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${
                                     isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                   }`}
