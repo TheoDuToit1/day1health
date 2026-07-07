@@ -155,10 +155,10 @@ const PlanDetailPage: React.FC = () => {
   // Quantity is fixed at 1 for non-family variants; no qty URL handling
 
   // Pricing rules
-  const SINGLE_PRICES = [440, 661, 881, 1102, 1322];
-  const COUPLE_PRICES = [792, 1013, 1233, 1454, 1674];
+  const SINGLE_PRICES = [440, 660, 880, 1100, 1320];
+  const COUPLE_PRICES = [770, 990, 1210, 1430, 1650];
   const ADULT_PRICE = 440;
-  const CHILD_PRICE = 221;
+  const CHILD_PRICE = 220;
   const getPriceForVariant = (variant: 'single' | 'couple' | 'family', adults: number, children: number) => {
     const safeChildren = Math.max(0, Math.min(4, children));
     if (variant === 'couple') {
@@ -269,7 +269,7 @@ const PlanDetailPage: React.FC = () => {
                       <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
                       <p className={`mt-2 text-base md:text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>Day-to-Day Plan</p>
                       <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        Price range: {variantDisplay === 'Couple' ? 'R792.00 - R1,674.00' : variantDisplay === 'Family' ? 'R440.00 - R1,674.00' : 'R440.00 - R1,322.00'}
+                        Price range: {variantDisplay === 'Couple' ? 'R770.00 - R1,650.00' : variantDisplay === 'Family' ? 'R440.00 - R1,650.00' : 'R440.00 - R1,320.00'}
                       </p>
                     </div>
                   </div>
