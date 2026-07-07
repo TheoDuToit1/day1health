@@ -335,8 +335,8 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   // Executive: exact price ladder from the brochure
   const getPricing = () => {
     if (tierParam === 'value') {
-      const singlePrices = [750, 1088, 1425, 1763, 2100];
-      const couplePrices = [1350, 1688, 2025, 2363, 2700];
+      const singlePrices = [750, 1050, 1350, 1650, 1950];
+      const couplePrices = [1275, 1575, 1875, 2175, 2475];
       const safeChildren = Math.max(0, Math.min(4, childCount));
       if (adultCount === 1) return singlePrices[safeChildren];
       if (adultCount === 2) return couplePrices[safeChildren];
@@ -359,15 +359,15 @@ const ComprehensivePlanDetailPage: React.FC = () => {
       return (adultCount * 1050) + (safeChildren * CHILD_PRICE_EXECUTIVE);
     }
     // Value Plus
-    const singlePrices = [750, 1088, 1425, 1763, 2100];
-    const couplePrices = [1350, 1688, 2025, 2363, 2700];
+    const singlePrices = [750, 1050, 1350, 1650, 1950];
+    const couplePrices = [1275, 1575, 1875, 2175, 2475];
     const safeChildren = Math.max(0, Math.min(4, childCount));
     if (adultCount === 1) return singlePrices[safeChildren];
     if (adultCount === 2) return couplePrices[safeChildren];
     return (adultCount * 750) + (safeChildren * CHILD_PRICE_VALUE);
   };
   
-  const CHILD_PRICE_VALUE = 338;
+  const CHILD_PRICE_VALUE = 300;
   const CHILD_PRICE_PLATINUM = 392;
   const CHILD_PRICE_EXECUTIVE = 420;
   const currentPrice = getPricing();
@@ -449,7 +449,7 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                       {tierParam === 'value' && (
                         <div className="mt-1">
                           <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R750.00 through R2,700.00</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R750.00 through R2,475.00</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
