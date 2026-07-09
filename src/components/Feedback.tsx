@@ -1,5 +1,5 @@
 import React from 'react';
-import { Carousel, TestimonialCard } from './ui/retro-testimonial';
+import { Carousel, StarRating, TestimonialCard } from './ui/retro-testimonial';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface FeedbackProps {
@@ -134,19 +134,22 @@ const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
           </p>
         </div>
 
-        <div className={`max-w-3xl mx-auto mb-12 rounded-3xl border px-6 py-5 text-center ${
-          isDark ? 'border-green-900/60 bg-green-950/30' : 'border-green-200 bg-green-50'
-        }`}>
-          <p className={`text-xs font-semibold uppercase tracking-[0.3em] ${
-            isDark ? 'text-green-700' : 'text-green-900'
+        <div className="mb-12 flex justify-center">
+          <div className={`inline-flex flex-col items-center gap-3 rounded-[9px] border px-5 py-4 text-center shadow-sm sm:flex-row sm:gap-4 sm:px-6 ${
+            isDark
+              ? 'border-emerald-900/70 bg-gradient-to-r from-emerald-950/50 via-gray-900 to-emerald-950/40'
+              : 'border-emerald-200 bg-gradient-to-r from-emerald-50 via-white to-emerald-100/80'
           }`}>
-            Hello Peter
-          </p>
-          <p className={`mt-2 text-2xl font-bold ${
-            isDark ? 'text-white' : 'text-gray-900'
-          }`}>
-            5 Star Hello Peter Rating
-          </p>
+            <img
+              src="/assets/images/logo.svg"
+              alt="Hello Peter"
+              className="h-6 w-auto"
+            />
+            <div className={`hidden h-8 w-px sm:block ${
+              isDark ? 'bg-emerald-800/70' : 'bg-emerald-200'
+            }`} />
+            <StarRating rating={5} label="5/5" />
+          </div>
         </div>
 
         <div className="max-w-7xl mx-auto">
