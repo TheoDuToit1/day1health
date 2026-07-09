@@ -134,6 +134,21 @@ const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
           </p>
         </div>
 
+        <div className={`max-w-3xl mx-auto mb-12 rounded-3xl border px-6 py-5 text-center ${
+          isDark ? 'border-green-900/60 bg-green-950/30' : 'border-green-200 bg-green-50'
+        }`}>
+          <p className={`text-xs font-semibold uppercase tracking-[0.3em] ${
+            isDark ? 'text-green-700' : 'text-green-900'
+          }`}>
+            Hello Peter
+          </p>
+          <p className={`mt-2 text-2xl font-bold ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            5 Star Hello Peter Rating
+          </p>
+        </div>
+
         <div className="max-w-7xl mx-auto">
           <Carousel
             items={testimonials.map((testimonial, index) => (
