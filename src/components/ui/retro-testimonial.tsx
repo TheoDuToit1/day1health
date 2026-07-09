@@ -169,10 +169,12 @@ const StarRating = ({
 	rating,
 	layout = false,
 	size = "sm",
+	label,
 }: {
 	rating: number;
 	layout?: boolean;
 	size?: "sm" | "md";
+	label?: string;
 }) => {
 	const { isDark } = useTheme();
 	const clipPathId = useId();
@@ -276,7 +278,7 @@ const StarRating = ({
 				variants={labelVariants}
 				className={cn("ml-2 font-semibold tracking-[0.18em] uppercase", labelClasses)}
 			>
-				{rating.toFixed(1)}/{MAX_RATING}
+				{label ?? `${rating.toFixed(1)}/${MAX_RATING}`}
 			</motion.span>
 		</motion.div>
 	);
@@ -499,6 +501,6 @@ const ProfileImage = ({ src: _src, alt, className, ...rest }: { src: string; alt
 };
 
 // Export the components
-export {Carousel, TestimonialCard, ProfileImage};
+export {Carousel, TestimonialCard, ProfileImage, StarRating};
 
 
