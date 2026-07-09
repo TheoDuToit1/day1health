@@ -149,9 +149,6 @@ const Feedback: React.FC<FeedbackProps> = ({ isSidebarCollapsed }) => {
               isDark ? 'bg-emerald-800/70' : 'bg-emerald-200'
             }`} />
             <StarRating rating={5} label="5/5" />
-            <div className={`hidden h-8 w-px sm:block ${
-              isDark ? 'bg-emerald-800/70' : 'bg-emerald-200'
-            }`} />
           </div>
         </div>
 
