@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -8,6 +8,10 @@ import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
+import { hasSupabaseEnv, supabase } from '../admin/supabaseClient';
+import { useCmsAssetHref } from '../utils/cmsAssets';
+
+type CmsRow = Record<string, any> & { id: string };
 
 const coverItems = [
   'Private Managed Doctor Visits',
@@ -67,7 +71,7 @@ const descriptionItems: { title: string; text: string }[] = [
   {
     title: 'Out-of-Area Visits',
     text:
-      'In the event that you cannot see your Network GP, the Plan will allow 3 “out of area” visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
+      'In the event that you cannot see your Network GP, the Plan will allow 3 "out of area" visits per family per annum to an alternative Network GP or GP of your choice, subject to pre-authorisation. A 1 month waiting period applies.',
   },
   {
     title: 'Radiology',
@@ -81,9 +85,87 @@ const descriptionItems: { title: string; text: string }[] = [
   },
 ];
 
-const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
+const legalCopy = `Practical Medical Insurance - Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider - FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes - CMS Ref: 1074. Powered by Day1 Health - Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
 
 Day1 Health complies with the principles of open enrollment, community rating and cross-subsidisation and does not discriminate or refuse membership on the basis of race, age, gender, marital status, ethnic or social origin, sexual orientation, pregnancy, disability, state of health, geographical location or any other means of discrimination.`;
+
+const normalizeDayToDayVariant = (variant: string): 'single' | 'couple' | 'family' => {
+  if (variant === 'couple' || variant === 'couples') return 'couple';
+  if (variant === 'family') return 'family';
+  return 'single';
+};
+
+const slugifyCmsValue = (value: unknown): string =>
+  String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const selectDayToDayCmsPage = (
+  pages: CmsRow[],
+  variant: 'single' | 'couple' | 'family',
+): CmsRow | null => {
+  const targetSlug = `day-to-day-${variant}`;
+
+  const rankedPages = pages
+    .map((page, index) => {
+      const planFamily = String(page.plan_family ?? '').toLowerCase();
+      if (planFamily.length > 0 && planFamily !== 'day-to-day') {
+        return null;
+      }
+
+      const planKey = slugifyCmsValue(page.plan_key);
+      const pageHeading = slugifyCmsValue(page.page_heading);
+      const heroTitle = slugifyCmsValue(page.hero_title);
+      const routePath = String(page.route_path ?? '').toLowerCase();
+      let score = -1;
+
+      if (planKey === targetSlug || planKey.includes(`${targetSlug}-`)) score = 120;
+      else if (pageHeading === targetSlug || pageHeading.includes(`${targetSlug}-`)) score = 110;
+      else if (heroTitle === targetSlug || heroTitle.includes(`${targetSlug}-`)) score = 100;
+      else if (routePath.includes('/plans/day-to-day') && routePath.includes(`variant=${variant}`)) score = 90;
+      else if (variant === 'single' && (planKey === 'day-to-day' || pageHeading === 'day-to-day')) score = 60;
+      else if (variant === 'single' && routePath === '/plans/day-to-day') score = 50;
+
+      if (score < 0) {
+        return null;
+      }
+
+      const sortOrder =
+        typeof page.sort_order === 'number' ? page.sort_order : Number(page.sort_order ?? Number.MAX_SAFE_INTEGER);
+
+      return {
+        page,
+        score,
+        sortOrder: Number.isFinite(sortOrder) ? sortOrder : Number.MAX_SAFE_INTEGER,
+        index,
+      };
+    })
+    .filter((entry): entry is { page: CmsRow; score: number; sortOrder: number; index: number } => entry !== null)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder;
+      return left.index - right.index;
+    });
+
+  return rankedPages[0]?.page ?? null;
+};
+
+const ensureVariantInTitle = (title: string, variantDisplay: 'Single' | 'Couple' | 'Family'): string => {
+  const normalizedTitle = title.trim();
+  if (!normalizedTitle) {
+    return `Day-to-Day - ${variantDisplay}`;
+  }
+
+  const lowerTitle = normalizedTitle.toLowerCase();
+  const hasVariant =
+    lowerTitle.includes('single') ||
+    lowerTitle.includes('couple') ||
+    lowerTitle.includes('family');
+
+  return hasVariant ? normalizedTitle : `${normalizedTitle} - ${variantDisplay}`;
+};
 
 const PlanDetailPage: React.FC = () => {
   const { isDark } = useTheme();
@@ -93,72 +175,130 @@ const PlanDetailPage: React.FC = () => {
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
+  const [cmsPage, setCmsPage] = useState<CmsRow | null>(null);
+  const [cmsBenefits, setCmsBenefits] = useState<CmsRow[]>([]);
+  const [cmsCoverHighlights, setCmsCoverHighlights] = useState<CmsRow[]>([]);
+  const [cmsPriceRows, setCmsPriceRows] = useState<CmsRow[]>([]);
+  const [cmsAssets, setCmsAssets] = useState<CmsRow[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
-  const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
-  const pageTitle = `Day-to-Day - ${variantDisplay}`;
-  
-  // Scroll to top when this page loads (e.g., after clicking "Choose Plan")
+  const currentVariant = normalizeDayToDayVariant(variantParam);
+  const variantDisplay = currentVariant === 'couple' ? 'Couple' : currentVariant === 'family' ? 'Family' : 'Single';
+  const defaultPageTitle = `Day-to-Day - ${variantDisplay}`;
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Handle sidebar navigation (mirror BlogPage behavior)
+  useEffect(() => {
+    if (!hasSupabaseEnv) {
+      setCmsPage(null);
+      setCmsBenefits([]);
+      setCmsCoverHighlights([]);
+      setCmsPriceRows([]);
+      setCmsAssets([]);
+      return;
+    }
+
+    let isActive = true;
+
+    const clearCmsState = () => {
+      if (!isActive) return;
+      setCmsPage(null);
+      setCmsBenefits([]);
+      setCmsCoverHighlights([]);
+      setCmsPriceRows([]);
+      setCmsAssets([]);
+    };
+
+    const fetchCmsContent = async () => {
+      const { data: pageData, error: pageError } = await supabase
+        .from('cms_plan_pages')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (pageError || !pageData || pageData.length === 0) {
+        clearCmsState();
+        return;
+      }
+
+      const matchedPage = selectDayToDayCmsPage(pageData, currentVariant);
+      if (!matchedPage) {
+        clearCmsState();
+        return;
+      }
+
+      const pageId = matchedPage.id;
+      const [benefitsResult, highlightsResult, priceRowsResult, assetsResult] = await Promise.all([
+        supabase.from('cms_plan_benefits').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_cover_highlights').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_price_rows').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_assets').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+      ]);
+
+      if (!isActive) {
+        return;
+      }
+
+      setCmsPage(matchedPage);
+      setCmsBenefits(benefitsResult.data ?? []);
+      setCmsCoverHighlights(highlightsResult.data ?? []);
+      setCmsPriceRows(priceRowsResult.data ?? []);
+      setCmsAssets(assetsResult.data ?? []);
+    };
+
+    void fetchCmsContent();
+
+    return () => {
+      isActive = false;
+    };
+  }, [currentVariant]);
+
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
-    // Persist target for main app to pick up and scroll
     sessionStorage.setItem('navigatingToSection', targetSection);
-    // Redirect to main site with hash
     window.location.href = `/#${targetSection}`;
-    // Ensure top scroll during transition
     window.scrollTo(0, 0);
   };
 
-  // Initialize selected option based on URL variant
   useEffect(() => {
-    const initial = (variantParam === 'couple' || variantParam === 'couples')
-      ? 'couple'
-      : (variantParam === 'family' ? 'family' : 'single');
-    setOption(initial);
-  }, [variantParam]);
+    setOption(currentVariant);
+  }, [currentVariant]);
 
-  // Initialize adult count when the variant changes
   useEffect(() => {
-    if (variantParam === 'family') {
+    if (currentVariant === 'family') {
       setAdultCount((prev) => (prev >= 1 && prev <= 2 ? prev : 1));
-    } else if (variantParam === 'single') {
+    } else if (currentVariant === 'single') {
       setAdultCount(1);
-    } else if (variantParam === 'couple' || variantParam === 'couples') {
+    } else if (currentVariant === 'couple') {
       setAdultCount(2);
     } else {
       setAdultCount(1);
     }
-  }, [variantParam]);
+  }, [currentVariant]);
 
-  // Initialize child count based on variant and URL children value
   useEffect(() => {
     const raw = searchParams.get('children');
     const parsed = raw ? parseInt(raw, 10) : NaN;
-    if (variantParam === 'family') {
+    if (currentVariant === 'family') {
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
-    } else if (variantParam === 'single') {
-      setChildCount(0); // Single always has 0 children
-    } else if (variantParam === 'couple' || variantParam === 'couples') {
+    } else if (currentVariant === 'single') {
+      setChildCount(0);
+    } else if (currentVariant === 'couple') {
       const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
       setChildCount(clamped);
     } else {
       setChildCount(0);
     }
-  }, [variantParam, searchParams]);
+  }, [currentVariant, searchParams]);
 
-  // Quantity is fixed at 1 for non-family variants; no qty URL handling
-
-  // Pricing rules
   const SINGLE_PRICES = [440, 660, 880, 1100, 1320];
   const COUPLE_PRICES = [770, 990, 1210, 1430, 1650];
   const ADULT_PRICE = 440;
   const CHILD_PRICE = 220;
+  const selectedVariant = (option || currentVariant) as 'single' | 'couple' | 'family';
+
   const getPriceForVariant = (variant: 'single' | 'couple' | 'family', adults: number, children: number) => {
     const safeChildren = Math.max(0, Math.min(4, children));
     if (variant === 'couple') {
@@ -171,17 +311,61 @@ const PlanDetailPage: React.FC = () => {
     }
     return SINGLE_PRICES[safeChildren];
   };
-  const [currentPrice, setCurrentPrice] = useState(() => {
-    const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
-    return getPriceForVariant(v, adultCount, childCount);
+
+  const cmsPriceRow = cmsPriceRows.find((row) => {
+    const rowVariant = normalizeDayToDayVariant(String(row.variant_type ?? 'single'));
+    const rowAdults = Number(row.adults_count ?? row.adults ?? 1);
+    const rowChildren = Number(row.children_count ?? row.children ?? 0);
+    return rowVariant === selectedVariant && rowAdults === adultCount && rowChildren === childCount;
   });
 
-  useEffect(() => {
-    const v = (option || (variantParam === 'couples' ? 'couple' : variantParam)) as 'single' | 'couple' | 'family';
-    setCurrentPrice(getPriceForVariant(v, adultCount, childCount));
-  }, [childCount, adultCount, option, variantParam]);
+  const parsedCmsPrice =
+    typeof cmsPriceRow?.price === 'number'
+      ? cmsPriceRow.price
+      : typeof cmsPriceRow?.price === 'string' && cmsPriceRow.price.trim().length > 0
+        ? Number(cmsPriceRow.price)
+        : null;
 
-  // Helper to keep URL in sync with selections
+  const currentPrice = Number.isFinite(parsedCmsPrice) ? Number(parsedCmsPrice) : getPriceForVariant(selectedVariant, adultCount, childCount);
+
+  const cmsDisplayCoverItems = cmsCoverHighlights
+    .map((row) => (typeof row.highlight_text === 'string' ? row.highlight_text.trim() : ''))
+    .filter((item) => item.length > 0);
+  const displayCoverItems = cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : coverItems;
+
+  const cmsDescriptionItems = cmsBenefits
+    .map((row) => ({
+      title: typeof row.benefit_title === 'string' ? row.benefit_title.trim() : '',
+      text: typeof row.benefit_summary === 'string' ? row.benefit_summary.trim() : '',
+    }))
+    .filter((item) => item.title.length > 0 && item.text.length > 0);
+  const displayDescriptionItems = cmsDescriptionItems.length > 0 ? cmsDescriptionItems : descriptionItems;
+
+  useEffect(() => {
+    setCoverCarouselIndex((prev) => (prev >= displayCoverItems.length ? 0 : prev));
+  }, [displayCoverItems.length]);
+
+  const effectivePageTitle =
+    typeof cmsPage?.page_heading === 'string' && cmsPage.page_heading.length > 0
+      ? ensureVariantInTitle(cmsPage.page_heading, variantDisplay)
+      : defaultPageTitle;
+  const effectivePlanLabel =
+    typeof cmsPage?.hero_title === 'string' && cmsPage.hero_title.length > 0 ? cmsPage.hero_title : 'Day-to-Day Plan';
+  const defaultPriceRange =
+    variantDisplay === 'Couple' ? 'R770.00 - R1,650.00' : variantDisplay === 'Family' ? 'R440.00 - R1,650.00' : 'R440.00 - R1,320.00';
+  const effectivePriceRange =
+    typeof cmsPage?.price_range === 'string' && cmsPage.price_range.length > 0 ? cmsPage.price_range : defaultPriceRange;
+  const effectiveLegalCopy =
+    typeof cmsPage?.legal_copy === 'string' && cmsPage.legal_copy.length > 0 ? cmsPage.legal_copy : legalCopy;
+  const brochureHref = useCmsAssetHref(
+    cmsAssets.find((asset) => asset.asset_type === 'brochure') ?? null,
+    `/assets/pdf's/Day-To-Day ${variantDisplay} Plan.pdf`,
+  );
+  const applicationHref = useCmsAssetHref(
+    cmsAssets.find((asset) => asset.asset_type === 'application_form') ?? null,
+    "/assets/pdf's/Application forms/Day-to-day.pdf",
+  );
+
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
     const params = new URLSearchParams(searchParams);
     params.set('variant', nextVariant);
@@ -194,7 +378,6 @@ const PlanDetailPage: React.FC = () => {
     } else {
       params.delete('children');
     }
-    // Always remove qty for Single/Couple to enforce a fixed quantity of 1
     params.delete('qty');
     setSearchParams(params);
   };
@@ -205,7 +388,7 @@ const PlanDetailPage: React.FC = () => {
         isSidebarCollapsed ? 'lg:ml-24 lg:w-[calc(100%-6rem)]' : 'lg:ml-64 lg:w-[calc(100%-16rem)]'
       }`}
       style={{
-        transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        transition: 'margin-left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
       }}
     >
       <div className="flex min-h-screen w-full">
@@ -219,31 +402,27 @@ const PlanDetailPage: React.FC = () => {
 
         <div className="flex-1 min-w-0">
           <main className="w-full py-8 md:py-12">
-            {/* Page header */}
             <motion.div
-              className={`max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12`}
+              className="max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-            >
-            </motion.div>
+            />
 
-            {/* Hero / Title */}
             <section className={`${isDark ? 'bg-gradient-to-b from-gray-900 via-gray-900 to-gray-900' : 'bg-gradient-to-b from-white via-gray-50 to-gray-50'} border-y ${isDark ? 'border-gray-800' : 'border-gray-200'} py-6 md:py-8 mb-6`}>
               <motion.div
-                className={`max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12`}
+                className="max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
               >
-                {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
                   <ol className="flex items-center gap-1 text-[13px]">
                     <li>
                       <Link
                         to="/"
-                        onClick={(e) => {
-                          e.preventDefault();
+                        onClick={(event) => {
+                          event.preventDefault();
                           handleNavigate('plans');
                         }}
                         className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm px-0.5`}
@@ -255,7 +434,7 @@ const PlanDetailPage: React.FC = () => {
                       <ChevronRight className="h-3.5 w-3.5" />
                     </li>
                     <li>
-                      <span className={`${isDark ? 'text-white/90' : 'text-gray-900'} font-medium`}>{pageTitle}</span>
+                      <span className={`${isDark ? 'text-white/90' : 'text-gray-900'} font-medium`}>{effectivePageTitle}</span>
                     </li>
                   </ol>
                 </nav>
@@ -266,33 +445,31 @@ const PlanDetailPage: React.FC = () => {
                       <ShieldCheck className="h-6 w-6" />
                     </div>
                     <div>
-                      <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
-                      <p className={`mt-2 text-base md:text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>Day-to-Day Plan</p>
+                      <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{effectivePageTitle}</h1>
+                      <p className={`mt-2 text-base md:text-lg ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>{effectivePlanLabel}</p>
                       <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                        Price range: {variantDisplay === 'Couple' ? 'R770.00 - R1,650.00' : variantDisplay === 'Family' ? 'R440.00 - R1,650.00' : 'R440.00 - R1,320.00'}
+                        Price range: {effectivePriceRange}
                       </p>
                     </div>
                   </div>
-                  {/* Right side price block removed per request; title now reflects selected plan name */}
                 </div>
-                {/* Cover highlights */}
+
                 <motion.div
                   className={`mt-4 rounded-xl border p-4 ${isDark ? 'bg-gray-800/60 border-gray-700' : 'bg-white/70 backdrop-blur-md border-gray-200'}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
-                  {/* Mobile: Carousel */}
                   <div className="md:hidden">
                     <div className="flex items-center justify-between gap-3 mb-2">
                       <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
                       <div className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {coverCarouselIndex + 1} / {coverItems.length}
+                        {coverCarouselIndex + 1} / {displayCoverItems.length}
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => setCoverCarouselIndex((prev) => prev === 0 ? coverItems.length - 1 : prev - 1)}
+                        onClick={() => setCoverCarouselIndex((prev) => (prev === 0 ? displayCoverItems.length - 1 : prev - 1))}
                         className={`p-2 rounded-lg ${isDark ? 'text-emerald-300 hover:bg-emerald-500/10' : 'text-emerald-700 hover:bg-emerald-50'}`}
                         aria-label="Previous"
                       >
@@ -309,12 +486,12 @@ const PlanDetailPage: React.FC = () => {
                             className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm border w-full ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
                           >
                             <Check className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">{coverItems[coverCarouselIndex]}</span>
+                            <span className="truncate">{displayCoverItems[coverCarouselIndex]}</span>
                           </motion.div>
                         </AnimatePresence>
                       </div>
                       <button
-                        onClick={() => setCoverCarouselIndex((prev) => prev === coverItems.length - 1 ? 0 : prev + 1)}
+                        onClick={() => setCoverCarouselIndex((prev) => (prev === displayCoverItems.length - 1 ? 0 : prev + 1))}
                         className={`p-2 rounded-lg ${isDark ? 'text-emerald-300 hover:bg-emerald-500/10' : 'text-emerald-700 hover:bg-emerald-50'}`}
                         aria-label="Next"
                       >
@@ -322,38 +499,34 @@ const PlanDetailPage: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  
-                  {/* Desktop: Flex wrap */}
+
                   <div className="hidden md:flex flex-wrap items-center gap-2">
                     <div className={`text-xs uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Cover:</div>
-                    {coverItems.map((c, i) => (
+                    {displayCoverItems.map((item, index) => (
                       <motion.span
-                        key={c}
+                        key={item}
                         className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20 text-emerald-200' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.05 * i }}
+                        transition={{ duration: 0.4, delay: 0.05 * index }}
                         whileHover={{ scale: 1.03 }}
                       >
-                        <Check className="w-3.5 h-3.5" /> {c}
+                        <Check className="w-3.5 h-3.5" /> {item}
                       </motion.span>
                     ))}
                   </div>
                 </motion.div>
               </motion.div>
-              </section>
+            </section>
 
-            {/* Main content grid */}
-            <div className={`max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12`}>
+            <div className="max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12">
               <div className="grid grid-cols-12 gap-6 lg:gap-8">
-                {/* Left: Details & Tabs */}
-                <motion.div 
+                <motion.div
                   className="col-span-12 lg:col-span-8 xl:col-span-9"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                 >
-                  {/* Tabs */}
                   <div className="mb-4 flex items-center gap-3">
                     <motion.button
                       className={`px-4 py-2.5 text-base rounded-lg border transition-colors ${activeTab === 'description' ? (isDark ? 'bg-emerald-600/20 border-emerald-400 text-white' : 'bg-emerald-50 border-emerald-300 text-emerald-800') : (isDark ? 'bg-gray-800/80 border-gray-700 text-gray-300 hover:border-gray-600' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300')}`}
@@ -373,9 +546,8 @@ const PlanDetailPage: React.FC = () => {
                     </motion.button>
                   </div>
 
-                  {/* Tab content */}
                   {activeTab === 'description' ? (
-                    <motion.div 
+                    <motion.div
                       className={`rounded-xl border p-6 lg:p-8 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -383,39 +555,31 @@ const PlanDetailPage: React.FC = () => {
                     >
                       <div className="prose max-w-none">
                         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                          {descriptionItems.map((item, i) => (
-                            <motion.div 
+                          {displayDescriptionItems.map((item, index) => (
+                            <motion.div
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.4, delay: 0.03 * i }}
-                              className={`rounded-lg border p-5 lg:p-6 ${
-                                isDark 
-                                  ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50' 
-                                  : 'bg-gray-50 border-gray-200 hover:border-emerald-400/50'
-                              } transition-colors duration-200`}
+                              transition={{ duration: 0.4, delay: 0.03 * index }}
+                              className={`rounded-lg border p-5 lg:p-6 ${isDark ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50' : 'bg-gray-50 border-gray-200 hover:border-emerald-400/50'} transition-colors duration-200`}
                             >
-                              <div className={`font-semibold mb-3 text-lg lg:text-xl ${
-                                isDark ? 'text-emerald-400' : 'text-emerald-600'
-                              }`}>{item.title}</div>
-                              <div className={`text-base lg:text-lg leading-relaxed ${
-                                isDark ? 'text-gray-300' : 'text-gray-700'
-                              }`}>{item.text}</div>
+                              <div className={`font-semibold mb-3 text-lg lg:text-xl ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{item.title}</div>
+                              <div className={`text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{item.text}</div>
                             </motion.div>
                           ))}
                         </div>
                       </div>
-                      <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{legalCopy}</div>
+                      <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{effectiveLegalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
-                          href={`/assets/pdf's/Day-To-Day ${variantDisplay} Plan.pdf`}
+                          href={brochureHref}
                           className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
                           sentText="Downloaded Plan Details"
                         />
                       </div>
                     </motion.div>
                   ) : (
-                    <motion.div 
+                    <motion.div
                       className={`rounded-xl border p-6 lg:p-8 ${isDark ? 'bg-gray-800/80 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'}`}
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -425,15 +589,15 @@ const PlanDetailPage: React.FC = () => {
                       <div>
                         <div className={`text-base lg:text-lg font-medium mb-3 ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>Options</div>
                         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                          {additionalInfoOptions.map((opt, i) => (
+                          {additionalInfoOptions.map((item, index) => (
                             <motion.li
-                              key={opt}
+                              key={item}
                               initial={{ opacity: 0, y: 8 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.35, delay: 0.02 * i }}
+                              transition={{ duration: 0.35, delay: 0.02 * index }}
                               className={`text-base lg:text-lg rounded-lg border px-4 py-3 ${isDark ? 'bg-gray-900/60 border-gray-700 text-gray-200' : 'bg-gray-50 border-gray-200 text-gray-800'}`}
                             >
-                              {opt}
+                              {item}
                             </motion.li>
                           ))}
                         </ul>
@@ -442,10 +606,9 @@ const PlanDetailPage: React.FC = () => {
                   )}
                 </motion.div>
 
-                {/* Right: Sticky summary / purchase card */}
                 <aside className="col-span-12 lg:col-span-4 xl:col-span-3 -mt-4 sm:-mt-6 lg:mt-16" style={{ position: 'relative' }}>
                   <div style={{ position: 'sticky', top: '6rem', zIndex: 10 }}>
-                    <motion.div 
+                    <motion.div
                       className={`rounded-xl border p-6 lg:p-7 shadow-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
                       initial={{ opacity: 0, y: 18 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -469,14 +632,11 @@ const PlanDetailPage: React.FC = () => {
                           <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Options</label>
                           <select
                             value={option}
-                            onChange={(e) => {
-                            const v = e.target.value;
-                            setOption(v);
-                            updateUrl(
-                              v,
-                              v === 'family' ? childCount : undefined
-                            );
-                          }}
+                            onChange={(event) => {
+                              const nextVariant = event.target.value;
+                              setOption(nextVariant);
+                              updateUrl(nextVariant, nextVariant === 'family' ? childCount : undefined);
+                            }}
                             className={`mt-2 w-full rounded-lg border px-4 py-3 text-base outline-none ${isDark ? 'bg-gray-900/70 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
                           >
                             <option value="">Choose an option</option>
@@ -487,21 +647,18 @@ const PlanDetailPage: React.FC = () => {
                         </div>
 
                         {option === 'single' && (
-                          <>
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Adults 18+</label>
-                              </div>
-                              <div className="mt-2 flex items-center gap-2">
-                                <div className={`h-10 px-4 rounded-md border flex items-center justify-center text-base ${
-                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                }`}>
-                                  {adultCount}
-                                </div>
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Adults 18+</label>
+                            </div>
+                            <div className="mt-2 flex items-center gap-2">
+                              <div className={`h-10 px-4 rounded-md border flex items-center justify-center text-base ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
+                                {adultCount}
                               </div>
                             </div>
-                          </>
+                          </div>
                         )}
+
                         {option === 'couple' && (
                           <>
                             <div>
@@ -509,9 +666,7 @@ const PlanDetailPage: React.FC = () => {
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Adults 18+</label>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                }`}>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300'}`}>
                                   {adultCount}
                                 </div>
                               </div>
@@ -519,33 +674,33 @@ const PlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm'}>Children 0-21</label>
-                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0–4</span>
+                                <span className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>0-4</span>
                               </div>
                               <div className="mt-1 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(0, childCount - 1)); updateUrl('couple', Math.max(0, childCount - 1)); }}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
+                                  onClick={() => {
+                                    const nextChildren = Math.max(0, childCount - 1);
+                                    setChildCount(nextChildren);
+                                    updateUrl('couple', nextChildren);
+                                  }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
                                 >
                                   -
                                 </button>
-                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${
-                                  childCount === 0
-                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
-                                }`}>
+                                <div className={`h-8 px-3 rounded-md border flex items-center justify-center text-sm ${childCount === 0 ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300') : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')}`}>
                                   {childCount}
                                 </div>
                                 <button
                                   type="button"
                                   aria-label="Increase children"
-                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('couple', Math.min(4, childCount + 1)); }}
-                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
+                                  onClick={() => {
+                                    const nextChildren = Math.min(4, childCount + 1);
+                                    setChildCount(nextChildren);
+                                    updateUrl('couple', nextChildren);
+                                  }}
+                                  className={`h-8 w-8 rounded-md border flex items-center justify-center text-sm transition-colors ${isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
                                 >
                                   +
                                 </button>
@@ -553,38 +708,31 @@ const PlanDetailPage: React.FC = () => {
                             </div>
                           </>
                         )}
-                        {option === 'family' ? (
+
+                        {option === 'family' && (
                           <>
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Adults 18+</label>
-                                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–2</span>
+                                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1-2</span>
                               </div>
                               <div className="mt-2 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease adults"
                                   onClick={() => setAdultCount(Math.max(1, adultCount - 1))}
-                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
+                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
                                 >
                                   -
                                 </button>
-                                <div className={`h-10 px-4 rounded-md border flex items-center justify-center text-base ${
-                                  adultCount === 1
-                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
-                                }`}>
+                                <div className={`h-10 px-4 rounded-md border flex items-center justify-center text-base ${adultCount === 1 ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300') : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')}`}>
                                   {adultCount}
                                 </div>
                                 <button
                                   type="button"
                                   aria-label="Increase adults"
                                   onClick={() => setAdultCount(Math.min(2, adultCount + 1))}
-                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
+                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
                                 >
                                   +
                                 </button>
@@ -593,48 +741,44 @@ const PlanDetailPage: React.FC = () => {
                             <div>
                               <div className="flex items-center justify-between">
                                 <label className={isDark ? 'text-gray-200 text-base' : 'text-gray-700 text-base'}>Children 0-21</label>
-                                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1–4</span>
+                                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>1-4</span>
                               </div>
                               <div className="mt-2 flex items-center gap-2">
                                 <button
                                   type="button"
                                   aria-label="Decrease children"
-                                  onClick={() => { setChildCount(Math.max(1, childCount - 1)); updateUrl('family', Math.max(1, childCount - 1)); }}
-                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
+                                  onClick={() => {
+                                    const nextChildren = Math.max(1, childCount - 1);
+                                    setChildCount(nextChildren);
+                                    updateUrl('family', nextChildren);
+                                  }}
+                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
                                 >
                                   -
                                 </button>
-                                <div className={`h-10 px-4 rounded-md border flex items-center justify-center text-base ${
-                                  childCount === 1
-                                    ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300')
-                                    : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')
-                                }`}>
+                                <div className={`h-10 px-4 rounded-md border flex items-center justify-center text-base ${childCount === 1 ? (isDark ? 'bg-emerald-600/30 text-white border-emerald-400' : 'bg-emerald-50 text-emerald-700 border-emerald-300') : (isDark ? 'bg-gray-900/60 text-gray-200 border-gray-700' : 'bg-white text-gray-800 border-gray-300')}`}>
                                   {childCount}
                                 </div>
                                 <button
                                   type="button"
                                   aria-label="Increase children"
-                                  onClick={() => { setChildCount(Math.min(4, childCount + 1)); updateUrl('family', Math.min(4, childCount + 1)); }}
-                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${
-                                    isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                                  }`}
+                                  onClick={() => {
+                                    const nextChildren = Math.min(4, childCount + 1);
+                                    setChildCount(nextChildren);
+                                    updateUrl('family', nextChildren);
+                                  }}
+                                  className={`h-10 w-10 rounded-md border flex items-center justify-center text-base transition-colors ${isDark ? 'border-gray-700 text-gray-200 hover:border-gray-600' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
                                 >
                                   +
                                 </button>
                               </div>
                             </div>
                           </>
-                        ) : null}
+                        )}
                       </div>
 
                       <div className="mt-5">
-                        <a
-                          href="/assets/pdf's/Application forms/Day-to-day.pdf"
-                          download
-                          className="block w-full"
-                        >
+                        <a href={applicationHref} download className="block w-full">
                           <AnimatedContactButton
                             type="button"
                             className="w-full"
@@ -663,5 +807,3 @@ const PlanDetailPage: React.FC = () => {
 };
 
 export default PlanDetailPage;
-
-

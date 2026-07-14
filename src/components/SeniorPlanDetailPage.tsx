@@ -8,6 +8,10 @@ import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
+import { hasSupabaseEnv, supabase } from '../admin/supabaseClient';
+import { useCmsAssetHref } from '../utils/cmsAssets';
+
+type CmsRow = Record<string, any> & { id: string };
 
 const coverItems = [
   'Private Managed Doctor Visits',
@@ -22,27 +26,114 @@ const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Da
 
 Day1 Health complies with the principles of open enrollment, community rating and cross-subsidisation and does not discriminate or refuse membership on the basis of race, age, gender, marital status, ethnic or social origin, sexual orientation, pregnancy, disability, state of health, geographical location or any other means of discrimination.`;
 
+const normalizeSeniorVariant = (variant: string): 'single' | 'couple' => {
+  if (variant === 'couple' || variant === 'couples') return 'couple';
+  return 'single';
+};
+
+const slugifyCmsValue = (value: unknown): string =>
+  String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const selectSeniorCmsPage = (
+  pages: CmsRow[],
+  category: 'day-to-day' | 'comprehensive' | 'hospital',
+  variant: 'single' | 'couple',
+): CmsRow | null => {
+  const categoryPlanKey = `senior-${category}`;
+  const variantPlanKey = `${categoryPlanKey}-${variant}`;
+
+  const rankedPages = pages
+    .map((page, index) => {
+      const planFamily = String(page.plan_family ?? '').toLowerCase();
+      if (planFamily.length > 0 && planFamily !== 'senior') {
+        return null;
+      }
+
+      const planKey = slugifyCmsValue(page.plan_key);
+      const pageHeading = slugifyCmsValue(page.page_heading);
+      const heroTitle = slugifyCmsValue(page.hero_title);
+      const categoryValue = slugifyCmsValue(page.senior_category);
+      const routePath = String(page.route_path ?? '').toLowerCase();
+      let score = -1;
+
+      if (planKey === variantPlanKey || planKey.includes(`${variantPlanKey}-`)) score = 140;
+      else if (pageHeading === variantPlanKey || pageHeading.includes(`${variantPlanKey}-`)) score = 130;
+      else if (heroTitle === variantPlanKey || heroTitle.includes(`${variantPlanKey}-`)) score = 120;
+      else if (
+        routePath.includes('/plans/senior-plan') &&
+        routePath.includes(`category=${category}`) &&
+        routePath.includes(`variant=${variant}`)
+      ) {
+        score = 110;
+      } else if (categoryValue === category && variant === 'single') {
+        score = 90;
+      } else if (planKey === categoryPlanKey && variant === 'single') {
+        score = 80;
+      } else if (routePath.includes('/plans/senior-plan') && routePath.includes(`category=${category}`) && variant === 'single') {
+        score = 70;
+      } else if (categoryValue === category) {
+        score = 65;
+      } else if (planKey === categoryPlanKey) {
+        score = 60;
+      } else if (routePath.includes('/plans/senior-plan') && routePath.includes(`category=${category}`)) {
+        score = 50;
+      }
+
+      if (score < 0) {
+        return null;
+      }
+
+      const sortOrder =
+        typeof page.sort_order === 'number' ? page.sort_order : Number(page.sort_order ?? Number.MAX_SAFE_INTEGER);
+
+      return {
+        page,
+        score,
+        sortOrder: Number.isFinite(sortOrder) ? sortOrder : Number.MAX_SAFE_INTEGER,
+        index,
+      };
+    })
+    .filter((entry): entry is { page: CmsRow; score: number; sortOrder: number; index: number } => entry !== null)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder;
+      return left.index - right.index;
+    });
+
+  return rankedPages[0]?.page ?? null;
+};
+
 const SeniorPlanDetailPage: React.FC = () => {
   const { isDark } = useTheme();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [option, setOption] = useState('');
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
+  const [cmsPage, setCmsPage] = useState<CmsRow | null>(null);
+  const [cmsBenefits, setCmsBenefits] = useState<CmsRow[]>([]);
+  const [cmsCoverHighlights, setCmsCoverHighlights] = useState<CmsRow[]>([]);
+  const [cmsPriceRows, setCmsPriceRows] = useState<CmsRow[]>([]);
+  const [cmsAssets, setCmsAssets] = useState<CmsRow[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Only Single or Couple for Senior
   const rawVariant = (searchParams.get('variant') || 'single').toLowerCase();
   const variantParam = rawVariant === 'family' ? 'single' : rawVariant; // guard
-  const variantDisplay = (variantParam === 'couple' || variantParam === 'couples') ? 'couple' : 'single';
+  const currentVariant = normalizeSeniorVariant(variantParam);
+  const variantDisplay = currentVariant;
   // Category segment (Senior categories): day-to-day, comprehensive, hospital. Default to 'day-to-day'.
   const rawCategory = (searchParams.get('category') || 'day-to-day').toLowerCase();
   const allowedSeniorCategories = new Set(['day-to-day', 'comprehensive', 'hospital']);
   const categoryDisplay = allowedSeniorCategories.has(rawCategory) ? rawCategory : 'day-to-day';
-  const pageTitle = ['Senior-Plan', categoryDisplay, variantDisplay].filter(Boolean).join(' / ');
+  const defaultPageTitle = ['Senior-Plan', categoryDisplay, variantDisplay].filter(Boolean).join(' / ');
 
 
   // Build cover badges based on Senior category
-  const displayCoverItems: string[] = (() => {
+  const defaultDisplayCoverItems: string[] = (() => {
     if (categoryDisplay === 'hospital') {
       return [
         'Private Hospital Benefits',
@@ -65,7 +156,7 @@ const SeniorPlanDetailPage: React.FC = () => {
   })();
 
   // Category-aware description items - separated by category for easier maintenance
-  const descriptionItems: { title: string; text: string }[] = (() => {
+  const defaultDescriptionItems: { title: string; text: string }[] = (() => {
     // Senior Hospital information cards
     if (categoryDisplay === 'hospital') {
       return [
@@ -158,6 +249,70 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
+  useEffect(() => {
+    if (!hasSupabaseEnv) {
+      setCmsPage(null);
+      setCmsBenefits([]);
+      setCmsCoverHighlights([]);
+      setCmsPriceRows([]);
+      setCmsAssets([]);
+      return;
+    }
+
+    let isActive = true;
+
+    const clearCmsState = () => {
+      if (!isActive) return;
+      setCmsPage(null);
+      setCmsBenefits([]);
+      setCmsCoverHighlights([]);
+      setCmsPriceRows([]);
+      setCmsAssets([]);
+    };
+
+    const fetchCmsContent = async () => {
+      const { data: pageData, error: pageError } = await supabase
+        .from('cms_plan_pages')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (pageError || !pageData || pageData.length === 0) {
+        clearCmsState();
+        return;
+      }
+
+      const matchedPage = selectSeniorCmsPage(pageData, categoryDisplay, currentVariant);
+      if (!matchedPage) {
+        clearCmsState();
+        return;
+      }
+
+      const pageId = matchedPage.id;
+      const [benefitsResult, highlightsResult, priceRowsResult, assetsResult] = await Promise.all([
+        supabase.from('cms_plan_benefits').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_cover_highlights').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_price_rows').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_assets').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+      ]);
+
+      if (!isActive) {
+        return;
+      }
+
+      setCmsPage(matchedPage);
+      setCmsBenefits(benefitsResult.data ?? []);
+      setCmsCoverHighlights(highlightsResult.data ?? []);
+      setCmsPriceRows(priceRowsResult.data ?? []);
+      setCmsAssets(assetsResult.data ?? []);
+    };
+
+    void fetchCmsContent();
+
+    return () => {
+      isActive = false;
+    };
+  }, [categoryDisplay, currentVariant]);
+
   // Map Senior category to the correct PDF
   const seniorPdfMap: Record<string, string> = {
     'day-to-day': 'Senior Day-To-Day Plan.pdf',
@@ -175,27 +330,84 @@ const SeniorPlanDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const initial = (variantParam === 'couple' || variantParam === 'couples') ? 'couple' : 'single';
-    setOption(initial);
-  }, [variantParam]);
+    setOption(currentVariant);
+  }, [currentVariant]);
 
   // Quantity is fixed to 1 for Senior (Single/Couple only); no qty handling
 
-  // Senior plan pricing by category
-  const currentPrice = ((): number => {
-    const adultCount = (option === 'couple') ? 2 : 1;
-    
-    if (categoryDisplay === 'comprehensive') {
-      // Senior Comprehensive: R970 single, R1940 couple
-      return adultCount === 2 ? 1940 : 970;
-    }
-    if (categoryDisplay === 'hospital') {
-      // Senior Hospital: R600 single, R1200 couple
-      return adultCount === 2 ? 1200 : 600;
-    }
-    // Senior Day-to-Day: R480 single, R960 couple
-    return adultCount === 2 ? 960 : 480;
-  })();
+  const selectedVariant = normalizeSeniorVariant(option || currentVariant);
+  const adultCount = selectedVariant === 'couple' ? 2 : 1;
+  const cmsPriceRow = cmsPriceRows.find((row) => {
+    const rowVariant = normalizeSeniorVariant(String(row.variant_type ?? 'single'));
+    const rowAdults = Number(row.adults_count ?? row.adults ?? 1);
+    const rowChildren = Number(row.children_count ?? row.children ?? 0);
+    return rowVariant === selectedVariant && rowAdults === adultCount && rowChildren === 0;
+  });
+  const parsedCmsPrice =
+    typeof cmsPriceRow?.price === 'number'
+      ? cmsPriceRow.price
+      : typeof cmsPriceRow?.price === 'string' && cmsPriceRow.price.trim().length > 0
+        ? Number(cmsPriceRow.price)
+        : null;
+  const currentPrice = Number.isFinite(parsedCmsPrice)
+    ? Number(parsedCmsPrice)
+    : categoryDisplay === 'comprehensive'
+      ? adultCount === 2 ? 1940 : 970
+      : categoryDisplay === 'hospital'
+        ? adultCount === 2 ? 1200 : 600
+        : adultCount === 2 ? 960 : 480;
+
+  const cmsDisplayCoverItems = cmsCoverHighlights
+    .map((row) => (typeof row.highlight_text === 'string' ? row.highlight_text.trim() : ''))
+    .filter((item) => item.length > 0);
+  const displayCoverItems = cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : defaultDisplayCoverItems;
+
+  const cmsDescriptionItems = cmsBenefits
+    .map((row) => ({
+      title: typeof row.benefit_title === 'string' ? row.benefit_title.trim() : '',
+      text: typeof row.benefit_summary === 'string' ? row.benefit_summary.trim() : '',
+    }))
+    .filter((item) => item.title.length > 0 && item.text.length > 0);
+  const displayDescriptionItems = cmsDescriptionItems.length > 0 ? cmsDescriptionItems : defaultDescriptionItems;
+
+  useEffect(() => {
+    setCoverCarouselIndex((prev) => (prev >= displayCoverItems.length ? 0 : prev));
+  }, [displayCoverItems.length]);
+
+  const brochureHref = useCmsAssetHref(
+    cmsAssets.find((asset) => asset.asset_type === 'brochure') ?? null,
+    seniorPdfPath,
+  );
+  const applicationHref = useCmsAssetHref(
+    cmsAssets.find((asset) => asset.asset_type === 'application_form') ?? null,
+    `/assets/pdf's/Application forms/${
+      categoryDisplay === 'comprehensive'
+        ? 'Senior-Comprehensive'
+        : categoryDisplay === 'hospital'
+          ? 'Senior-Hospital'
+          : 'Senior-Day-To-Day'
+    }.pdf`,
+  );
+  const effectivePageTitle =
+    typeof cmsPage?.page_heading === 'string' && cmsPage.page_heading.length > 0 ? cmsPage.page_heading : defaultPageTitle;
+  const effectivePlanLabel =
+    typeof cmsPage?.hero_title === 'string' && cmsPage.hero_title.length > 0
+      ? cmsPage.hero_title
+      : categoryDisplay === 'comprehensive'
+        ? 'Senior Comprehensive Plan'
+        : categoryDisplay === 'hospital'
+          ? 'Value Plus Hospital Plan | Senior'
+          : 'Senior Day to Day Plan';
+  const effectivePriceRange =
+    typeof cmsPage?.price_range === 'string' && cmsPage.price_range.length > 0
+      ? cmsPage.price_range
+      : categoryDisplay === 'comprehensive'
+        ? 'R970.00 through R1,940.00'
+        : categoryDisplay === 'hospital'
+          ? 'R600.00 through R1,200.00'
+          : 'R480.00 through R960.00';
+  const effectiveLegalCopy =
+    typeof cmsPage?.legal_copy === 'string' && cmsPage.legal_copy.length > 0 ? cmsPage.legal_copy : legalCopy;
 
   const updateUrl = (nextVariant: 'single' | 'couple') => {
     const params = new URLSearchParams(searchParams);
@@ -253,7 +465,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                       <ChevronRight className="h-3.5 w-3.5" />
                     </li>
                     <li>
-                      <span className={`${isDark ? 'text-white/90' : 'text-gray-900'} font-medium`}>{pageTitle}</span>
+                      <span className={`${isDark ? 'text-white/90' : 'text-gray-900'} font-medium`}>{effectivePageTitle}</span>
                     </li>
                   </ol>
                 </nav>
@@ -264,25 +476,25 @@ const SeniorPlanDetailPage: React.FC = () => {
                       <ShieldCheck className="h-6 w-6" />
                     </div>
                     <div>
-                      <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
+                      <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{effectivePageTitle}</h1>
                       {categoryDisplay === 'day-to-day' && (
                         <div className="mt-1">
-                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Day to Day Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R480.00 through R960.00</div>
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>{effectivePlanLabel}</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: {effectivePriceRange}</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'comprehensive' && (
                         <div className="mt-1">
-                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Senior Comprehensive Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R970.00 through R1,940.00</div>
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>{effectivePlanLabel}</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: {effectivePriceRange}</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
                       {categoryDisplay === 'hospital' && (
                         <div className="mt-1">
-                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan | Senior</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R600.00 through R1,200.00</div>
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>{effectivePlanLabel}</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: {effectivePriceRange}</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Senior</div>
                         </div>
                       )}
@@ -397,7 +609,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                     >
                       <div className="prose max-w-none">
                         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                          {descriptionItems.map((item: { title: string; text: string }, i: number) => (
+                          {displayDescriptionItems.map((item: { title: string; text: string }, i: number) => (
                             <motion.div 
                               key={item.title}
                               initial={{ opacity: 0, y: 10 }}
@@ -419,10 +631,10 @@ const SeniorPlanDetailPage: React.FC = () => {
                           ))}
                         </div>
                       </div>
-                      <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{legalCopy}</div>
+                      <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{effectiveLegalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
-                          href={seniorPdfPath}
+                          href={brochureHref}
                           className="hero-cta-xs hero-cta-green hero-cta-fast hero-cta-left"
                           sentText="Downloaded Plan Details"
                         />
@@ -470,7 +682,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <div className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Plan</div>
-                          <div className={`text-xl lg:text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Senior-Plan</div>
+                          <div className={`text-xl lg:text-2xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{effectivePlanLabel}</div>
                         </div>
                         <RollingNumber
                           value={currentPrice}
@@ -502,13 +714,7 @@ const SeniorPlanDetailPage: React.FC = () => {
 
                       <div className="mt-5">
                         <a
-                          href={`/assets/pdf's/Application forms/${
-                            categoryDisplay === 'comprehensive' 
-                              ? 'Senior-Comprehensive' 
-                              : categoryDisplay === 'hospital'
-                              ? 'Senior-Hospital'
-                              : 'Senior-Day-To-Day'
-                          }.pdf`}
+                          href={applicationHref}
                           download
                           className="block w-full"
                         >
@@ -523,7 +729,7 @@ const SeniorPlanDetailPage: React.FC = () => {
 
                       <div className={`mt-5 text-sm lg:text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                         <div>SKU: N/A</div>
-                        <div>Category: Senior-Plan</div>
+                        <div>Category: Senior</div>
                       </div>
                     </motion.div>
                   </div>

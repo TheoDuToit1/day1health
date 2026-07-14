@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { hasSupabaseEnv, supabase, supabaseConfigError } from './supabaseClient';
-import AdminPage from './AdminPage';
 import { Loader, LogOut, AlertCircle } from 'lucide-react';
 
 interface RateLimitData {
@@ -11,10 +11,22 @@ interface RateLimitData {
   lockedUntil?: number;
 }
 
+type AdminRole = 'claims' | 'it_manager';
+
+const IT_MANAGER_EMAIL = 'day1healthdeveloper@gmail.com';
+const IT_MANAGER_PASSWORD = 'day1health';
+
+const resolveRoleForEmail = (email?: string | null): AdminRole => {
+  return email?.trim().toLowerCase() === IT_MANAGER_EMAIL.toLowerCase() ? 'it_manager' : 'claims';
+};
+
 const ProtectedAdminPage: React.FC = () => {
   const { isDark } = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedRole, setSelectedRole] = useState<AdminRole>('claims');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -25,10 +37,8 @@ const ProtectedAdminPage: React.FC = () => {
   const [lockoutTimeRemaining, setLockoutTimeRemaining] = useState(0);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
 
-  // Get client IP (for rate limiting key)
   const getClientIdentifier = (): string => {
     if (typeof window !== 'undefined') {
-      // Use a combination of user agent and screen resolution as a pseudo-IP identifier
       const ua = navigator.userAgent;
       const screen = `${window.screen.width}x${window.screen.height}`;
       return `${ua}-${screen}`.substring(0, 50);
@@ -36,7 +46,6 @@ const ProtectedAdminPage: React.FC = () => {
     return 'unknown';
   };
 
-  // Get rate limit data from localStorage
   const getRateLimitData = (): RateLimitData | null => {
     if (typeof window === 'undefined') return null;
     try {
@@ -49,7 +58,6 @@ const ProtectedAdminPage: React.FC = () => {
     }
   };
 
-  // Save rate limit data to localStorage
   const saveRateLimitData = (data: RateLimitData): void => {
     if (typeof window === 'undefined') return;
     try {
@@ -60,7 +68,11 @@ const ProtectedAdminPage: React.FC = () => {
     }
   };
 
-  // Check and update rate limit status
+  const clearRateLimitData = (): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
+  };
+
   const checkRateLimit = (): void => {
     const rateLimitData = getRateLimitData();
     if (!rateLimitData) {
@@ -70,17 +82,15 @@ const ProtectedAdminPage: React.FC = () => {
     }
 
     const now = Date.now();
-    const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+    const rateLimitWindow = 15 * 60 * 1000;
 
-    // Check if outside the time window
-    if (now - rateLimitData.firstAttempt > RATE_LIMIT_WINDOW) {
-      localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
+    if (now - rateLimitData.firstAttempt > rateLimitWindow) {
+      clearRateLimitData();
       setRemainingAttempts(5);
       setIsLocked(false);
       return;
     }
 
-    // Check if locked
     if (rateLimitData.locked && rateLimitData.lockedUntil) {
       if (now < rateLimitData.lockedUntil) {
         setIsLocked(true);
@@ -88,8 +98,7 @@ const ProtectedAdminPage: React.FC = () => {
         setLockoutTimeRemaining(remaining);
         setRemainingAttempts(0);
       } else {
-        // Lockout expired
-        localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
+        clearRateLimitData();
         setIsLocked(false);
         setRemainingAttempts(5);
       }
@@ -100,23 +109,25 @@ const ProtectedAdminPage: React.FC = () => {
     }
   };
 
-  // Check if user is already logged in
   useEffect(() => {
-    if (!hasSupabaseEnv) {
-      setLoading(false);
-      setLoginError(supabaseConfigError ?? 'Supabase is not configured.');
-      return;
-    }
-
     const checkAuth = async () => {
+      if (!hasSupabaseEnv) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         if (session?.user) {
-          setUser(session.user);
+          const role = resolveRoleForEmail(session.user.email);
+          setUser({ ...session.user, role, authType: 'supabase' });
           setIsAuthenticated(true);
+          setSelectedRole(role);
         }
 
-        // Check rate limit status
         checkRateLimit();
       } catch (err) {
         console.error('Auth check error:', err);
@@ -127,11 +138,18 @@ const ProtectedAdminPage: React.FC = () => {
 
     checkAuth();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    if (!hasSupabaseEnv) {
+      return;
+    }
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        setUser(session.user);
+        const role = resolveRoleForEmail(session.user.email);
+        setUser({ ...session.user, role, authType: 'supabase' });
         setIsAuthenticated(true);
+        setSelectedRole(role);
       } else {
         setUser(null);
         setIsAuthenticated(false);
@@ -141,14 +159,68 @@ const ProtectedAdminPage: React.FC = () => {
     return () => subscription?.unsubscribe();
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!hasSupabaseEnv) {
-      setLoginError(supabaseConfigError ?? 'Supabase is not configured.');
-      return;
+  const handleSuccessfulLogin = (nextUser: any, role: AdminRole) => {
+    setTimeout(() => {
+      if (buttonRef.current) {
+        buttonRef.current.focus();
+      }
+    }, 100);
+
+    clearRateLimitData();
+
+    setTimeout(() => {
+      setUser(nextUser);
+      setSelectedRole(role);
+      setIsAuthenticated(true);
+      setEmail('');
+      setPassword('');
+      setIsLoggingIn(false);
+      setRemainingAttempts(5);
+    }, 3000);
+  };
+
+  const handleFailedLogin = (message?: string) => {
+    const rateLimitData = getRateLimitData() || {
+      attempts: 0,
+      firstAttempt: Date.now(),
+      locked: false,
+    };
+
+    rateLimitData.attempts += 1;
+
+    if (rateLimitData.attempts >= 5) {
+      rateLimitData.locked = true;
+      rateLimitData.lockedUntil = Date.now() + 30 * 60 * 1000;
+      saveRateLimitData(rateLimitData);
+      setIsLocked(true);
+      setLockoutTimeRemaining(1800);
+      setLoginError('Too many failed login attempts. Your device has been temporarily blocked for 30 minutes.');
+
+      const interval = setInterval(() => {
+        setLockoutTimeRemaining((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            setIsLocked(false);
+            setRemainingAttempts(5);
+            clearRateLimitData();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      saveRateLimitData(rateLimitData);
+      const remaining = 5 - rateLimitData.attempts;
+      setRemainingAttempts(remaining);
+      setLoginError(message ?? `Invalid credentials. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`);
     }
 
-    // Check if IP is locked
+    setIsLoggingIn(false);
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (isLocked) {
       setLoginError(`Your device has been temporarily blocked. Try again in ${lockoutTimeRemaining} seconds.`);
       return;
@@ -158,82 +230,55 @@ const ProtectedAdminPage: React.FC = () => {
     setIsLoggingIn(true);
 
     try {
-      // Attempt to authenticate with Supabase directly
+      if (!hasSupabaseEnv) {
+        setLoginError(supabaseConfigError ?? 'Supabase environment variables are missing for this environment.');
+        setIsLoggingIn(false);
+        return;
+      }
+
+      if (selectedRole === 'it_manager') {
+        const emailMatches = email.trim().toLowerCase() === IT_MANAGER_EMAIL.toLowerCase();
+        const passwordMatches = password === IT_MANAGER_PASSWORD;
+
+        if (!emailMatches || !passwordMatches) {
+          handleFailedLogin('Invalid IT Manager credentials.');
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error || !data.user) {
+          handleFailedLogin();
+          return;
+        }
+
+        handleSuccessfulLogin({ ...data.user, role: 'it_manager', authType: 'supabase' }, 'it_manager');
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error || !data.user) {
-        // Record failed attempt
-        const rateLimitData = getRateLimitData() || {
-          attempts: 0,
-          firstAttempt: Date.now(),
-          locked: false,
-        };
-
-        rateLimitData.attempts += 1;
-
-        // Lock after 5 attempts for 30 minutes
-        if (rateLimitData.attempts >= 5) {
-          rateLimitData.locked = true;
-          rateLimitData.lockedUntil = Date.now() + 30 * 60 * 1000; // 30 minutes
-          saveRateLimitData(rateLimitData);
-          setIsLocked(true);
-          setLockoutTimeRemaining(1800);
-          setLoginError('Too many failed login attempts. Your device has been temporarily blocked for 30 minutes.');
-
-          // Start countdown timer
-          const interval = setInterval(() => {
-            setLockoutTimeRemaining((prev) => {
-              if (prev <= 1) {
-                clearInterval(interval);
-                setIsLocked(false);
-                setRemainingAttempts(5);
-                localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
-                return 0;
-              }
-              return prev - 1;
-            });
-          }, 1000);
-        } else {
-          saveRateLimitData(rateLimitData);
-          const remaining = 5 - rateLimitData.attempts;
-          setRemainingAttempts(remaining);
-          setLoginError(`Invalid credentials. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`);
-        }
-        setIsLoggingIn(false);
-      } else if (data.user) {
-        // Check if user has admin role
-        const userMetadata = data.user.user_metadata || {};
-        const isAdmin = userMetadata.role === 'admin' || data.user.email?.endsWith('@day1.co.za');
-
-        if (!isAdmin) {
-          setLoginError('You do not have permission to access the admin panel');
-          setIsLoggingIn(false);
-          return;
-        }
-
-        // Trigger button animation by focusing it
-        setTimeout(() => {
-          if (buttonRef.current) {
-            buttonRef.current.focus();
-          }
-        }, 100);
-
-        // Clear rate limit on successful login
-        localStorage.removeItem(`rate_limit_${getClientIdentifier()}`);
-
-        // Delay navigation by 3 seconds to show animation
-        setTimeout(() => {
-          setUser(data.user);
-          setIsAuthenticated(true);
-          setEmail('');
-          setPassword('');
-          setIsLoggingIn(false);
-          setRemainingAttempts(5); // Reset attempts on successful login
-        }, 3000);
+        handleFailedLogin();
+        return;
       }
+
+      const userMetadata = data.user.user_metadata || {};
+      const isAdmin = userMetadata.role === 'admin' || data.user.email?.endsWith('@day1.co.za');
+
+      if (!isAdmin) {
+        setLoginError('You do not have permission to access the admin panel');
+        setIsLoggingIn(false);
+        return;
+      }
+
+      handleSuccessfulLogin({ ...data.user, role: 'claims', authType: 'supabase' }, 'claims');
     } catch (err) {
       console.error('Login error:', err);
       setLoginError('An error occurred. Please try again.');
@@ -242,19 +287,47 @@ const ProtectedAdminPage: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    if (!hasSupabaseEnv) return;
+    if (!hasSupabaseEnv) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setSelectedRole('claims');
+      navigate('/admin', { replace: true });
+      return;
+    }
 
     try {
       await supabase.auth.signOut();
       setUser(null);
       setIsAuthenticated(false);
+      setSelectedRole('claims');
+      navigate('/admin', { replace: true });
     } catch (err) {
       console.error('Logout error:', err);
     }
   };
 
-  // Loading state
-  if (loading) {
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    const currentRole = user?.role === 'it_manager' ? 'it_manager' : 'claims';
+
+    if (currentRole === 'it_manager' && location.pathname === '/admin') {
+      navigate('/admin/cms', { replace: true });
+      return;
+    }
+
+    if (currentRole === 'claims' && (location.pathname === '/admin' || location.pathname === '/admin/cms')) {
+      navigate('/admin/providers', { replace: true });
+    }
+  }, [isAuthenticated, location.pathname, navigate, user]);
+
+  const roleDescription = selectedRole === 'it_manager'
+    ? 'Use the Supabase IT manager user to access the CMS panel directly.'
+    : 'Use your existing Supabase admin login for claims access.';
+
+  if (loading || (isAuthenticated && location.pathname === '/admin')) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${
         isDark ? 'bg-gray-900' : 'bg-gray-50'
@@ -264,7 +337,6 @@ const ProtectedAdminPage: React.FC = () => {
     );
   }
 
-  // Not authenticated - show login form
   if (!isAuthenticated) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${
@@ -282,9 +354,44 @@ const ProtectedAdminPage: React.FC = () => {
             <p className={`text-sm ${
               isDark ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Doctor & Dentist Directory Management
+              Select a role before signing in
             </p>
           </div>
+
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <button
+              type="button"
+              onClick={() => setSelectedRole('it_manager')}
+              className={`rounded-lg border px-4 py-3 text-sm font-semibold transition-colors ${
+                selectedRole === 'it_manager'
+                  ? 'border-green-600 bg-green-600 text-white'
+                  : isDark
+                    ? 'border-gray-600 bg-gray-700 text-gray-200 hover:border-green-500'
+                    : 'border-gray-300 bg-white text-gray-700 hover:border-green-500'
+              }`}
+            >
+              IT Manager
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedRole('claims')}
+              className={`rounded-lg border px-4 py-3 text-sm font-semibold transition-colors ${
+                selectedRole === 'claims'
+                  ? 'border-green-600 bg-green-600 text-white'
+                  : isDark
+                    ? 'border-gray-600 bg-gray-700 text-gray-200 hover:border-green-500'
+                    : 'border-gray-300 bg-white text-gray-700 hover:border-green-500'
+              }`}
+            >
+              Claims
+            </button>
+          </div>
+
+          <p className={`mb-6 text-sm ${
+            isDark ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            {roleDescription}
+          </p>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
@@ -303,7 +410,7 @@ const ProtectedAdminPage: React.FC = () => {
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                 }`}
-                placeholder="admin@example.com"
+                placeholder="Enter Admin Email"
               />
             </div>
 
@@ -323,7 +430,7 @@ const ProtectedAdminPage: React.FC = () => {
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                 }`}
-                placeholder="••••••••"
+                placeholder="********"
               />
             </div>
 
@@ -342,6 +449,17 @@ const ProtectedAdminPage: React.FC = () => {
                 </div>
               </div>
             )}
+
+            <div className="flex items-center justify-between text-xs">
+              <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>
+                Remaining attempts: {remainingAttempts}
+              </span>
+              {isLocked && (
+                <span className="text-red-600">
+                  Locked for {lockoutTimeRemaining}s
+                </span>
+              )}
+            </div>
 
             <button
               ref={buttonRef}
@@ -388,17 +506,13 @@ const ProtectedAdminPage: React.FC = () => {
               </div>
             </button>
           </form>
-
-
         </div>
       </div>
     );
   }
 
-  // Authenticated - show admin panel with logout button
   return (
     <div>
-      {/* Logout button in top right */}
       <div className={`fixed top-4 right-4 z-40 flex items-center gap-3 ${
         isDark ? 'bg-gray-800' : 'bg-white'
       } px-4 py-2 rounded-lg shadow-lg`}>
@@ -416,8 +530,7 @@ const ProtectedAdminPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Admin panel */}
-      <AdminPage />
+      <Outlet />
     </div>
   );
 };

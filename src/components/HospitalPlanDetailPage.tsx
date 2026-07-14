@@ -8,6 +8,10 @@ import Header from './Header';
 import Footer from './Footer';
 import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
+import { hasSupabaseEnv, supabase } from '../admin/supabaseClient';
+import { useCmsAssetHref } from '../utils/cmsAssets';
+
+type CmsRow = Record<string, any> & { id: string };
 
 const coverItems = [
   'Private Hospital Benefits',
@@ -35,6 +39,88 @@ const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Da
 
 Day1 Health complies with the principles of open enrollment, community rating and cross-subsidisation and does not discriminate or refuse membership on the basis of race, age, gender, marital status, ethnic or social origin, sexual orientation, pregnancy, disability, state of health, geographical location or any other means of discrimination.`;
 
+const normalizeHospitalVariant = (variant: string): 'single' | 'couple' | 'family' => {
+  if (variant === 'couple' || variant === 'couples') return 'couple';
+  if (variant === 'family') return 'family';
+  return 'single';
+};
+
+const normalizeHospitalTier = (tier: string): 'value' | 'platinum' | 'executive' => {
+  if (tier === 'platinum') return 'platinum';
+  if (tier === 'executive') return 'executive';
+  return 'value';
+};
+
+const slugifyCmsValue = (value: unknown): string =>
+  String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const selectHospitalCmsPage = (
+  pages: CmsRow[],
+  tier: 'value' | 'platinum' | 'executive',
+  variant: 'single' | 'couple' | 'family',
+): CmsRow | null => {
+  const tierPlanKey = `hospital-${tier}`;
+  const variantPlanKey = `${tierPlanKey}-${variant}`;
+
+  const rankedPages = pages
+    .map((page, index) => {
+      const planFamily = String(page.plan_family ?? '').toLowerCase();
+      if (planFamily.length > 0 && planFamily !== 'hospital') {
+        return null;
+      }
+
+      const planKey = slugifyCmsValue(page.plan_key);
+      const pageHeading = slugifyCmsValue(page.page_heading);
+      const heroTitle = slugifyCmsValue(page.hero_title);
+      const tierValue = slugifyCmsValue(page.tier);
+      const routePath = String(page.route_path ?? '').toLowerCase();
+      let score = -1;
+
+      if (planKey === variantPlanKey || planKey.includes(`${variantPlanKey}-`)) score = 140;
+      else if (pageHeading === variantPlanKey || pageHeading.includes(`${variantPlanKey}-`)) score = 130;
+      else if (heroTitle === variantPlanKey || heroTitle.includes(`${variantPlanKey}-`)) score = 120;
+      else if (
+        routePath.includes('/plans/hospital') &&
+        routePath.includes(`tier=${tier}`) &&
+        routePath.includes(`variant=${variant}`)
+      ) {
+        score = 110;
+      } else if (tierValue === tier && variant === 'single') {
+        score = 90;
+      } else if (planKey === tierPlanKey && variant === 'single') {
+        score = 80;
+      } else if (routePath.includes('/plans/hospital') && routePath.includes(`tier=${tier}`) && variant === 'single') {
+        score = 70;
+      }
+
+      if (score < 0) {
+        return null;
+      }
+
+      const sortOrder =
+        typeof page.sort_order === 'number' ? page.sort_order : Number(page.sort_order ?? Number.MAX_SAFE_INTEGER);
+
+      return {
+        page,
+        score,
+        sortOrder: Number.isFinite(sortOrder) ? sortOrder : Number.MAX_SAFE_INTEGER,
+        index,
+      };
+    })
+    .filter((entry): entry is { page: CmsRow; score: number; sortOrder: number; index: number } => entry !== null)
+    .sort((left, right) => {
+      if (right.score !== left.score) return right.score - left.score;
+      if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder;
+      return left.index - right.index;
+    });
+
+  return rankedPages[0]?.page ?? null;
+};
+
 const HospitalPlanDetailPage: React.FC = () => {
   const { isDark } = useTheme();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -43,15 +129,78 @@ const HospitalPlanDetailPage: React.FC = () => {
   const [adultCount, setAdultCount] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [coverCarouselIndex, setCoverCarouselIndex] = useState(0);
+  const [cmsPage, setCmsPage] = useState<CmsRow | null>(null);
+  const [cmsBenefits, setCmsBenefits] = useState<CmsRow[]>([]);
+  const [cmsCoverHighlights, setCmsCoverHighlights] = useState<CmsRow[]>([]);
+  const [cmsPriceRows, setCmsPriceRows] = useState<CmsRow[]>([]);
+  const [cmsAssets, setCmsAssets] = useState<CmsRow[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const variantParam = (searchParams.get('variant') || 'single').toLowerCase();
-  const variantDisplay = variantParam === 'couple' || variantParam === 'couples' ? 'Couple' : variantParam === 'family' ? 'Family' : 'Single';
+  const currentVariant = normalizeHospitalVariant(variantParam);
+  const variantDisplay = currentVariant === 'couple' ? 'Couple' : currentVariant === 'family' ? 'Family' : 'Single';
   const tierParam = (searchParams.get('tier') || 'value').toLowerCase();
-  const tierDisplay = tierParam === 'platinum' ? 'Platinum' : tierParam === 'executive' ? 'Executive' : 'Value';
-  const tierKey = (tierParam === 'platinum' || tierParam === 'executive') ? tierParam : 'value';
-  const pageTitle = `Hospital - ${tierDisplay} - ${variantDisplay}`;
+  const currentTier = normalizeHospitalTier(tierParam);
+  const tierDisplay = currentTier === 'platinum' ? 'Platinum' : currentTier === 'executive' ? 'Executive' : 'Value';
+  const tierKey = currentTier;
+  const defaultPageTitle = `Hospital - ${tierDisplay} - ${variantDisplay}`;
+  const pageTitle = typeof cmsPage?.page_heading === 'string' && cmsPage.page_heading.length > 0
+    ? cmsPage.page_heading
+    : defaultPageTitle;
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+
+  useEffect(() => {
+    if (!hasSupabaseEnv) {
+      setCmsPage(null);
+      setCmsBenefits([]);
+      setCmsCoverHighlights([]);
+      setCmsPriceRows([]);
+      setCmsAssets([]);
+      return;
+    }
+
+    const fetchCmsContent = async () => {
+      const { data: pageData, error: pageError } = await supabase
+        .from('cms_plan_pages')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (pageError || !pageData || pageData.length === 0) {
+        setCmsPage(null);
+        setCmsBenefits([]);
+        setCmsCoverHighlights([]);
+        setCmsPriceRows([]);
+        setCmsAssets([]);
+        return;
+      }
+
+      const matchedPage = selectHospitalCmsPage(pageData, currentTier, currentVariant);
+      if (!matchedPage) {
+        setCmsPage(null);
+        setCmsBenefits([]);
+        setCmsCoverHighlights([]);
+        setCmsPriceRows([]);
+        setCmsAssets([]);
+        return;
+      }
+
+      const pageId = matchedPage.id;
+      const [benefitsResult, highlightsResult, priceRowsResult, assetsResult] = await Promise.all([
+        supabase.from('cms_plan_benefits').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_cover_highlights').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_price_rows').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+        supabase.from('cms_plan_assets').select('*').eq('page_id', pageId).order('sort_order', { ascending: true }),
+      ]);
+
+      setCmsPage(matchedPage);
+      setCmsBenefits(benefitsResult.data ?? []);
+      setCmsCoverHighlights(highlightsResult.data ?? []);
+      setCmsPriceRows(priceRowsResult.data ?? []);
+      setCmsAssets(assetsResult.data ?? []);
+    };
+
+    void fetchCmsContent();
+  }, [currentTier, currentVariant]);
 
   // Map tier to the correct Hospital plan PDF
   const hospitalPdfMap: Record<string, string> = {
@@ -59,18 +208,31 @@ const HospitalPlanDetailPage: React.FC = () => {
     platinum: "Hospital Platinum Plan.pdf",
     executive: "Hospital Executive Plan.pdf",
   };
-  const hospitalPdfFile = hospitalPdfMap[tierParam] || 'Day 1 Comparative guide 2025_v2.pdf';
-  const pdfPath = `/assets/pdf's/${hospitalPdfFile}`;
+  const hospitalPdfFile = hospitalPdfMap[tierKey] || 'Day 1 Comparative guide 2025_v2.pdf';
+  const defaultPdfPath = `/assets/pdf's/${hospitalPdfFile}`;
+  const pdfPath = useCmsAssetHref(
+    cmsAssets.find((asset) => asset.asset_type === 'brochure') ?? null,
+    defaultPdfPath,
+  );
+  const applicationHref = useCmsAssetHref(
+    cmsAssets.find((asset) => asset.asset_type === 'application_form') ?? null,
+    `/assets/pdf's/Application forms/${tierParam === 'platinum' ? 'hospital-platinum' : tierParam === 'executive' ? 'Hospital-Executive' : 'Hospital-ValuePlus'}.pdf`,
+  );
 
   // Build cover badges per tier
-  const displayCoverItems = ((): string[] => {
+  const defaultDisplayCoverItems = ((): string[] => {
     if (tierKey === 'executive') return [...coverItems, 'Illness Top-Up', 'Critical Illness'];
     if (tierKey === 'platinum') return [...coverItems, 'Critical Illness'];
     return coverItems;
   })();
+  const displayCoverItems = cmsCoverHighlights.length > 0
+    ? cmsCoverHighlights
+        .map((row) => (typeof row.highlight_text === 'string' ? row.highlight_text.trim() : ''))
+        .filter((item) => item.length > 0)
+    : defaultDisplayCoverItems;
 
   // Tier-aware description items - separated by tier for easier maintenance
-  const descriptionItems: { title: string; text: string }[] = (() => {
+  const defaultDescriptionItems: { title: string; text: string }[] = (() => {
     // Hospital Value Plus information cards
     const valuePlusItems: { title: string; text: string }[] = [
       {
@@ -130,6 +292,14 @@ const HospitalPlanDetailPage: React.FC = () => {
     }
     return valuePlusItems;
   })();
+  const descriptionItems: { title: string; text: string }[] = cmsBenefits.length > 0
+    ? cmsBenefits
+        .map((row) => ({
+          title: typeof row.benefit_title === 'string' ? row.benefit_title : '',
+          text: typeof row.benefit_summary === 'string' ? row.benefit_summary : '',
+        }))
+        .filter((row) => row.title.length > 0 && row.text.length > 0)
+    : defaultDescriptionItems;
 
   const handleNavigate = (section: string) => {
     const targetSection = section === 'home' ? 'hero' : section;
@@ -139,38 +309,36 @@ const HospitalPlanDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const initial = (variantParam === 'couple' || variantParam === 'couples')
-      ? 'couple' : (variantParam === 'family' ? 'family' : 'single');
-    setOption(initial);
-  }, [variantParam]);
+    setOption(currentVariant);
+  }, [currentVariant]);
 
   useEffect(() => {
-    if (variantParam === 'family') {
+    if (currentVariant === 'family') {
       setAdultCount((prev) => (prev >= 1 && prev <= 2 ? prev : 1));
-    } else if (variantParam === 'single') {
+    } else if (currentVariant === 'single') {
       setAdultCount(1);
-    } else if (variantParam === 'couple' || variantParam === 'couples') {
+    } else if (currentVariant === 'couple') {
       setAdultCount(2);
     } else {
       setAdultCount(1);
     }
-  }, [variantParam]);
+  }, [currentVariant]);
 
   useEffect(() => {
     const raw = searchParams.get('children');
     const parsed = raw ? parseInt(raw, 10) : NaN;
-    if (variantParam === 'family') {
+    if (currentVariant === 'family') {
       const clamped = Math.max(1, Math.min(4, isNaN(parsed) ? 1 : parsed));
       setChildCount(clamped);
-    } else if (variantParam === 'single') {
+    } else if (currentVariant === 'single') {
       setChildCount(0); // Single always has 0 children
-    } else if (variantParam === 'couple' || variantParam === 'couples') {
+    } else if (currentVariant === 'couple') {
       const clamped = Math.max(0, Math.min(4, isNaN(parsed) ? 0 : parsed));
       setChildCount(clamped);
     } else {
       setChildCount(0);
     }
-  }, [variantParam, searchParams]);
+  }, [currentVariant, searchParams]);
 
   // Hospital plan pricing per tier
   // Value Plus: R420 single, R756 couple + R168 per child
@@ -193,7 +361,38 @@ const HospitalPlanDetailPage: React.FC = () => {
   const CHILD_PRICE_VALUE = 168;
   const CHILD_PRICE_PLATINUM = 236;
   const CHILD_PRICE_EXECUTIVE = 268;
-  const currentPrice = getPricing();
+  const selectedVariant = (option || currentVariant) as 'single' | 'couple' | 'family';
+  const cmsPriceRow = cmsPriceRows.find((row) => {
+    const rowVariant = normalizeHospitalVariant(String(row.variant_type ?? 'single'));
+    const rowAdults = Number(row.adults_count ?? row.adults ?? 1);
+    const rowChildren = Number(row.children_count ?? row.children ?? 0);
+    return rowVariant === selectedVariant && rowAdults === adultCount && rowChildren === childCount;
+  });
+  const parsedCmsPrice = cmsPriceRow && typeof cmsPriceRow.price === 'number'
+    ? cmsPriceRow.price
+    : cmsPriceRow && typeof cmsPriceRow.price === 'string' && cmsPriceRow.price.trim().length > 0
+      ? Number(cmsPriceRow.price)
+      : null;
+  const currentPrice = Number.isFinite(parsedCmsPrice)
+    ? Number(parsedCmsPrice)
+    : getPricing();
+  const effectiveLegalCopy = typeof cmsPage?.legal_copy === 'string' && cmsPage.legal_copy.length > 0
+    ? cmsPage.legal_copy
+    : legalCopy;
+  const effectivePriceRange = typeof cmsPage?.price_range === 'string' && cmsPage.price_range.length > 0
+    ? cmsPage.price_range
+    : currentTier === 'platinum'
+      ? 'R590.00 through R2,006.00'
+      : currentTier === 'executive'
+        ? 'R670.00 through R2,278.00'
+        : 'R420.00 through R1,428.00';
+  const effectivePlanLabel = typeof cmsPage?.hero_title === 'string' && cmsPage.hero_title.length > 0
+    ? cmsPage.hero_title
+    : currentTier === 'platinum'
+      ? 'Platinum Hospital Plan'
+      : currentTier === 'executive'
+        ? 'Executive Hospital Plan'
+        : 'Value Plus Hospital Plan';
 
   const updateUrl = (nextVariant: string, nextChildren?: number) => {
     const params = new URLSearchParams(searchParams);
@@ -266,22 +465,22 @@ const HospitalPlanDetailPage: React.FC = () => {
                       <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{pageTitle}</h1>
                       {tierKey === 'value' && (
                         <div className="mt-1">
-                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Value Plus Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R420.00 through R1,428.00</div>
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>{effectivePlanLabel}</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: {effectivePriceRange}</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierKey === 'platinum' && (
                         <div className="mt-1">
-                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Platinum Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R590.00 through R2,006.00</div>
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>{effectivePlanLabel}</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: {effectivePriceRange}</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
                       {tierKey === 'executive' && (
                         <div className="mt-1">
-                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>Executive Hospital Plan</div>
-                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: R670.00 through R2,278.00</div>
+                          <div className={`${isDark ? 'text-emerald-300' : 'text-emerald-700'} text-sm font-semibold`}>{effectivePlanLabel}</div>
+                          <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'} text-sm`}>Price range: {effectivePriceRange}</div>
                           <div className={`${isDark ? 'text-gray-400' : 'text-gray-500'} text-xs`}>SKU: N/A · Category: Normal</div>
                         </div>
                       )}
@@ -418,7 +617,7 @@ const HospitalPlanDetailPage: React.FC = () => {
                           ))}
                         </div>
                       </div>
-                      <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{legalCopy}</div>
+                      <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{effectiveLegalCopy}</div>
                       <div className="mt-4">
                         <DownloadHeroButton
                           href={pdfPath}
@@ -643,7 +842,7 @@ const HospitalPlanDetailPage: React.FC = () => {
 
                       <div className="mt-5">
                         <a
-                          href={`/assets/pdf's/Application forms/${tierParam === 'platinum' ? 'hospital-platinum' : tierParam === 'executive' ? 'Hospital-Executive' : 'Hospital-ValuePlus'}.pdf`}
+                          href={applicationHref}
                           download
                           className="block w-full"
                         >
@@ -675,6 +874,3 @@ const HospitalPlanDetailPage: React.FC = () => {
 };
 
 export default HospitalPlanDetailPage;
-
-
-

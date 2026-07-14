@@ -12,6 +12,8 @@ const SeniorPlanDetailPage = lazy(() => import('./components/SeniorPlanDetailPag
 const RegulatoryInformationPage = lazy(() => import('./components/RegulatoryInformationPage'));
 const ProceduresPage = lazy(() => import('./components/ProceduresPage'));
 const ProtectedAdminPage = lazy(() => import('./admin/ProtectedAdminPage'));
+const AdminPage = lazy(() => import('./admin/AdminPage'));
+const AdminCmsPlaceholderPage = lazy(() => import('./admin/AdminCmsPlaceholderPage'));
 const DirectoryPage = lazy(() => import('./directory/DirectoryPage'));
 const ProviderDetailPage = lazy(() => import('./directory/ProviderDetailPage'));
 const Day1HealthAiChatbotPage = lazy(() => import('./components/Day1HealthAiChatbotPage'));
@@ -19,43 +21,11 @@ const Day1HealthAiChatbotPage = lazy(() => import('./components/Day1HealthAiChat
 // Smooth scroll enhancement hook
 const useSmoothScrollEnhancement = () => {
   useEffect(() => {
-    // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (prefersReducedMotion) {
-      return; // Don't enhance scrolling for users who prefer reduced motion
-    }
 
-    // Enhanced smooth scrolling for mouse wheel (optional enhancement)
-    // This is disabled by default as native smooth scrolling is usually sufficient
-    // Uncomment if you want custom wheel smoothing:
-    /*
-    let isScrolling = false;
-    
-    const handleWheel = (e: WheelEvent) => {
-      if (isScrolling) return;
-      
-      e.preventDefault();
-      isScrolling = true;
-      
-      const scrollAmount = e.deltaY * 0.8; // Adjust multiplier for sensitivity
-      
-      window.scrollBy({
-        top: scrollAmount,
-        behavior: 'smooth'
-      });
-      
-      setTimeout(() => {
-        isScrolling = false;
-      }, 50);
-    };
-    
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-    */
+    if (prefersReducedMotion) {
+      return;
+    }
   }, []);
 };
 
@@ -63,47 +33,39 @@ function AppWrapper() {
   const [activeSection, setActiveSection] = useState('hero');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isFooterInView, setIsFooterInView] = useState(false);
-  
-  // Enable smooth scrolling enhancements
+
   useSmoothScrollEnhancement();
 
-
-
-  // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
-    // Special case for footer: scroll all the way down
     if (sectionId === 'footer') {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
       return;
     }
-    // Special case for home/hero section
+
     if (sectionId === 'hero') {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
       return;
     }
-    
+
     const element = document.getElementById(sectionId);
     if (element) {
-      // For heading elements, scroll with some offset to position them better
       const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-      const offset = 60; // Adjust this value to move screen up/down
+      const offset = 60;
       window.scrollTo({
         top: elementTop - offset,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
 
-  // Handle hash navigation
   useEffect(() => {
     const handleNavigation = () => {
-      // Check URL hash
       const hash = window.location.hash.substring(1);
       if (hash) {
         if (hash === 'footer') {
@@ -111,38 +73,32 @@ function AppWrapper() {
             window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
           }, 100);
           return;
-        } else {
-          const element = document.getElementById(hash);
-          if (element) {
-            setTimeout(() => {
-              const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-              const offset = 60; // keep header clearance
-              window.scrollTo({ top: elementTop - offset, behavior: 'smooth' });
-            }, 100);
-            return;
-          }
+        }
+
+        const element = document.getElementById(hash);
+        if (element) {
+          setTimeout(() => {
+            const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+            const offset = 60;
+            window.scrollTo({ top: elementTop - offset, behavior: 'smooth' });
+          }, 100);
         }
       }
     };
 
-    // Initial check
     handleNavigation();
-
-    // Also handle hash changes
     window.addEventListener('hashchange', handleNavigation);
-    
+
     return () => {
       window.removeEventListener('hashchange', handleNavigation);
     };
   }, []);
 
-  // Track active section and footer visibility based on scroll position
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['hero', 'plans', 'how-it-works', 'feedback', 'why-choose', 'faqs', 'contact'];
-      const scrollPosition = window.scrollY + 100; // Reduced offset for better accuracy
-      
-      // Check if footer is in view
+      const scrollPosition = window.scrollY + 100;
+
       const footer = document.getElementById('footer');
       if (footer) {
         const footerTop = footer.getBoundingClientRect().top;
@@ -150,7 +106,6 @@ function AppWrapper() {
         setIsFooterInView(footerTop < windowHeight * 0.8);
       }
 
-      // Special case for hero section
       const heroSection = document.getElementById('hero');
       if (heroSection) {
         const heroRect = heroSection.getBoundingClientRect();
@@ -160,20 +115,17 @@ function AppWrapper() {
         }
       }
 
-      // Update active section for other sections (now using heading elements)
       for (let i = sections.length - 1; i >= 0; i--) {
-        if (sections[i] === 'hero') continue; // Skip hero as we handle it above
-        
+        if (sections[i] === 'hero') continue;
+
         const heading = document.getElementById(sections[i]);
         if (heading) {
-          // Get the parent section element to calculate section boundaries
           const section = heading.closest('section');
           if (section) {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.offsetHeight;
             const sectionBottom = sectionTop + sectionHeight;
-            
-            // If scroll position is within this section's boundaries
+
             if (scrollPosition >= sectionTop - 200 && scrollPosition < sectionBottom - 200) {
               setActiveSection(sections[i]);
               break;
@@ -184,7 +136,7 @@ function AppWrapper() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -205,62 +157,111 @@ function App() {
     <ThemeProvider>
       <Routes>
         <Route path="/" element={<AppWrapper />} />
-        <Route path="/plans/day-to-day" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <PlanDetailPage />
-          </Suspense>
-        } />
-        <Route path="/plans/hospital" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <HospitalPlanDetailPage />
-          </Suspense>
-        } />
-        <Route path="/plans/comprehensive" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <ComprehensivePlanDetailPage />
-          </Suspense>
-        } />
-        <Route path="/plans/senior-plan" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <SeniorPlanDetailPage />
-          </Suspense>
-        } />
-        <Route path="/regulatory-information" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <RegulatoryInformationPage />
-          </Suspense>
-        } />
-        <Route path="/procedures" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <ProceduresPage />
-          </Suspense>
-        } />
-        <Route path="/day1health-ai-chatbot" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <Day1HealthAiChatbotPage />
-          </Suspense>
-        } />
-        <Route path="/admin" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <ProtectedAdminPage />
-          </Suspense>
-        } />
-        <Route path="/directory" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <DirectoryPage />
-          </Suspense>
-        } />
-        <Route path="/directory/:slug" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <DirectoryPage />
-          </Suspense>
-        } />
-        <Route path="/provider/:id" element={
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-            <ProviderDetailPage />
-          </Suspense>
-        } />
-        {/* Catch-all: render the SPA for any other route */}
+        <Route
+          path="/plans/day-to-day"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <PlanDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/plans/hospital"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <HospitalPlanDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/plans/comprehensive"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <ComprehensivePlanDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/plans/senior-plan"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <SeniorPlanDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/regulatory-information"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <RegulatoryInformationPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/procedures"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <ProceduresPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/day1health-ai-chatbot"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <Day1HealthAiChatbotPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <ProtectedAdminPage />
+            </Suspense>
+          }
+        >
+          <Route
+            path="providers"
+            element={
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+                <AdminPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="cms"
+            element={
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+                <AdminCmsPlaceholderPage />
+              </Suspense>
+            }
+          />
+        </Route>
+        <Route
+          path="/directory"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <DirectoryPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/directory/:slug"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <DirectoryPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/provider/:id"
+          element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <ProviderDetailPage />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<AppWrapper />} />
       </Routes>
       <Analytics />
