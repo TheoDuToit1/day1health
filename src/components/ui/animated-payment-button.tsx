@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import './animated-payment-button.css';
@@ -30,37 +30,38 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
 }) => {
   const [hoverIndex, setHoverIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
-  const intervalRef = useRef<number | null>(null);
   const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
-    if (isHovering && hoverMessages.length > 0) {
-      intervalRef.current = window.setInterval(() => {
-        setHoverIndex((i) => (i + 1) % hoverMessages.length);
-      }, hoverCycleMs);
-    }
-    return () => {
-      if (intervalRef.current) {
-        window.clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [isHovering, hoverMessages, hoverCycleMs]);
-
-  // While hovering, every 3 seconds toggle the label to "Sign up"
-  useEffect(() => {
     if (!isHovering) {
+      setHoverIndex(0);
       setShowSignup(false);
       return;
     }
-    const id = window.setInterval(() => {
-      setShowSignup((v) => !v);
-    }, 3000);
+
+    if (hoverMessages.length === 0) {
+      return;
+    }
+
+    const id = window.setTimeout(() => {
+      if (showSignup) {
+        setShowSignup(false);
+        setHoverIndex(0);
+        return;
+      }
+
+      if (hoverIndex < hoverMessages.length - 1) {
+        setHoverIndex((current) => current + 1);
+        return;
+      }
+
+      setShowSignup(true);
+    }, showSignup ? 3000 : hoverCycleMs);
+
     return () => {
-      window.clearInterval(id);
-      setShowSignup(false);
+      window.clearTimeout(id);
     };
-  }, [isHovering]);
+  }, [hoverCycleMs, hoverIndex, hoverMessages.length, isHovering, showSignup]);
 
   const baseDisplay = isHovering && hoverMessages.length > 0 ? hoverMessages[hoverIndex] : text;
   const displayText = showSignup ? 'Sign up' : baseDisplay;
@@ -70,7 +71,7 @@ export const AnimatedPaymentButton: React.FC<AnimatedPaymentButtonProps> = ({
     'wallet', 'card', 'payment', 'dollar', 'check'
   ];
   const iconSeq = hoverIcons && hoverIcons.length > 0 ? hoverIcons : defaultIcons;
-  const activeIcon = iconSeq[activeIndex % iconSeq.length];
+  const activeIcon = showSignup ? 'check' : iconSeq[activeIndex % iconSeq.length];
   const contentKey = `${showSignup ? 'signup' : (isHovering && hoverMessages.length > 0 ? `hover-${hoverIndex}` : 'base')}-${activeIcon}`;
 
   const renderIcon = (key: "card" | "payment" | "dollar" | "wallet" | "check") => {

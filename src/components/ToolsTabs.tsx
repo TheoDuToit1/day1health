@@ -689,11 +689,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Acute and chronic medication options</span>
+                        <span className={`text-white`}>Radiology and pathology.</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                        <span className={`text-white`}>Acute medication</span>
                       </li>
                     </ul>
                     {/* Intro helper */}
@@ -1375,11 +1375,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                      <span className={`text-white`}>Acute and chronic medication options</span>
+                      <span className={`text-white`}>Radiology and pathology.</span>
                     </li>
                     <li className="flex items-start">
                       <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                      <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                      <span className={`text-white`}>Acute medication</span>
                     </li>
                   </ul>
                   {/* Intro helper */}
@@ -1544,9 +1544,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm px-4 pt-4 pb-2 mb-0`}>
                     <ul className="space-y-3">
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute medication</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Radiology and pathology.</span></li>
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Up to 4 children</span></li>
                     </ul>
@@ -1558,12 +1557,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       text="Choose Plan"
                       className="bronze"
                       hoverMessages={[
-                        'GP and specialist consultations',
-                        'Acute and chronic medication',
-                        'Blood tests and x-rays',
-                        'Dentistry and optometry',
-                        'Funeral benefit',
-                        'Up to 4 children',
+                        'GP consultations & virtual care',
+                        'Radiology and pathology.',
+                        'Acute medication',
                       ]}
                       hoverIcons={['wallet','card','payment','check']}
                       showArrow={false}
@@ -1726,9 +1722,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                     <ul className="space-y-3">
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute medication</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Radiology and pathology.</span></li>
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
                     </ul>
                   </div>
@@ -1739,11 +1734,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       text="Choose Plan"
                       className="silver"
                       hoverMessages={[
-                        'GP and specialist consultations',
-                        'Acute and chronic medication',
-                        'Blood tests and x-rays',
-                        'Dentistry and optometry',
-                        'Funeral benefit',
+                        'GP consultations & virtual care',
+                        'Radiology and pathology.',
+                        'Acute medication',
                       ]}
                       hoverIcons={['wallet','card','payment','check']}
                       showArrow={false}
@@ -1907,9 +1900,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                     <ul className="space-y-3">
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>GP and specialist consultations</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute and chronic medication</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Blood tests and x-rays</span></li>
-                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Dentistry and optometry</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Acute medication</span></li>
+                      <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Radiology and pathology.</span></li>
                       <li className="flex items-center"><Check className="w-5 h-5 text-emerald-400 mr-2" /> <span className={`text-white`}>Funeral benefit</span></li>
                     </ul>
                   </div>
@@ -1920,11 +1912,9 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       text="Choose Plan"
                       className="bronze"
                       hoverMessages={[
-                        'GP and specialist consultations',
-                        'Acute and chronic medication',
-                        'Blood tests and x-rays',
-                        'Dentistry and optometry',
-                        'Funeral benefit',
+                        'GP consultations & virtual care',
+                        'Radiology and pathology.',
+                        'Acute medication',
                       ]}
                       hoverIcons={['wallet','card','payment','check']}
                       showArrow={false}
@@ -2098,11 +2088,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Acute and chronic medication options</span>
+                        <span className={`text-white`}>Radiology and pathology.</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                        <span className={`text-white`}>Acute medication</span>
                       </li>
                     </ul>
                     {/* Intro helper */}
@@ -2778,11 +2768,11 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Acute and chronic medication options</span>
+                        <span className={`text-white`}>Radiology and pathology.</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="w-5 h-5 text-emerald-400 mr-2 mt-0.5" />
-                        <span className={`text-white`}>Dental, optical and basic diagnostics</span>
+                        <span className={`text-white`}>Acute medication</span>
                       </li>
                     </ul>
                     {/* Intro helper */}
@@ -2942,9 +2932,8 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                     <div className={`rounded-xl border ${isDark ? 'bg-emerald-500/10 border-emerald-200/20' : 'bg-emerald-500/10 border-emerald-500/20'} backdrop-blur-sm p-4 mb-6`}>
                       <ul className="space-y-2">
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Senior Day to Day Plan</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Doctor visits / acute & chronic medication</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Blood tests & x-rays</span></li>
-                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Dentistry & optometry</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Acute medication</span></li>
+                        <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Radiology and pathology.</span></li>
                         <li className="flex items-start"><Check className="w-4 h-4 text-emerald-400 mr-2 mt-0.5" /> <span className={`text-white text-sm leading-snug`}>Funeral benefits</span></li>
                       </ul>
                     </div>
@@ -2952,14 +2941,13 @@ const ToolsTabs: React.FC<ToolsTabsProps> = ({ isSidebarCollapsed }) => {
                   <div className={(expanded.student ? 'mt-[-3px] ' : 'mt-8 ') + 'relative z-10'}>
                     <div className="relative">
                       <AnimatedPaymentButton 
-                        text="Choose Plan"
-                        className="bronze"
-                        hoverMessages={[
-                          'Senior Day to Day Plan',
-                          'Doctor visits & medication',
-                          'Blood tests & x-rays',
-                          'Dentistry, optometry & funeral',
-                        ]}
+                      text="Choose Plan"
+                      className="bronze"
+                      hoverMessages={[
+                          'GP consultations & virtual care',
+                          'Radiology and pathology.',
+                          'Acute medication',
+                      ]}
                         hoverIcons={['wallet','card','payment','check']}
                         showArrow={false}
                         expanded={expanded.student}

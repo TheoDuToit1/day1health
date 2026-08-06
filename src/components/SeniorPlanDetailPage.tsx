@@ -13,11 +13,18 @@ import { useCmsAssetHref } from '../utils/cmsAssets';
 
 type CmsRow = Record<string, any> & { id: string };
 
+const excludedBenefitTitles = new Set([
+  'basic dentistry',
+  'dentistry / optometry',
+  'optometry (iso leso optics)',
+  'chronic medication',
+]);
+
 const coverItems = [
   'Private Managed Doctor Visits',
-  'Acute/Chronic Medication',
-  'Dentistry / Optometry',
-  'Funeral Cover',
+  'Radiology and pathology',
+  'Acute Medication',
+  'Funeral Benefit',
 ];
 
 // descriptionItems will be set in the component based on Senior category
@@ -210,24 +217,9 @@ const SeniorPlanDetailPage: React.FC = () => {
           'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
       },
       {
-        title: 'Basic Dentistry',
-        text:
-          'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
-      },
-      {
         title: 'Acute Medication',
         text:
           'Acute medication covered according to the 1Doctor Health formulary. A 1 month waiting period applies.',
-      },
-      {
-        title: 'Optometry (Iso Leso Optics)',
-        text:
-          'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
-      },
-      {
-        title: 'Chronic Medication',
-        text:
-          'Chronic medication covered according to the 1Doctor Health formulary. A 3 month waiting period applies on chronic medication for unknown conditions and 12 months waiting period on pre-existing conditions. (All chronic medication is subject to pre-authorisation. An additional administration fee may be levied on all approved chronic medication.)',
       },
       {
         title: 'Out-of-Area Visits',
@@ -359,15 +351,32 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   const cmsDisplayCoverItems = cmsCoverHighlights
     .map((row) => (typeof row.highlight_text === 'string' ? row.highlight_text.trim() : ''))
-    .filter((item) => item.length > 0);
-  const displayCoverItems = cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : defaultDisplayCoverItems;
+    .filter((item) => {
+      if (item.length === 0) return false;
+      const normalizedItem = item.toLowerCase();
+      return !normalizedItem.includes('dental') && !normalizedItem.includes('optometry') && !normalizedItem.includes('chronic');
+    })
+    .map((item) => {
+      if (categoryDisplay !== 'day-to-day') return item;
+      const normalizedItem = item.toLowerCase();
+      if (normalizedItem === 'pathology') return 'Radiology and pathology';
+      if (normalizedItem === 'acute medication') return 'Acute Medication';
+      return item;
+    });
+  const displayCoverItems = (cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : defaultDisplayCoverItems).filter(
+    (item, index, items) => items.findIndex((entry) => entry.toLowerCase() === item.toLowerCase()) === index,
+  );
+  if (categoryDisplay === 'day-to-day' && !displayCoverItems.some((item) => item.toLowerCase() === 'funeral benefit')) {
+    displayCoverItems.push('Funeral Benefit');
+  }
 
   const cmsDescriptionItems = cmsBenefits
     .map((row) => ({
       title: typeof row.benefit_title === 'string' ? row.benefit_title.trim() : '',
       text: typeof row.benefit_summary === 'string' ? row.benefit_summary.trim() : '',
     }))
-    .filter((item) => item.title.length > 0 && item.text.length > 0);
+    .filter((item) => item.title.length > 0 && item.text.length > 0)
+    .filter((item) => !excludedBenefitTitles.has(item.title.toLowerCase()));
   const displayDescriptionItems = cmsDescriptionItems.length > 0 ? cmsDescriptionItems : defaultDescriptionItems;
 
   useEffect(() => {
