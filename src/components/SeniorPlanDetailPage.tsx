@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Check, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
 import { AnimatedContactButton } from './ui/animated-contact-button';
 import { RollingNumber } from './ui/rolling-number';
 import Header from './Header';
@@ -459,16 +459,17 @@ const SeniorPlanDetailPage: React.FC = () => {
                 <nav aria-label="Breadcrumb" className="mb-3 md:mb-4">
                   <ol className="flex items-center gap-1 text-[13px]">
                     <li>
-                      <Link
-                        to="/"
-                        className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-sm px-0.5`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleNavigate('plans');
-                        }}
+                      <button
+                        type="button"
+                        onClick={() => handleNavigate('plans')}
+                        className="group relative h-10 w-36 rounded-lg border-[0.5px] border-gray-300 bg-[#F9FAFB] text-center text-base font-semibold text-black shadow-sm transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2"
+                        aria-label="Go back to plans"
                       >
-                        Back
-                      </Link>
+                        <div className="absolute left-1 top-[4px] z-10 flex h-8 w-1/4 items-center justify-center rounded-lg bg-green-400 duration-500 group-hover:w-[136px]">
+                          <ArrowLeft className="h-5 w-5 text-black" strokeWidth={2} />
+                        </div>
+                        <p className="translate-x-2">Go Back</p>
+                      </button>
                     </li>
                     <li aria-hidden="true" className={`${isDark ? 'text-gray-500' : 'text-gray-400'} px-1`}>
                       <ChevronRight className="h-3.5 w-3.5" />

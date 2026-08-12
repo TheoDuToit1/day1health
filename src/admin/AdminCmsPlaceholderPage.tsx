@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, FileText, FolderOpen, LayoutPanelLeft, Loader, RefreshCcw, Save, Search, Upload } from 'lucide-react';
+import { AlertCircle, FileText, FolderOpen, GripVertical, LayoutPanelLeft, Loader, RefreshCcw, Save, Search, Upload } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { hasSupabaseEnv, supabase, supabaseConfigError } from './supabaseClient';
 import {
@@ -353,6 +353,22 @@ const filterFields = (fields: string[], allowlist: string[]): string[] => {
   return fields.filter((field) => allowSet.has(field));
 };
 
+const reorderRowsById = (rows: CmsRow[], draggedId: string, targetId: string): CmsRow[] => {
+  if (draggedId === targetId) return rows;
+
+  const draggedIndex = rows.findIndex((row) => row.id === draggedId);
+  const targetIndex = rows.findIndex((row) => row.id === targetId);
+
+  if (draggedIndex < 0 || targetIndex < 0) {
+    return rows;
+  }
+
+  const nextRows = [...rows];
+  const [draggedRow] = nextRows.splice(draggedIndex, 1);
+  nextRows.splice(targetIndex, 0, draggedRow);
+  return nextRows.map((row, index) => ({ ...row, sort_order: index + 1 }));
+};
+
 const getFieldLabel = (field: string): string => {
   return PAGE_FIELD_LABELS[field] ?? ROW_FIELD_LABELS[field] ?? humanizeKey(field);
 };
@@ -378,6 +394,8 @@ const AdminCmsPlaceholderPage: React.FC = () => {
   const [currentUserEmail, setCurrentUserEmail] = useState('');
   const [reportMonth, setReportMonth] = useState(getCurrentMonthInputValue());
   const [generatingReport, setGeneratingReport] = useState(false);
+  const [draggedBenefitId, setDraggedBenefitId] = useState<string | null>(null);
+  const [savingBenefitOrder, setSavingBenefitOrder] = useState(false);
 
   const selectedPage = useMemo(
     () => pages.find((page) => page.id === selectedPageId) ?? null,
@@ -655,6 +673,97 @@ const AdminCmsPlaceholderPage: React.FC = () => {
       ...prev,
       [collectionKey]: prev[collectionKey].map((row) => (row.id === rowId ? { ...row, [field]: value } : row)),
     }));
+  };
+
+  const saveBenefitOrder = async (nextRows: CmsRow[], previousRows: CmsRow[]) => {
+    const previousOrderById = Object.fromEntries(previousRows.map((row) => [row.id, Number(row.sort_order ?? 0)]));
+    const changedRows = nextRows.filter((row) => Number(row.sort_order ?? 0) !== previousOrderById[row.id]);
+
+    if (changedRows.length === 0) {
+      return;
+    }
+
+    try {
+      setSavingBenefitOrder(true);
+      setStatus(null);
+
+      const startedAt = new Date().toISOString();
+      const updates = changedRows.map((row) =>
+        supabase.from('cms_plan_benefits').update({ sort_order: row.sort_order }).eq('id', row.id),
+      );
+      const results = await Promise.all(updates);
+      const failedUpdate = results.find((result) => result.error);
+
+      if (failedUpdate?.error) {
+        throw failedUpdate.error;
+      }
+
+      const completedAt = new Date().toISOString();
+      setCollectionSnapshots((prev) => ({
+        ...prev,
+        benefits: changedRows.reduce(
+          (nextSnapshots, row) => ({
+            ...nextSnapshots,
+            [row.id]: {
+              ...(nextSnapshots[row.id] ?? collectionSnapshots.benefits[row.id] ?? row),
+              sort_order: row.sort_order,
+            },
+          }),
+          { ...prev.benefits },
+        ),
+      }));
+
+      const auditResults = await Promise.all(
+        changedRows.map((row) =>
+          writeAuditLog({
+            page_id: typeof row.page_id === 'string' && row.page_id.length > 0 ? row.page_id : selectedPage?.id ?? null,
+            plan_family: String(selectedPage?.plan_family ?? ''),
+            plan_key: String(selectedPage?.plan_key ?? ''),
+            page_heading: String(selectedPage?.page_heading ?? selectedPage?.hero_title ?? ''),
+            section_key: 'benefits',
+            action_type: 'update',
+            table_name: 'cms_plan_benefits',
+            record_id: row.id,
+            changed_by: currentUserId,
+            changed_by_email: currentUserEmail,
+            started_at: startedAt,
+            completed_at: completedAt,
+            duration_seconds: getDurationSeconds(startedAt, completedAt),
+            change_summary: `Reordered benefit "${String(row.benefit_title ?? row.id)}"`,
+            previous_values: { sort_order: previousOrderById[row.id] },
+            next_values: { sort_order: row.sort_order },
+            changed_fields: ['sort_order'],
+          }),
+        ),
+      );
+
+      const auditError = auditResults.find(Boolean);
+      setStatus({
+        type: auditError ? 'error' : 'success',
+        message: auditError
+          ? `Benefit order saved, but tracking log failed: ${auditError}`
+          : 'Benefit order saved. Plan detail pages will use this order.',
+      });
+    } catch (err) {
+      setCollections((prev) => ({ ...prev, benefits: previousRows }));
+      const message = err instanceof Error ? err.message : 'Failed to save benefit order.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingBenefitOrder(false);
+    }
+  };
+
+  const handleBenefitDrop = (targetRowId: string) => {
+    if (!draggedBenefitId || draggedBenefitId === targetRowId || savingBenefitOrder) {
+      setDraggedBenefitId(null);
+      return;
+    }
+
+    const previousRows = collections.benefits;
+    const nextRows = reorderRowsById(previousRows, draggedBenefitId, targetRowId);
+    setDraggedBenefitId(null);
+    setCollections((prev) => ({ ...prev, benefits: nextRows }));
+    void saveBenefitOrder(nextRows, previousRows);
   };
 
   const savePage = async () => {
@@ -1232,22 +1341,63 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     const isUploading = Boolean(uploadingRows[busyKey]);
     const editableFields = filterFields(sortEditableFields(row), TAB_FIELD_ALLOWLIST[collectionKey]);
     const assetUrl = typeof row.asset_url === 'string' && row.asset_url ? row.asset_url : typeof row.public_url === 'string' && row.public_url ? row.public_url : null;
+    const isBenefitRow = collectionKey === 'benefits';
+    const isDragging = isBenefitRow && draggedBenefitId === row.id;
 
     return (
       <div
         key={row.id}
-        className={`rounded-2xl border p-5 shadow-sm ${
-          isDark ? 'border-gray-800 bg-gray-800/60' : 'border-gray-200 bg-white'
+        onDragOver={(event) => {
+          if (!isBenefitRow || savingBenefitOrder) return;
+          event.preventDefault();
+        }}
+        onDrop={() => {
+          if (isBenefitRow) {
+            handleBenefitDrop(row.id);
+          }
+        }}
+        className={`rounded-2xl border p-5 shadow-sm transition ${
+          isDragging
+            ? isDark
+              ? 'border-emerald-400 bg-emerald-950/40 opacity-70'
+              : 'border-emerald-500 bg-emerald-50 opacity-70'
+            : isDark
+              ? 'border-gray-800 bg-gray-800/60'
+              : 'border-gray-200 bg-white'
         }`}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
-          <div>
-            <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {String(row.title ?? row.asset_label ?? row.benefit_title ?? row.highlight_text ?? row.member_type ?? row.plan_key ?? row.id)}
-            </h3>
-            <p className={`mt-1 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              {row.id}
-            </p>
+          <div className="flex min-w-0 items-start gap-3">
+            {isBenefitRow && (
+              <button
+                type="button"
+                draggable={!savingBenefitOrder}
+                onDragStart={(event) => {
+                  event.dataTransfer.effectAllowed = 'move';
+                  event.dataTransfer.setData('text/plain', row.id);
+                  setDraggedBenefitId(row.id);
+                }}
+                onDragEnd={() => setDraggedBenefitId(null)}
+                disabled={savingBenefitOrder}
+                title="Drag to reorder benefit"
+                aria-label={`Drag ${String(row.benefit_title ?? 'benefit')} to reorder`}
+                className={`mt-0.5 inline-flex h-9 w-9 flex-shrink-0 cursor-grab items-center justify-center rounded-lg border transition active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50 ${
+                  isDark
+                    ? 'border-gray-700 bg-gray-900 text-gray-300 hover:border-emerald-500 hover:text-emerald-300'
+                    : 'border-gray-200 bg-gray-50 text-gray-500 hover:border-emerald-400 hover:text-emerald-600'
+                }`}
+              >
+                <GripVertical className="h-4 w-4" />
+              </button>
+            )}
+            <div className="min-w-0">
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                {String(row.title ?? row.asset_label ?? row.benefit_title ?? row.highlight_text ?? row.member_type ?? row.plan_key ?? row.id)}
+              </h3>
+              <p className={`mt-1 break-all text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                {row.id}
+              </p>
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -1711,16 +1861,26 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                     const rows = collections[config.key];
                     return (
                       <div key={config.key} className={`rounded-3xl border p-6 ${isDark ? 'border-gray-800 bg-gray-900/70' : 'border-white/80 bg-white/95 shadow-sm'}`}>
-                        <div className="mb-5 flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-lg">
-                            <FileText className="h-6 w-6" />
+                        <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-lg">
+                              <FileText className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{config.title}</h2>
+                              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                {CMS_SECTION_DESCRIPTIONS[config.key]}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{config.title}</h2>
-                            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {CMS_SECTION_DESCRIPTIONS[config.key]}
-                            </p>
-                          </div>
+                          {config.key === 'benefits' && (
+                            <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold ${
+                              isDark ? 'border-gray-700 bg-gray-950 text-gray-300' : 'border-gray-200 bg-gray-50 text-gray-600'
+                            }`}>
+                              {savingBenefitOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
+                              {savingBenefitOrder ? 'Saving order...' : 'Drag handles to reorder'}
+                            </div>
+                          )}
                         </div>
 
                         {rows.length === 0 ? (

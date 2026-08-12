@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import AppContent from './components/AppContent';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { SiteLoader } from './components/ui/site-loader';
 
 // Lazy load route components for code splitting
 const PlanDetailPage = lazy(() => import('./components/PlanDetailPage'));
@@ -153,6 +154,42 @@ function AppWrapper() {
 }
 
 function App() {
+  const shouldShowInitialLoader = Boolean((window as any).__DAY1HEALTH_SHOW_INITIAL_LOADER__);
+  const [isInitialLoading, setIsInitialLoading] = useState(shouldShowInitialLoader);
+  const routeLoader = <SiteLoader />;
+
+  useEffect(() => {
+    let isPageLoaded = document.readyState === 'complete';
+
+    const handleWindowLoad = () => {
+      isPageLoaded = true;
+      setIsInitialLoading(false);
+    };
+
+    if (isPageLoaded) {
+      setIsInitialLoading(false);
+      return;
+    }
+
+    if (shouldShowInitialLoader) {
+      window.addEventListener('load', handleWindowLoad);
+      return () => window.removeEventListener('load', handleWindowLoad);
+    }
+
+    const loaderDelayTimer = window.setTimeout(() => {
+      if (!isPageLoaded) {
+        setIsInitialLoading(true);
+      }
+    }, 1000);
+
+    window.addEventListener('load', handleWindowLoad);
+
+    return () => {
+      window.clearTimeout(loaderDelayTimer);
+      window.removeEventListener('load', handleWindowLoad);
+    };
+  }, []);
+
   return (
     <ThemeProvider>
       <Routes>
@@ -160,7 +197,7 @@ function App() {
         <Route
           path="/plans/day-to-day"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <PlanDetailPage />
             </Suspense>
           }
@@ -168,7 +205,7 @@ function App() {
         <Route
           path="/plans/hospital"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <HospitalPlanDetailPage />
             </Suspense>
           }
@@ -176,7 +213,7 @@ function App() {
         <Route
           path="/plans/comprehensive"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <ComprehensivePlanDetailPage />
             </Suspense>
           }
@@ -184,7 +221,7 @@ function App() {
         <Route
           path="/plans/senior-plan"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <SeniorPlanDetailPage />
             </Suspense>
           }
@@ -192,7 +229,7 @@ function App() {
         <Route
           path="/regulatory-information"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <RegulatoryInformationPage />
             </Suspense>
           }
@@ -200,7 +237,7 @@ function App() {
         <Route
           path="/procedures"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <ProceduresPage />
             </Suspense>
           }
@@ -208,7 +245,7 @@ function App() {
         <Route
           path="/day1health-ai-chatbot"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <Day1HealthAiChatbotPage />
             </Suspense>
           }
@@ -216,7 +253,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <ProtectedAdminPage />
             </Suspense>
           }
@@ -224,7 +261,7 @@ function App() {
           <Route
             path="providers"
             element={
-              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <Suspense fallback={routeLoader}>
                 <AdminPage />
               </Suspense>
             }
@@ -232,7 +269,7 @@ function App() {
           <Route
             path="cms"
             element={
-              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <Suspense fallback={routeLoader}>
                 <AdminCmsPlaceholderPage />
               </Suspense>
             }
@@ -241,7 +278,7 @@ function App() {
         <Route
           path="/directory"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <DirectoryPage />
             </Suspense>
           }
@@ -249,7 +286,7 @@ function App() {
         <Route
           path="/directory/:slug"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <DirectoryPage />
             </Suspense>
           }
@@ -257,13 +294,14 @@ function App() {
         <Route
           path="/provider/:id"
           element={
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Suspense fallback={routeLoader}>
               <ProviderDetailPage />
             </Suspense>
           }
         />
         <Route path="*" element={<AppWrapper />} />
       </Routes>
+      {isInitialLoading && <SiteLoader overlay />}
       <Analytics />
     </ThemeProvider>
   );
