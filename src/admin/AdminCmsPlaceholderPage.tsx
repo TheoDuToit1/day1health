@@ -396,6 +396,7 @@ const AdminCmsPlaceholderPage: React.FC = () => {
   const [generatingReport, setGeneratingReport] = useState(false);
   const [draggedBenefitId, setDraggedBenefitId] = useState<string | null>(null);
   const [savingBenefitOrder, setSavingBenefitOrder] = useState(false);
+  const [savingAllChanges, setSavingAllChanges] = useState(false);
 
   const selectedPage = useMemo(
     () => pages.find((page) => page.id === selectedPageId) ?? null,
@@ -444,6 +445,34 @@ const AdminCmsPlaceholderPage: React.FC = () => {
       })
       .filter(([, familyPages]) => familyPages.length > 0);
   }, [groupedPages, sidebarQuery]);
+
+  const pageHasUnsavedChanges = useMemo(() => {
+    if (!pageDraft) return false;
+    const baselinePayload = pageBaseline ? buildUpdatePayload(pageBaseline) : {};
+    const payload = buildUpdatePayload(pageDraft);
+    return diffRecords(baselinePayload, payload).changedFields.length > 0;
+  }, [pageDraft, pageBaseline]);
+
+  const changedCollectionRows = useMemo(() => {
+    return TABLE_CONFIG.flatMap((config) =>
+      collections[config.key]
+        .filter((row) => {
+          const previousRow = collectionSnapshots[config.key][row.id] ?? null;
+          const previousPayload = previousRow ? buildUpdatePayload(previousRow) : {};
+          const payload = buildUpdatePayload(row);
+          return diffRecords(previousPayload, payload).changedFields.length > 0;
+        })
+        .map((row) => ({ collectionKey: config.key, row })),
+    );
+  }, [collections, collectionSnapshots]);
+
+  const hasUnsavedChanges = pageHasUnsavedChanges || changedCollectionRows.length > 0;
+  const isSavingAnyChange =
+    savingPage ||
+    savingAllChanges ||
+    savingBenefitOrder ||
+    Object.values(savingRows).some(Boolean) ||
+    Object.values(uploadingRows).some(Boolean);
 
   const setRowBusy = (key: string, value: boolean, target: 'saving' | 'uploading') => {
     const setter = target === 'saving' ? setSavingRows : setUploadingRows;
@@ -818,6 +847,40 @@ const AdminCmsPlaceholderPage: React.FC = () => {
       setStatus({ type: 'error', message });
     } finally {
       setSavingPage(false);
+    }
+  };
+
+  const saveAllChanges = async () => {
+    if (!hasUnsavedChanges || isSavingAnyChange) {
+      return;
+    }
+
+    try {
+      setSavingAllChanges(true);
+      setStatus(null);
+
+      const pageNeedsSave = pageHasUnsavedChanges;
+      const rowsToSave = changedCollectionRows;
+
+      if (pageNeedsSave) {
+        await savePage();
+      }
+
+      for (const { collectionKey, row } of rowsToSave) {
+        await saveRow(collectionKey, row, {
+          successMessage: 'Changes saved.',
+        });
+      }
+
+      setStatus({
+        type: 'success',
+        message: `Saved ${Number(pageNeedsSave) + rowsToSave.length} change${Number(pageNeedsSave) + rowsToSave.length === 1 ? '' : 's'}.`,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to save CMS changes.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingAllChanges(false);
     }
   };
 
@@ -1413,15 +1476,12 @@ const AdminCmsPlaceholderPage: React.FC = () => {
               <RefreshCcw className="h-4 w-4" />
               {collectionKey === 'assets' ? 'Revert Latest File Change' : 'Revert Latest Change'}
             </button>
-            <button
-              type="button"
-              onClick={() => saveRow(collectionKey, row)}
-              disabled={isSaving || isUploading}
-              className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isSaving ? <Loader className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Save Row
-            </button>
+            {isSaving && (
+              <span className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${isDark ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-600'}`}>
+                <Loader className="h-4 w-4 animate-spin text-green-600" />
+                Saving
+              </span>
+            )}
           </div>
         </div>
 
@@ -1773,6 +1833,15 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                             {item}
                           </span>
                         ))}
+                        <button
+                          type="button"
+                          onClick={saveAllChanges}
+                          disabled={!hasUnsavedChanges || isSavingAnyChange}
+                          className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-green-600/20 transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 disabled:shadow-none"
+                        >
+                          {isSavingAnyChange ? <Loader className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                          {hasUnsavedChanges ? 'Save Changes' : 'Saved'}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1829,15 +1898,12 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                           <RefreshCcw className="h-4 w-4" />
                           Revert Latest Change
                         </button>
-                        <button
-                          type="button"
-                          onClick={savePage}
-                          disabled={savingPage}
-                          className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
-                        >
-                          {savingPage ? <Loader className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                          Save Page
-                        </button>
+                        {savingPage && (
+                          <span className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${isDark ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-600'}`}>
+                            <Loader className="h-4 w-4 animate-spin text-green-600" />
+                            Saving
+                          </span>
+                        )}
                       </div>
                     </div>
 
