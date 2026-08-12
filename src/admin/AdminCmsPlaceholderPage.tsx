@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, FileText, FolderOpen, GripVertical, LayoutPanelLeft, Loader, RefreshCcw, Save, Search, Upload } from 'lucide-react';
+import { AlertCircle, FileText, FolderOpen, GripVertical, LayoutPanelLeft, Loader, Plus, RefreshCcw, Save, Search, Trash2, Upload } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { hasSupabaseEnv, supabase, supabaseConfigError } from './supabaseClient';
 import {
@@ -782,6 +782,158 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     }
   };
 
+  const addBenefit = async () => {
+    if (!selectedPage || savingAllChanges || savingBenefitOrder) {
+      return;
+    }
+
+    const startedAt = new Date().toISOString();
+    const nextSortOrder =
+      collections.benefits.reduce((maxOrder, row) => Math.max(maxOrder, Number(row.sort_order ?? 0)), 0) + 1;
+    const newBenefit: CmsRow = {
+      id: crypto.randomUUID(),
+      page_id: selectedPage.id,
+      sort_order: nextSortOrder,
+      benefit_title: 'New Benefit',
+      benefit_summary: '',
+    };
+
+    try {
+      setSavingAllChanges(true);
+      setStatus(null);
+
+      const { data, error } = await supabase
+        .from('cms_plan_benefits')
+        .insert(newBenefit)
+        .select('*')
+        .single();
+
+      if (error) throw error;
+
+      const insertedBenefit = (data ?? newBenefit) as CmsRow;
+      setCollections((prev) => ({
+        ...prev,
+        benefits: [...prev.benefits, insertedBenefit].sort((left, right) => Number(left.sort_order ?? 0) - Number(right.sort_order ?? 0)),
+      }));
+      setCollectionSnapshots((prev) => ({
+        ...prev,
+        benefits: {
+          ...prev.benefits,
+          [insertedBenefit.id]: snapshotRow(insertedBenefit),
+        },
+      }));
+      upsertEditSessionStartedAt(`benefits:${insertedBenefit.id}`, new Date().toISOString());
+
+      const completedAt = new Date().toISOString();
+      const auditError = await writeAuditLog({
+        page_id: selectedPage.id,
+        plan_family: String(selectedPage.plan_family ?? ''),
+        plan_key: String(selectedPage.plan_key ?? ''),
+        page_heading: String(selectedPage.page_heading ?? selectedPage.hero_title ?? ''),
+        section_key: 'benefits',
+        action_type: 'create',
+        table_name: 'cms_plan_benefits',
+        record_id: insertedBenefit.id,
+        changed_by: currentUserId,
+        changed_by_email: currentUserEmail,
+        started_at: startedAt,
+        completed_at: completedAt,
+        duration_seconds: getDurationSeconds(startedAt, completedAt),
+        change_summary: `Created benefit "${String(insertedBenefit.benefit_title ?? insertedBenefit.id)}"`,
+        previous_values: {},
+        next_values: buildUpdatePayload(insertedBenefit),
+        changed_fields: Object.keys(buildUpdatePayload(insertedBenefit)),
+      });
+
+      setStatus({
+        type: auditError ? 'error' : 'success',
+        message: auditError ? `Benefit added, but tracking log failed: ${auditError}` : 'Benefit added. Add the description, then use Save Changes.',
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to add benefit.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingAllChanges(false);
+    }
+  };
+
+  const deleteBenefit = async (row: CmsRow) => {
+    if (savingAllChanges || savingBenefitOrder) {
+      return;
+    }
+
+    const title = String(row.benefit_title ?? 'this benefit');
+    const confirmed = window.confirm(`Delete "${title}" from this plan? This cannot be undone from the CMS screen.`);
+    if (!confirmed) {
+      return;
+    }
+
+    const previousRows = collections.benefits;
+    const remainingRows = previousRows
+      .filter((benefit) => benefit.id !== row.id)
+      .map((benefit, index) => ({ ...benefit, sort_order: index + 1 }));
+    const startedAt = new Date().toISOString();
+
+    try {
+      setSavingAllChanges(true);
+      setStatus(null);
+
+      const { error } = await supabase.from('cms_plan_benefits').delete().eq('id', row.id);
+      if (error) throw error;
+
+      const orderUpdates = remainingRows
+        .filter((benefit) => Number(benefit.sort_order ?? 0) !== Number(previousRows.find((previous) => previous.id === benefit.id)?.sort_order ?? 0))
+        .map((benefit) => supabase.from('cms_plan_benefits').update({ sort_order: benefit.sort_order }).eq('id', benefit.id));
+      const orderResults = await Promise.all(orderUpdates);
+      const failedOrderUpdate = orderResults.find((result) => result.error);
+      if (failedOrderUpdate?.error) {
+        throw failedOrderUpdate.error;
+      }
+
+      setCollections((prev) => ({ ...prev, benefits: remainingRows }));
+      setCollectionSnapshots((prev) => {
+        const nextSnapshots = { ...prev.benefits };
+        delete nextSnapshots[row.id];
+        remainingRows.forEach((benefit) => {
+          nextSnapshots[benefit.id] = snapshotRow(benefit);
+        });
+        return { ...prev, benefits: nextSnapshots };
+      });
+
+      const completedAt = new Date().toISOString();
+      const auditError = await writeAuditLog({
+        page_id: typeof row.page_id === 'string' && row.page_id.length > 0 ? row.page_id : selectedPage?.id ?? null,
+        plan_family: String(selectedPage?.plan_family ?? ''),
+        plan_key: String(selectedPage?.plan_key ?? ''),
+        page_heading: String(selectedPage?.page_heading ?? selectedPage?.hero_title ?? ''),
+        section_key: 'benefits',
+        action_type: 'delete',
+        table_name: 'cms_plan_benefits',
+        record_id: row.id,
+        changed_by: currentUserId,
+        changed_by_email: currentUserEmail,
+        started_at: startedAt,
+        completed_at: completedAt,
+        duration_seconds: getDurationSeconds(startedAt, completedAt),
+        change_summary: `Deleted benefit "${title}"`,
+        previous_values: buildUpdatePayload(row),
+        next_values: {},
+        changed_fields: Object.keys(buildUpdatePayload(row)),
+      });
+
+      setStatus({
+        type: auditError ? 'error' : 'success',
+        message: auditError ? `Benefit deleted, but tracking log failed: ${auditError}` : 'Benefit deleted.',
+      });
+    } catch (err) {
+      setCollections((prev) => ({ ...prev, benefits: previousRows }));
+      const message = err instanceof Error ? err.message : 'Failed to delete benefit.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingAllChanges(false);
+    }
+  };
+
   const handleBenefitDrop = (targetRowId: string) => {
     if (!draggedBenefitId || draggedBenefitId === targetRowId || savingBenefitOrder) {
       setDraggedBenefitId(null);
@@ -1463,6 +1615,21 @@ const AdminCmsPlaceholderPage: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
+            {isBenefitRow && (
+              <button
+                type="button"
+                onClick={() => deleteBenefit(row)}
+                disabled={isSaving || isUploading || savingAllChanges || savingBenefitOrder}
+                className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                  isDark
+                    ? 'border border-red-900/60 bg-red-950/40 text-red-200 hover:bg-red-950'
+                    : 'border border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
+                }`}
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </button>
+            )}
             <button
               type="button"
               onClick={() => revertRow(collectionKey, row)}
@@ -1940,11 +2107,22 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                             </div>
                           </div>
                           {config.key === 'benefits' && (
-                            <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold ${
-                              isDark ? 'border-gray-700 bg-gray-950 text-gray-300' : 'border-gray-200 bg-gray-50 text-gray-600'
-                            }`}>
-                              {savingBenefitOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
-                              {savingBenefitOrder ? 'Saving order...' : 'Drag handles to reorder'}
+                            <div className="flex flex-wrap items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={addBenefit}
+                                disabled={isSavingAnyChange || !selectedPage}
+                                className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+                              >
+                                {savingAllChanges ? <Loader className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                                Add Benefit
+                              </button>
+                              <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold ${
+                                isDark ? 'border-gray-700 bg-gray-950 text-gray-300' : 'border-gray-200 bg-gray-50 text-gray-600'
+                              }`}>
+                                {savingBenefitOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
+                                {savingBenefitOrder ? 'Saving order...' : 'Drag handles to reorder'}
+                              </div>
                             </div>
                           )}
                         </div>
