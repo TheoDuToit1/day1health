@@ -12,8 +12,7 @@ The Senior Day-to-Day Plan provides everyday medical cover tailored for senior m
 
 **Cover includes:**
 - Private Managed Doctor Visits
-- Radiology and pathology
-- Acute Medication
+- Funeral Cover
 - Funeral Benefit
 
 ---

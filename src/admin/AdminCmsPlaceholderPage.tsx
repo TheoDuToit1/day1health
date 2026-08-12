@@ -1015,6 +1015,159 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     }
   };
 
+  const addCoverHighlight = async () => {
+    if (!selectedPage || savingAllChanges || savingCoverHighlightOrder) {
+      return;
+    }
+
+    const startedAt = new Date().toISOString();
+    const nextSortOrder =
+      collections.coverHighlights.reduce((maxOrder, row) => Math.max(maxOrder, Number(row.sort_order ?? 0)), 0) + 1;
+    const newCoverHighlight: CmsRow = {
+      id: crypto.randomUUID(),
+      page_id: selectedPage.id,
+      sort_order: nextSortOrder,
+      highlight_text: 'New Cover Highlight',
+    };
+
+    try {
+      setSavingAllChanges(true);
+      setStatus(null);
+
+      const { data, error } = await supabase
+        .from('cms_plan_cover_highlights')
+        .insert(newCoverHighlight)
+        .select('*')
+        .single();
+
+      if (error) throw error;
+
+      const insertedCoverHighlight = (data ?? newCoverHighlight) as CmsRow;
+      setCollections((prev) => ({
+        ...prev,
+        coverHighlights: [...prev.coverHighlights, insertedCoverHighlight].sort(
+          (left, right) => Number(left.sort_order ?? 0) - Number(right.sort_order ?? 0),
+        ),
+      }));
+      setCollectionSnapshots((prev) => ({
+        ...prev,
+        coverHighlights: {
+          ...prev.coverHighlights,
+          [insertedCoverHighlight.id]: snapshotRow(insertedCoverHighlight),
+        },
+      }));
+      upsertEditSessionStartedAt(`coverHighlights:${insertedCoverHighlight.id}`, new Date().toISOString());
+
+      const completedAt = new Date().toISOString();
+      const auditError = await writeAuditLog({
+        page_id: selectedPage.id,
+        plan_family: String(selectedPage.plan_family ?? ''),
+        plan_key: String(selectedPage.plan_key ?? ''),
+        page_heading: String(selectedPage.page_heading ?? selectedPage.hero_title ?? ''),
+        section_key: 'coverHighlights',
+        action_type: 'create',
+        table_name: 'cms_plan_cover_highlights',
+        record_id: insertedCoverHighlight.id,
+        changed_by: currentUserId,
+        changed_by_email: currentUserEmail,
+        started_at: startedAt,
+        completed_at: completedAt,
+        duration_seconds: getDurationSeconds(startedAt, completedAt),
+        change_summary: `Created cover highlight "${String(insertedCoverHighlight.highlight_text ?? insertedCoverHighlight.id)}"`,
+        previous_values: {},
+        next_values: buildUpdatePayload(insertedCoverHighlight),
+        changed_fields: Object.keys(buildUpdatePayload(insertedCoverHighlight)),
+      });
+
+      setStatus({
+        type: auditError ? 'error' : 'success',
+        message: auditError ? `Cover highlight added, but tracking log failed: ${auditError}` : 'Cover highlight added. Update the text, then use Save Changes.',
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to add cover highlight.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingAllChanges(false);
+    }
+  };
+
+  const deleteCoverHighlight = async (row: CmsRow) => {
+    if (savingAllChanges || savingCoverHighlightOrder) {
+      return;
+    }
+
+    const title = String(row.highlight_text ?? 'this cover highlight');
+    const confirmed = window.confirm(`Delete "${title}" from this plan? This cannot be undone from the CMS screen.`);
+    if (!confirmed) {
+      return;
+    }
+
+    const previousRows = collections.coverHighlights;
+    const remainingRows = previousRows
+      .filter((highlight) => highlight.id !== row.id)
+      .map((highlight, index) => ({ ...highlight, sort_order: index + 1 }));
+    const startedAt = new Date().toISOString();
+
+    try {
+      setSavingAllChanges(true);
+      setStatus(null);
+
+      const { error } = await supabase.from('cms_plan_cover_highlights').delete().eq('id', row.id);
+      if (error) throw error;
+
+      const orderUpdates = remainingRows
+        .filter((highlight) => Number(highlight.sort_order ?? 0) !== Number(previousRows.find((previous) => previous.id === highlight.id)?.sort_order ?? 0))
+        .map((highlight) => supabase.from('cms_plan_cover_highlights').update({ sort_order: highlight.sort_order }).eq('id', highlight.id));
+      const orderResults = await Promise.all(orderUpdates);
+      const failedOrderUpdate = orderResults.find((result) => result.error);
+      if (failedOrderUpdate?.error) {
+        throw failedOrderUpdate.error;
+      }
+
+      setCollections((prev) => ({ ...prev, coverHighlights: remainingRows }));
+      setCollectionSnapshots((prev) => {
+        const nextSnapshots = { ...prev.coverHighlights };
+        delete nextSnapshots[row.id];
+        remainingRows.forEach((highlight) => {
+          nextSnapshots[highlight.id] = snapshotRow(highlight);
+        });
+        return { ...prev, coverHighlights: nextSnapshots };
+      });
+
+      const completedAt = new Date().toISOString();
+      const auditError = await writeAuditLog({
+        page_id: typeof row.page_id === 'string' && row.page_id.length > 0 ? row.page_id : selectedPage?.id ?? null,
+        plan_family: String(selectedPage?.plan_family ?? ''),
+        plan_key: String(selectedPage?.plan_key ?? ''),
+        page_heading: String(selectedPage?.page_heading ?? selectedPage?.hero_title ?? ''),
+        section_key: 'coverHighlights',
+        action_type: 'delete',
+        table_name: 'cms_plan_cover_highlights',
+        record_id: row.id,
+        changed_by: currentUserId,
+        changed_by_email: currentUserEmail,
+        started_at: startedAt,
+        completed_at: completedAt,
+        duration_seconds: getDurationSeconds(startedAt, completedAt),
+        change_summary: `Deleted cover highlight "${title}"`,
+        previous_values: buildUpdatePayload(row),
+        next_values: {},
+        changed_fields: Object.keys(buildUpdatePayload(row)),
+      });
+
+      setStatus({
+        type: auditError ? 'error' : 'success',
+        message: auditError ? `Cover highlight deleted, but tracking log failed: ${auditError}` : 'Cover highlight deleted.',
+      });
+    } catch (err) {
+      setCollections((prev) => ({ ...prev, coverHighlights: previousRows }));
+      const message = err instanceof Error ? err.message : 'Failed to delete cover highlight.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingAllChanges(false);
+    }
+  };
+
   const handleBenefitDrop = (targetRowId: string) => {
     if (!draggedBenefitId || draggedBenefitId === targetRowId || savingBenefitOrder) {
       setDraggedBenefitId(null);
@@ -1656,6 +1809,20 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     const isOrderSaving = isBenefitRow ? savingBenefitOrder : isCoverHighlightRow ? savingCoverHighlightOrder : false;
     const isDragging = (isBenefitRow && draggedBenefitId === row.id) || (isCoverHighlightRow && draggedCoverHighlightId === row.id);
     const reorderLabel = isBenefitRow ? 'benefit' : 'cover highlight';
+    const startRowDrag = (event: React.DragEvent<HTMLElement>) => {
+      if (!isOrderableRow || isOrderSaving) return;
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', row.id);
+      if (isBenefitRow) {
+        setDraggedBenefitId(row.id);
+      } else {
+        setDraggedCoverHighlightId(row.id);
+      }
+    };
+    const endRowDrag = () => {
+      setDraggedBenefitId(null);
+      setDraggedCoverHighlightId(null);
+    };
 
     return (
       <div
@@ -1684,33 +1851,23 @@ const AdminCmsPlaceholderPage: React.FC = () => {
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-3">
             {isOrderableRow && (
-              <button
-                type="button"
+              <div
                 draggable={!isOrderSaving}
-                onDragStart={(event) => {
-                  event.dataTransfer.effectAllowed = 'move';
-                  event.dataTransfer.setData('text/plain', row.id);
-                  if (isBenefitRow) {
-                    setDraggedBenefitId(row.id);
-                  } else {
-                    setDraggedCoverHighlightId(row.id);
-                  }
-                }}
-                onDragEnd={() => {
-                  setDraggedBenefitId(null);
-                  setDraggedCoverHighlightId(null);
-                }}
-                disabled={isOrderSaving}
+                onDragStart={startRowDrag}
+                onDragEnd={endRowDrag}
                 title={`Drag to reorder ${reorderLabel}`}
                 aria-label={`Drag ${String(row.benefit_title ?? row.highlight_text ?? reorderLabel)} to reorder`}
-                className={`mt-0.5 inline-flex h-9 w-9 flex-shrink-0 cursor-grab items-center justify-center rounded-lg border transition active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50 ${
+                role="button"
+                tabIndex={0}
+                className={`mt-0.5 inline-flex h-9 flex-shrink-0 cursor-grab items-center justify-center gap-1.5 rounded-lg border px-2 text-xs font-semibold transition active:cursor-grabbing ${
                   isDark
                     ? 'border-gray-700 bg-gray-900 text-gray-300 hover:border-emerald-500 hover:text-emerald-300'
                     : 'border-gray-200 bg-gray-50 text-gray-500 hover:border-emerald-400 hover:text-emerald-600'
-                }`}
+                } ${isOrderSaving ? 'pointer-events-none cursor-not-allowed opacity-50' : ''}`}
               >
                 <GripVertical className="h-4 w-4" />
-              </button>
+                Drag
+              </div>
             )}
             <div className="min-w-0">
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -1727,6 +1884,21 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                 type="button"
                 onClick={() => deleteBenefit(row)}
                 disabled={isSaving || isUploading || savingAllChanges || savingBenefitOrder}
+                className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                  isDark
+                    ? 'border border-red-900/60 bg-red-950/40 text-red-200 hover:bg-red-950'
+                    : 'border border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
+                }`}
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </button>
+            )}
+            {isCoverHighlightRow && (
+              <button
+                type="button"
+                onClick={() => deleteCoverHighlight(row)}
+                disabled={isSaving || isUploading || savingAllChanges || savingCoverHighlightOrder}
                 className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
                   isDark
                     ? 'border border-red-900/60 bg-red-950/40 text-red-200 hover:bg-red-950'
@@ -2233,11 +2405,22 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                             </div>
                           )}
                           {config.key === 'coverHighlights' && (
-                            <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold ${
-                              isDark ? 'border-gray-700 bg-gray-950 text-gray-300' : 'border-gray-200 bg-gray-50 text-gray-600'
-                            }`}>
-                              {savingCoverHighlightOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
-                              {savingCoverHighlightOrder ? 'Saving order...' : 'Drag handles to reorder'}
+                            <div className="flex flex-wrap items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={addCoverHighlight}
+                                disabled={isSavingAnyChange || !selectedPage}
+                                className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+                              >
+                                {savingAllChanges ? <Loader className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                                Add Cover Highlight
+                              </button>
+                              <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold ${
+                                isDark ? 'border-gray-700 bg-gray-950 text-gray-300' : 'border-gray-200 bg-gray-50 text-gray-600'
+                              }`}>
+                                {savingCoverHighlightOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
+                                {savingCoverHighlightOrder ? 'Saving order...' : 'Drag handles to reorder'}
+                              </div>
                             </div>
                           )}
                         </div>

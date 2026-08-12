@@ -21,10 +21,10 @@ where page_id in (
   where plan_family = 'senior'
     and senior_category = 'day-to-day'
 )
-and lower(trim(highlight_text)) in (
-  'acute/chronic medication',
-  'dentistry / optometry',
-  'funeral cover'
+and lower(trim(highlight_text)) not in (
+  'private managed doctor visits',
+  'funeral cover',
+  'funeral benefit'
 );
 
 with ordered_benefits as (

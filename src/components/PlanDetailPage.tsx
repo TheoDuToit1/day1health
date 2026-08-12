@@ -22,10 +22,18 @@ const excludedBenefitTitles = new Set([
 
 const coverItems = [
   'Private Managed Doctor Visits',
-  'Radiology and pathology',
-  'Acute Medication',
   'Funeral Benefit',
 ];
+
+const excludedCoverHighlightTitles = new Set([
+  'acute medication',
+  'acute/chronic medication',
+  'dentistry / optometry',
+  'funeral cover',
+  'pathology',
+  'radiology',
+  'radiology and pathology',
+]);
 
 const additionalInfoOptions: string[] = [
   'Single',
@@ -326,13 +334,13 @@ const PlanDetailPage: React.FC = () => {
     .filter((item) => {
       if (item.length === 0) return false;
       const normalizedItem = item.toLowerCase();
-      return !normalizedItem.includes('dental') && !normalizedItem.includes('optometry') && !normalizedItem.includes('chronic');
-    })
-    .map((item) => {
-      const normalizedItem = item.toLowerCase();
-      if (normalizedItem === 'pathology') return 'Radiology and pathology';
-      if (normalizedItem === 'acute medication') return 'Acute Medication';
-      return item;
+      return (
+        !excludedCoverHighlightTitles.has(normalizedItem) &&
+        !normalizedItem.includes('dental') &&
+        !normalizedItem.includes('dentistry') &&
+        !normalizedItem.includes('optometry') &&
+        !normalizedItem.includes('chronic')
+      );
     });
   const displayCoverItems = (cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : coverItems).filter(
     (item, index, items) => items.findIndex((entry) => entry.toLowerCase() === item.toLowerCase()) === index,
