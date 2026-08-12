@@ -395,7 +395,9 @@ const AdminCmsPlaceholderPage: React.FC = () => {
   const [reportMonth, setReportMonth] = useState(getCurrentMonthInputValue());
   const [generatingReport, setGeneratingReport] = useState(false);
   const [draggedBenefitId, setDraggedBenefitId] = useState<string | null>(null);
+  const [draggedCoverHighlightId, setDraggedCoverHighlightId] = useState<string | null>(null);
   const [savingBenefitOrder, setSavingBenefitOrder] = useState(false);
+  const [savingCoverHighlightOrder, setSavingCoverHighlightOrder] = useState(false);
   const [savingAllChanges, setSavingAllChanges] = useState(false);
 
   const selectedPage = useMemo(
@@ -471,6 +473,7 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     savingPage ||
     savingAllChanges ||
     savingBenefitOrder ||
+    savingCoverHighlightOrder ||
     Object.values(savingRows).some(Boolean) ||
     Object.values(uploadingRows).some(Boolean);
 
@@ -782,6 +785,84 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     }
   };
 
+  const saveCoverHighlightOrder = async (nextRows: CmsRow[], previousRows: CmsRow[]) => {
+    const previousOrderById = Object.fromEntries(previousRows.map((row) => [row.id, Number(row.sort_order ?? 0)]));
+    const changedRows = nextRows.filter((row) => Number(row.sort_order ?? 0) !== previousOrderById[row.id]);
+
+    if (changedRows.length === 0) {
+      return;
+    }
+
+    try {
+      setSavingCoverHighlightOrder(true);
+      setStatus(null);
+
+      const startedAt = new Date().toISOString();
+      const updates = changedRows.map((row) =>
+        supabase.from('cms_plan_cover_highlights').update({ sort_order: row.sort_order }).eq('id', row.id),
+      );
+      const results = await Promise.all(updates);
+      const failedUpdate = results.find((result) => result.error);
+
+      if (failedUpdate?.error) {
+        throw failedUpdate.error;
+      }
+
+      const completedAt = new Date().toISOString();
+      setCollectionSnapshots((prev) => ({
+        ...prev,
+        coverHighlights: changedRows.reduce(
+          (nextSnapshots, row) => ({
+            ...nextSnapshots,
+            [row.id]: {
+              ...(nextSnapshots[row.id] ?? collectionSnapshots.coverHighlights[row.id] ?? row),
+              sort_order: row.sort_order,
+            },
+          }),
+          { ...prev.coverHighlights },
+        ),
+      }));
+
+      const auditResults = await Promise.all(
+        changedRows.map((row) =>
+          writeAuditLog({
+            page_id: typeof row.page_id === 'string' && row.page_id.length > 0 ? row.page_id : selectedPage?.id ?? null,
+            plan_family: String(selectedPage?.plan_family ?? ''),
+            plan_key: String(selectedPage?.plan_key ?? ''),
+            page_heading: String(selectedPage?.page_heading ?? selectedPage?.hero_title ?? ''),
+            section_key: 'coverHighlights',
+            action_type: 'update',
+            table_name: 'cms_plan_cover_highlights',
+            record_id: row.id,
+            changed_by: currentUserId,
+            changed_by_email: currentUserEmail,
+            started_at: startedAt,
+            completed_at: completedAt,
+            duration_seconds: getDurationSeconds(startedAt, completedAt),
+            change_summary: `Reordered cover highlight "${String(row.highlight_text ?? row.id)}"`,
+            previous_values: { sort_order: previousOrderById[row.id] },
+            next_values: { sort_order: row.sort_order },
+            changed_fields: ['sort_order'],
+          }),
+        ),
+      );
+
+      const auditError = auditResults.find(Boolean);
+      setStatus({
+        type: auditError ? 'error' : 'success',
+        message: auditError
+          ? `Cover highlight order saved, but tracking log failed: ${auditError}`
+          : 'Cover highlight order saved. Plan detail pages will use this order.',
+      });
+    } catch (err) {
+      setCollections((prev) => ({ ...prev, coverHighlights: previousRows }));
+      const message = err instanceof Error ? err.message : 'Failed to save cover highlight order.';
+      setStatus({ type: 'error', message });
+    } finally {
+      setSavingCoverHighlightOrder(false);
+    }
+  };
+
   const addBenefit = async () => {
     if (!selectedPage || savingAllChanges || savingBenefitOrder) {
       return;
@@ -945,6 +1026,19 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     setDraggedBenefitId(null);
     setCollections((prev) => ({ ...prev, benefits: nextRows }));
     void saveBenefitOrder(nextRows, previousRows);
+  };
+
+  const handleCoverHighlightDrop = (targetRowId: string) => {
+    if (!draggedCoverHighlightId || draggedCoverHighlightId === targetRowId || savingCoverHighlightOrder) {
+      setDraggedCoverHighlightId(null);
+      return;
+    }
+
+    const previousRows = collections.coverHighlights;
+    const nextRows = reorderRowsById(previousRows, draggedCoverHighlightId, targetRowId);
+    setDraggedCoverHighlightId(null);
+    setCollections((prev) => ({ ...prev, coverHighlights: nextRows }));
+    void saveCoverHighlightOrder(nextRows, previousRows);
   };
 
   const savePage = async () => {
@@ -1557,18 +1651,24 @@ const AdminCmsPlaceholderPage: React.FC = () => {
     const editableFields = filterFields(sortEditableFields(row), TAB_FIELD_ALLOWLIST[collectionKey]);
     const assetUrl = typeof row.asset_url === 'string' && row.asset_url ? row.asset_url : typeof row.public_url === 'string' && row.public_url ? row.public_url : null;
     const isBenefitRow = collectionKey === 'benefits';
-    const isDragging = isBenefitRow && draggedBenefitId === row.id;
+    const isCoverHighlightRow = collectionKey === 'coverHighlights';
+    const isOrderableRow = isBenefitRow || isCoverHighlightRow;
+    const isOrderSaving = isBenefitRow ? savingBenefitOrder : isCoverHighlightRow ? savingCoverHighlightOrder : false;
+    const isDragging = (isBenefitRow && draggedBenefitId === row.id) || (isCoverHighlightRow && draggedCoverHighlightId === row.id);
+    const reorderLabel = isBenefitRow ? 'benefit' : 'cover highlight';
 
     return (
       <div
         key={row.id}
         onDragOver={(event) => {
-          if (!isBenefitRow || savingBenefitOrder) return;
+          if (!isOrderableRow || isOrderSaving) return;
           event.preventDefault();
         }}
         onDrop={() => {
           if (isBenefitRow) {
             handleBenefitDrop(row.id);
+          } else if (isCoverHighlightRow) {
+            handleCoverHighlightDrop(row.id);
           }
         }}
         className={`rounded-2xl border p-5 shadow-sm transition ${
@@ -1583,19 +1683,26 @@ const AdminCmsPlaceholderPage: React.FC = () => {
       >
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-start gap-3">
-            {isBenefitRow && (
+            {isOrderableRow && (
               <button
                 type="button"
-                draggable={!savingBenefitOrder}
+                draggable={!isOrderSaving}
                 onDragStart={(event) => {
                   event.dataTransfer.effectAllowed = 'move';
                   event.dataTransfer.setData('text/plain', row.id);
-                  setDraggedBenefitId(row.id);
+                  if (isBenefitRow) {
+                    setDraggedBenefitId(row.id);
+                  } else {
+                    setDraggedCoverHighlightId(row.id);
+                  }
                 }}
-                onDragEnd={() => setDraggedBenefitId(null)}
-                disabled={savingBenefitOrder}
-                title="Drag to reorder benefit"
-                aria-label={`Drag ${String(row.benefit_title ?? 'benefit')} to reorder`}
+                onDragEnd={() => {
+                  setDraggedBenefitId(null);
+                  setDraggedCoverHighlightId(null);
+                }}
+                disabled={isOrderSaving}
+                title={`Drag to reorder ${reorderLabel}`}
+                aria-label={`Drag ${String(row.benefit_title ?? row.highlight_text ?? reorderLabel)} to reorder`}
                 className={`mt-0.5 inline-flex h-9 w-9 flex-shrink-0 cursor-grab items-center justify-center rounded-lg border transition active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50 ${
                   isDark
                     ? 'border-gray-700 bg-gray-900 text-gray-300 hover:border-emerald-500 hover:text-emerald-300'
@@ -2123,6 +2230,14 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                                 {savingBenefitOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
                                 {savingBenefitOrder ? 'Saving order...' : 'Drag handles to reorder'}
                               </div>
+                            </div>
+                          )}
+                          {config.key === 'coverHighlights' && (
+                            <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold ${
+                              isDark ? 'border-gray-700 bg-gray-950 text-gray-300' : 'border-gray-200 bg-gray-50 text-gray-600'
+                            }`}>
+                              {savingCoverHighlightOrder ? <Loader className="h-4 w-4 animate-spin text-green-600" /> : <GripVertical className="h-4 w-4 text-green-600" />}
+                              {savingCoverHighlightOrder ? 'Saving order...' : 'Drag handles to reorder'}
                             </div>
                           )}
                         </div>
