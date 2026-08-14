@@ -10,6 +10,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
 import { hasSupabaseEnv, supabase } from '../admin/supabaseClient';
 import { useCmsAssetHref } from '../utils/cmsAssets';
+import { sortCmsRowsByDisplayOrder } from '../utils/cmsOrdering';
 
 type CmsRow = Record<string, any> & { id: string };
 
@@ -40,7 +41,7 @@ const additionalInfoOptions: string[] = [
   'Couple + 4 Children',
 ];
 
-const descriptionItems: { title: string; text: string }[] = [
+const descriptionItems: { id?: string; title: string; text: string }[] = [
   {
     title: 'Private Managed Doctor Visits',
     text:
@@ -341,14 +342,17 @@ const PlanDetailPage: React.FC = () => {
     displayCoverItems.push('Funeral Benefit');
   }
 
-  const cmsDescriptionItems = cmsBenefits
+  const orderedCmsBenefits = sortCmsRowsByDisplayOrder(cmsBenefits);
+  const cmsDescriptionItems: { id?: string; title: string; text: string }[] = orderedCmsBenefits
     .map((row) => ({
+      id: row.id,
       title: typeof row.benefit_title === 'string' ? row.benefit_title.trim() : '',
       text: typeof row.benefit_summary === 'string' ? row.benefit_summary.trim() : '',
     }))
     .filter((item) => item.title.length > 0 && item.text.length > 0)
     .filter((item) => !excludedBenefitTitles.has(item.title.toLowerCase()));
-  const displayDescriptionItems = cmsDescriptionItems.length > 0 ? cmsDescriptionItems : descriptionItems;
+  const displayDescriptionItems: { id?: string; title: string; text: string }[] =
+    cmsDescriptionItems.length > 0 ? cmsDescriptionItems : descriptionItems;
 
   useEffect(() => {
     setCoverCarouselIndex((prev) => (prev >= displayCoverItems.length ? 0 : prev));
@@ -567,7 +571,7 @@ const PlanDetailPage: React.FC = () => {
                         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
                           {displayDescriptionItems.map((item, index) => (
                             <motion.div
-                              key={item.title}
+                              key={item.id ?? `${item.title}-${index}`}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.4, delay: 0.03 * index }}

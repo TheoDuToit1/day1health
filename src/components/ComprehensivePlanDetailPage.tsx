@@ -10,6 +10,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { DownloadHeroButton } from './ui/download-hero-button';
 import { hasSupabaseEnv, supabase } from '../admin/supabaseClient';
 import { useCmsAssetHref } from '../utils/cmsAssets';
+import { sortCmsRowsByDisplayOrder } from '../utils/cmsOrdering';
 
 type CmsRow = Record<string, any> & { id: string };
 
@@ -436,9 +437,11 @@ const ComprehensivePlanDetailPage: React.FC = () => {
     }
     return valuePlusItems;
   })();
-  const descriptionItems: { title: string; text: string }[] = cmsBenefits.length > 0
-    ? cmsBenefits
+  const orderedCmsBenefits = sortCmsRowsByDisplayOrder(cmsBenefits);
+  const descriptionItems: { id?: string; title: string; text: string }[] = orderedCmsBenefits.length > 0
+    ? orderedCmsBenefits
         .map((row) => ({
+          id: row.id,
           title: typeof row.benefit_title === 'string' ? row.benefit_title : '',
           text: typeof row.benefit_summary === 'string' ? row.benefit_summary : '',
         }))
@@ -779,9 +782,9 @@ const ComprehensivePlanDetailPage: React.FC = () => {
                     >
                       <div className="prose max-w-none">
                         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                          {descriptionItems.map((item: { title: string; text: string }, i: number) => (
+                          {descriptionItems.map((item: { id?: string; title: string; text: string }, i: number) => (
                             <motion.div 
-                              key={item.title}
+                              key={item.id ?? `${item.title}-${i}`}
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.4, delay: 0.03 * i }}
