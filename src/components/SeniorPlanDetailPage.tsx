@@ -22,10 +22,18 @@ const excludedBenefitTitles = new Set([
 
 const coverItems = [
   'Private Managed Doctor Visits',
-  'Radiology and pathology',
-  'Acute Medication',
+  'Funeral Cover',
   'Funeral Benefit',
 ];
+
+const excludedSeniorDayToDayCoverHighlightTitles = new Set([
+  'acute medication',
+  'acute/chronic medication',
+  'dentistry / optometry',
+  'pathology',
+  'radiology',
+  'radiology and pathology',
+]);
 
 // descriptionItems will be set in the component based on Senior category
 
@@ -354,20 +362,27 @@ const SeniorPlanDetailPage: React.FC = () => {
     .filter((item) => {
       if (item.length === 0) return false;
       const normalizedItem = item.toLowerCase();
-      return !normalizedItem.includes('dental') && !normalizedItem.includes('optometry') && !normalizedItem.includes('chronic');
-    })
-    .map((item) => {
-      if (categoryDisplay !== 'day-to-day') return item;
-      const normalizedItem = item.toLowerCase();
-      if (normalizedItem === 'pathology') return 'Radiology and pathology';
-      if (normalizedItem === 'acute medication') return 'Acute Medication';
-      return item;
+      if (categoryDisplay !== 'day-to-day') {
+        return !normalizedItem.includes('dental') && !normalizedItem.includes('optometry') && !normalizedItem.includes('chronic');
+      }
+      return (
+        !excludedSeniorDayToDayCoverHighlightTitles.has(normalizedItem) &&
+        !normalizedItem.includes('dental') &&
+        !normalizedItem.includes('dentistry') &&
+        !normalizedItem.includes('optometry') &&
+        !normalizedItem.includes('chronic')
+      );
     });
   const displayCoverItems = (cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : defaultDisplayCoverItems).filter(
     (item, index, items) => items.findIndex((entry) => entry.toLowerCase() === item.toLowerCase()) === index,
   );
-  if (categoryDisplay === 'day-to-day' && !displayCoverItems.some((item) => item.toLowerCase() === 'funeral benefit')) {
-    displayCoverItems.push('Funeral Benefit');
+  if (categoryDisplay === 'day-to-day') {
+    if (!displayCoverItems.some((item) => item.toLowerCase() === 'funeral cover')) {
+      displayCoverItems.push('Funeral Cover');
+    }
+    if (!displayCoverItems.some((item) => item.toLowerCase() === 'funeral benefit')) {
+      displayCoverItems.push('Funeral Benefit');
+    }
   }
 
   const cmsDescriptionItems = cmsBenefits
@@ -618,7 +633,7 @@ const SeniorPlanDetailPage: React.FC = () => {
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
-                        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                           {displayDescriptionItems.map((item: { title: string; text: string }, i: number) => (
                             <motion.div 
                               key={item.title}

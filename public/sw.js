@@ -8,7 +8,7 @@ const urlsToCache = [
 ];
 
 // Bump the cache to invalidate old entries when deploying
-const CACHE_NAME_NEXT = 'day1health-v3';
+const CACHE_NAME_NEXT = 'day1health-v4';
 
 self.addEventListener('install', event => {
   // Take over as soon as installed

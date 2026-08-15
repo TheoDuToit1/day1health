@@ -1,11 +1,12 @@
--- Removes Day-To-Day CMS rows that no longer appear on the plan detail page.
+-- Removes Senior Day-To-Day CMS rows that no longer appear on the plan detail page.
 -- Run this in Supabase SQL editor while signed in as an IT manager/admin.
 
 delete from public.cms_plan_benefits
 where page_id in (
   select id
   from public.cms_plan_pages
-  where plan_family = 'day-to-day'
+  where plan_family = 'senior'
+    and senior_category = 'day-to-day'
 )
 and lower(trim(benefit_title)) in (
   'basic dentistry',
@@ -17,10 +18,12 @@ delete from public.cms_plan_cover_highlights
 where page_id in (
   select id
   from public.cms_plan_pages
-  where plan_family = 'day-to-day'
+  where plan_family = 'senior'
+    and senior_category = 'day-to-day'
 )
 and lower(trim(highlight_text)) not in (
   'private managed doctor visits',
+  'funeral cover',
   'funeral benefit'
 );
 
@@ -35,7 +38,8 @@ with ordered_benefits as (
   where page_id in (
     select id
     from public.cms_plan_pages
-    where plan_family = 'day-to-day'
+    where plan_family = 'senior'
+      and senior_category = 'day-to-day'
   )
 )
 update public.cms_plan_benefits as benefits
@@ -54,7 +58,8 @@ with ordered_highlights as (
   where page_id in (
     select id
     from public.cms_plan_pages
-    where plan_family = 'day-to-day'
+    where plan_family = 'senior'
+      and senior_category = 'day-to-day'
   )
 )
 update public.cms_plan_cover_highlights as highlights

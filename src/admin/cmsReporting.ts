@@ -12,7 +12,7 @@ import {
 } from 'docx';
 
 export type CmsAuditSection = 'page' | 'benefits' | 'coverHighlights' | 'priceRows' | 'assets';
-export type CmsAuditAction = 'update' | 'replace_file' | 'revert';
+export type CmsAuditAction = 'update' | 'create' | 'delete' | 'replace_file' | 'revert';
 
 export type CmsChangeLogInsert = {
   page_id: string | null;
@@ -130,6 +130,14 @@ export const buildAuditSummary = (
     }
 
     return `Reverted ${section} fields for ${pageLabel}: ${changedFields.join(', ')}`;
+  }
+
+  if (actionType === 'create') {
+    return `Created ${section} for ${pageLabel}`;
+  }
+
+  if (actionType === 'delete') {
+    return `Deleted ${section} from ${pageLabel}`;
   }
 
   if (changedFields.length === 0) {

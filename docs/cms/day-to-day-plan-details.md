@@ -23,8 +23,7 @@ For `family`, the page allows `1` or `2` adults and `1` to `4` children.
 ## Cover Highlights
 
 - Private Managed Doctor Visits
-- Acute/Chronic Medication
-- Dentistry / Optometry
+- Funeral Benefit
 
 ## Pricing
 
