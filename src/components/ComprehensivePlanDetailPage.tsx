@@ -62,8 +62,9 @@ const selectComprehensiveCmsPage = (
   tier: 'value' | 'platinum' | 'executive',
   variant: 'single' | 'couple' | 'family',
 ): CmsRow | null => {
-  const tierPlanKey = `comprehensive-${tier}`;
-  const variantPlanKey = `${tierPlanKey}-${variant}`;
+  const tierPlanKeys =
+    tier === 'value' ? ['comprehensive-value', 'comprehensive-value-plus'] : [`comprehensive-${tier}`];
+  const variantPlanKeys = tierPlanKeys.map((planKey) => `${planKey}-${variant}`);
 
   const rankedPages = pages
     .map((page, index) => {
@@ -75,13 +76,13 @@ const selectComprehensiveCmsPage = (
       const planKey = slugifyCmsValue(page.plan_key);
       const pageHeading = slugifyCmsValue(page.page_heading);
       const heroTitle = slugifyCmsValue(page.hero_title);
-      const tierValue = slugifyCmsValue(page.tier);
+      const tierValue = normalizeComprehensiveTier(String(page.tier ?? '').toLowerCase());
       const routePath = String(page.route_path ?? '').toLowerCase();
       let score = -1;
 
-      if (planKey === variantPlanKey || planKey.includes(`${variantPlanKey}-`)) score = 140;
-      else if (pageHeading === variantPlanKey || pageHeading.includes(`${variantPlanKey}-`)) score = 130;
-      else if (heroTitle === variantPlanKey || heroTitle.includes(`${variantPlanKey}-`)) score = 120;
+      if (variantPlanKeys.some((candidate) => planKey === candidate || planKey.includes(`${candidate}-`))) score = 140;
+      else if (variantPlanKeys.some((candidate) => pageHeading === candidate || pageHeading.includes(`${candidate}-`))) score = 130;
+      else if (variantPlanKeys.some((candidate) => heroTitle === candidate || heroTitle.includes(`${candidate}-`))) score = 120;
       else if (
         routePath.includes('/plans/comprehensive') &&
         routePath.includes(`tier=${tier}`) &&
@@ -90,7 +91,7 @@ const selectComprehensiveCmsPage = (
         score = 110;
       } else if (tierValue === tier && variant === 'single') {
         score = 90;
-      } else if (planKey === tierPlanKey && variant === 'single') {
+      } else if (tierPlanKeys.some((candidate) => planKey === candidate) && variant === 'single') {
         score = 80;
       } else if (routePath.includes('/plans/comprehensive') && routePath.includes(`tier=${tier}`) && variant === 'single') {
         score = 70;
@@ -257,19 +258,9 @@ const ComprehensivePlanDetailPage: React.FC = () => {
           'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.',
       },
       {
-        title: 'Pathology',
-        text:
-          'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
-      },
-      {
         title: 'Specialist Benefit',
         text:
           'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
-      },
-      {
-        title: 'Basic Dentistry',
-        text:
-          'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
       },
       {
         title: 'Acute & Chronic Medication',
@@ -277,14 +268,24 @@ const ComprehensivePlanDetailPage: React.FC = () => {
           'Both acute and chronic medication are covered according to the Day1 Health formulary. A 1 month waiting period applies to acute medication. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
       },
       {
-        title: 'Optometry (Iso Leso Optics)',
-        text:
-          'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
-      },
-      {
         title: 'Radiology',
         text:
           'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Pathology',
+        text:
+          'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+      },
+      {
+        title: 'Basic Dentistry',
+        text:
+          'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+      },
+      {
+        title: 'Optometry (Iso Leso Optics)',
+        text:
+          'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
       },
       {
         title: 'Out-of-Area Visits',
@@ -319,19 +320,9 @@ const ComprehensivePlanDetailPage: React.FC = () => {
             'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.',
         },
         {
-          title: 'Pathology',
-          text:
-            'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
-        },
-        {
           title: 'Specialist Benefit',
           text:
             'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
-        },
-        {
-          title: 'Basic Dentistry',
-          text:
-            'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
         },
         {
           title: 'Acute & Chronic Medication',
@@ -339,14 +330,24 @@ const ComprehensivePlanDetailPage: React.FC = () => {
             'Both acute and chronic medication are covered according to the Day1 Health formulary. A 1 month waiting period applies to acute medication. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
         },
         {
-          title: 'Optometry (Iso Leso Optics)',
-          text:
-            'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
-        },
-        {
           title: 'Radiology',
           text:
             'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+        },
+        {
+          title: 'Pathology',
+          text:
+            'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+        },
+        {
+          title: 'Basic Dentistry',
+          text:
+            'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+        },
+        {
+          title: 'Optometry (Iso Leso Optics)',
+          text:
+            'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
         },
         {
           title: 'Out-of-Area Visits',
@@ -385,19 +386,9 @@ const ComprehensivePlanDetailPage: React.FC = () => {
             'Consultations available via a registered Day1 Health Network Partner. Limited to 5 doctor visits per member per annum. A Pay-as-you-Go Virtual Doctor consultation platform is available for members to utilise thereafter. Pre-authorisation is required. A 1 month waiting period applies.',
         },
         {
-          title: 'Pathology',
-          text:
-            'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
-        },
-        {
           title: 'Specialist Benefit',
           text:
             'Specialist Benefit of up to R 1000 per family per annum. Subject to pre-authorisation and referral from a 1Doctor Health Network GP. A 3 month waiting period applies.',
-        },
-        {
-          title: 'Basic Dentistry',
-          text:
-            'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
         },
         {
           title: 'Acute & Chronic Medication',
@@ -405,14 +396,24 @@ const ComprehensivePlanDetailPage: React.FC = () => {
             'Both acute and chronic medication are covered according to the Day1 Health formulary. A 1 month waiting period applies to acute medication. Chronic Medication is limited to R500 per member per month and up to R6000 per member per annum. A 3 month waiting period applies on chronic medication for unknown conditions and 12 month waiting period on pre-existing conditions. All chronic medication is subject to pre-authorisation.',
         },
         {
-          title: 'Optometry (Iso Leso Optics)',
-          text:
-            'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
-        },
-        {
           title: 'Radiology',
           text:
             'Basic radiology according to the 1Doctor Health formulary via a 1Doctor Health network GP. Black and white diagnostic x-rays only. A 1 month waiting period applies.',
+        },
+        {
+          title: 'Pathology',
+          text:
+            'Basic diagnostic blood tests on referral by a 1Doctor Health Network GP and subject to a list of basic pathology tests approved by Day1 Health. A 1 month waiting period applies.',
+        },
+        {
+          title: 'Basic Dentistry',
+          text:
+            'Basic treatment includes preventative cleaning, fillings, extractions and emergency pain and sepsis control via a Day1 Health Network Dentist. 2 visits per member per annum. Pre-authorisation is required for each visit. A 3 month waiting period applies.',
+        },
+        {
+          title: 'Optometry (Iso Leso Optics)',
+          text:
+            'One eye test and one set of glasses every 24 months per the specific Iso Leso Optics agreed protocol range. A 12 month waiting period applies.',
         },
         {
           title: 'Out-of-Area Visits',
@@ -438,6 +439,8 @@ const ComprehensivePlanDetailPage: React.FC = () => {
   })();
   const descriptionItems: { title: string; text: string }[] = cmsBenefits.length > 0
     ? cmsBenefits
+        .slice()
+        .sort((left, right) => Number(left.sort_order ?? 0) - Number(right.sort_order ?? 0))
         .map((row) => ({
           title: typeof row.benefit_title === 'string' ? row.benefit_title : '',
           text: typeof row.benefit_summary === 'string' ? row.benefit_summary : '',
