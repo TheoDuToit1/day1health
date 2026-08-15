@@ -572,7 +572,7 @@ const PlanDetailPage: React.FC = () => {
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                     >
                       <div className="prose max-w-none">
-                        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                           {displayDescriptionItems.map((item, index) => (
                             <motion.div
                               key={item.title}
