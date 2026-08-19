@@ -20,6 +20,21 @@ const coverItems = [
   'Ambulance',
 ];
 
+const hospitalDayCardTitles = new Set(['1st Day in Hospital', '2nd Day in Hospital', '3rd Day in Hospital']);
+
+const splitHospitalDayCardText = (text: string): { amount: string; benefit: string } | null => {
+  const parts = text.split(/\s+—\s+/);
+  if (parts.length < 2) return null;
+
+  const [left, ...remaining] = parts;
+  const right = remaining.join(' — ').trim();
+  const leftText = left.trim();
+
+  if (/^up to\b/i.test(leftText)) return { amount: leftText, benefit: right };
+  if (/^up to\b/i.test(right)) return { amount: right, benefit: leftText };
+  return null;
+};
+
 const additionalInfoOptions: string[] = [
   'Single',
   'Single + 1 Child',
@@ -600,26 +615,52 @@ const HospitalPlanDetailPage: React.FC = () => {
                     >
                       <div className="prose max-w-none">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                          {descriptionItems.map((item, i) => (
-                            <motion.div 
-                              key={item.title}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.4, delay: 0.03 * i }}
-                              className={`rounded-lg border p-5 lg:p-6 ${
-                                isDark 
-                                  ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50' 
-                                  : 'bg-gray-50 border-gray-200 hover:border-emerald-400/50'
-                              } transition-colors duration-200`}
-                            >
-                              <div className={`font-semibold mb-3 text-lg lg:text-xl ${
-                                isDark ? 'text-emerald-400' : 'text-emerald-600'
-                              }`}>{item.title}</div>
-                              <div className={`text-base lg:text-lg leading-relaxed ${
-                                isDark ? 'text-gray-300' : 'text-gray-700'
-                              }`}>{item.text}</div>
-                            </motion.div>
-                          ))}
+                          {descriptionItems.map((item, i) => {
+                            const hospitalDayCard = hospitalDayCardTitles.has(item.title)
+                              ? splitHospitalDayCardText(item.text)
+                              : null;
+
+                            return (
+                              <motion.div
+                                key={item.title}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.4, delay: 0.03 * i }}
+                                className={`rounded-2xl border p-5 lg:p-6 ${
+                                  isDark
+                                    ? 'bg-gray-900/50 border-gray-700 hover:border-emerald-500/50'
+                                    : 'bg-white border-gray-200 hover:border-emerald-400/50'
+                                } transition-colors duration-200`}
+                              >
+                                <div className={`font-semibold text-lg lg:text-xl ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
+                                  {item.title}
+                                </div>
+
+                                {hospitalDayCard ? (
+                                  <>
+                                    <div className={`mt-4 rounded-xl px-4 py-3 ${isDark ? 'bg-gray-800' : 'bg-emerald-50/70'}`}>
+                                      <div className={`text-xs font-bold uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                                        Amount payable
+                                      </div>
+                                      <div className={`mt-1 text-lg font-normal leading-snug ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                        {hospitalDayCard.amount}
+                                      </div>
+                                    </div>
+                                    <div className={`mt-3 border-t border-dashed pt-3 ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
+                                      <div className={`text-xs font-bold uppercase tracking-wide ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        Benefit
+                                      </div>
+                                      <div className={`mt-1 text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>
+                                        {hospitalDayCard.benefit}
+                                      </div>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <div className={`mt-3 text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{item.text}</div>
+                                )}
+                              </motion.div>
+                            );
+                          })}
                         </div>
                       </div>
                       <div className="mt-8 text-sm lg:text-base opacity-80 whitespace-pre-line leading-relaxed">{effectiveLegalCopy}</div>
