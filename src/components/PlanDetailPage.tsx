@@ -25,16 +25,6 @@ const coverItems = [
   'Funeral Benefit',
 ];
 
-const excludedCoverHighlightTitles = new Set([
-  'acute medication',
-  'acute/chronic medication',
-  'dentistry / optometry',
-  'funeral cover',
-  'pathology',
-  'radiology',
-  'radiology and pathology',
-]);
-
 const additionalInfoOptions: string[] = [
   'Single',
   'Single + 1 Child',
@@ -331,23 +321,8 @@ const PlanDetailPage: React.FC = () => {
 
   const cmsDisplayCoverItems = cmsCoverHighlights
     .map((row) => (typeof row.highlight_text === 'string' ? row.highlight_text.trim() : ''))
-    .filter((item) => {
-      if (item.length === 0) return false;
-      const normalizedItem = item.toLowerCase();
-      return (
-        !excludedCoverHighlightTitles.has(normalizedItem) &&
-        !normalizedItem.includes('dental') &&
-        !normalizedItem.includes('dentistry') &&
-        !normalizedItem.includes('optometry') &&
-        !normalizedItem.includes('chronic')
-      );
-    });
-  const displayCoverItems = (cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : coverItems).filter(
-    (item, index, items) => items.findIndex((entry) => entry.toLowerCase() === item.toLowerCase()) === index,
-  );
-  if (!displayCoverItems.some((item) => item.toLowerCase() === 'funeral benefit')) {
-    displayCoverItems.push('Funeral Benefit');
-  }
+    .filter((item) => item.length > 0);
+  const displayCoverItems = cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : coverItems;
 
   const cmsDescriptionItems = cmsBenefits
     .map((row) => ({

@@ -3,7 +3,9 @@ import cors from 'cors';
 import { createClient } from '@supabase/supabase-js';
 
 const app = express();
-const PORT = 3001;
+// Keep the public Vite app on 3000 and the chatbot on 3001.
+// The root admin/email API uses 3002 so all local services can run together.
+const PORT = Number(process.env.DAY1_API_PORT || 3002);
 
 // Middleware
 app.use(cors());
