@@ -26,15 +26,6 @@ const coverItems = [
   'Funeral Benefit',
 ];
 
-const excludedSeniorDayToDayCoverHighlightTitles = new Set([
-  'acute medication',
-  'acute/chronic medication',
-  'dentistry / optometry',
-  'pathology',
-  'radiology',
-  'radiology and pathology',
-]);
-
 // descriptionItems will be set in the component based on Senior category
 
 const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
@@ -359,31 +350,8 @@ const SeniorPlanDetailPage: React.FC = () => {
 
   const cmsDisplayCoverItems = cmsCoverHighlights
     .map((row) => (typeof row.highlight_text === 'string' ? row.highlight_text.trim() : ''))
-    .filter((item) => {
-      if (item.length === 0) return false;
-      const normalizedItem = item.toLowerCase();
-      if (categoryDisplay !== 'day-to-day') {
-        return !normalizedItem.includes('dental') && !normalizedItem.includes('optometry') && !normalizedItem.includes('chronic');
-      }
-      return (
-        !excludedSeniorDayToDayCoverHighlightTitles.has(normalizedItem) &&
-        !normalizedItem.includes('dental') &&
-        !normalizedItem.includes('dentistry') &&
-        !normalizedItem.includes('optometry') &&
-        !normalizedItem.includes('chronic')
-      );
-    });
-  const displayCoverItems = (cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : defaultDisplayCoverItems).filter(
-    (item, index, items) => items.findIndex((entry) => entry.toLowerCase() === item.toLowerCase()) === index,
-  );
-  if (categoryDisplay === 'day-to-day') {
-    if (!displayCoverItems.some((item) => item.toLowerCase() === 'funeral cover')) {
-      displayCoverItems.push('Funeral Cover');
-    }
-    if (!displayCoverItems.some((item) => item.toLowerCase() === 'funeral benefit')) {
-      displayCoverItems.push('Funeral Benefit');
-    }
-  }
+    .filter((item) => item.length > 0);
+  const displayCoverItems = cmsDisplayCoverItems.length > 0 ? cmsDisplayCoverItems : defaultDisplayCoverItems;
 
   const cmsDescriptionItems = cmsBenefits
     .map((row) => ({

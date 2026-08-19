@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "api": "node server.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run api\"",
+    "dev:chatbot": "npm --prefix day1health-ai-chatbot run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run api\" \"npm run dev:chatbot\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
