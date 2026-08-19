@@ -41,6 +41,12 @@ type AuditLookupParams = {
 const HIDDEN_FIELDS = new Set(['id', 'page_id', 'created_at', 'updated_at']);
 const PLAN_DOCS_BUCKET = 'plan-docs';
 const CMS_CHANGE_LOG_TABLE = 'cms_change_log';
+const HOSPITAL_DAY_CARD_TITLES = ['1st Day in Hospital', '2nd Day in Hospital', '3rd Day in Hospital'] as const;
+const DEFAULT_HOSPITAL_DAY_CARD_SUMMARIES: Record<(typeof HOSPITAL_DAY_CARD_TITLES)[number], string> = {
+  '1st Day in Hospital': 'Up to R 10 000.00 — Not less than 24 hours from time of admission to time of discharge',
+  '2nd Day in Hospital': 'Up to R 10 000.00 — Payable in units of R 2 500.00 for every quarter day (6 hours)',
+  '3rd Day in Hospital': 'Up to R 10 000.00 — Payable in units of R 2 500.00 for every quarter day (6 hours)',
+};
 
 const TABLE_CONFIG: Array<{ key: CmsTableKey; table: string; title: string; emptyMessage: string }> = [
   {
@@ -399,6 +405,8 @@ const AdminCmsPlaceholderPage: React.FC = () => {
   const [savingBenefitOrder, setSavingBenefitOrder] = useState(false);
   const [savingCoverHighlightOrder, setSavingCoverHighlightOrder] = useState(false);
   const [savingAllChanges, setSavingAllChanges] = useState(false);
+  const [hospitalDayCardSummaries, setHospitalDayCardSummaries] = useState(DEFAULT_HOSPITAL_DAY_CARD_SUMMARIES);
+  const [savingHospitalDayCards, setSavingHospitalDayCards] = useState(false);
 
   const selectedPage = useMemo(
     () => pages.find((page) => page.id === selectedPageId) ?? null,
@@ -705,6 +713,88 @@ const AdminCmsPlaceholderPage: React.FC = () => {
       ...prev,
       [collectionKey]: prev[collectionKey].map((row) => (row.id === rowId ? { ...row, [field]: value } : row)),
     }));
+  };
+
+  const saveHospitalDayCards = async () => {
+    if (!hasSupabaseEnv || savingHospitalDayCards || pages.length === 0) return;
+
+    const startedAt = new Date().toISOString();
+    const titleLookup = new Map(HOSPITAL_DAY_CARD_TITLES.map((title) => [title.toLowerCase(), title]));
+
+    try {
+      setSavingHospitalDayCards(true);
+      setStatus(null);
+
+      const { data, error } = await supabase
+        .from('cms_plan_benefits')
+        .select('*')
+        .in('page_id', pages.map((page) => page.id));
+
+      if (error) throw error;
+
+      const matchingRows = (data ?? []).filter((row) =>
+        titleLookup.has(String(row.benefit_title ?? '').trim().toLowerCase()),
+      ) as CmsRow[];
+      const rowsToUpdate = matchingRows.filter((row) => {
+        const title = titleLookup.get(String(row.benefit_title ?? '').trim().toLowerCase());
+        return title && String(row.benefit_summary ?? '') !== hospitalDayCardSummaries[title];
+      });
+
+      const results = await Promise.all(
+        rowsToUpdate.map(async (row) => {
+          const title = titleLookup.get(String(row.benefit_title ?? '').trim().toLowerCase())!;
+          const nextSummary = hospitalDayCardSummaries[title];
+          const { error: updateError } = await supabase
+            .from('cms_plan_benefits')
+            .update({ benefit_summary: nextSummary })
+            .eq('id', row.id);
+          if (updateError) throw updateError;
+
+          return { row, nextSummary };
+        }),
+      );
+
+      const completedAt = new Date().toISOString();
+      const auditErrors = await Promise.all(
+        results.map(({ row, nextSummary }) =>
+          writeAuditLog({
+            page_id: String(row.page_id ?? ''),
+            plan_family: String(pages.find((page) => page.id === row.page_id)?.plan_family ?? ''),
+            plan_key: String(pages.find((page) => page.id === row.page_id)?.plan_key ?? ''),
+            page_heading: String(pages.find((page) => page.id === row.page_id)?.page_heading ?? ''),
+            section_key: 'benefits',
+            action_type: 'update',
+            table_name: 'cms_plan_benefits',
+            record_id: row.id,
+            changed_by: currentUserId,
+            changed_by_email: currentUserEmail,
+            started_at: startedAt,
+            completed_at: completedAt,
+            duration_seconds: getDurationSeconds(startedAt, completedAt),
+            change_summary: `Bulk updated ${String(row.benefit_title ?? 'hospital day benefit')}`,
+            previous_values: buildUpdatePayload(row),
+            next_values: { ...buildUpdatePayload(row), benefit_summary: nextSummary },
+            changed_fields: ['benefit_summary'],
+          }),
+        ),
+      );
+
+      if (selectedPageId) await fetchPageContent(selectedPageId);
+      const auditFailureCount = auditErrors.filter(Boolean).length;
+      setStatus({
+        type: auditFailureCount > 0 ? 'error' : 'success',
+        message:
+          rowsToUpdate.length === 0
+            ? 'All hospital day cards already match these values.'
+            : auditFailureCount > 0
+              ? `${rowsToUpdate.length} hospital day cards updated, but ${auditFailureCount} audit logs failed.`
+              : `${rowsToUpdate.length} hospital day cards updated across all plan detail pages.`,
+      });
+    } catch (err) {
+      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Failed to update hospital day cards.' });
+    } finally {
+      setSavingHospitalDayCards(false);
+    }
   };
 
   const saveBenefitOrder = async (nextRows: CmsRow[], previousRows: CmsRow[]) => {
@@ -2424,6 +2514,45 @@ const AdminCmsPlaceholderPage: React.FC = () => {
                             </div>
                           )}
                         </div>
+
+                        {config.key === 'benefits' && (
+                          <div className={`mb-6 rounded-2xl border p-4 ${isDark ? 'border-emerald-900/60 bg-emerald-950/30' : 'border-emerald-100 bg-emerald-50/70'}`}>
+                            <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                              <div>
+                                <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Hospital day cards — global update</h3>
+                                <p className={`mt-1 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                  Saves these three descriptions to every matching plan detail page in one action.
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={saveHospitalDayCards}
+                                disabled={savingHospitalDayCards || pages.length === 0}
+                                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+                              >
+                                {savingHospitalDayCards ? <Loader className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                                Update All Plan Pages
+                              </button>
+                            </div>
+                            <div className="mt-4 grid gap-3">
+                              {HOSPITAL_DAY_CARD_TITLES.map((title) => (
+                                <label key={title} className="grid gap-1.5">
+                                  <span className={`text-xs font-semibold uppercase tracking-wide ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>{title}</span>
+                                  <textarea
+                                    value={hospitalDayCardSummaries[title]}
+                                    onChange={(event) =>
+                                      setHospitalDayCardSummaries((current) => ({ ...current, [title]: event.target.value }))
+                                    }
+                                    rows={2}
+                                    className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-500/20 ${
+                                      isDark ? 'border-gray-700 bg-gray-950 text-white' : 'border-gray-200 bg-white text-gray-900'
+                                    }`}
+                                  />
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
                         {rows.length === 0 ? (
                           <div className={`rounded-xl border border-dashed p-4 text-sm ${isDark ? 'border-gray-700 text-gray-400' : 'border-gray-300 text-gray-500'}`}>
