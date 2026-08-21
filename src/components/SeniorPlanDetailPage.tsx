@@ -19,6 +19,13 @@ const coverItems = [
   'Funeral Benefit',
 ];
 
+const excludedSeniorDayToDayBenefitTitles = new Set([
+  'basic dentistry',
+  'dentistry / optometry',
+  'optometry (iso leso optics)',
+  'chronic medication',
+]);
+
 // descriptionItems will be set in the component based on Senior category
 
 const legalCopy = `Practical Medical Insurance – Providing cover since 2003 Day1 Health (Pty) Ltd is an authorised Financial Services Provider – FSP Number 11319. Day1 Health (Pty) Ltd is duly approved and accredited by the Council for Medical Schemes – CMS Ref: 1074. Powered by Day1 Health – Underwritten by African Unity Life Ltd, a licensed Life Insurer and an authorised Financial Services Provider. FSP No: FSP 8447. Day1 Health offers Medical Insurance plans and is not a Medical Aid product.
@@ -367,7 +374,11 @@ const SeniorPlanDetailPage: React.FC = () => {
       title: typeof row.benefit_title === 'string' ? row.benefit_title.trim() : '',
       text: typeof row.benefit_summary === 'string' ? row.benefit_summary.trim() : '',
     }))
-    .filter((item) => item.title.length > 0 && item.text.length > 0);
+    .filter((item) => item.title.length > 0 && item.text.length > 0)
+    .filter(
+      (item) =>
+        categoryDisplay !== 'day-to-day' || !excludedSeniorDayToDayBenefitTitles.has(item.title.toLowerCase()),
+    );
   const displayDescriptionItems = cmsDescriptionItems.length > 0 ? cmsDescriptionItems : defaultDescriptionItems;
 
   useEffect(() => {
