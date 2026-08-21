@@ -13,18 +13,18 @@ import { useCmsAssetHref } from '../utils/cmsAssets';
 
 type CmsRow = Record<string, any> & { id: string };
 
-const excludedBenefitTitles = new Set([
-  'basic dentistry',
-  'dentistry / optometry',
-  'optometry (iso leso optics)',
-  'chronic medication',
-]);
-
 const coverItems = [
   'Private Managed Doctor Visits',
   'Funeral Cover',
   'Funeral Benefit',
 ];
+
+const excludedSeniorDayToDayBenefitTitles = new Set([
+  'basic dentistry',
+  'dentistry / optometry',
+  'optometry (iso leso optics)',
+  'chronic medication',
+]);
 
 // descriptionItems will be set in the component based on Senior category
 
@@ -51,6 +51,7 @@ const selectSeniorCmsPage = (
 ): CmsRow | null => {
   const categoryPlanKey = `senior-${category}`;
   const variantPlanKey = `${categoryPlanKey}-${variant}`;
+  const cmsVariantPlanKey = `senior-plan-${category}-${variant}`;
 
   const rankedPages = pages
     .map((page, index) => {
@@ -66,9 +67,24 @@ const selectSeniorCmsPage = (
       const routePath = String(page.route_path ?? '').toLowerCase();
       let score = -1;
 
-      if (planKey === variantPlanKey || planKey.includes(`${variantPlanKey}-`)) score = 140;
-      else if (pageHeading === variantPlanKey || pageHeading.includes(`${variantPlanKey}-`)) score = 130;
-      else if (heroTitle === variantPlanKey || heroTitle.includes(`${variantPlanKey}-`)) score = 120;
+      if (
+        planKey === variantPlanKey ||
+        planKey === cmsVariantPlanKey ||
+        planKey.includes(`${variantPlanKey}-`) ||
+        planKey.includes(`${cmsVariantPlanKey}-`)
+      ) score = 140;
+      else if (
+        pageHeading === variantPlanKey ||
+        pageHeading === cmsVariantPlanKey ||
+        pageHeading.includes(`${variantPlanKey}-`) ||
+        pageHeading.includes(`${cmsVariantPlanKey}-`)
+      ) score = 130;
+      else if (
+        heroTitle === variantPlanKey ||
+        heroTitle === cmsVariantPlanKey ||
+        heroTitle.includes(`${variantPlanKey}-`) ||
+        heroTitle.includes(`${cmsVariantPlanKey}-`)
+      ) score = 120;
       else if (
         routePath.includes('/plans/senior-plan') &&
         routePath.includes(`category=${category}`) &&
@@ -359,7 +375,10 @@ const SeniorPlanDetailPage: React.FC = () => {
       text: typeof row.benefit_summary === 'string' ? row.benefit_summary.trim() : '',
     }))
     .filter((item) => item.title.length > 0 && item.text.length > 0)
-    .filter((item) => !excludedBenefitTitles.has(item.title.toLowerCase()));
+    .filter(
+      (item) =>
+        categoryDisplay !== 'day-to-day' || !excludedSeniorDayToDayBenefitTitles.has(item.title.toLowerCase()),
+    );
   const displayDescriptionItems = cmsDescriptionItems.length > 0 ? cmsDescriptionItems : defaultDescriptionItems;
 
   useEffect(() => {
