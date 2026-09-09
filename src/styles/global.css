@@ -280,6 +280,6 @@ html[data-audience='employer'] [data-audience-content='individual'] {
 }
 
 @media (min-width: 64rem) {
-	.site-main { margin-inline-start: clamp(16.5rem, 18vw, 18.5rem) !important; }
+	.site-main { margin-inline-start: clamp(calc(16.5rem - 10px), calc(18vw - 10px), calc(18.5rem - 10px)) !important; }
 	html[data-sidebar='collapsed'] .site-main { margin-inline-start: 5rem !important; }
 }

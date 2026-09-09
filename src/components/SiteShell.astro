@@ -142,7 +142,7 @@ const { currentRoute } = Astro.props;
 	.site-footer li, .site-footer a { color: var(--color-text-muted); font-size: var(--text-body-sm); }
 
 	@media (min-width: 64rem) {
-		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(16.5rem, 18vw, 18.5rem); height: 100vh; height: 100dvh; overflow: hidden; border-right: 1px solid var(--color-border); background: var(--color-canvas); transition: width 460ms cubic-bezier(0.4, 0, 0.2, 1); }
+		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(calc(16.5rem - 10px), calc(18vw - 10px), calc(18.5rem - 10px)); height: 100vh; height: 100dvh; overflow: hidden; border-right: 1px solid var(--color-border); background: var(--color-canvas); transition: width 460ms cubic-bezier(0.4, 0, 0.2, 1); }
 		.site-sidebar__inner { display: flex; height: 100%; min-height: 0; padding: var(--space-4) var(--space-3); flex-direction: column; }
 		.site-sidebar__brand { position: relative; height: 5.25rem; margin-block-end: var(--space-4); transition: height 460ms cubic-bezier(0.4, 0, 0.2, 1), margin var(--transition-standard); }
 		.brand-mark { position: absolute; top: 0; left: 0; display: block; width: 5.25rem; overflow: hidden; transition: opacity 220ms ease, transform 320ms cubic-bezier(0.4, 0, 0.2, 1); }
@@ -162,7 +162,7 @@ const { currentRoute } = Astro.props;
 		.site-sidebar__actions { display: grid; margin-block-start: var(--space-3); gap: var(--space-2); }
 		.site-sidebar__actions :global(.ui-button) { width: 100%; }
 		.mobile-header { display: none; }
-		.site-main { min-height: 100dvh; margin-inline-start: clamp(16.5rem, 18vw, 18.5rem); transition: margin-inline-start 460ms cubic-bezier(0.4, 0, 0.2, 1); }
+		.site-main { min-height: 100dvh; margin-inline-start: clamp(calc(16.5rem - 10px), calc(18vw - 10px), calc(18.5rem - 10px)); transition: margin-inline-start 460ms cubic-bezier(0.4, 0, 0.2, 1); }
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
 		:global(html[data-sidebar='collapsed']) .site-sidebar { width: 5rem; }
 		:global(html[data-sidebar='collapsed']) .site-main { margin-inline-start: 5rem; }
