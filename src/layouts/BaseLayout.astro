@@ -27,7 +27,7 @@ const ogImage = openGraph.image?.toString();
 ---
 
 <!doctype html>
-	<html lang="en" data-audience="individual" data-sidebar="expanded">
+	<html lang="en" data-audience="individual">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -63,17 +63,6 @@ const ogImage = openGraph.image?.toString();
 				};
 				document.documentElement.dataset.audience = read();
 				window.Day1Audience = { get: () => read(), set };
-				const sidebarKey = 'day1:sidebar-collapsed';
-				const sidebarCollapsed = () => { try { return window.localStorage.getItem(sidebarKey) === 'true'; } catch { return false; } };
-				const setSidebar = (collapsed) => {
-					document.documentElement.dataset.sidebar = collapsed ? 'collapsed' : 'expanded';
-					try { window.localStorage.setItem(sidebarKey, String(collapsed)); } catch {}
-					return collapsed;
-				};
-				const initialSidebar = sidebarCollapsed() ? 'collapsed' : 'expanded';
-				document.documentElement.dataset.sidebar = initialSidebar;
-				document.documentElement.dataset.sidebarContent = initialSidebar;
-				window.Day1Sidebar = { collapsed: sidebarCollapsed, set: setSidebar };
 			})();
 		</script>
 	</head>

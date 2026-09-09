@@ -4,13 +4,15 @@ import { audienceLabels, type Audience } from '../domain/audience';
 interface Props {
 	selected?: Audience;
 	compact?: boolean;
+	order?: 'individual-first' | 'employer-first';
 }
 
-const { selected = 'individual', compact = false } = Astro.props;
+const { selected = 'individual', compact = false, order = 'individual-first' } = Astro.props;
+const audiences = order === 'employer-first' ? ['employer', 'individual'] as const : ['individual', 'employer'] as const;
 ---
 
 <div class:list={['audience-switcher', { 'audience-switcher--compact': compact }]} role="group" aria-label="Who is this cover for?">
-	{(['individual', 'employer'] as const).map((audience) => (
+	{audiences.map((audience) => (
 		<button type="button" data-audience-option={audience} aria-pressed={audience === selected}><span class="audience-option__icon" aria-hidden="true">{audience === 'individual' ? 'I' : 'E'}</span><span class="audience-option__label">{audienceLabels[audience]}</span></button>
 	))}
 </div>
