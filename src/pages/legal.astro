@@ -1,0 +1,15 @@
+---
+import ContentSection from '../components/ContentSection.astro';
+import PageShell from '../components/PageShell.astro';
+import { company } from '../data/company';
+---
+
+<PageShell routeKey="legal">
+	<ContentSection id="regulatory" title="Regulatory Information" status="approved">
+		<ul>{company.regulatoryStatements.map((statement) => <li>{statement.text}</li>)}</ul>
+	</ContentSection>
+	<ContentSection id="terms" title="Terms" />
+	<ContentSection id="privacy" title="POPIA and Privacy" />
+	<ContentSection id="complaints" title="Complaints" />
+	<ContentSection id="documents" title="Regulatory Documents" />
+</PageShell>

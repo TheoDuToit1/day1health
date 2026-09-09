@@ -1,0 +1,18 @@
+---
+import ContentSection from '../components/ContentSection.astro';
+import PageShell from '../components/PageShell.astro';
+import { company } from '../data/company';
+import { routes } from '../data/navigation';
+---
+
+<PageShell routeKey="cover">
+	<ContentSection id="included" title="What Is Included" status="database" />
+	<ContentSection id="limits" title="Limits and Waiting Periods" status="database" />
+	<ContentSection id="excluded" title="Exclusions" status="database" />
+	<ContentSection id="classification" title="Product Classification" status="approved">
+		<p>{company.productClassification}</p>
+	</ContentSection>
+	<ContentSection id="directory" title="Provider Directory" status="database">
+		<p><a href={routes.directory.href}>{routes.directory.label}</a></p>
+	</ContentSection>
+</PageShell>

@@ -1,0 +1,12 @@
+---
+import ContentSection from '../../components/ContentSection.astro';
+import PageShell from '../../components/PageShell.astro';
+import { company } from '../../data/company';
+---
+
+<PageShell routeKey="kzn" eyebrow="KZN">
+	<ContentSection id="regional-content" title="Regional Information" />
+	<ContentSection id="shared-compliance" title="Day1 Health Compliance" status="approved">
+		<ul>{company.regulatoryStatements.map((statement) => <li>{statement.text}</li>)}</ul>
+	</ContentSection>
+</PageShell>

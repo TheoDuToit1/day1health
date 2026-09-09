@@ -1,0 +1,22 @@
+---
+import ContentContainer from '../components/ContentContainer.astro';
+import PrimaryNavigation from '../components/PrimaryNavigation.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="Page Not Found | Day1 Health"
+	description="The requested Day1 Health page could not be found."
+	robots="noindex, follow"
+>
+	<PrimaryNavigation slot="before-main" />
+	<ContentContainer>
+		<article class="page-shell" data-page-status="not-found">
+			<header class="page-header">
+				<h1>Page Not Found</h1>
+				<p>The requested page could not be found.</p>
+			</header>
+			<p><a href="/">Return to Day1 Health</a></p>
+		</article>
+	</ContentContainer>
+</BaseLayout>

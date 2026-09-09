@@ -1,0 +1,18 @@
+---
+import ContentSection from '../components/ContentSection.astro';
+import PageShell from '../components/PageShell.astro';
+import { company } from '../data/company';
+---
+
+<PageShell routeKey="about">
+	<ContentSection id="story" title="Day1 Story" />
+	<ContentSection id="positioning" title="Company Positioning" />
+	<ContentSection id="leadership" title="Leadership and Founder" />
+	<ContentSection id="employers" title="Employer and SMME Suitability" />
+	<ContentSection id="compliance" title="Trust and Compliance" status="approved">
+		<ul>{company.regulatoryStatements.map((statement) => <li>{statement.text}</li>)}</ul>
+	</ContentSection>
+	<ContentSection id="underwriter" title="Underwriter" status="approved">
+		<p>Underwritten by {company.underwriter}</p>
+	</ContentSection>
+</PageShell>

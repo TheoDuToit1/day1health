@@ -1,0 +1,14 @@
+---
+interface Props {
+	id: string;
+	title: string;
+	status?: 'approved' | 'database' | 'todo';
+}
+
+const { id, title, status = 'todo' } = Astro.props;
+---
+
+<section id={id} aria-labelledby={`${id}-heading`} data-content-status={status}>
+	<h2 id={`${id}-heading`}>{title}</h2>
+	<slot />
+</section>

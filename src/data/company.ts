@@ -3,7 +3,7 @@ import type { CompanyInformation } from '../domain/company';
 export const company = {
 	companyName: 'Day1 Health',
 	brandName: 'Day1 Health',
-	canonicalDomain: null,
+	canonicalDomain: 'https://www.day1health.co.za',
 	fspNumber: '11319',
 	cmsReference: 'DM1074',
 	productClassification: 'Medical Insurance Product — not Medical Aid',
