@@ -273,3 +273,8 @@ textarea.form-control { min-height: 8rem; resize: vertical; }
 	box-shadow: inset 3px 0 0 var(--color-action);
 	background: var(--color-surface);
 }
+
+html[data-audience='individual'] [data-audience-content='employer'],
+html[data-audience='employer'] [data-audience-content='individual'] {
+	display: none;
+}

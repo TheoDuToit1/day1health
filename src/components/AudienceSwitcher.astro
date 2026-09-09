@@ -11,7 +11,7 @@ const { selected = 'individual', compact = false } = Astro.props;
 
 <div class:list={['audience-switcher', { 'audience-switcher--compact': compact }]} role="group" aria-label="Who is this cover for?">
 	{(['individual', 'employer'] as const).map((audience) => (
-		<button type="button" aria-pressed={audience === selected}>{audienceLabels[audience]}</button>
+		<button type="button" data-audience-option={audience} aria-pressed={audience === selected}>{audienceLabels[audience]}</button>
 	))}
 </div>
 

@@ -1,11 +1,14 @@
 ---
 import ContentSection from '../components/ContentSection.astro';
+import AudienceVariant from '../components/AudienceVariant.astro';
 import PageShell from '../components/PageShell.astro';
 import { routes } from '../data/navigation';
 ---
 
 <PageShell routeKey="quote">
 	<ContentSection id="context" title="Quote Context">
+		<AudienceVariant audience="individual"><p>Audience context: individual. A future quote session can read this selection.</p></AudienceVariant>
+		<AudienceVariant audience="employer"><p>Audience context: employer. A future quote session can read this selection.</p></AudienceVariant>
 		<ul>
 			<li>Audience</li>
 			<li>Region</li>

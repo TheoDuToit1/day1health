@@ -1,10 +1,14 @@
 ---
 import ContentSection from '../components/ContentSection.astro';
+import AudienceVariant from '../components/AudienceVariant.astro';
 import PageShell from '../components/PageShell.astro';
 ---
 
 <PageShell routeKey="contact">
-	<ContentSection id="methods" title="Contact Methods" />
+	<ContentSection id="methods" title="Contact Methods">
+		<AudienceVariant audience="individual"><p>Individual contact intent is available to a future contact journey.</p></AudienceVariant>
+		<AudienceVariant audience="employer"><p>Employer contact intent is available to a future contact journey.</p></AudienceVariant>
+	</ContentSection>
 	<ContentSection id="quote" title="Quote Entry" />
 	<ContentSection id="hours" title="Office Hours" />
 	<ContentSection id="location" title="Location and Map" />

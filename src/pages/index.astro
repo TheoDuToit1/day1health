@@ -1,5 +1,6 @@
 ---
 import ContentSection from '../components/ContentSection.astro';
+import AudienceVariant from '../components/AudienceVariant.astro';
 import PageShell from '../components/PageShell.astro';
 import { audienceLabels } from '../domain/audience';
 import { company } from '../data/company';
@@ -9,6 +10,8 @@ import { planFamilies } from '../data/plan-catalog';
 
 <PageShell routeKey="home">
 	<ContentSection id="audience" title="Individual and Employer" status="approved">
+		<AudienceVariant audience="individual"><p>This information structure is for people arranging cover for themselves or their families.</p></AudienceVariant>
+		<AudienceVariant audience="employer"><p>This information structure is for employers considering cover for their teams.</p></AudienceVariant>
 		<ul>
 			<li>{audienceLabels.individual}</li>
 			<li>{audienceLabels.employer}</li>

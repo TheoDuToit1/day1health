@@ -27,7 +27,7 @@ const ogImage = openGraph.image?.toString();
 ---
 
 <!doctype html>
-<html lang="en">
+	<html lang="en" data-audience="individual">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,6 +41,30 @@ const ogImage = openGraph.image?.toString();
 		<meta property="og:type" content={openGraph.type ?? 'website'} />
 		{canonical && <meta property="og:url" content={canonical} />}
 		{ogImage && <meta property="og:image" content={ogImage} />}
+		<script is:inline>
+			(() => {
+				const storageKey = 'day1:audience';
+				const fallback = 'individual';
+				const valid = (value) => value === 'individual' || value === 'employer';
+				const read = () => {
+					try {
+						const stored = window.localStorage.getItem(storageKey);
+						return valid(stored) ? stored : fallback;
+					} catch {
+						return fallback;
+					}
+				};
+				const set = (value) => {
+					const audience = valid(value) ? value : fallback;
+					document.documentElement.dataset.audience = audience;
+					try { window.localStorage.setItem(storageKey, audience); } catch {}
+					document.dispatchEvent(new CustomEvent('day1:audience-change', { detail: { audience } }));
+					return audience;
+				};
+				document.documentElement.dataset.audience = read();
+				window.Day1Audience = { get: () => read(), set };
+			})();
+		</script>
 	</head>
 	<body>
 		<a class="skip-link" href="#main-content">Skip to main content</a>

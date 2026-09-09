@@ -1,0 +1,12 @@
+---
+import type { Audience } from '../domain/audience';
+
+interface Props {
+	audience: Audience;
+	class?: string;
+}
+
+const { audience, class: className } = Astro.props;
+---
+
+<div class:list={['audience-variant', className]} data-audience-content={audience}><slot /></div>
