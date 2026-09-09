@@ -278,3 +278,8 @@ html[data-audience='individual'] [data-audience-content='employer'],
 html[data-audience='employer'] [data-audience-content='individual'] {
 	display: none;
 }
+
+@media (min-width: 64rem) {
+	.site-main { margin-inline-start: clamp(16.5rem, 18vw, 18.5rem) !important; }
+	html[data-sidebar='collapsed'] .site-main { margin-inline-start: 5rem !important; }
+}

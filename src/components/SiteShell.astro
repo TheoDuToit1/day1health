@@ -14,7 +14,7 @@ const { currentRoute } = Astro.props;
 	<aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
 		<div class="site-sidebar__inner">
 			<div class="site-sidebar__brand"><a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><button class="sidebar-toggle" type="button" aria-controls="desktop-sidebar" aria-expanded="true" aria-label="Collapse sidebar"><span aria-hidden="true">‹</span></button></div>
-			<PrimaryNavigation currentRoute={currentRoute} />
+			<div class="site-sidebar__nav"><PrimaryNavigation currentRoute={currentRoute} /></div>
 			<div class="site-sidebar__audience">
 				<p>Cover context</p>
 				<AudienceSwitcher />
@@ -37,7 +37,7 @@ const { currentRoute } = Astro.props;
 	<dialog class="mobile-navigation" id="mobile-navigation" aria-labelledby="mobile-navigation-title">
 		<div class="mobile-navigation__panel">
 			<div class="mobile-navigation__topline">
-				<p id="mobile-navigation-title">Day1 Health</p>
+				<img class="mobile-navigation__logo" src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" />
 				<button class="mobile-menu-close" type="button" aria-label="Close navigation">Close</button>
 			</div>
 			<PrimaryNavigation currentRoute={currentRoute} label="Mobile primary navigation" />
@@ -118,9 +118,10 @@ const { currentRoute } = Astro.props;
 	.mobile-header__quote { color: var(--color-on-action); background: var(--color-action); border-color: var(--color-action); }
 	.mobile-navigation { width: min(100% - var(--space-4), 31rem); max-width: none; min-height: 100%; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--color-canvas); box-shadow: var(--shadow-elevated); }
 	.mobile-navigation::backdrop { background: rgb(17 24 39 / 0.32); }
-	.mobile-navigation__panel { display: grid; min-height: 100dvh; padding: var(--space-5); align-content: start; gap: var(--space-7); }
+	.mobile-navigation__panel { display: grid; height: 100dvh; padding: var(--space-4); overflow-y: auto; overscroll-behavior: contain; align-content: start; gap: var(--space-5); }
 	.mobile-navigation__topline { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
-	.mobile-navigation__topline p, .mobile-navigation__audience p, .site-sidebar__audience p { margin: 0; color: var(--color-text-muted); font-size: var(--text-label); font-weight: var(--font-weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+	.mobile-navigation__logo { width: 4.5rem; height: auto; }
+	.mobile-navigation__audience p, .site-sidebar__audience p { margin: 0; color: var(--color-text-muted); font-size: var(--text-label); font-weight: var(--font-weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; }
 	.mobile-navigation :global(.primary-navigation) ul { display: grid; width: auto; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
 	.mobile-navigation :global(.primary-navigation) a { width: 100%; min-height: 3rem; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
 	.mobile-navigation :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
@@ -135,21 +136,22 @@ const { currentRoute } = Astro.props;
 	.site-footer li, .site-footer a { color: var(--color-text-muted); font-size: var(--text-body-sm); }
 
 	@media (min-width: 64rem) {
-		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(16.5rem, 20vw, 19rem); border-right: 1px solid var(--color-border); background: var(--color-canvas); transition: width var(--transition-standard); }
-		.site-sidebar__inner { display: flex; height: 100%; padding: var(--space-6) var(--space-5); flex-direction: column; }
-		.site-sidebar__brand { display: flex; margin-block-end: var(--space-7); align-items: start; justify-content: space-between; gap: var(--space-2); }
-		.brand-mark { display: block; width: 8.5rem; }
+		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(16.5rem, 18vw, 18.5rem); height: 100vh; height: 100dvh; overflow: hidden; border-right: 1px solid var(--color-border); background: var(--color-canvas); transition: width var(--transition-standard); }
+		.site-sidebar__inner { display: flex; height: 100%; min-height: 0; padding: var(--space-4) var(--space-3); flex-direction: column; }
+		.site-sidebar__brand { display: flex; margin-block-end: var(--space-3); align-items: start; justify-content: space-between; gap: var(--space-2); }
+		.brand-mark { display: block; width: 5.25rem; }
 		.brand-mark img { width: 100%; height: auto; }
 		.sidebar-toggle { display: inline-grid; width: var(--touch-target); min-height: var(--touch-target); padding: 0; border: 1px solid var(--color-border); border-radius: var(--radius-sm); place-items: center; color: var(--color-brand); background: var(--color-canvas); font-size: 1.5rem; cursor: pointer; }
+		.site-sidebar__nav { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 		.site-sidebar :global(.primary-navigation) { border: 0; }
 		.site-sidebar :global(.primary-navigation) ul { display: grid; width: auto; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
-		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: 2.8rem; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
+		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: var(--touch-target); padding-inline: var(--space-3); border-radius: var(--radius-sm); gap: var(--space-3); }
 		.site-sidebar :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
-		.site-sidebar__audience { display: grid; margin-block-start: var(--space-6); gap: var(--space-3); }
-		.site-sidebar__actions { display: grid; margin-block-start: auto; gap: var(--space-3); }
+		.site-sidebar__audience { display: grid; margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-top: 1px solid var(--color-border); gap: var(--space-2); }
+		.site-sidebar__actions { display: grid; margin-block-start: var(--space-3); gap: var(--space-2); }
 		.site-sidebar__actions :global(.ui-button) { width: 100%; }
 		.mobile-header { display: none; }
-		.site-main { min-height: 100dvh; margin-inline-start: clamp(16.5rem, 20vw, 19rem); transition: margin-inline-start var(--transition-standard); }
+		.site-main { min-height: 100dvh; margin-inline-start: clamp(16.5rem, 18vw, 18.5rem); transition: margin-inline-start var(--transition-standard); }
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
 		:global(html[data-sidebar='collapsed']) .site-sidebar { width: 5rem; }
 		:global(html[data-sidebar='collapsed']) .site-main { margin-inline-start: 5rem; }
@@ -164,5 +166,14 @@ const { currentRoute } = Astro.props;
 		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) a { justify-content: center; padding-inline: 0; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar__actions { width: 100%; justify-items: center; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar__actions :global(.ui-button) { width: var(--touch-target); padding-inline: 0; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-switcher { gap: var(--space-2); }
+		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-switcher button { display: grid; width: var(--touch-target); padding: 0; place-items: center; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-option__label { display: none; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-option__icon { display: inline; font-size: var(--text-caption); font-weight: var(--font-weight-bold); }
+		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link::before { content: '↪'; font-size: 1.1rem; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link { display: inline-flex; width: var(--touch-target); justify-content: center; border: 1px solid var(--color-brand); border-radius: var(--radius-sm); }
+		.site-sidebar :global(.nav-icon) { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.nav-icon) { width: 1.3rem; height: 1.3rem; }
+		@media (max-height: 44rem) { .site-sidebar__inner { padding-block: var(--space-2); } .site-sidebar__brand { margin-block-end: var(--space-1); } .brand-mark { width: 4.25rem; } .site-sidebar__audience { margin-block-start: var(--space-2); padding-block-start: var(--space-2); } }
 	}
 </style>
