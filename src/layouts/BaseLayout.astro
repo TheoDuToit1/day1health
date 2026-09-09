@@ -70,7 +70,9 @@ const ogImage = openGraph.image?.toString();
 					try { window.localStorage.setItem(sidebarKey, String(collapsed)); } catch {}
 					return collapsed;
 				};
-				document.documentElement.dataset.sidebar = sidebarCollapsed() ? 'collapsed' : 'expanded';
+				const initialSidebar = sidebarCollapsed() ? 'collapsed' : 'expanded';
+				document.documentElement.dataset.sidebar = initialSidebar;
+				document.documentElement.dataset.sidebarContent = initialSidebar;
 				window.Day1Sidebar = { collapsed: sidebarCollapsed, set: setSidebar };
 			})();
 		</script>

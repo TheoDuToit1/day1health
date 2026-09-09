@@ -101,14 +101,22 @@ const { currentRoute } = Astro.props;
 	syncAudience(window.Day1Audience?.get() ?? 'individual');
 	document.addEventListener('day1:audience-change', ((event: CustomEvent<{ audience: 'individual' | 'employer' }>) => syncAudience(event.detail.audience)) as EventListener);
 
-	function syncSidebar(collapsed: boolean) {
+	let sidebarContentTimer: number | undefined;
+
+	function syncSidebar(collapsed: boolean, animate = false) {
 		sidebarToggle?.setAttribute('aria-expanded', String(!collapsed));
 		sidebarToggle?.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
 		if (sidebarToggle) sidebarToggle.classList.toggle('is-collapsed', collapsed);
+		window.clearTimeout(sidebarContentTimer);
+		if (collapsed && animate) {
+			sidebarContentTimer = window.setTimeout(() => { document.documentElement.dataset.sidebarContent = 'collapsed'; }, 460);
+		} else {
+			document.documentElement.dataset.sidebarContent = collapsed ? 'collapsed' : 'expanded';
+		}
 	}
 
 	syncSidebar(window.Day1Sidebar?.collapsed() ?? false);
-	sidebarToggle?.addEventListener('click', () => syncSidebar(window.Day1Sidebar?.set(!(window.Day1Sidebar?.collapsed() ?? false)) ?? false));
+	sidebarToggle?.addEventListener('click', () => syncSidebar(window.Day1Sidebar?.set(!(window.Day1Sidebar?.collapsed() ?? false)) ?? false, true));
 </script>
 
 <style>
@@ -167,26 +175,26 @@ const { currentRoute } = Astro.props;
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
 		:global(html[data-sidebar='collapsed']) .site-sidebar { width: 5rem; }
 		:global(html[data-sidebar='collapsed']) .site-main { margin-inline-start: 5rem; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar__inner { padding-inline: var(--space-2); align-items: center; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar__brand { width: 100%; height: var(--touch-target); margin-block-end: var(--space-3); }
-		:global(html[data-sidebar='collapsed']) .sidebar-toggle { right: 0.5rem; }
-		:global(html[data-sidebar='collapsed']) .brand-mark { margin: 0; opacity: 0; transform: scale(0.82); pointer-events: none; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.nav-label),
-		:global(html[data-sidebar='collapsed']) .site-sidebar__audience,
-		:global(html[data-sidebar='collapsed']) .site-sidebar .ui-button > span,
-		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link { display: none; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) { width: 100%; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) a { justify-content: center; padding-inline: 0; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar__actions { width: 100%; grid-template-columns: 1fr; justify-items: center; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar__actions :global(.ui-button) { width: var(--touch-target); padding-inline: 0; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-switcher { gap: var(--space-2); }
-		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-switcher button { display: grid; width: var(--touch-target); padding: 0; place-items: center; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-option__label { display: none; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-option__icon { display: inline; font-size: var(--text-caption); font-weight: var(--font-weight-bold); }
-		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link::before { content: '↪'; font-size: 1.1rem; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link { display: inline-flex; width: var(--touch-target); justify-content: center; border: 1px solid var(--color-brand); border-radius: var(--radius-sm); }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar__inner { padding-inline: var(--space-2); align-items: center; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar__brand { width: 100%; height: var(--touch-target); margin-block-end: var(--space-3); }
+		:global(html[data-sidebar-content='collapsed']) .sidebar-toggle { right: 0.5rem; }
+		:global(html[data-sidebar-content='collapsed']) .brand-mark { margin: 0; opacity: 0; transform: scale(0.82); pointer-events: none; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar :global(.nav-label),
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar__audience,
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .ui-button > span,
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .sign-in-link { display: none; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar :global(.primary-navigation) { width: 100%; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar :global(.primary-navigation) a { justify-content: center; padding-inline: 0; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar__actions { width: 100%; grid-template-columns: 1fr; justify-items: center; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar__actions :global(.ui-button) { width: var(--touch-target); padding-inline: 0; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .audience-switcher { gap: var(--space-2); }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .audience-switcher button { display: grid; width: var(--touch-target); padding: 0; place-items: center; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .audience-option__label { display: none; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .audience-option__icon { display: inline; font-size: var(--text-caption); font-weight: var(--font-weight-bold); }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .sign-in-link::before { content: '↪'; font-size: 1.1rem; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar .sign-in-link { display: inline-flex; width: var(--touch-target); justify-content: center; border: 1px solid var(--color-brand); border-radius: var(--radius-sm); }
 		.site-sidebar :global(.nav-icon) { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.nav-icon) { width: 1.3rem; height: 1.3rem; }
+		:global(html[data-sidebar-content='collapsed']) .site-sidebar :global(.nav-icon) { width: 1.3rem; height: 1.3rem; }
 		@media (max-height: 44rem) { .site-sidebar__inner { padding-block: var(--space-2); } .site-sidebar__brand { margin-block-end: var(--space-1); } .brand-mark { width: 4.25rem; } .site-sidebar__audience { margin-block-start: var(--space-2); padding-block-start: var(--space-2); } }
 	}
 </style>
