@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 480" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 432" role="img" aria-labelledby="title desc">
   <title id="title">Hero banner placeholder</title>
   <desc id="desc">Placeholder for a hero banner containing a welcome message and image.</desc>
-  <rect width="1600" height="480" fill="#f5f7f9"/>
-  <rect x="1" y="1" width="1598" height="478" fill="none" stroke="#94a3b8" stroke-dasharray="10 8" stroke-width="2"/>
-  <text x="800" y="240" fill="#475569" font-family="Arial, sans-serif" font-size="24" font-style="italic" text-anchor="middle">[Hero banner — welcome message + image]</text>
+  <rect width="1600" height="432" fill="#f5f7f9"/>
+  <rect x="1" y="1" width="1598" height="430" fill="none" stroke="#94a3b8" stroke-dasharray="10 8" stroke-width="2"/>
+  <text x="800" y="216" fill="#475569" font-family="Arial, sans-serif" font-size="24" font-style="italic" text-anchor="middle">[Hero banner — welcome message + image]</text>
 </svg>
