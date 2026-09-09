@@ -147,7 +147,7 @@ const { currentRoute } = Astro.props;
 		.site-sidebar__brand { position: relative; height: 5.25rem; margin-block-end: var(--space-4); transition: height 460ms cubic-bezier(0.4, 0, 0.2, 1), margin var(--transition-standard); }
 		.brand-mark { position: absolute; top: 0; left: 0; display: block; width: 5.25rem; overflow: hidden; transition: opacity 220ms ease, transform 320ms cubic-bezier(0.4, 0, 0.2, 1); }
 		.brand-mark img { width: 100%; height: auto; }
-		.sidebar-toggle { position: absolute; top: 0; right: 0; display: inline-grid; width: var(--touch-target); min-height: var(--touch-target); padding: 0; border: 1px solid var(--color-border); border-radius: var(--radius-sm); place-items: center; color: var(--color-brand); background: var(--color-canvas); cursor: pointer; }
+		.sidebar-toggle { position: absolute; top: 0.75rem; right: 0; display: inline-grid; width: calc(var(--touch-target) * 0.95); min-height: calc(var(--touch-target) * 0.95); padding: 0; border: 0; border-radius: var(--radius-sm); place-items: center; color: var(--color-action); background: transparent; cursor: pointer; }
 		.sidebar-toggle.hamburger svg { width: 1.9rem; height: 1.9rem; transform: rotate(-45deg); }
 		.sidebar-toggle.hamburger.is-collapsed svg { transform: rotate(0); }
 		.sidebar-toggle.hamburger .line { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; transition: stroke-dasharray var(--transition-standard), stroke-dashoffset var(--transition-standard); }
