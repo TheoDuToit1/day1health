@@ -45,7 +45,7 @@ const { currentRoute, topHero = false } = Astro.props;
 		</div>
 	</dialog>
 
-	{topHero && <section class="site-hero" aria-label="Homepage introduction"><img src="/assets/placeholders/hero-banner.svg" alt="Placeholder for the homepage hero banner" /><slot name="top-hero" /></section>}
+	{topHero && <section class="site-hero" aria-label="Homepage introduction"><h1>Homepage</h1><img src="/assets/placeholders/hero-banner.svg" alt="Placeholder for the homepage hero banner" /><slot name="top-hero" /></section>}
 
 	<div class="site-body">
 		<aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
@@ -127,7 +127,8 @@ const { currentRoute, topHero = false } = Astro.props;
 
 <style>
 	.site-sidebar { display: none; }
-	.site-hero { padding: clamp(1.5rem, 3.5vw, 3rem) var(--gutter) 0; background: var(--color-canvas); }
+	.site-hero { padding: 30px var(--gutter) 0; background: var(--color-canvas); }
+	.site-hero h1 { margin-block-end: 30px; }
 	.site-hero img { width: 100%; }
 	.mobile-header { display: flex; min-height: 4.25rem; padding: var(--space-3); border-bottom: 1px solid var(--color-border); align-items: center; justify-content: space-between; gap: var(--space-2); background: var(--color-canvas); }
 	.mobile-header__brand, .site-footer__brand { color: var(--color-brand); font-weight: var(--font-weight-bold); text-decoration: none; white-space: nowrap; }
