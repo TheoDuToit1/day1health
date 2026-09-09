@@ -13,7 +13,7 @@ const { currentRoute } = Astro.props;
 <div class="site-shell">
 	<aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
 		<div class="site-sidebar__inner">
-			<div class="site-sidebar__brand"><a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><button class="sidebar-toggle" type="button" aria-controls="desktop-sidebar" aria-expanded="true" aria-label="Collapse sidebar"><span aria-hidden="true">‹</span></button></div>
+			<div class="site-sidebar__brand"><a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><button class="sidebar-toggle hamburger" type="button" aria-controls="desktop-sidebar" aria-expanded="true" aria-label="Collapse navigation"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22" /><path class="line" d="M7 16 27 16" /></svg></button></div>
 			<div class="site-sidebar__nav"><PrimaryNavigation currentRoute={currentRoute} /></div>
 			<div class="site-sidebar__audience">
 				<p>Cover context</p>
@@ -104,7 +104,7 @@ const { currentRoute } = Astro.props;
 	function syncSidebar(collapsed: boolean) {
 		sidebarToggle?.setAttribute('aria-expanded', String(!collapsed));
 		sidebarToggle?.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
-		if (sidebarToggle) sidebarToggle.querySelector('span')!.textContent = collapsed ? '›' : '‹';
+		if (sidebarToggle) sidebarToggle.classList.toggle('is-collapsed', collapsed);
 	}
 
 	syncSidebar(window.Day1Sidebar?.collapsed() ?? false);
@@ -147,7 +147,12 @@ const { currentRoute } = Astro.props;
 		.site-sidebar__brand { display: flex; margin-block-end: var(--space-3); align-items: start; justify-content: space-between; gap: var(--space-2); }
 		.brand-mark { display: block; width: 5.25rem; }
 		.brand-mark img { width: 100%; height: auto; }
-		.sidebar-toggle { display: inline-grid; width: var(--touch-target); min-height: var(--touch-target); padding: 0; border: 1px solid var(--color-border); border-radius: var(--radius-sm); place-items: center; color: var(--color-brand); background: var(--color-canvas); font-size: 1.5rem; cursor: pointer; }
+		.sidebar-toggle { display: inline-grid; width: var(--touch-target); min-height: var(--touch-target); padding: 0; border: 1px solid var(--color-border); border-radius: var(--radius-sm); place-items: center; color: var(--color-brand); background: var(--color-canvas); cursor: pointer; }
+		.sidebar-toggle.hamburger svg { width: 1.9rem; height: 1.9rem; transform: rotate(-45deg); }
+		.sidebar-toggle.hamburger.is-collapsed svg { transform: rotate(0); }
+		.sidebar-toggle.hamburger .line { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; transition: stroke-dasharray var(--transition-standard), stroke-dashoffset var(--transition-standard); }
+		.sidebar-toggle.hamburger .line-top-bottom { stroke-dasharray: 20 300; stroke-dashoffset: -32.42; }
+		.sidebar-toggle.hamburger.is-collapsed .line-top-bottom { stroke-dasharray: 12 63; stroke-dashoffset: 0; }
 		.site-sidebar__nav { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 		.site-sidebar :global(.primary-navigation) { border: 0; }
 		.site-sidebar :global(.primary-navigation) ul { display: grid; width: auto; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
