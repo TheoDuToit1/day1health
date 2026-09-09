@@ -169,7 +169,7 @@ const { currentRoute } = Astro.props;
 		.site-sidebar__brand { position: relative; height: 5.25rem; margin-block-end: var(--space-4); }
 		.brand-mark { position: absolute; top: 0; left: 0; display: block; width: 5.25rem; overflow: hidden; transition: opacity 220ms ease, transform 320ms cubic-bezier(0.4, 0, 0.2, 1); }
 		.brand-mark img { width: 100%; height: auto; }
-		.sidebar-toggle { position: absolute; top: 0.75rem; right: 0; display: inline-grid; width: calc(var(--touch-target) * 0.95); min-height: calc(var(--touch-target) * 0.95); padding: 0; border: 0; place-items: center; color: var(--color-action); background: transparent; cursor: pointer; }
+		.sidebar-toggle { position: absolute; top: 1rem; right: 0; display: inline-grid; width: calc(var(--touch-target) * 0.95); min-height: calc(var(--touch-target) * 0.95); padding: 0; border: 0; place-items: center; color: var(--color-action); background: transparent; cursor: pointer; }
 		.sidebar-toggle.hamburger svg { width: 1.9rem; height: 1.9rem; transform: rotate(-45deg); }
 		.sidebar-toggle.hamburger.is-collapsed svg { transform: rotate(0); }
 		.sidebar-toggle.hamburger .line { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; transition: stroke-dasharray var(--transition-standard), stroke-dashoffset var(--transition-standard); }
@@ -177,8 +177,8 @@ const { currentRoute } = Astro.props;
 		.sidebar-toggle.hamburger.is-collapsed .line-top-bottom { stroke-dasharray: 12 63; stroke-dashoffset: 0; }
 		.site-sidebar__nav { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 		.site-sidebar :global(.primary-navigation) { border: 0; }
-		.site-sidebar :global(.primary-navigation) ul { display: grid; width: 100%; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
-		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: 2.875rem; padding-inline: var(--space-3); gap: var(--space-2); border-radius: 0; }
+		.site-sidebar :global(.primary-navigation) ul { display: grid; width: 100%; min-height: auto; margin: 0; padding: 0; gap: 2px; }
+		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: 2.875rem; padding-inline: var(--space-3); gap: calc(var(--space-2) + 4px); border-radius: 0; }
 		.site-sidebar :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
 		.site-sidebar :global(.nav-icon) { width: 1rem; height: 1rem; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 		.site-sidebar__actions { display: grid; margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-top: 1px solid var(--color-border); gap: var(--space-1); }
