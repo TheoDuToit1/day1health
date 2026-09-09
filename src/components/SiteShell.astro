@@ -11,18 +11,16 @@ const { currentRoute } = Astro.props;
 ---
 
 <div class="site-shell">
-	<aside class="site-sidebar" aria-label="Day1 Health site navigation">
+	<aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
 		<div class="site-sidebar__inner">
-			<a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}>
-				<img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" />
-			</a>
+			<div class="site-sidebar__brand"><a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><button class="sidebar-toggle" type="button" aria-controls="desktop-sidebar" aria-expanded="true" aria-label="Collapse sidebar"><span aria-hidden="true">‹</span></button></div>
 			<PrimaryNavigation currentRoute={currentRoute} />
 			<div class="site-sidebar__audience">
 				<p>Cover context</p>
 				<AudienceSwitcher />
 			</div>
 			<div class="site-sidebar__actions">
-				<Button href={routes.quote.href}>Get a Quote</Button>
+				<Button href={routes.quote.href} ariaLabel="Get a Quote"><svg slot="icon-start" class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" /></svg>Get a Quote</Button>
 				<a class="sign-in-link" href={routes.signIn.href}>Sign In</a>
 			</div>
 		</div>
@@ -70,6 +68,7 @@ const { currentRoute } = Astro.props;
 				get: () => 'individual' | 'employer';
 				set: (audience: 'individual' | 'employer') => 'individual' | 'employer';
 			};
+			Day1Sidebar?: { collapsed: () => boolean; set: (collapsed: boolean) => boolean; };
 		}
 	}
 
@@ -77,6 +76,7 @@ const { currentRoute } = Astro.props;
 	const trigger = document.querySelector<HTMLButtonElement>('.mobile-menu-trigger');
 	const closeButton = document.querySelector<HTMLButtonElement>('.mobile-menu-close');
 	const audienceOptions = document.querySelectorAll<HTMLButtonElement>('[data-audience-option]');
+	const sidebarToggle = document.querySelector<HTMLButtonElement>('.sidebar-toggle');
 
 	function setMenuState(open: boolean) {
 		trigger?.setAttribute('aria-expanded', String(open));
@@ -98,6 +98,15 @@ const { currentRoute } = Astro.props;
 
 	syncAudience(window.Day1Audience?.get() ?? 'individual');
 	document.addEventListener('day1:audience-change', ((event: CustomEvent<{ audience: 'individual' | 'employer' }>) => syncAudience(event.detail.audience)) as EventListener);
+
+	function syncSidebar(collapsed: boolean) {
+		sidebarToggle?.setAttribute('aria-expanded', String(!collapsed));
+		sidebarToggle?.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+		if (sidebarToggle) sidebarToggle.querySelector('span')!.textContent = collapsed ? '›' : '‹';
+	}
+
+	syncSidebar(window.Day1Sidebar?.collapsed() ?? false);
+	sidebarToggle?.addEventListener('click', () => syncSidebar(window.Day1Sidebar?.set(!(window.Day1Sidebar?.collapsed() ?? false)) ?? false));
 </script>
 
 <style>
@@ -126,10 +135,12 @@ const { currentRoute } = Astro.props;
 	.site-footer li, .site-footer a { color: var(--color-text-muted); font-size: var(--text-body-sm); }
 
 	@media (min-width: 64rem) {
-		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(16.5rem, 20vw, 19rem); border-right: 1px solid var(--color-border); background: var(--color-canvas); }
+		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(16.5rem, 20vw, 19rem); border-right: 1px solid var(--color-border); background: var(--color-canvas); transition: width var(--transition-standard); }
 		.site-sidebar__inner { display: flex; height: 100%; padding: var(--space-6) var(--space-5); flex-direction: column; }
-		.brand-mark { display: block; width: 8.5rem; margin-block-end: var(--space-7); }
+		.site-sidebar__brand { display: flex; margin-block-end: var(--space-7); align-items: start; justify-content: space-between; gap: var(--space-2); }
+		.brand-mark { display: block; width: 8.5rem; }
 		.brand-mark img { width: 100%; height: auto; }
+		.sidebar-toggle { display: inline-grid; width: var(--touch-target); min-height: var(--touch-target); padding: 0; border: 1px solid var(--color-border); border-radius: var(--radius-sm); place-items: center; color: var(--color-brand); background: var(--color-canvas); font-size: 1.5rem; cursor: pointer; }
 		.site-sidebar :global(.primary-navigation) { border: 0; }
 		.site-sidebar :global(.primary-navigation) ul { display: grid; width: auto; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
 		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: 2.8rem; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
@@ -138,7 +149,20 @@ const { currentRoute } = Astro.props;
 		.site-sidebar__actions { display: grid; margin-block-start: auto; gap: var(--space-3); }
 		.site-sidebar__actions :global(.ui-button) { width: 100%; }
 		.mobile-header { display: none; }
-		.site-main { min-height: 100dvh; margin-inline-start: clamp(16.5rem, 20vw, 19rem); }
+		.site-main { min-height: 100dvh; margin-inline-start: clamp(16.5rem, 20vw, 19rem); transition: margin-inline-start var(--transition-standard); }
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
+		:global(html[data-sidebar='collapsed']) .site-sidebar { width: 5rem; }
+		:global(html[data-sidebar='collapsed']) .site-main { margin-inline-start: 5rem; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar__inner { padding-inline: var(--space-2); align-items: center; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar__brand { width: 100%; margin-block-end: var(--space-5); flex-direction: column; align-items: center; }
+		:global(html[data-sidebar='collapsed']) .brand-mark { width: 3rem; margin: 0; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.nav-label),
+		:global(html[data-sidebar='collapsed']) .site-sidebar__audience,
+		:global(html[data-sidebar='collapsed']) .site-sidebar .ui-button > span,
+		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link { display: none; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) { width: 100%; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) a { justify-content: center; padding-inline: 0; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar__actions { width: 100%; justify-items: center; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar__actions :global(.ui-button) { width: var(--touch-target); padding-inline: 0; }
 	}
 </style>
