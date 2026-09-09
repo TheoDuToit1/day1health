@@ -58,9 +58,6 @@
 	--width-reading: 46rem;
 	--width-standard: 72rem;
 	--width-wide: 88rem;
-	--global-utility-height: 1.75rem;
-	--global-main-header-height: 4rem;
-	--global-header-height: calc(var(--global-utility-height) + var(--global-main-header-height));
 	--global-sidebar-width: clamp(11.5rem, 14vw, 13rem);
 	--future-sidebar-width: var(--global-sidebar-width);
 	--section-space: clamp(3.5rem, 8vw, 7rem);

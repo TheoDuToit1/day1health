@@ -11,11 +11,6 @@ const { currentRoute } = Astro.props;
 ---
 
 <div class="site-shell">
-	<header class="global-header">
-		<div class="global-header__utility"><a href={routes.signIn.href}>Sign In</a><span>Just Browsing</span></div>
-		<div class="global-header__main"><a class="global-header__brand" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><AudienceSwitcher compact order="employer-first" /></div>
-	</header>
-
 	<header class="mobile-header">
 		<a class="mobile-header__brand" href={routes.home.href} aria-label={`${company.brandName} home`}>Day1 Health</a>
 		<div class="mobile-header__actions">
@@ -41,8 +36,23 @@ const { currentRoute } = Astro.props;
 		</div>
 	</dialog>
 
+	<dialog class="audience-entry" id="audience-entry" aria-labelledby="audience-entry-title">
+		<div class="audience-entry__panel">
+			<img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" />
+			<h2 id="audience-entry-title">Who are you covering?</h2>
+			<p>Choose an option to tailor the website.</p>
+			<AudienceSwitcher compact order="employer-first" />
+		</div>
+	</dialog>
+
 	<div class="site-body">
-		<aside class="site-sidebar" aria-label="Day1 Health site navigation"><PrimaryNavigation currentRoute={currentRoute} /></aside>
+		<aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
+			<div class="site-sidebar__inner">
+				<div class="site-sidebar__brand"><a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><button class="sidebar-toggle hamburger" type="button" aria-controls="desktop-sidebar" aria-expanded="true" aria-label="Collapse sidebar"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22" /><path class="line" d="M7 16 27 16" /></svg></button></div>
+				<div class="site-sidebar__nav"><PrimaryNavigation currentRoute={currentRoute} /></div>
+				<div class="site-sidebar__actions"><a class="sign-in-link" href={routes.signIn.href}>Sign In</a><span class="sidebar-browsing">Just Browsing</span></div>
+			</div>
+		</aside>
 		<main id="main-content" class="site-main" tabindex="-1">
 			<div class="site-main__content"><slot /></div>
 			<footer class="site-footer">
@@ -63,13 +73,16 @@ const { currentRoute } = Astro.props;
 				get: () => 'individual' | 'employer';
 				set: (audience: 'individual' | 'employer') => 'individual' | 'employer';
 			};
+			Day1Sidebar?: { collapsed: () => boolean; set: (collapsed: boolean) => boolean; };
 		}
 	}
 
 	const dialog = document.querySelector<HTMLDialogElement>('#mobile-navigation');
 	const trigger = document.querySelector<HTMLButtonElement>('.mobile-menu-trigger');
 	const closeButton = document.querySelector<HTMLButtonElement>('.mobile-menu-close');
+	const entryDialog = document.querySelector<HTMLDialogElement>('#audience-entry');
 	const audienceOptions = document.querySelectorAll<HTMLButtonElement>('[data-audience-option]');
+	const sidebarToggle = document.querySelector<HTMLButtonElement>('.sidebar-toggle');
 
 	function setMenuState(open: boolean) {
 		trigger?.setAttribute('aria-expanded', String(open));
@@ -86,16 +99,32 @@ const { currentRoute } = Astro.props;
 
 	audienceOptions.forEach((option) => option.addEventListener('click', () => {
 		const audience = option.dataset.audienceOption;
-		if (audience === 'individual' || audience === 'employer') window.Day1Audience?.set(audience);
+		if (audience === 'individual' || audience === 'employer') {
+			window.Day1Audience?.set(audience);
+			if (entryDialog?.open) entryDialog.close();
+		}
 	}));
 
 	syncAudience(window.Day1Audience?.get() ?? 'individual');
 	document.addEventListener('day1:audience-change', ((event: CustomEvent<{ audience: 'individual' | 'employer' }>) => syncAudience(event.detail.audience)) as EventListener);
 
+	function syncSidebar(collapsed: boolean) {
+		sidebarToggle?.setAttribute('aria-expanded', String(!collapsed));
+		sidebarToggle?.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+		sidebarToggle?.classList.toggle('is-collapsed', collapsed);
+	}
+
+	syncSidebar(window.Day1Sidebar?.collapsed() ?? false);
+	sidebarToggle?.addEventListener('click', () => syncSidebar(window.Day1Sidebar?.set(!(window.Day1Sidebar?.collapsed() ?? false)) ?? false));
+
+	try {
+		if (window.localStorage.getItem('day1:audience') === null) entryDialog?.showModal();
+	} catch { entryDialog?.showModal(); }
+
 </script>
 
 <style>
-	.global-header, .site-sidebar { display: none; }
+	.site-sidebar { display: none; }
 	.mobile-header { display: flex; min-height: 4.25rem; padding: var(--space-3); border-bottom: 1px solid var(--color-border); align-items: center; justify-content: space-between; gap: var(--space-2); background: var(--color-canvas); }
 	.mobile-header__brand, .site-footer__brand { color: var(--color-brand); font-weight: var(--font-weight-bold); text-decoration: none; white-space: nowrap; }
 	.mobile-header__actions { display: flex; min-width: 0; flex-shrink: 0; align-items: center; gap: var(--space-2); }
@@ -118,6 +147,15 @@ const { currentRoute } = Astro.props;
 	.mobile-navigation__actions { display: grid; gap: var(--space-3); }
 	.mobile-navigation__actions :global(.ui-button) { width: 100%; }
 	.sign-in-link { display: inline-flex; min-height: var(--touch-target); align-items: center; color: var(--color-brand); font-size: var(--text-body-sm); font-weight: var(--font-weight-bold); }
+	.audience-entry { width: min(calc(100% - var(--space-6)), 28rem); padding: 0; border: 0; border-radius: var(--radius-md); background: var(--color-canvas); box-shadow: var(--shadow-elevated); }
+	.audience-entry::backdrop { background: rgb(17 24 39 / 0.48); }
+	.audience-entry__panel { display: grid; padding: var(--space-7); text-align: center; justify-items: center; gap: var(--space-4); }
+	.audience-entry__panel img { width: 5rem; }
+	.audience-entry__panel h2, .audience-entry__panel p { margin: 0; }
+	.audience-entry__panel p { color: var(--color-text-muted); }
+	.audience-entry :global(.audience-switcher) { width: 100%; }
+	.audience-entry :global(.audience-switcher button) { border-color: var(--color-brand); border-radius: var(--radius-pill); color: var(--color-brand); background: var(--color-canvas); font-weight: var(--font-weight-bold); }
+	.audience-entry :global(.audience-switcher button[aria-pressed='true']) { color: var(--color-on-brand); background: var(--color-brand); }
 	.site-footer { padding: var(--space-7) var(--gutter); border-top: 1px solid var(--color-border); background: var(--color-surface); }
 	.site-footer__inner { width: min(100%, var(--width-standard)); margin-inline: auto; }
 	.site-footer__brand { margin-block-end: var(--space-4); }
@@ -125,24 +163,38 @@ const { currentRoute } = Astro.props;
 	.site-footer li, .site-footer a { color: var(--color-text-muted); font-size: var(--text-body-sm); }
 
 	@media (min-width: 64rem) {
-		.global-header { position: sticky; top: 0; z-index: 20; display: block; height: var(--global-header-height); border-bottom: 1px solid var(--color-border); background: var(--color-canvas); }
-		.global-header__utility { display: flex; height: var(--global-utility-height); padding-inline: var(--gutter); border-bottom: 1px solid var(--color-border); justify-content: flex-end; align-items: center; gap: var(--space-4); color: var(--color-text-muted); font-size: var(--text-caption); }
-		.global-header__utility a { color: var(--color-text-muted); font-size: inherit; font-weight: var(--font-weight-medium); }
-		.global-header__main { display: flex; height: var(--global-main-header-height); padding-inline: var(--gutter); align-items: center; justify-content: space-between; gap: var(--space-5); }
-		.global-header__brand { display: block; width: 4rem; }
-		.global-header__brand img { width: 100%; height: auto; }
-		.global-header :global(.audience-switcher) { grid-template-columns: repeat(2, auto); gap: var(--space-2); }
-		.global-header :global(.audience-switcher button) { min-height: 2.25rem; padding-inline: var(--space-4); border-color: var(--color-brand); border-radius: var(--radius-pill); color: var(--color-brand); background: var(--color-canvas); font-weight: var(--font-weight-bold); }
-		.global-header :global(.audience-switcher button[aria-pressed='true']) { color: var(--color-on-brand); background: var(--color-brand); }
-		.site-body { display: grid; min-height: calc(100dvh - var(--global-header-height)); grid-template-columns: var(--global-sidebar-width) minmax(0, 1fr); }
-		.site-sidebar { position: sticky; top: var(--global-header-height); display: block; height: calc(100dvh - var(--global-header-height)); min-height: 0; padding-block: var(--space-3); overflow-y: auto; overscroll-behavior: contain; border-right: 1px solid var(--color-border); background: var(--color-canvas); }
+		.site-body { display: grid; min-height: 100dvh; grid-template-columns: var(--global-sidebar-width) minmax(0, 1fr); transition: grid-template-columns 460ms cubic-bezier(0.4, 0, 0.2, 1); }
+		.site-sidebar { position: sticky; top: 0; display: block; width: var(--global-sidebar-width); height: 100dvh; min-height: 0; overflow: hidden; border-right: 1px solid var(--color-border); background: var(--color-canvas); transition: width 460ms cubic-bezier(0.4, 0, 0.2, 1); }
+		.site-sidebar__inner { display: flex; height: 100%; min-height: 0; padding: var(--space-4) var(--space-3); flex-direction: column; }
+		.site-sidebar__brand { position: relative; height: 5.25rem; margin-block-end: var(--space-4); }
+		.brand-mark { position: absolute; top: 0; left: 0; display: block; width: 5.25rem; overflow: hidden; transition: opacity 220ms ease, transform 320ms cubic-bezier(0.4, 0, 0.2, 1); }
+		.brand-mark img { width: 100%; height: auto; }
+		.sidebar-toggle { position: absolute; top: 0.75rem; right: 0; display: inline-grid; width: calc(var(--touch-target) * 0.95); min-height: calc(var(--touch-target) * 0.95); padding: 0; border: 0; place-items: center; color: var(--color-action); background: transparent; cursor: pointer; }
+		.sidebar-toggle.hamburger svg { width: 1.9rem; height: 1.9rem; transform: rotate(-45deg); }
+		.sidebar-toggle.hamburger.is-collapsed svg { transform: rotate(0); }
+		.sidebar-toggle.hamburger .line { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; transition: stroke-dasharray var(--transition-standard), stroke-dashoffset var(--transition-standard); }
+		.sidebar-toggle.hamburger .line-top-bottom { stroke-dasharray: 20 300; stroke-dashoffset: -32.42; }
+		.sidebar-toggle.hamburger.is-collapsed .line-top-bottom { stroke-dasharray: 12 63; stroke-dashoffset: 0; }
+		.site-sidebar__nav { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 		.site-sidebar :global(.primary-navigation) { border: 0; }
 		.site-sidebar :global(.primary-navigation) ul { display: grid; width: 100%; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
 		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: 2.875rem; padding-inline: var(--space-3); gap: var(--space-2); border-radius: 0; }
 		.site-sidebar :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
 		.site-sidebar :global(.nav-icon) { width: 1rem; height: 1rem; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+		.site-sidebar__actions { display: grid; margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-top: 1px solid var(--color-border); gap: var(--space-1); }
+		.site-sidebar__actions .sign-in-link, .sidebar-browsing { min-height: 2.5rem; padding-inline: var(--space-3); align-items: center; font-size: var(--text-body-sm); }
+		.sidebar-browsing { display: inline-flex; color: var(--color-text-muted); }
 		.mobile-header { display: none; }
-		.site-main { min-width: 0; min-height: calc(100dvh - var(--global-header-height)); }
+		.site-main { min-width: 0; min-height: 100dvh; }
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
+		:global(html[data-sidebar='collapsed']) .site-body { grid-template-columns: 5rem minmax(0, 1fr); }
+		:global(html[data-sidebar='collapsed']) .site-sidebar { width: 5rem; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar__inner { padding-inline: var(--space-2); align-items: center; }
+		:global(html[data-sidebar='collapsed']) .brand-mark { opacity: 0; transform: scale(0.82); pointer-events: none; }
+		:global(html[data-sidebar='collapsed']) .sidebar-toggle { right: 0.5rem; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.nav-label),
+		:global(html[data-sidebar='collapsed']) .site-sidebar__actions { display: none; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) a { justify-content: center; padding-inline: 0; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.nav-icon) { width: 1.3rem; height: 1.3rem; }
 	}
 </style>
