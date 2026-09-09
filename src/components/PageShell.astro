@@ -28,6 +28,7 @@ const canonicalUrl = siteOrigin ? new URL(route.href, siteOrigin) : undefined;
 	robots={robotsFor(metadata.indexing)}
 >
 	<SiteShell currentRoute={routeKey} topHero={topHero}>
+		<div slot="top-hero"><slot name="top-hero" /></div>
 		<div class="content-container">
 			<article class="page-shell" data-page-status={metadata.status} data-indexing-decision={metadata.indexing}>
 				{!hidePageHeader && <PageHeader heading={metadata.heading} eyebrow={eyebrow} />}
