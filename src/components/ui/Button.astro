@@ -1,0 +1,39 @@
+---
+interface Props {
+	href?: string;
+	variant?: 'primary' | 'secondary' | 'tertiary';
+	type?: 'button' | 'submit' | 'reset';
+	disabled?: boolean;
+	ariaLabel?: string;
+	class?: string;
+}
+const { href, variant = 'primary', type = 'button', disabled = false, ariaLabel, class: className } = Astro.props;
+---
+{href && !disabled ? (
+	<a class:list={['ui-button', `ui-button--${variant}`, className]} href={href} aria-label={ariaLabel}>
+		<slot name="icon-start" /><span><slot /></span><slot name="icon-end" />
+	</a>
+) : (
+	<button class:list={['ui-button', `ui-button--${variant}`, className]} type={type} disabled={disabled} aria-label={ariaLabel}>
+		<slot name="icon-start" /><span><slot /></span><slot name="icon-end" />
+	</button>
+)}
+<style>
+	.ui-button {
+		display: inline-flex; min-height: var(--touch-target); padding: 0.7rem 1.125rem;
+		border: 1px solid transparent; border-radius: var(--radius-sm); align-items: center;
+		justify-content: center; gap: var(--space-2); font-size: var(--text-body-sm);
+		font-weight: var(--font-weight-bold); line-height: 1.2; text-align: center;
+		text-decoration: none; cursor: pointer;
+		transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+	}
+	.ui-button:hover:not(:disabled) { transform: translateY(-1px); }
+	.ui-button:active:not(:disabled) { transform: translateY(0); }
+	.ui-button:disabled { cursor: not-allowed; opacity: 0.5; }
+	.ui-button--primary { color: var(--color-on-action); background: var(--color-action); border-color: var(--color-action); }
+	.ui-button--primary:hover:not(:disabled) { box-shadow: var(--shadow-subtle); filter: brightness(0.96); }
+	.ui-button--secondary { color: var(--color-brand); background: var(--color-canvas); border-color: var(--color-brand); }
+	.ui-button--secondary:hover:not(:disabled) { color: var(--color-on-brand); background: var(--color-brand); }
+	.ui-button--tertiary { padding-inline: var(--space-2); color: var(--color-brand); background: transparent; }
+	.ui-button--tertiary:hover:not(:disabled) { background: var(--color-surface); }
+</style>

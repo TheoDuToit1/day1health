@@ -8,7 +8,7 @@ interface Props {
 const { id, title, status = 'todo' } = Astro.props;
 ---
 
-<section id={id} aria-labelledby={`${id}-heading`} data-content-status={status}>
+<section class="content-section" id={id} aria-labelledby={`${id}-heading`} data-content-status={status}>
 	<h2 id={`${id}-heading`}>{title}</h2>
 	<slot />
 </section>

@@ -1,0 +1,154 @@
+---
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const colours = [
+	['Brand', 'var(--color-brand)'],
+	['Action', 'var(--color-action)'],
+	['Ink', 'var(--color-text)'],
+	['Muted', 'var(--color-text-muted)'],
+	['Surface', 'var(--color-surface)'],
+	['Border', 'var(--color-border)'],
+	['White', 'var(--color-canvas)'],
+];
+const spacing = [1, 2, 3, 4, 5, 6, 7, 8];
+
+export function getStaticPaths() {
+	return [{ params: { preview: '_design-system' } }];
+}
+---
+
+<BaseLayout
+	title="Day1 design system preview"
+	description="Internal development preview of the Day1 Health visual system."
+	robots="noindex, nofollow"
+>
+	<Container width="wide">
+		<header class="preview-header">
+			<p class="eyebrow">Development preview · not a marketing page</p>
+			<h1>Day1 visual system</h1>
+			<p class="lead">A white-first, accessible foundation for clear healthcare communication.</p>
+		</header>
+	</Container>
+
+	<Section labelledby="colour-heading" surface="subtle">
+		<Container width="wide">
+			<h2 id="colour-heading">Colour</h2>
+			<div class="swatch-grid">
+				{colours.map(([name, value]) => (
+					<div class="swatch">
+						<div class="swatch__colour" style={`--swatch: ${value}`}></div>
+						<strong>{name}</strong><code>{value}</code>
+					</div>
+				))}
+			</div>
+		</Container>
+	</Section>
+
+	<Section labelledby="type-heading">
+		<Container width="wide">
+			<h2 id="type-heading">Typography</h2>
+			<div class="type-samples">
+				<p class="type-display"><span>Display</span> Health cover made clear.</p>
+				<h1><span>H1</span> The right cover for everyday life.</h1>
+				<h2><span>H2</span> Understand your options.</h2>
+				<h3><span>H3</span> Benefits you can use.</h3>
+				<h4><span>H4</span> Important details.</h4>
+				<p class="type-body-lg"><span>Body large</span> Straightforward information helps people make confident choices.</p>
+				<p><span>Body</span> Clear, readable copy with a comfortable line length.</p>
+				<p class="type-small"><span>Body small</span> Supporting information remains legible.</p>
+				<p class="type-label"><span>Label</span> Plan information</p>
+				<p class="type-caption"><span>Caption</span> Supporting context and notes.</p>
+			</div>
+		</Container>
+	</Section>
+
+	<Section labelledby="interaction-heading" surface="subtle">
+		<Container width="wide">
+			<h2 id="interaction-heading">Buttons and links</h2>
+			<div class="row">
+				<Button>Primary action</Button>
+				<Button variant="secondary">Secondary action</Button>
+				<Button variant="tertiary">Tertiary action</Button>
+				<Button disabled>Disabled action</Button>
+			</div>
+			<p class="link-samples">This is an <a href="#forms">inline link</a>. <a class="action-link" href="#cards">Standalone action link <span aria-hidden="true">→</span></a></p>
+		</Container>
+	</Section>
+
+	<Section id="cards" labelledby="cards-heading">
+		<Container width="wide">
+			<h2 id="cards-heading">Cards and markers</h2>
+			<div class="card-grid">
+				<Card><p class="eyebrow">Standard</p><h3>Quiet elevation</h3><p>For content needing light separation from its surroundings.</p></Card>
+				<Card variant="bordered"><span class="badge">Status</span><h3>Bordered card</h3><p>Structural distinction without visual weight.</p></Card>
+				<Card variant="surface"><p class="compliance-marker">Compliance information</p><h3>Surface card</h3><p>A subtle alternative to the white canvas.</p></Card>
+			</div>
+		</Container>
+	</Section>
+
+	<Section labelledby="spacing-heading" surface="subtle">
+		<Container width="wide">
+			<h2 id="spacing-heading">Spacing</h2>
+			<div class="spacing-list">
+				{spacing.map((step) => <div><code>space-{step}</code><span style={`--size: var(--space-${step})`}></span></div>)}
+			</div>
+		</Container>
+	</Section>
+
+	<Section id="forms" labelledby="forms-heading">
+		<Container width="reading">
+			<h2 id="forms-heading">Form foundation</h2>
+			<div class="form-preview" aria-label="Example form controls">
+				<div class="form-field">
+					<label class="form-label" for="preview-name">Full name</label>
+					<input class="form-control" id="preview-name" name="name" autocomplete="name" placeholder="Your full name" />
+					<p class="form-helper">Use the name shown on your identity document.</p>
+				</div>
+				<div class="form-field">
+					<label class="form-label" for="preview-plan">Plan interest</label>
+					<select class="form-control" id="preview-plan" name="plan"><option>Select an option</option><option>Day-to-Day</option></select>
+				</div>
+				<div class="form-field">
+					<label class="form-label" for="preview-message">Question</label>
+					<textarea class="form-control" id="preview-message" name="message"></textarea>
+					<p class="form-error" id="preview-error">Example error message.</p>
+				</div>
+				<label class="choice-control"><input type="checkbox" name="consent" /> <span>I agree to be contacted.</span></label>
+				<label class="choice-control"><input type="radio" name="contact-method" /> <span>Contact me by phone.</span></label>
+				<div class="form-field"><label class="form-label" for="preview-disabled">Disabled</label><input class="form-control" id="preview-disabled" disabled value="Unavailable" /></div>
+			</div>
+		</Container>
+	</Section>
+</BaseLayout>
+
+<style>
+	.preview-header { padding-block: clamp(4rem, 10vw, 8rem); }
+	.preview-header h1 { color: var(--color-brand); }
+	.lead { color: var(--color-text-muted); font-size: var(--text-body-lg); }
+	.swatch-grid, .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--space-5); }
+	.swatch { display: grid; gap: var(--space-2); font-size: var(--text-body-sm); }
+	.swatch__colour { height: 6rem; background: var(--swatch); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+	.swatch code { color: var(--color-text-muted); font-size: var(--text-caption); }
+	.type-samples { display: grid; gap: var(--space-6); }
+	.type-samples > * { margin: 0; }
+	.type-samples span { display: block; margin-block-end: var(--space-2); color: var(--color-text-muted); font-size: var(--text-caption); font-weight: var(--font-weight-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+	.type-display { max-width: 18ch; font-size: var(--text-display); font-weight: var(--font-weight-bold); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
+	.type-body-lg { font-size: var(--text-body-lg); }
+	.type-small { font-size: var(--text-body-sm); }
+	.type-label { font-size: var(--text-label); font-weight: var(--font-weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+	.type-caption { font-size: var(--text-caption); }
+	.row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+	.link-samples { display: grid; margin-block-start: var(--space-6); gap: var(--space-3); }
+	.card-grid h3 { margin-block-start: var(--space-5); }
+	.spacing-list { display: grid; gap: var(--space-3); }
+	.spacing-list div { display: grid; grid-template-columns: 5rem 1fr; align-items: center; gap: var(--space-4); }
+	.spacing-list span { display: block; width: var(--size); max-width: 100%; height: 0.75rem; background: var(--color-brand); border-radius: var(--radius-pill); }
+	.form-preview { display: grid; gap: var(--space-5); }
+	@media (max-width: 30rem) {
+		.swatch-grid, .card-grid { grid-template-columns: 1fr; }
+	}
+</style>

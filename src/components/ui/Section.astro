@@ -1,0 +1,13 @@
+---
+interface Props {
+	id?: string; labelledby?: string; spacing?: 'compact' | 'standard';
+	surface?: 'canvas' | 'subtle'; class?: string;
+}
+const { id, labelledby, spacing = 'standard', surface = 'canvas', class: className } = Astro.props;
+---
+<section id={id} aria-labelledby={labelledby} class:list={['ui-section', `ui-section--${spacing}`, `ui-section--${surface}`, className]}><slot /></section>
+<style>
+	.ui-section--compact { padding-block: clamp(2rem, 5vw, 4rem); }
+	.ui-section--standard { padding-block: var(--section-space); }
+	.ui-section--subtle { background: var(--color-surface); }
+</style>

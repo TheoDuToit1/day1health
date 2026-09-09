@@ -1,0 +1,12 @@
+---
+interface Props { variant?: 'standard' | 'bordered' | 'surface'; ariaLabel?: string; class?: string; }
+const { variant = 'standard', ariaLabel, class: className } = Astro.props;
+---
+<article class:list={['ui-card', `ui-card--${variant}`, className]} aria-label={ariaLabel}><slot /></article>
+<style>
+	.ui-card { padding: clamp(1.25rem, 3vw, 2rem); background: var(--color-canvas); border-radius: var(--radius-md); }
+	.ui-card > :last-child { margin-block-end: 0; }
+	.ui-card--standard { box-shadow: var(--shadow-subtle); }
+	.ui-card--bordered { border: 1px solid var(--color-border); }
+	.ui-card--surface { background: var(--color-surface); }
+</style>

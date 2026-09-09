@@ -1,0 +1,11 @@
+---
+interface Props { width?: 'reading' | 'standard' | 'wide'; class?: string; }
+const { width = 'standard', class: className } = Astro.props;
+---
+<div class:list={['ui-container', `ui-container--${width}`, className]}><slot /></div>
+<style>
+	.ui-container { width: min(calc(100% - (2 * var(--gutter))), var(--container-width)); margin-inline: auto; }
+	.ui-container--reading { --container-width: var(--width-reading); }
+	.ui-container--standard { --container-width: var(--width-standard); }
+	.ui-container--wide { --container-width: var(--width-wide); }
+</style>
