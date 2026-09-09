@@ -6,8 +6,8 @@ import AudienceSwitcher from './AudienceSwitcher.astro';
 import PrimaryNavigation from './PrimaryNavigation.astro';
 import Button from './ui/Button.astro';
 
-interface Props { currentRoute?: RouteKey; standalone?: boolean; }
-const { currentRoute, standalone = false } = Astro.props;
+interface Props { currentRoute?: RouteKey; }
+const { currentRoute } = Astro.props;
 ---
 
 <div class="site-shell">
@@ -45,14 +45,14 @@ const { currentRoute, standalone = false } = Astro.props;
 		</div>
 	</dialog>
 
-	<div class:list={['site-body', { 'site-body--standalone': standalone }]}>
-		{!standalone && <aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
+	<div class="site-body">
+		<aside class="site-sidebar" id="desktop-sidebar" aria-label="Day1 Health site navigation">
 			<div class="site-sidebar__inner">
 				<div class="site-sidebar__brand"><a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}><img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" /></a><button class="sidebar-toggle hamburger" type="button" aria-controls="desktop-sidebar" aria-expanded="true" aria-label="Collapse sidebar"><svg viewBox="0 0 32 32" aria-hidden="true"><path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22" /><path class="line" d="M7 16 27 16" /></svg></button></div>
 				<div class="site-sidebar__nav"><PrimaryNavigation currentRoute={currentRoute} /></div>
 				<div class="site-sidebar__actions"><a class="sign-in-link" href={routes.signIn.href}>Sign In</a><span class="sidebar-browsing">Just Browsing</span></div>
 			</div>
-		</aside>}
+		</aside>
 		<main id="main-content" class="site-main" tabindex="-1">
 			<div class="site-main__content"><slot /></div>
 			<footer class="site-footer">
@@ -187,8 +187,7 @@ const { currentRoute, standalone = false } = Astro.props;
 		.mobile-header { display: none; }
 		.site-main { min-width: 0; min-height: 100dvh; }
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
-		.site-body--standalone { grid-template-columns: minmax(0, 1fr); }
-		:global(html[data-sidebar='collapsed']) .site-body:not(.site-body--standalone) { grid-template-columns: 5rem minmax(0, 1fr); }
+		:global(html[data-sidebar='collapsed']) .site-body { grid-template-columns: 5rem minmax(0, 1fr); }
 		:global(html[data-sidebar='collapsed']) .site-sidebar { width: 5rem; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar__inner { padding-inline: var(--space-2); align-items: center; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar__brand { width: 100%; }

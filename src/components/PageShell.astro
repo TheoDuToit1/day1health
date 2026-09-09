@@ -11,10 +11,9 @@ interface Props {
 	routeKey: RouteKey;
 	eyebrow?: string;
 	hidePageHeader?: boolean;
-	standalone?: boolean;
 }
 
-const { routeKey, eyebrow, hidePageHeader = false, standalone = false } = Astro.props;
+const { routeKey, eyebrow, hidePageHeader = false } = Astro.props;
 const metadata = pageMetadata[routeKey];
 const route = routes[routeKey];
 const siteOrigin = company.canonicalDomain ?? Astro.site;
@@ -27,7 +26,7 @@ const canonicalUrl = siteOrigin ? new URL(route.href, siteOrigin) : undefined;
 	canonicalUrl={canonicalUrl}
 	robots={robotsFor(metadata.indexing)}
 >
-	<SiteShell currentRoute={routeKey} standalone={standalone}>
+	<SiteShell currentRoute={routeKey}>
 		<div class="content-container">
 			<article class="page-shell" data-page-status={metadata.status} data-indexing-decision={metadata.indexing}>
 				{!hidePageHeader && <PageHeader heading={metadata.heading} eyebrow={eyebrow} />}
