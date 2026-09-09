@@ -159,8 +159,9 @@ const { currentRoute } = Astro.props;
 		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: var(--touch-target); padding-inline: var(--space-3); border-radius: var(--radius-sm); gap: var(--space-3); }
 		.site-sidebar :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
 		.site-sidebar__audience { display: grid; margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-top: 1px solid var(--color-border); gap: var(--space-2); }
-		.site-sidebar__actions { display: grid; margin-block-start: var(--space-3); gap: var(--space-2); }
+		.site-sidebar__actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; margin-block-start: var(--space-3); gap: var(--space-2); }
 		.site-sidebar__actions :global(.ui-button) { width: 100%; }
+		.site-sidebar__actions .sign-in-link { justify-content: center; padding-inline: var(--space-2); }
 		.mobile-header { display: none; }
 		.site-main { min-height: 100dvh; margin-inline-start: clamp(calc(16.5rem - 10px), calc(18vw - 10px), calc(18.5rem - 10px)); transition: margin-inline-start 460ms cubic-bezier(0.4, 0, 0.2, 1); }
 		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
@@ -176,7 +177,7 @@ const { currentRoute } = Astro.props;
 		:global(html[data-sidebar='collapsed']) .site-sidebar .sign-in-link { display: none; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) { width: 100%; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar :global(.primary-navigation) a { justify-content: center; padding-inline: 0; }
-		:global(html[data-sidebar='collapsed']) .site-sidebar__actions { width: 100%; justify-items: center; }
+		:global(html[data-sidebar='collapsed']) .site-sidebar__actions { width: 100%; grid-template-columns: 1fr; justify-items: center; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar__actions :global(.ui-button) { width: var(--touch-target); padding-inline: 0; }
 		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-switcher { gap: var(--space-2); }
 		:global(html[data-sidebar='collapsed']) .site-sidebar .audience-switcher button { display: grid; width: var(--touch-target); padding: 0; place-items: center; }
