@@ -1,49 +1,25 @@
 ---
-import ContentSection from '../components/ContentSection.astro';
 import AudienceVariant from '../components/AudienceVariant.astro';
+import Button from '../components/ui/Button.astro';
 import PageShell from '../components/PageShell.astro';
-import { audienceLabels } from '../domain/audience';
-import { company } from '../data/company';
-import { routes } from '../data/navigation';
+import { homepageContent } from '../data/homepage';
 import { planFamilies } from '../data/plan-catalog';
 ---
-
-<PageShell routeKey="home">
-	<ContentSection id="audience" title="Individual and Employer" status="approved">
-		<AudienceVariant audience="individual"><p>This information structure is for people arranging cover for themselves or their families.</p></AudienceVariant>
-		<AudienceVariant audience="employer"><p>This information structure is for employers considering cover for their teams.</p></AudienceVariant>
-		<ul>
-			<li>{audienceLabels.individual}</li>
-			<li>{audienceLabels.employer}</li>
-		</ul>
-		<p><a href={routes.kzn.href}>{routes.kzn.label}</a></p>
-	</ContentSection>
-	<ContentSection id="trust" title="Trust and Compliance" status="approved">
-		<ul>
-			{company.regulatoryStatements.map((statement) => <li>{statement.text}</li>)}
-		</ul>
-	</ContentSection>
-	<ContentSection id="plans" title="Our Packages" status="database">
-		<ul>
-			{planFamilies.map((family) => <li>{family.name}</li>)}
-		</ul>
-		<p><a href={routes.plans.href}>{routes.plans.label}</a></p>
-	</ContentSection>
-	<ContentSection id="cover" title="What We Cover">
-		<p><a href={routes.cover.href}>{routes.cover.label}</a></p>
-	</ContentSection>
-	<ContentSection id="audience-relevance" title="Individual and Employer Relevance" />
-	<ContentSection id="why-day1" title="About Day1 Health" status="approved">
-		<p>{company.regulatoryStatements.find((statement) => statement.id === 'underwriter')?.text}</p>
-	</ContentSection>
-	<ContentSection id="reviews" title="Reviews and Social Proof">
-		<p><a href={routes.reviews.href}>{routes.reviews.label}</a></p>
-	</ContentSection>
-	<ContentSection id="conversion" title="Quote and Contact">
-		<ul>
-			<li><a href={routes.quote.href}>{routes.quote.label}</a></li>
-			<li><a href={routes.contact.href}>{routes.contact.label}</a></li>
-			<li><a href={routes.signIn.href}>{routes.signIn.label}</a></li>
-		</ul>
-	</ContentSection>
+<PageShell routeKey="home" hidePageHeader>
+	<section class="hero" aria-labelledby="hero-heading"><div class="hero-copy"><p class="eyebrow">{homepageContent.hero.eyebrow}</p><AudienceVariant audience="individual"><h1 id="hero-heading">{homepageContent.hero.individual.title}</h1><p>{homepageContent.hero.individual.description}</p></AudienceVariant><AudienceVariant audience="employer"><h1 id="hero-heading">{homepageContent.hero.employer.title}</h1><p>{homepageContent.hero.employer.description}</p></AudienceVariant><div class="actions"><Button href={homepageContent.hero.primaryCta.href}>{homepageContent.hero.primaryCta.label}</Button><Button href={homepageContent.hero.secondaryCta.href} variant="secondary">{homepageContent.hero.secondaryCta.label}</Button></div></div><aside class="hero-panel" aria-label="Day1 product classification"><p>Day1 Health</p><strong>Medical Insurance Product</strong><span>Not Medical Aid</span></aside></section>
+	<section class="trust" aria-labelledby="trust-heading"><div><p class="eyebrow">Trust and compliance</p><h2 id="trust-heading">{homepageContent.trust.title}</h2><p>{homepageContent.trust.description}</p></div><ul>{homepageContent.trust.statements.map((statement) => <li>{statement.text}</li>)}</ul></section>
+	<section class="plans" aria-labelledby="plans-heading"><div><p class="eyebrow">{homepageContent.plans.eyebrow}</p><h2 id="plans-heading">{homepageContent.plans.title}</h2><p>{homepageContent.plans.description}</p><Button href={homepageContent.plans.cta.href} variant="secondary">{homepageContent.plans.cta.label}</Button></div><ol>{planFamilies.map((family, index) => <li class:list={{ featured: index === 0 }}><span>0{index + 1}</span><strong>{family.name}</strong></li>)}</ol></section>
+	<section class="why" aria-labelledby="why-heading"><div><p class="eyebrow">{homepageContent.whyDay1.eyebrow}</p><h2 id="why-heading">{homepageContent.whyDay1.title}</h2></div><ul>{homepageContent.whyDay1.items.map((item) => <li>{item}</li>)}</ul></section>
+	<section class="audience-feature" aria-labelledby="audience-heading"><AudienceVariant audience="individual"><p class="eyebrow">{homepageContent.audienceValue.individual.eyebrow}</p><h2 id="audience-heading">{homepageContent.audienceValue.individual.title}</h2><p>{homepageContent.audienceValue.individual.description}</p><Button href={homepageContent.audienceValue.individual.cta.href} variant="secondary">{homepageContent.audienceValue.individual.cta.label}</Button></AudienceVariant><AudienceVariant audience="employer"><p class="eyebrow">{homepageContent.audienceValue.employer.eyebrow}</p><h2 id="audience-heading">{homepageContent.audienceValue.employer.title}</h2><p>{homepageContent.audienceValue.employer.description}</p><Button href={homepageContent.audienceValue.employer.cta.href} variant="secondary">{homepageContent.audienceValue.employer.cta.label}</Button></AudienceVariant></section>
+	<section class="process" aria-labelledby="process-heading"><p class="eyebrow">{homepageContent.process.eyebrow}</p><h2 id="process-heading">{homepageContent.process.title}</h2><ol>{homepageContent.process.steps.map((step) => <li><span>{step.number}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}</ol></section>
+	<section class="cover" aria-labelledby="cover-heading"><div><p class="eyebrow">{homepageContent.cover.eyebrow}</p><h2 id="cover-heading">{homepageContent.cover.title}</h2></div><div><p>{homepageContent.cover.description}</p><Button href={homepageContent.cover.cta.href} variant="secondary">{homepageContent.cover.cta.label}</Button></div></section>
+	<section class="reviews" aria-labelledby="reviews-heading"><p class="eyebrow">{homepageContent.reviews.eyebrow}</p><h2 id="reviews-heading">{homepageContent.reviews.title}</h2><p>{homepageContent.reviews.description}</p><a class="action-link" href={homepageContent.reviews.cta.href}>{homepageContent.reviews.cta.label} <span aria-hidden="true">→</span></a></section>
+	<section class="final" aria-labelledby="final-heading"><AudienceVariant audience="individual"><h2 id="final-heading">{homepageContent.finalCta.individual.title}</h2><p>{homepageContent.finalCta.individual.description}</p></AudienceVariant><AudienceVariant audience="employer"><h2 id="final-heading">{homepageContent.finalCta.employer.title}</h2><p>{homepageContent.finalCta.employer.description}</p></AudienceVariant><div class="actions"><Button href={homepageContent.finalCta.primaryCta.href}>{homepageContent.finalCta.primaryCta.label}</Button><Button href={homepageContent.finalCta.secondaryCta.href} variant="tertiary">{homepageContent.finalCta.secondaryCta.label}</Button></div></section>
 </PageShell>
+<style>
+.hero{display:grid;margin-inline:calc(-1 * var(--gutter));padding:clamp(3rem,7vw,7rem) var(--gutter);gap:var(--space-7);background:var(--color-surface)}.hero-copy{max-width:45rem}.hero h1{max-width:13ch;color:var(--color-brand);font-size:clamp(2.7rem,4.7vw,4.75rem);line-height:var(--leading-tight)}.hero :global(.audience-variant>p){max-width:58ch;color:var(--color-text-muted);font-size:var(--text-body-lg)}.actions{display:flex;margin-block-start:var(--space-6);gap:var(--space-3);flex-wrap:wrap}.hero-panel{display:grid;min-height:14rem;padding:var(--space-6);align-content:end;gap:var(--space-2);color:var(--color-on-brand);background:var(--color-brand);border-radius:var(--radius-md)}.hero-panel p{margin:0 0 auto;color:inherit;font-size:var(--text-label);font-weight:var(--font-weight-bold);letter-spacing:var(--tracking-label);text-transform:uppercase}.hero-panel strong{max-width:12ch;font-size:var(--text-h3);line-height:var(--leading-heading)}.hero-panel span{font-size:var(--text-body-sm)}
+.trust,.plans,.why,.cover{display:grid;padding-block:var(--section-space);gap:var(--space-6)}.trust h2,.plans h2,.why h2,.audience-feature h2,.process h2,.cover h2,.reviews h2{color:var(--color-brand)}.trust p:not(.eyebrow),.plans p:not(.eyebrow),.cover div:last-child p,.reviews>p:not(.eyebrow){color:var(--color-text-muted);font-size:var(--text-body-lg)}.trust{border-bottom:1px solid var(--color-border)}.trust ul,.why ul{display:grid;margin:0;padding:0;list-style:none;gap:var(--space-2)}.trust li{padding-inline-start:var(--space-4);border-left:2px solid var(--color-action);font-size:var(--text-body-sm)}
+.plans ol,.process ol{display:grid;margin:0;padding:0;list-style:none;border-top:1px solid var(--color-border)}.plans li{display:flex;min-height:5.5rem;padding:var(--space-4) 0;border-bottom:1px solid var(--color-border);align-items:center;gap:var(--space-5)}.plans li span,.process li>span{color:var(--color-action);font-size:var(--text-label);font-weight:var(--font-weight-bold);letter-spacing:var(--tracking-label)}.plans li strong{font-size:var(--text-h3);letter-spacing:var(--tracking-tight)}.plans li.featured strong{color:var(--color-brand)}.why ul{border-top:1px solid var(--color-border)}.why li{padding:var(--space-4) 0 var(--space-4) var(--space-5);border-bottom:1px solid var(--color-border);font-size:var(--text-body-lg)}.why li::before{content:'—';position:absolute;margin-inline-start:calc(-1 * var(--space-5));color:var(--color-action)}
+.audience-feature{padding:clamp(2.5rem,7vw,5rem);background:var(--color-surface);border-radius:var(--radius-lg)}.audience-feature h2{max-width:16ch}.audience-feature :global(.audience-variant>p:not(.eyebrow)){color:var(--color-text-muted);font-size:var(--text-body-lg)}.process{padding-block:var(--section-space)}.process ol{margin-block-start:var(--space-7)}.process li{padding:var(--space-5) 0;border-bottom:1px solid var(--color-border)}.process h3{margin-block:var(--space-3) var(--space-2)}.process li p{margin:0;color:var(--color-text-muted)}.cover{border-top:1px solid var(--color-border)}.reviews{max-width:var(--width-reading);padding-block:var(--section-space)}.final{display:grid;padding:clamp(2.5rem,7vw,5rem);gap:var(--space-6);color:var(--color-on-brand);background:var(--color-brand);border-radius:var(--radius-lg)}.final h2{max-width:16ch;color:inherit}.final :global(.audience-variant>p){color:inherit;opacity:.88}.final :global(.ui-button--tertiary){color:var(--color-on-brand)}.final :global(.ui-button--tertiary:hover:not(:disabled)){background:rgb(255 255 255 / .12)}
+@media(min-width:48rem){.hero{grid-template-columns:minmax(0,1.45fr) minmax(15rem,.55fr);align-items:stretch}.hero-panel{min-height:auto}.trust,.why,.cover{grid-template-columns:minmax(0,1fr) minmax(20rem,.85fr);align-items:start}.process ol{grid-template-columns:repeat(3,1fr)}.process li{min-height:15rem;padding:var(--space-5);border-right:1px solid var(--color-border)}.process li:first-child{padding-inline-start:0}.process li:last-child{border-right:0}.final{grid-template-columns:minmax(0,1fr) auto;align-items:end}}@media(min-width:64rem){.plans{grid-template-columns:minmax(0,.9fr) minmax(25rem,1.1fr);align-items:end}}
+</style>

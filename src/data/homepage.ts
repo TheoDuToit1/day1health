@@ -1,39 +1,15 @@
 import { audienceLabels } from '../domain/audience';
-import type { HomepageContent } from '../domain/content';
 import { company } from './company';
+import { routes } from './navigation';
 
 export const homepageContent = {
-	shared: {
-		hero: {
-			source: 'approved',
-			content: {
-				shared: { title: company.brandName },
-				overrides: {
-					individual: { eyebrow: audienceLabels.individual },
-					employer: { eyebrow: audienceLabels.employer },
-				},
-			},
-		},
-		trust: { source: 'approved', content: company.regulatoryStatements },
-		planDiscovery: {
-			source: 'database',
-			note: 'Plan discovery content must be mapped from the future plan data source.',
-		},
-		coverIntroduction: {
-			source: 'todo',
-			note: 'Approved cover introduction copy is required.',
-		},
-		audienceMessaging: {
-			source: 'todo',
-			note: 'Approved individual and employer positioning is required.',
-		},
-		reviewsEntry: {
-			source: 'todo',
-			note: 'Approved review content and sourcing rules are required.',
-		},
-		contactQuoteCta: {
-			source: 'todo',
-			note: 'Approved contact and quote CTA copy is required.',
-		},
-	},
-} as const satisfies HomepageContent;
+	hero: { eyebrow: 'Medical insurance, made easier to understand', individual: { title: 'Straightforward cover for you and your family.', description: 'Explore Day1 Health medical insurance options and take the next step when you are ready.' }, employer: { title: 'Practical healthcare cover for your team.', description: 'Explore Day1 Health medical insurance options for employees and start a conversation when you are ready.' }, primaryCta: { label: 'Get a Quote', href: routes.quote.href }, secondaryCta: { label: 'View Our Packages', href: routes.plans.href } },
+	trust: { title: 'A regulated medical insurance product', description: 'Day1 Health provides a clear route into medical insurance information and cover discovery.', statements: company.regulatoryStatements },
+	plans: { eyebrow: 'Cover discovery', title: 'Start with the cover structure that fits your needs.', description: 'Explore the Day1 package families first. Full plan information belongs on the packages page.', cta: { label: 'Explore Packages', href: routes.plans.href } },
+	whyDay1: { eyebrow: 'Why Day1', title: 'Clear information before important cover decisions.', items: ['Straightforward medical insurance information.', 'Options for individuals, families and employers.', 'An established compliance and underwriting framework.'] },
+	audienceValue: { individual: { eyebrow: audienceLabels.individual, title: 'Make sense of cover for the people who matter to you.', description: 'Use the package structure to understand your options, then request a quote when you want to continue.', cta: { label: 'View Cover', href: routes.cover.href } }, employer: { eyebrow: audienceLabels.employer, title: 'Give your team a clearer route to healthcare cover.', description: 'Review the available package structure, then speak to Day1 Health about the next step for your business.', cta: { label: 'Contact Us', href: routes.contact.href } } },
+	process: { eyebrow: 'How it works', title: 'A simple place to begin.', steps: [{ number: '01', title: 'Explore', description: 'Review package and cover information.' }, { number: '02', title: 'Request a quote', description: 'Tell Day1 Health you would like to continue.' }, { number: '03', title: 'Take the next step', description: 'Use the appropriate Day1 process when ready.' }] },
+	cover: { eyebrow: 'What we cover', title: 'Understand the information that shapes your cover choice.', description: 'Explore cover information, medical-insurance context and the terms that help you ask better questions.', cta: { label: 'Explore What We Cover', href: routes.cover.href } },
+	reviews: { eyebrow: 'Customer experiences', title: 'Looking for reviews?', description: 'Visit the reviews area for Day1 Health customer-experience information as it becomes available.', cta: { label: 'Read Reviews', href: routes.reviews.href } },
+	finalCta: { individual: { title: 'Ready to explore cover for yourself or your family?', description: 'Start with a quote or contact Day1 Health with your questions.' }, employer: { title: 'Ready to discuss cover for your team?', description: 'Start with a quote or contact Day1 Health to discuss your next step.' }, primaryCta: { label: 'Get a Quote', href: routes.quote.href }, secondaryCta: { label: 'Contact Us', href: routes.contact.href } },
+} as const;
