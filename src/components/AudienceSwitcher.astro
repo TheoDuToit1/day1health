@@ -1,0 +1,28 @@
+---
+import { audienceLabels, type Audience } from '../domain/audience';
+
+interface Props {
+	selected?: Audience;
+	compact?: boolean;
+}
+
+const { selected = 'individual', compact = false } = Astro.props;
+---
+
+<div class:list={['audience-switcher', { 'audience-switcher--compact': compact }]} role="group" aria-label="Who is this cover for?">
+	{(['individual', 'employer'] as const).map((audience) => (
+		<button type="button" aria-pressed={audience === selected}>{audienceLabels[audience]}</button>
+	))}
+</div>
+
+<style>
+	.audience-switcher { display: grid; gap: var(--space-2); }
+	.audience-switcher button {
+		min-height: var(--touch-target); padding: var(--space-2) var(--space-3); color: var(--color-text-muted);
+		background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); text-align: left;
+		font-size: var(--text-body-sm); cursor: pointer;
+	}
+	.audience-switcher button[aria-pressed='true'] { color: var(--color-text); background: var(--color-surface); border-color: var(--color-border); font-weight: var(--font-weight-bold); }
+	.audience-switcher--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.audience-switcher--compact button { text-align: center; }
+</style>

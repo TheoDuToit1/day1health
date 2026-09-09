@@ -1,0 +1,122 @@
+---
+import type { RouteKey } from '../domain/navigation';
+import { company } from '../data/company';
+import { routes } from '../data/navigation';
+import AudienceSwitcher from './AudienceSwitcher.astro';
+import PrimaryNavigation from './PrimaryNavigation.astro';
+import Button from './ui/Button.astro';
+
+interface Props { currentRoute?: RouteKey; }
+const { currentRoute } = Astro.props;
+---
+
+<div class="site-shell">
+	<aside class="site-sidebar" aria-label="Day1 Health site navigation">
+		<div class="site-sidebar__inner">
+			<a class="brand-mark" href={routes.home.href} aria-label={`${company.brandName} home`}>
+				<img src="/assets/Logo.jpg" width="530" height="530" alt="Day1 Health" />
+			</a>
+			<PrimaryNavigation currentRoute={currentRoute} />
+			<div class="site-sidebar__audience">
+				<p>Cover context</p>
+				<AudienceSwitcher />
+			</div>
+			<div class="site-sidebar__actions">
+				<Button href={routes.quote.href}>Get a Quote</Button>
+				<a class="sign-in-link" href={routes.signIn.href}>Sign In</a>
+			</div>
+		</div>
+	</aside>
+
+	<header class="mobile-header">
+		<a class="mobile-header__brand" href={routes.home.href} aria-label={`${company.brandName} home`}>Day1 Health</a>
+		<div class="mobile-header__actions">
+			<a class="mobile-header__quote" href={routes.quote.href}>Quote</a>
+			<button class="mobile-menu-trigger" type="button" aria-haspopup="dialog" aria-controls="mobile-navigation" aria-expanded="false">Menu</button>
+		</div>
+	</header>
+
+	<dialog class="mobile-navigation" id="mobile-navigation" aria-labelledby="mobile-navigation-title">
+		<div class="mobile-navigation__panel">
+			<div class="mobile-navigation__topline">
+				<p id="mobile-navigation-title">Day1 Health</p>
+				<button class="mobile-menu-close" type="button" aria-label="Close navigation">Close</button>
+			</div>
+			<PrimaryNavigation currentRoute={currentRoute} label="Mobile primary navigation" />
+			<div class="mobile-navigation__audience"><p>Cover context</p><AudienceSwitcher compact /></div>
+			<div class="mobile-navigation__actions">
+				<Button href={routes.quote.href}>Get a Quote</Button>
+				<a class="sign-in-link" href={routes.signIn.href}>Sign In</a>
+			</div>
+		</div>
+	</dialog>
+
+	<main id="main-content" class="site-main" tabindex="-1">
+		<div class="site-main__content"><slot /></div>
+		<footer class="site-footer">
+			<div class="site-footer__inner">
+				<p class="site-footer__brand">{company.companyName}</p>
+				<ul>{company.regulatoryStatements.map((statement) => <li>{statement.text}</li>)}</ul>
+				<a href={routes.legal.href}>Legal information</a>
+			</div>
+		</footer>
+	</main>
+</div>
+
+<script>
+	const dialog = document.querySelector<HTMLDialogElement>('#mobile-navigation');
+	const trigger = document.querySelector<HTMLButtonElement>('.mobile-menu-trigger');
+	const closeButton = document.querySelector<HTMLButtonElement>('.mobile-menu-close');
+
+	function setMenuState(open: boolean) {
+		trigger?.setAttribute('aria-expanded', String(open));
+	}
+
+	trigger?.addEventListener('click', () => { dialog?.showModal(); setMenuState(true); });
+	closeButton?.addEventListener('click', () => dialog?.close());
+	dialog?.addEventListener('close', () => setMenuState(false));
+	dialog?.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+</script>
+
+<style>
+	.site-sidebar { display: none; }
+	.mobile-header { display: flex; min-height: 4.25rem; padding: var(--space-3); border-bottom: 1px solid var(--color-border); align-items: center; justify-content: space-between; gap: var(--space-2); background: var(--color-canvas); }
+	.mobile-header__brand, .site-footer__brand { color: var(--color-brand); font-weight: var(--font-weight-bold); text-decoration: none; white-space: nowrap; }
+	.mobile-header__actions { display: flex; min-width: 0; flex-shrink: 0; align-items: center; gap: var(--space-2); }
+	.mobile-header__quote, .mobile-menu-trigger, .mobile-menu-close { display: inline-flex; min-height: var(--touch-target); padding: var(--space-2) 0.625rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); align-items: center; color: var(--color-text); background: var(--color-canvas); font-size: var(--text-body-sm); font-weight: var(--font-weight-bold); text-decoration: none; cursor: pointer; }
+	.mobile-header__quote { color: var(--color-on-action); background: var(--color-action); border-color: var(--color-action); }
+	.mobile-navigation { width: min(100% - var(--space-4), 31rem); max-width: none; min-height: 100%; margin: 0 0 0 auto; padding: 0; border: 0; background: var(--color-canvas); box-shadow: var(--shadow-elevated); }
+	.mobile-navigation::backdrop { background: rgb(17 24 39 / 0.32); }
+	.mobile-navigation__panel { display: grid; min-height: 100dvh; padding: var(--space-5); align-content: start; gap: var(--space-7); }
+	.mobile-navigation__topline { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+	.mobile-navigation__topline p, .mobile-navigation__audience p, .site-sidebar__audience p { margin: 0; color: var(--color-text-muted); font-size: var(--text-label); font-weight: var(--font-weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+	.mobile-navigation :global(.primary-navigation) ul { display: grid; width: auto; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
+	.mobile-navigation :global(.primary-navigation) a { width: 100%; min-height: 3rem; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
+	.mobile-navigation :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
+	.mobile-navigation__audience { display: grid; gap: var(--space-3); }
+	.mobile-navigation__actions { display: grid; gap: var(--space-3); }
+	.mobile-navigation__actions :global(.ui-button) { width: 100%; }
+	.sign-in-link { display: inline-flex; min-height: var(--touch-target); align-items: center; color: var(--color-brand); font-size: var(--text-body-sm); font-weight: var(--font-weight-bold); }
+	.site-footer { padding: var(--space-7) var(--gutter); border-top: 1px solid var(--color-border); background: var(--color-surface); }
+	.site-footer__inner { width: min(100%, var(--width-standard)); margin-inline: auto; }
+	.site-footer__brand { margin-block-end: var(--space-4); }
+	.site-footer ul { display: grid; margin: 0 0 var(--space-4); padding: 0; list-style: none; gap: var(--space-2); }
+	.site-footer li, .site-footer a { color: var(--color-text-muted); font-size: var(--text-body-sm); }
+
+	@media (min-width: 64rem) {
+		.site-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: block; width: clamp(16.5rem, 20vw, 19rem); border-right: 1px solid var(--color-border); background: var(--color-canvas); }
+		.site-sidebar__inner { display: flex; height: 100%; padding: var(--space-6) var(--space-5); flex-direction: column; }
+		.brand-mark { display: block; width: 8.5rem; margin-block-end: var(--space-7); }
+		.brand-mark img { width: 100%; height: auto; }
+		.site-sidebar :global(.primary-navigation) { border: 0; }
+		.site-sidebar :global(.primary-navigation) ul { display: grid; width: auto; min-height: auto; margin: 0; padding: 0; gap: var(--space-1); }
+		.site-sidebar :global(.primary-navigation) a { width: 100%; min-height: 2.8rem; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
+		.site-sidebar :global(.primary-navigation) a[aria-current='page'] { box-shadow: inset 3px 0 0 var(--color-action); background: var(--color-surface); }
+		.site-sidebar__audience { display: grid; margin-block-start: var(--space-6); gap: var(--space-3); }
+		.site-sidebar__actions { display: grid; margin-block-start: auto; gap: var(--space-3); }
+		.site-sidebar__actions :global(.ui-button) { width: 100%; }
+		.mobile-header { display: none; }
+		.site-main { min-height: 100dvh; margin-inline-start: clamp(16.5rem, 20vw, 19rem); }
+		.site-footer__inner { width: min(100%, calc(var(--width-standard) + var(--gutter))); }
+	}
+</style>

@@ -4,13 +4,14 @@ import { navigation } from '../data/navigation';
 
 interface Props {
 	currentRoute?: RouteKey;
+	label?: string;
 }
 
-const { currentRoute } = Astro.props;
+const { currentRoute, label = 'Primary navigation' } = Astro.props;
 const items = navigation.filter((item) => item.primary && item.public).sort((a, b) => a.order - b.order);
 ---
 
-<nav aria-label="Primary" class="primary-navigation">
+<nav aria-label={label} class="primary-navigation">
 	<ul>
 		{items.map((item) => <li><a href={item.href} aria-current={item.routeKey === currentRoute ? 'page' : undefined}>{item.label}</a></li>)}
 	</ul>

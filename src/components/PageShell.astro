@@ -4,9 +4,8 @@ import { company } from '../data/company';
 import { routes } from '../data/navigation';
 import { pageMetadata, robotsFor } from '../data/page-metadata';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ContentContainer from './ContentContainer.astro';
 import PageHeader from './PageHeader.astro';
-import PrimaryNavigation from './PrimaryNavigation.astro';
+import SiteShell from './SiteShell.astro';
 
 interface Props {
 	routeKey: RouteKey;
@@ -26,11 +25,12 @@ const canonicalUrl = siteOrigin ? new URL(route.href, siteOrigin) : undefined;
 	canonicalUrl={canonicalUrl}
 	robots={robotsFor(metadata.indexing)}
 >
-	<PrimaryNavigation slot="before-main" currentRoute={routeKey} />
-	<ContentContainer>
-		<article class="page-shell" data-page-status={metadata.status} data-indexing-decision={metadata.indexing}>
-			<PageHeader heading={metadata.heading} eyebrow={eyebrow} />
-			<slot />
-		</article>
-	</ContentContainer>
+	<SiteShell currentRoute={routeKey}>
+		<div class="content-container">
+			<article class="page-shell" data-page-status={metadata.status} data-indexing-decision={metadata.indexing}>
+				<PageHeader heading={metadata.heading} eyebrow={eyebrow} />
+				<slot />
+			</article>
+		</div>
+	</SiteShell>
 </BaseLayout>

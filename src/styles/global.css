@@ -248,3 +248,28 @@ textarea.form-control { min-height: 8rem; resize: vertical; }
 		animation-iteration-count: 1 !important;
 	}
 }
+
+/* Shell navigation is vertically stacked in constrained sidebar and dialog contexts. */
+.site-sidebar .primary-navigation ul,
+.mobile-navigation .primary-navigation ul {
+	display: grid;
+	width: auto;
+	min-height: auto;
+	margin: 0;
+	padding: 0;
+	gap: var(--space-1);
+}
+
+.site-sidebar .primary-navigation a,
+.mobile-navigation .primary-navigation a {
+	width: 100%;
+	min-height: 3rem;
+	padding-inline: var(--space-3);
+	border-radius: var(--radius-sm);
+}
+
+.site-sidebar .primary-navigation a[aria-current='page'],
+.mobile-navigation .primary-navigation a[aria-current='page'] {
+	box-shadow: inset 3px 0 0 var(--color-action);
+	background: var(--color-surface);
+}
